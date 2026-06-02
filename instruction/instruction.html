@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Startup Tycoon - Template Instructions</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #0f172a;
+            color: #f8fafc;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding: 40px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            border-radius: 20px;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+
+        .section {
+            background: #1e293b;
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 25px;
+            border: 1px solid #334155;
+        }
+
+        h2 {
+            color: #6366f1;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        h3 {
+            color: #8b5cf6;
+            margin: 20px 0 10px 0;
+        }
+
+        .code-block {
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 20px;
+            margin: 15px 0;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+            position: relative;
+        }
+
+        .code-label {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 0.75rem;
+            color: #64748b;
+            text-transform: uppercase;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 80px;
+            background: #334155;
+            border: none;
+            color: #fff;
+            padding: 5px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .code-block:hover .copy-btn {
+            opacity: 1;
+        }
+
+        .copy-btn:hover {
+            background: #475569;
+        }
+
+        .highlight {
+            color: #fbbf24;
+        }
+
+        .success { color: #10b981; }
+        .danger { color: #ef4444; }
+        .warning { color: #f59e0b; }
+        .info { color: #60a5fa; }
+
+        ul {
+            margin: 15px 0;
+            padding-left: 25px;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        .tip {
+            background: rgba(99, 102, 241, 0.1);
+            border-left: 4px solid #6366f1;
+            padding: 15px 20px;
+            border-radius: 0 12px 12px 0;
+            margin: 20px 0;
+        }
+
+        .warning-box {
+            background: rgba(245, 158, 11, 0.1);
+            border-left: 4px solid #f59e0b;
+            padding: 15px 20px;
+            border-radius: 0 12px 12px 0;
+            margin: 20px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #334155;
+        }
+
+        th {
+            color: #8b5cf6;
+            font-weight: 600;
+        }
+
+        .step {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .step-content {
+            flex: 1;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 30px;
+            color: #64748b;
+            border-top: 1px solid #334155;
+        }
+
+        .toggle-btn {
+            background: #334155;
+            border: none;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: background 0.3s;
+        }
+
+        .toggle-btn:hover {
+            background: #475569;
+        }
+
+        .hidden-content {
+            display: none;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #334155;
+        }
+
+        .hidden-content.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>🚀 Startup Tycoon</h1>
+        <p class="subtitle">Template Customization Guide</p>
+    </header>
+
+    <!-- Quick Start -->
+    <div class="section">
+        <h2>⚡ Quick Start (3 Steps)</h2>
+        
+        <div class="step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+                <h3>Open the File</h3>
+                <p>Open <span class="highlight">index.html</span> in any code editor (VS Code, Notepad++, Sublime Text).</p>
+            </div>
+        </div>
+
+        <div class="step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+                <h3>Find the Game State</h3>
+                <p>Locate the <code>const game = {</code> object at the beginning of the <code>&lt;script&gt;</code> section (around line 850).</p>
+            </div>
+        </div>
+
+        <div class="step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+                <h3>Modify Values</h3>
+                <p>Change numbers, names, or colors. Save file (Ctrl+S). Refresh browser to see changes.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Basic Customization -->
+    <div class="section">
+        <h2>🎨 Basic Customization</h2>
+
+        <h3>1. Change Starting Money</h3>
+        <p>Find this line in the game state:</p>
+        <div class="code-block">
+            <span class="code-label">JavaScript</span>
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <div>money: <span class="warning">50000</span>, <span class="info">// Change this number</span></div>
+        </div>
+
+        <h3>2. Change Company Name</h3>
+        <div class="code-block">
+            <span class="code-label">JavaScript</span>
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <div>companyName: <span class="success">"Your Company Name"</span>,</div>
+        </div>
+
+        <h3>3. Change Colors (CSS Variables)</h3>
+        <p>Find <code>:root</code> in the <code>&lt;style&gt;</code> section (top of file):</p>
+        <div class="code-block">
+            <span class="code-label">CSS</span>
+            <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+            <div>:root {<br>
+            &nbsp;&nbsp;<span class="highlight">--primary</span>: #6366f1; <span class="info">// Main purple color</span><br>
+            &nbsp;&nbsp;<span class="highlight">--success</span>: #10b981; <span class="info">// Green for money</span><br>
+            &nbsp;&nbsp;<span class="highlight">--danger</span>: #ef4444; <span class="info">// Red for errors</span><br>
+            }</div>
+        </div>
+        <p>Use any <a href="https://colorhunt.co" target="_blank" style="color: #60a5fa;">color picker</a> to get hex codes (#FF5733).</p>
+    </div>
+
+    <!-- Advanced Customization -->
+    <div class="section">
+        <h2>⚙️ Advanced Customization</h2>
+        <button class="toggle-btn" onclick="toggleSection('advanced')">Show/Hide Advanced</button>
+        
+        <div id="advanced" class="hidden-content">
+            <h3>Add New Product Type</h3>
+            <p>Find the <code>startProduct</code> function and add to the products object:</p>
+            <div class="code-block">
+                <span class="code-label">JavaScript</span>
+                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                <div>vr: { <br>
+                &nbsp;&nbsp;name: <span class="success">'VR Experience'</span>, <br>
+                &nbsp;&nbsp;cost: <span class="warning">35000</span>, <br>
+                &nbsp;&nbsp;time: <span class="warning">25</span>, <br>
+                &nbsp;&nbsp;income: <span class="warning">12000</span> <br>
+                }</div>
+            </div>
+
+            <h3>Change Employee Salaries</h3>
+            <p>In <code>hireEmployee</code> function, modify the roles object:</p>
+            <div class="code-block">
+                <span class="code-label">JavaScript</span>
+                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                <div>developer: { <br>
+                &nbsp;&nbsp;name: <span class="success">'Developer'</span>, <br>
+                &nbsp;&nbsp;salary: <span class="warning">5000</span>, <span class="info">// Was 3000</span><br>
+                &nbsp;&nbsp;hireCost: <span class="warning">2500</span>, <br>
+                &nbsp;&nbsp;skill: <span class="warning">75</span> <br>
+                }</div>
+            </div>
+
+            <h3>Add Random Events</h3>
+            <p>Find the <code>randomEvent</code> function and add to the events array:</p>
+            <div class="code-block">
+                <span class="code-label">JavaScript</span>
+                <button class="copy-btn" onclick="copyCode(this)">Copy</button>
+                <div>{ <br>
+                &nbsp;&nbsp;text: <span class="success">'Won startup competition! +$10,000'</span>, <br>
+                &nbsp;&nbsp;effect: () => game.money += <span class="warning">10000</span> <br>
+                }</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Common Issues -->
+    <div class="section">
+        <h2>🔧 Troubleshooting</h2>
+
+        <table>
+            <tr>
+                <th>Problem</th>
+                <th>Solution</th>
+            </tr>
+            <tr>
+                <td>Changes not showing</td>
+                <td>Press <kbd>Ctrl+F5</kbd> (hard refresh) or clear browser cache</td>
+            </tr>
+            <tr>
+                <td>Broke the game</td>
+                <td>Undo last change (Ctrl+Z). Check for missing commas or quotes</td>
+            </tr>
+            <tr>
+                <td>Colors look wrong</td>
+                <td>Ensure hex codes start with # (e.g., #FF0000 not FF0000)</td>
+            </tr>
+            <tr>
+                <td>Game won't start</td>
+                <td>Open browser console (F12 → Console) to see error messages</td>
+            </tr>
+        </table>
+
+        <div class="warning-box">
+            <strong>⚠️ Important:</strong> Always keep a backup of the original file before making changes!
+        </div>
+    </div>
+
+    <!-- Tips -->
+    <div class="section">
+        <h2>💡 Pro Tips</h2>
+        
+        <div class="tip">
+            <strong>Tip 1:</strong> Use VS Code with "Live Server" extension to see changes instantly without refreshing.
+        </div>
+
+        <div class="tip">
+            <strong>Tip 2:</strong> To make game easier, increase starting money to $100,000. To make harder, reduce to $25,000.
+        </div>
+
+        <div class="tip">
+            <strong>Tip 3:</strong> Search (Ctrl+F) for specific text like "Mobile App" to find it quickly in the code.
+        </div>
+
+        <div class="tip">
+            <strong>Tip 4:</strong> All text strings must be in quotes: <code>"Text"</code>. Numbers don't need quotes: <code>5000</code>.
+        </div>
+    </div>
+
+    <!-- File Structure -->
+    <div class="section">
+        <h2>📁 File Structure</h2>
+        <div class="code-block">
+            <span class="code-label">Folder</span>
+            <div>
+            📦 your-project/<br>
+            ├─ 📄 <span class="success">index.html</span> <span class="info">← Main game file (edit this)</span><br>
+            ├─ 📁 instruction/<br>
+            │  └─ 📄 <span class="success">instruction.html</span> <span class="info">← This guide</span><br>
+            └─ 📄 README.txt <span class="info">(optional)</span>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>Need more help? Contact support or visit <a href="#" style="color: #6366f1;">documentation</a></p>
+        <p style="margin-top: 10px; font-size: 0.9rem;">© 2024 Startup Tycoon Template</p>
+    </footer>
+</div>
+
+<script>
+    function copyCode(btn) {
+        const codeBlock = btn.parentElement;
+        const codeText = codeBlock.innerText.replace('Copy', '').replace(/^\w+\n/, '').trim();
+        
+        navigator.clipboard.writeText(codeText).then(() => {
+            btn.textContent = 'Copied!';
+            btn.style.background = '#10b981';
+            setTimeout(() => {
+                btn.textContent = 'Copy';
+                btn.style.background = '#334155';
+            }, 2000);
+        });
+    }
+
+    function toggleSection(id) {
+        const content = document.getElementById(id);
+        content.classList.toggle('active');
+    }
+
+    // Add keyboard shortcut for copy
+    document.addEventListener('keydown', (e) => {
+        if (e.ctrlKey && e.key === 'c' && window.getSelection().toString() === '') {
+            const activeCode = document.querySelector('.code-block:hover .copy-btn');
+            if (activeCode) activeCode.click();
+        }
+    });
+</script>
+
+</body>
+</html>
