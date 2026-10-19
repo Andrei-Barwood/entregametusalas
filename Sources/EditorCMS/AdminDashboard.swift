@@ -1,8 +1,18 @@
 import Foundation
 
 public struct AdminDashboard {
-    public static func renderHTML() -> String {
-        return #"""
+    public static func renderHTML(settings: SiteSettings? = nil) -> String {
+        let activeSettings = settings ?? .default()
+        let settingsJson: String
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = [.sortedKeys]
+        if let data = try? encoder.encode(activeSettings), let str = String(data: data, encoding: .utf8) {
+            settingsJson = str.replacingOccurrences(of: "</script>", with: "<\\/script>")
+        } else {
+            settingsJson = "{}"
+        }
+
+        return """
         <!DOCTYPE html>
         <html lang="es">
         <head>
@@ -14,7 +24,7 @@ public struct AdminDashboard {
           <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
           <style>
             :root {
-              --admin-sidebar-width: 340px;
+              --admin-sidebar-width: 320px;
             }
             body {
               background-color: var(--bg-primary);
@@ -24,6 +34,7 @@ public struct AdminDashboard {
               display: flex;
               flex-direction: column;
               overflow: hidden;
+              font-family: var(--font-sans);
             }
             .admin-topbar {
               height: 60px;
@@ -47,6 +58,7 @@ public struct AdminDashboard {
               font-weight: 700;
               letter-spacing: -0.01em;
               margin: 0;
+              color: var(--text-primary);
             }
             .admin-badge {
               font-family: var(--font-sans);
@@ -62,13 +74,13 @@ public struct AdminDashboard {
             .admin-actions {
               display: flex;
               align-items: center;
-              gap: 0.75rem;
+              gap: 0.65rem;
             }
             .admin-btn {
               display: inline-flex;
               align-items: center;
               gap: 0.4rem;
-              padding: 0.5rem 1rem;
+              padding: 0.48rem 0.95rem;
               font-family: var(--font-sans);
               font-size: 0.75rem;
               font-weight: 600;
@@ -78,6 +90,7 @@ public struct AdminDashboard {
               background-color: var(--bg-surface);
               color: var(--text-primary);
               cursor: pointer;
+              text-decoration: none;
             }
             .admin-btn:hover {
               border-color: var(--text-primary);
@@ -100,6 +113,10 @@ public struct AdminDashboard {
               background-color: #d93434;
               color: #ffffff;
             }
+            .admin-btn-sm {
+              padding: 0.25rem 0.65rem;
+              font-size: 0.7rem;
+            }
 
             /* Main Workspace Layout */
             .admin-workspace {
@@ -108,7 +125,7 @@ public struct AdminDashboard {
               overflow: hidden;
             }
 
-            /* Sidebar Posts List */
+            /* Sidebar */
             .admin-sidebar {
               width: var(--admin-sidebar-width);
               background-color: var(--bg-surface);
@@ -117,8 +134,59 @@ public struct AdminDashboard {
               flex-direction: column;
               flex-shrink: 0;
             }
+            .sidebar-section-title {
+              padding: 0.85rem 1.25rem 0.35rem 1.25rem;
+              font-family: var(--font-sans);
+              font-size: 0.65rem;
+              font-weight: 700;
+              letter-spacing: 1.5px;
+              text-transform: uppercase;
+              color: var(--text-secondary);
+            }
+            .sidebar-nav-tabs {
+              display: flex;
+              flex-direction: column;
+              gap: 0.25rem;
+              padding: 0.5rem 0.75rem 0.85rem 0.75rem;
+              border-bottom: 1px solid var(--border-color);
+            }
+            .sidebar-tab-btn {
+              display: flex;
+              align-items: center;
+              gap: 0.65rem;
+              padding: 0.55rem 0.85rem;
+              font-family: var(--font-sans);
+              font-size: 0.78rem;
+              font-weight: 600;
+              border-radius: var(--radius-md);
+              color: var(--text-secondary);
+              background: transparent;
+              border: 1px solid transparent;
+              cursor: pointer;
+              text-align: left;
+              transition: all var(--transition-fast);
+            }
+            .sidebar-tab-btn:hover {
+              background-color: var(--bg-muted);
+              color: var(--text-primary);
+            }
+            .sidebar-tab-btn.active {
+              background-color: var(--accent-subtle);
+              color: var(--accent);
+              border-color: rgba(217, 78, 52, 0.2);
+            }
+            .sidebar-tab-btn svg {
+              flex-shrink: 0;
+            }
+
+            .sidebar-subpane {
+              flex: 1;
+              display: flex;
+              flex-direction: column;
+              overflow: hidden;
+            }
             .sidebar-header {
-              padding: 1rem 1.25rem;
+              padding: 0.85rem 1.25rem;
               border-bottom: 1px solid var(--border-color);
               display: flex;
               align-items: center;
@@ -126,21 +194,19 @@ public struct AdminDashboard {
             }
             .sidebar-title {
               font-family: var(--font-sans);
-              font-size: 0.72rem;
+              font-size: 0.75rem;
               font-weight: 700;
-              letter-spacing: 2px;
-              text-transform: uppercase;
-              color: var(--text-secondary);
+              color: var(--text-primary);
             }
             .posts-list {
-              flex: 1;
-              overflow-y: auto;
               list-style: none;
               padding: 0;
               margin: 0;
+              overflow-y: auto;
+              flex: 1;
             }
             .post-list-item {
-              padding: 1.1rem 1.25rem;
+              padding: 0.85rem 1.25rem;
               border-bottom: 1px solid var(--border-light);
               cursor: pointer;
               transition: background-color var(--transition-fast);
@@ -152,170 +218,280 @@ public struct AdminDashboard {
               background-color: var(--accent-subtle);
               border-left: 3px solid var(--accent);
             }
-            .list-item-delete-btn {
-              background: none;
-              border: 1px solid transparent;
-              color: var(--text-muted);
-              font-size: 1.15rem;
-              line-height: 1;
-              padding: 0.15rem 0.4rem;
-              border-radius: var(--radius-sm);
-              cursor: pointer;
-              transition: all var(--transition-fast);
-              margin-left: 0.4rem;
-            }
-            .list-item-delete-btn:hover {
-              color: #d93434;
-              border-color: rgba(217, 52, 52, 0.25);
-              background-color: rgba(217, 52, 52, 0.08);
-            }
             .item-category {
               font-family: var(--font-sans);
               font-size: 0.65rem;
-              font-weight: 700;
               text-transform: uppercase;
-              letter-spacing: 1.5px;
+              letter-spacing: 1px;
               color: var(--accent);
-              margin-bottom: 0.25rem;
+              font-weight: 600;
             }
             .item-title {
               font-family: var(--font-serif);
-              font-size: 0.95rem;
+              font-size: 0.88rem;
               font-weight: 600;
+              margin-top: 0.2rem;
               color: var(--text-primary);
-              margin-bottom: 0.25rem;
               line-height: 1.3;
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
             }
             .item-meta {
               font-family: var(--font-sans);
-              font-size: 0.72rem;
+              font-size: 0.7rem;
               color: var(--text-secondary);
+              margin-top: 0.25rem;
               display: flex;
               justify-content: space-between;
             }
+            .list-item-delete-btn {
+              background: transparent;
+              border: none;
+              color: var(--text-secondary);
+              cursor: pointer;
+              padding: 2px 6px;
+              font-size: 1rem;
+              line-height: 1;
+              border-radius: var(--radius-sm);
+              transition: color 0.15s;
+            }
+            .list-item-delete-btn:hover {
+              color: #d93434;
+            }
 
-            /* Main Editor & Live Preview */
+            .sidebar-info-card {
+              padding: 1.25rem;
+              color: var(--text-secondary);
+              font-size: 0.78rem;
+              line-height: 1.5;
+            }
+            .sidebar-info-card strong {
+              color: var(--text-primary);
+            }
+
+            /* Main View Wrappers */
+            .admin-view-panel {
+              display: none;
+              flex: 1;
+              height: 100%;
+              overflow: hidden;
+            }
+            .admin-view-panel.active {
+              display: flex;
+              flex-direction: column;
+            }
+
+            /* Scrollable Settings Panel */
+            .settings-scroll-wrap {
+              flex: 1;
+              overflow-y: auto;
+              padding: 2.25rem 2rem 4rem 2rem;
+            }
+            .settings-container {
+              max-width: 840px;
+              margin: 0 auto;
+            }
+            .settings-card {
+              background-color: var(--bg-surface);
+              border: 1px solid var(--border-color);
+              border-radius: var(--radius-md);
+              padding: 2rem;
+              margin-bottom: 2rem;
+              box-shadow: var(--shadow-subtle);
+            }
+            .settings-card-header {
+              margin-bottom: 1.5rem;
+              padding-bottom: 1rem;
+              border-bottom: 1px solid var(--border-color);
+              display: flex;
+              justify-content: space-between;
+              align-items: flex-start;
+              gap: 1rem;
+            }
+            .settings-card-header h2 {
+              font-family: var(--font-serif);
+              font-size: 1.35rem;
+              margin: 0 0 0.35rem 0;
+              color: var(--text-primary);
+            }
+            .settings-card-header p {
+              font-family: var(--font-sans);
+              font-size: 0.8rem;
+              color: var(--text-secondary);
+              margin: 0;
+            }
+
+            /* Form Elements */
+            .field-group {
+              display: flex;
+              flex-direction: column;
+              gap: 0.4rem;
+              margin-bottom: 1.15rem;
+            }
+            .field-group label {
+              font-family: var(--font-sans);
+              font-size: 0.72rem;
+              font-weight: 700;
+              text-transform: uppercase;
+              letter-spacing: 1px;
+              color: var(--text-secondary);
+            }
+            .field-input, .field-select, .field-textarea {
+              width: 100%;
+              padding: 0.65rem 0.85rem;
+              background-color: var(--bg-primary);
+              border: 1px solid var(--border-color);
+              border-radius: var(--radius-sm);
+              color: var(--text-primary);
+              font-family: var(--font-sans);
+              font-size: 0.85rem;
+              box-sizing: border-box;
+              transition: border-color var(--transition-fast);
+            }
+            .field-input:focus, .field-select:focus, .field-textarea:focus {
+              outline: none;
+              border-color: var(--accent);
+              background-color: var(--bg-surface);
+            }
+            .field-textarea {
+              resize: vertical;
+              line-height: 1.5;
+            }
+            .field-input-title {
+              font-family: var(--font-serif);
+              font-size: 1.45rem;
+              font-weight: 700;
+              padding: 0.65rem 0.85rem;
+            }
+            .fields-grid-2 {
+              display: grid;
+              grid-template-columns: 1fr 1fr;
+              gap: 1.15rem;
+            }
+            .fields-grid-3 {
+              display: grid;
+              grid-template-columns: 1fr 1fr 1fr;
+              gap: 1.15rem;
+            }
+            .principle-box {
+              background-color: var(--bg-primary);
+              border: 1px solid var(--border-light);
+              border-radius: var(--radius-sm);
+              padding: 1.25rem;
+              margin-bottom: 1rem;
+            }
+            .principle-box-head {
+              display: flex;
+              align-items: center;
+              gap: 0.5rem;
+              margin-bottom: 0.75rem;
+              font-weight: 700;
+              font-size: 0.8rem;
+              color: var(--accent);
+            }
+
+            /* Live Preview Containers */
+            .preview-section-title {
+              font-family: var(--font-sans);
+              font-size: 0.68rem;
+              font-weight: 700;
+              text-transform: uppercase;
+              letter-spacing: 1px;
+              color: var(--accent);
+              margin-top: 1.75rem;
+              margin-bottom: 0.85rem;
+              display: flex;
+              align-items: center;
+              gap: 0.5rem;
+            }
+            .preview-box {
+              background: var(--bg-primary);
+              border: 1px dashed var(--border-color);
+              border-radius: var(--radius-md);
+              padding: 1.5rem;
+              margin-bottom: 1.5rem;
+            }
+
+            /* Article Post Editor Styles */
             .admin-editor-wrap {
               flex: 1;
               display: flex;
               flex-direction: column;
               overflow: hidden;
-              background-color: var(--bg-primary);
             }
             .editor-fields-bar {
-              padding: 1.25rem 2rem;
+              padding: 1.25rem 1.5rem 0.75rem 1.5rem;
               background-color: var(--bg-surface);
               border-bottom: 1px solid var(--border-color);
               overflow-y: auto;
               max-height: 280px;
             }
-            .fields-grid {
-              display: grid;
-              grid-template-columns: 2fr 1fr 1fr;
-              gap: 1rem;
-              margin-bottom: 1rem;
-            }
-            .field-group {
-              display: flex;
-              flex-direction: column;
-              gap: 0.35rem;
-            }
-            .field-group label {
-              font-family: var(--font-sans);
-              font-size: 0.7rem;
-              font-weight: 700;
-              letter-spacing: 1.5px;
-              text-transform: uppercase;
-              color: var(--text-secondary);
-            }
-            .field-input, .field-select, .field-textarea {
-              padding: 0.5rem 0.75rem;
-              border: 1px solid var(--border-color);
-              border-radius: var(--radius-sm);
-              background-color: var(--bg-primary);
-              font-family: var(--font-sans);
-              font-size: 0.85rem;
-              color: var(--text-primary);
-              outline: none;
-            }
-            .field-input:focus, .field-select:focus, .field-textarea:focus {
-              border-color: var(--accent);
-            }
-            .field-input-title {
-              font-family: var(--font-serif);
-              font-size: 1.4rem;
-              font-weight: 700;
-              padding: 0.5rem 0.75rem;
-            }
-
-            /* Toolbar */
             .editor-toolbar {
               padding: 0.5rem 1.5rem;
               background-color: var(--bg-muted);
               border-bottom: 1px solid var(--border-color);
               display: flex;
               align-items: center;
-              gap: 0.5rem;
+              gap: 0.4rem;
               flex-wrap: wrap;
             }
             .tool-btn {
-              padding: 0.35rem 0.65rem;
-              font-family: var(--font-sans);
-              font-size: 0.75rem;
-              font-weight: 600;
-              border-radius: var(--radius-sm);
+              background: var(--bg-surface);
               border: 1px solid var(--border-color);
-              background-color: var(--bg-surface);
               color: var(--text-primary);
+              font-size: 0.72rem;
+              font-weight: 600;
+              padding: 0.25rem 0.55rem;
+              border-radius: var(--radius-sm);
               cursor: pointer;
+              transition: all 0.15s;
             }
             .tool-btn:hover {
-              background-color: var(--accent-subtle);
-              color: var(--accent);
               border-color: var(--accent);
+              color: var(--accent);
             }
-
-            /* Split Panes: Markdown vs Live Preview */
             .editor-split-body {
               flex: 1;
-              display: grid;
-              grid-template-columns: 1fr 1fr;
+              display: flex;
               overflow: hidden;
             }
+            .markdown-pane, .preview-pane {
+              flex: 1;
+              overflow-y: auto;
+              height: 100%;
+            }
             .markdown-pane {
-              display: flex;
-              flex-direction: column;
               border-right: 1px solid var(--border-color);
               background-color: var(--bg-surface);
             }
             .markdown-textarea {
-              flex: 1;
               width: 100%;
-              padding: 2rem;
-              font-family: 'JetBrains Mono', SFMono-Regular, Menlo, Monaco, Consolas, monospace;
-              font-size: 0.95rem;
-              line-height: 1.7;
+              height: 100%;
+              padding: 1.5rem;
               border: none;
               outline: none;
               resize: none;
-              background-color: var(--bg-surface);
+              background: transparent;
               color: var(--text-primary);
+              font-family: var(--font-sans);
+              font-size: 0.95rem;
+              line-height: 1.7;
+              box-sizing: border-box;
             }
             .preview-pane {
-              flex: 1;
-              overflow-y: auto;
-              padding: 3rem 2.5rem;
+              padding: 1.5rem 2.5rem;
               background-color: var(--bg-primary);
             }
             .preview-watermark {
               font-family: var(--font-sans);
-              font-size: 0.68rem;
+              font-size: 0.65rem;
               font-weight: 700;
               letter-spacing: 2px;
               text-transform: uppercase;
               color: var(--text-muted);
               margin-bottom: 1.5rem;
-              text-align: right;
+              text-align: center;
             }
 
             /* Toast Notification */
@@ -323,10 +499,10 @@ public struct AdminDashboard {
               position: fixed;
               bottom: 2rem;
               right: 2rem;
-              padding: 0.85rem 1.5rem;
               background-color: var(--text-primary);
               color: var(--bg-primary);
-              border-radius: var(--radius-full);
+              padding: 0.75rem 1.5rem;
+              border-radius: var(--radius-md);
               font-family: var(--font-sans);
               font-size: 0.82rem;
               font-weight: 600;
@@ -345,11 +521,16 @@ public struct AdminDashboard {
         </head>
         <body>
 
+          <!-- Server Embedded Settings -->
+          <script id="server-settings" type="application/json">
+          \(settingsJson)
+          </script>
+
           <!-- Top Navigation Bar -->
           <header class="admin-topbar">
             <div class="admin-brand">
               <a href="/" target="_blank" style="text-decoration: none;">
-                <h1>EDITOR</h1>
+                <h1 id="topbar-site-title">EDITOR</h1>
               </a>
               <span class="admin-badge">Swift CMS</span>
             </div>
@@ -376,7 +557,7 @@ public struct AdminDashboard {
                 Eliminar
               </button>
 
-              <button class="admin-btn admin-btn-primary" id="btn-save" title="Guardar cambios en archivo Markdown y publicar">
+              <button class="admin-btn admin-btn-primary" id="btn-save" title="Guardar cambios y recompilar el sitio">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
                   <polyline points="17 21 17 13 7 13 7 21"></polyline>
@@ -394,114 +575,403 @@ public struct AdminDashboard {
           <!-- Workspace -->
           <div class="admin-workspace">
             
-            <!-- Left Sidebar: Articles List -->
+            <!-- Sidebar with Section Navigation -->
             <aside class="admin-sidebar">
-              <div class="sidebar-header">
-                <span class="sidebar-title">Artículos (<span id="posts-count">0</span>)</span>
-                <span style="font-family: var(--font-sans); font-size: 0.72rem; color: var(--text-secondary);">Markdown en disco</span>
+              <div class="sidebar-section-title">SECCIONES EDITORIALES</div>
+              <nav class="sidebar-nav-tabs">
+                <button class="sidebar-tab-btn active" id="tab-posts" onclick="switchView('posts')">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                  </svg>
+                  <span>Artículos del Blog</span>
+                </button>
+                <button class="sidebar-tab-btn" id="tab-author" onclick="switchView('author')">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                    <circle cx="12" cy="7" r="4"></circle>
+                  </svg>
+                  <span>Autor &amp; Biografía</span>
+                </button>
+                <button class="sidebar-tab-btn" id="tab-site" onclick="switchView('site')">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                  </svg>
+                  <span>Identidad del Sitio</span>
+                </button>
+                <button class="sidebar-tab-btn" id="tab-about" onclick="switchView('about')">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="16" x2="12" y2="12"></line>
+                    <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                  </svg>
+                  <span>Página &ldquo;Sobre mí&rdquo;</span>
+                </button>
+                <button class="sidebar-tab-btn" id="tab-newsletter" onclick="switchView('newsletter')">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                    <polyline points="22,6 12,13 2,6"></polyline>
+                  </svg>
+                  <span>Newsletter &amp; Pie</span>
+                </button>
+              </nav>
+
+              <!-- Subpane: Articles List (shown when in posts view) -->
+              <div class="sidebar-subpane" id="sidebar-articles-pane">
+                <div class="sidebar-header">
+                  <span class="sidebar-title">Artículos (<span id="posts-count">0</span>)</span>
+                  <button type="button" class="admin-btn admin-btn-sm" onclick="resetForNewPost()">+ Nuevo</button>
+                </div>
+                <ul class="posts-list" id="posts-list">
+                  <!-- Populated via JS fetch -->
+                </ul>
               </div>
-              <ul class="posts-list" id="posts-list">
-                <!-- Populated via JS fetch -->
-              </ul>
+
+              <!-- Subpane: Contextual Info for other views -->
+              <div class="sidebar-subpane" id="sidebar-info-pane" style="display: none;">
+                <div class="sidebar-info-card" id="sidebar-info-text">
+                  <!-- Updated dynamically -->
+                </div>
+              </div>
             </aside>
 
-            <!-- Main Editor Area -->
-            <main class="admin-editor-wrap">
-              
-              <!-- Metadata Collapsible / Top Fields -->
-              <div class="editor-fields-bar">
-                <div style="margin-bottom: 0.75rem;">
-                  <input type="text" id="post-title" class="field-input field-input-title" placeholder="Título del artículo..." style="width: 100%;">
+            <!-- Main Panels -->
+            
+            <!-- 1. POSTS VIEW (Existing Markdown Editor) -->
+            <main class="admin-view-panel active" id="view-posts">
+              <div class="admin-editor-wrap">
+                <div class="editor-fields-bar">
+                  <div style="margin-bottom: 0.75rem;">
+                    <input type="text" id="post-title" class="field-input field-input-title" placeholder="Título del artículo..." style="width: 100%;">
+                  </div>
+
+                  <div class="fields-grid-3">
+                    <div class="field-group">
+                      <label for="post-slug">Slug (URL del artículo)</label>
+                      <input type="text" id="post-slug" class="field-input" placeholder="titulo-del-articulo">
+                    </div>
+                    <div class="field-group">
+                      <label for="post-category">Categoría</label>
+                      <input type="text" id="post-category" class="field-input" placeholder="Arquitectura, Ensayo, Fotografía...">
+                    </div>
+                    <div class="field-group">
+                      <label for="post-format">Formato</label>
+                      <select id="post-format" class="field-select">
+                        <option value="standard">Estándar (Con imagen bleed)</option>
+                        <option value="quote">Cita Editorial</option>
+                        <option value="gallery">Galería / Ensayo Visual</option>
+                        <option value="audio">Audio / Podcast</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="fields-grid-3">
+                    <div class="field-group">
+                      <label for="post-cover">Imagen de Portada (URL)</label>
+                      <input type="text" id="post-cover" class="field-input" placeholder="https://images.unsplash.com/...">
+                    </div>
+                    <div class="field-group">
+                      <label for="post-caption">Pie de foto / Créditos</label>
+                      <input type="text" id="post-caption" class="field-input" placeholder="Fotografía de Kenzo Mori.">
+                    </div>
+                    <div class="field-group">
+                      <label for="post-date">Fecha de Publicación</label>
+                      <input type="text" id="post-date" class="field-input" placeholder="18 Octubre, 2026">
+                    </div>
+                  </div>
+
+                  <div class="field-group">
+                    <label for="post-excerpt">Extracto / Resumen (3-4 líneas)</label>
+                    <textarea id="post-excerpt" class="field-textarea" rows="2" placeholder="Breve sinopsis que aparecerá en el feed..."></textarea>
+                  </div>
                 </div>
 
-                <div class="fields-grid">
-                  <div class="field-group">
-                    <label for="post-slug">Slug (URL del artículo)</label>
-                    <input type="text" id="post-slug" class="field-input" placeholder="titulo-del-articulo">
-                  </div>
-                  <div class="field-group">
-                    <label for="post-category">Categoría</label>
-                    <input type="text" id="post-category" class="field-input" placeholder="Arquitectura, Ensayo, Fotografía...">
-                  </div>
-                  <div class="field-group">
-                    <label for="post-format">Formato</label>
-                    <select id="post-format" class="field-select">
-                      <option value="standard">Estándar (Con imagen bleed)</option>
-                      <option value="quote">Cita Editorial</option>
-                      <option value="gallery">Galería / Ensayo Visual</option>
-                      <option value="audio">Audio / Podcast</option>
-                    </select>
-                  </div>
+                <div class="editor-toolbar">
+                  <span style="font-family: var(--font-sans); font-size: 0.72rem; font-weight: 700; color: var(--text-secondary); margin-right: 0.5rem;">HERRAMIENTAS:</span>
+                  <button type="button" class="tool-btn" onclick="insertSyntax('## ', '')">H2</button>
+                  <button type="button" class="tool-btn" onclick="insertSyntax('### ', '')">H3</button>
+                  <button type="button" class="tool-btn" onclick="insertSyntax('**', '**')"><strong>B</strong></button>
+                  <button type="button" class="tool-btn" onclick="insertSyntax('*', '*')"><em>I</em></button>
+                  <button type="button" class="tool-btn" onclick="insertSyntax('> ', '')">Cita</button>
+                  <button type="button" class="tool-btn" onclick="insertSyntax('```\\n', '\\n```')">Código</button>
+                  <button type="button" class="tool-btn" onclick="insertSyntax('- ', '')">Lista</button>
+                  <button type="button" class="tool-btn" onclick="insertSyntax('[Texto del enlace](', ')')">Enlace</button>
+                  <button type="button" class="tool-btn" onclick="insertSyntax('![Descripción de la imagen](', ')')">Imagen</button>
+                  <button type="button" class="tool-btn" onclick="insertSyntax('https://youtube.com/playlist?list=PLrnz4iRZQNleNFUmd-0ZHFafTvUuvhlXr', '')" title="Insertar Playlist o Video de YouTube">YouTube</button>
+                  <span style="flex: 1;"></span>
+                  <span style="font-family: var(--font-sans); font-size: 0.7rem; color: var(--accent);">Tip: El primer párrafo recibe Letra Capital automáticamente</span>
                 </div>
 
-                <div class="fields-grid">
-                  <div class="field-group">
-                    <label for="post-cover">Imagen de Portada (URL)</label>
-                    <input type="text" id="post-cover" class="field-input" placeholder="https://images.unsplash.com/...">
+                <div class="editor-split-body">
+                  <div class="markdown-pane">
+                    <textarea id="post-content" class="markdown-textarea" placeholder="Escribe tu ensayo en Markdown puro..."></textarea>
                   </div>
-                  <div class="field-group">
-                    <label for="post-caption">Pie de foto / Créditos</label>
-                    <input type="text" id="post-caption" class="field-input" placeholder="Fotografía de Kenzo Mori.">
-                  </div>
-                  <div class="field-group">
-                    <label for="post-date">Fecha de Publicación</label>
-                    <input type="text" id="post-date" class="field-input" placeholder="18 Octubre, 2026">
-                  </div>
-                </div>
 
-                <div class="field-group">
-                  <label for="post-excerpt">Extracto / Resumen (3-4 líneas)</label>
-                  <textarea id="post-excerpt" class="field-textarea" rows="2" placeholder="Breve sinopsis que aparecerá en el feed..."></textarea>
-                </div>
-              </div>
-
-              <!-- Markdown Quick Formatting Toolbar -->
-              <div class="editor-toolbar">
-                <span style="font-family: var(--font-sans); font-size: 0.72rem; font-weight: 700; color: var(--text-secondary); margin-right: 0.5rem;">HERRAMIENTAS:</span>
-                <button type="button" class="tool-btn" onclick="insertSyntax('## ', '')">H2</button>
-                <button type="button" class="tool-btn" onclick="insertSyntax('### ', '')">H3</button>
-                <button type="button" class="tool-btn" onclick="insertSyntax('**', '**')"><strong>B</strong></button>
-                <button type="button" class="tool-btn" onclick="insertSyntax('*', '*')"><em>I</em></button>
-                <button type="button" class="tool-btn" onclick="insertSyntax('> ', '')">Cita</button>
-                <button type="button" class="tool-btn" onclick="insertSyntax('```\\n', '\\n```')">Código</button>
-                <button type="button" class="tool-btn" onclick="insertSyntax('- ', '')">Lista</button>
-                <button type="button" class="tool-btn" onclick="insertSyntax('[Texto del enlace](', ')')">Enlace</button>
-                <button type="button" class="tool-btn" onclick="insertSyntax('![Descripción de la imagen](', ')')">Imagen</button>
-                <button type="button" class="tool-btn" onclick="insertSyntax('https://youtube.com/playlist?list=PLrnz4iRZQNleNFUmd-0ZHFafTvUuvhlXr', '')" title="Insertar Playlist o Video de YouTube">YouTube</button>
-                <span style="flex: 1;"></span>
-                <span style="font-family: var(--font-sans); font-size: 0.7rem; color: var(--accent);">Tip: El primer párrafo recibe Letra Capital automáticamente</span>
-              </div>
-
-              <!-- Split Screen: Markdown Input + Live Preview -->
-              <div class="editor-split-body">
-                <div class="markdown-pane">
-                  <textarea id="post-content" class="markdown-textarea" placeholder="Escribe tu ensayo en Markdown puro...
-
-                  El primer párrafo aparecerá con una elegante letra capital de estilo editorial.
-
-                  ## Subtítulo de sección
-
-                  Puedes incluir citas hermosas:
-                  > «La simplicidad no es la falta de desorden, sino la presencia de propósito.»
-                  > — Jony Ive
-
-                  O bloques de código limpio:
-                  ```css
-                  :root {
-                    --editorial-space: 2rem;
-                  }
-                  ```"></textarea>
-                </div>
-
-                <div class="preview-pane">
-                  <div class="preview-watermark">&mdash; Vista Previa Editorial en Vivo &mdash;</div>
-                  <div class="prose" id="live-preview-content">
-                    <!-- Rendered live via JS -->
+                  <div class="preview-pane">
+                    <div class="preview-watermark">&mdash; Vista Previa Editorial en Vivo &mdash;</div>
+                    <div class="prose" id="live-preview-content"></div>
                   </div>
                 </div>
               </div>
-
             </main>
+
+            <!-- 2. AUTHOR & BIO VIEW -->
+            <main class="admin-view-panel" id="view-author">
+              <div class="settings-scroll-wrap">
+                <div class="settings-container">
+                  <div class="settings-card">
+                    <div class="settings-card-header">
+                      <div>
+                        <h2>Autor &amp; Biografía</h2>
+                        <p>Edita los datos del autor principal, su avatar y el texto de biografía que aparece al pie de cada artículo y en el perfil.</p>
+                      </div>
+                      <button type="button" class="admin-btn admin-btn-primary" onclick="saveSiteSettings()">Guardar Cambios</button>
+                    </div>
+
+                    <div class="fields-grid-2">
+                      <div class="field-group">
+                        <label for="set-author-name">Nombre del Autor</label>
+                        <input type="text" id="set-author-name" class="field-input" placeholder="andreii" oninput="updateSettingsPreviews()">
+                      </div>
+                      <div class="field-group">
+                        <label for="set-author-role">Rol o Título Editorial</label>
+                        <input type="text" id="set-author-role" class="field-input" placeholder="Editor" oninput="updateSettingsPreviews()">
+                      </div>
+                    </div>
+
+                    <div class="field-group">
+                      <label for="set-author-avatar">URL de la Fotografía / Avatar</label>
+                      <input type="text" id="set-author-avatar" class="field-input" placeholder="https://images.unsplash.com/..." oninput="updateSettingsPreviews()">
+                    </div>
+
+                    <div class="field-group">
+                      <label for="set-author-bio">Biografía Breve (Aparece en la ficha de cada artículo)</label>
+                      <textarea id="set-author-bio" class="field-textarea" rows="3" placeholder="i'll guess you're seeing me in another life hun" oninput="updateSettingsPreviews()"></textarea>
+                    </div>
+
+                    <div class="field-group">
+                      <label for="set-author-quote">Frase / Cita Reflexiva del Autor</label>
+                      <textarea id="set-author-quote" class="field-textarea" rows="2" placeholder="i'll guess you're seeing me in another life hun" oninput="updateSettingsPreviews()"></textarea>
+                    </div>
+
+                    <div class="preview-section-title">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                      VISTA PREVIA DE LA FICHA DEL AUTOR EN ARTÍCULOS
+                    </div>
+                    <div class="preview-box">
+                      <section class="author-bio-card" style="margin: 0;">
+                        <img src="" alt="" id="prev-author-avatar" class="author-bio-avatar">
+                        <div class="author-bio-info">
+                          <span class="author-bio-role" id="prev-author-role">Editor</span>
+                          <h3 id="prev-author-name">andreii</h3>
+                          <p class="author-bio-text" id="prev-author-bio">
+                            i'll guess you're seeing me in another life hun
+                          </p>
+                          <div class="author-social-links">
+                            <a href="/about.html">Perfil completo &rarr;</a>
+                            <a href="/about.html#contacto">Contacto directo</a>
+                          </div>
+                        </div>
+                      </section>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </main>
+
+            <!-- 3. SITE IDENTITY VIEW -->
+            <main class="admin-view-panel" id="view-site">
+              <div class="settings-scroll-wrap">
+                <div class="settings-container">
+                  <div class="settings-card">
+                    <div class="settings-card-header">
+                      <div>
+                        <h2>Identidad del Sitio</h2>
+                        <p>Configura el nombre principal de la publicación, su lema y la descripción SEO que leen buscadores y redes sociales.</p>
+                      </div>
+                      <button type="button" class="admin-btn admin-btn-primary" onclick="saveSiteSettings()">Guardar Cambios</button>
+                    </div>
+
+                    <div class="fields-grid-2">
+                      <div class="field-group">
+                        <label for="set-site-title">Título del Sitio / Revista</label>
+                        <input type="text" id="set-site-title" class="field-input field-input-title" placeholder="EDITOR" oninput="updateSettingsPreviews()">
+                      </div>
+                      <div class="field-group">
+                        <label for="set-site-tagline">Lema / Subtítulo</label>
+                        <input type="text" id="set-site-tagline" class="field-input" placeholder="Diario de diseño reflexivo..." oninput="updateSettingsPreviews()">
+                      </div>
+                    </div>
+
+                    <div class="field-group">
+                      <label for="set-site-description">Descripción SEO y Meta</label>
+                      <textarea id="set-site-description" class="field-textarea" rows="3" placeholder="Un diario y revista editorial minimalista..."></textarea>
+                    </div>
+
+                    <div class="preview-section-title">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                      VISTA PREVIA DE LA CABECERA
+                    </div>
+                    <div class="preview-box" style="text-align: center; padding: 2.5rem 1rem;">
+                      <div class="site-branding" style="margin: 0;">
+                        <h1 class="site-title" style="margin: 0;">
+                          <a href="#" style="text-decoration: none; color: inherit;" id="prev-site-title">EDITOR</a>
+                        </h1>
+                        <p class="site-tagline" id="prev-site-tagline" style="margin-top: 0.5rem; color: var(--text-secondary);">Diario de diseño reflexivo, arquitectura y cultura pausada</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </main>
+
+            <!-- 4. ABOUT & MANIFESTO VIEW -->
+            <main class="admin-view-panel" id="view-about">
+              <div class="settings-scroll-wrap">
+                <div class="settings-container">
+                  <div class="settings-card">
+                    <div class="settings-card-header">
+                      <div>
+                        <h2>Página &ldquo;Sobre mí&rdquo; &amp; Manifiesto</h2>
+                        <p>Personaliza el texto de la página about.html, la cabecera hero, los 4 principios editoriales y el formulario de contacto.</p>
+                      </div>
+                      <button type="button" class="admin-btn admin-btn-primary" onclick="saveSiteSettings()">Guardar Cambios</button>
+                    </div>
+
+                    <div class="fields-grid-2">
+                      <div class="field-group">
+                        <label for="set-about-tagline">Etiqueta Superior</label>
+                        <input type="text" id="set-about-tagline" class="field-input" placeholder="Perfil">
+                      </div>
+                      <div class="field-group">
+                        <label for="set-about-title">Título del Perfil</label>
+                        <input type="text" id="set-about-title" class="field-input" placeholder="andreii">
+                      </div>
+                    </div>
+
+                    <div class="field-group">
+                      <label for="set-about-lead">Texto Principal / Biografía Ampliada</label>
+                      <textarea id="set-about-lead" class="field-textarea" rows="3" placeholder="i'll guess you're seeing me in another life hun"></textarea>
+                    </div>
+
+                    <div class="field-group">
+                      <label for="set-contact-intro">Texto de Introducción al Contacto</label>
+                      <textarea id="set-contact-intro" class="field-textarea" rows="2" placeholder="Recibo con gratitud reflexiones de lectores o propuestas de colaboración."></textarea>
+                    </div>
+
+                    <div class="preview-section-title">LOS 4 PRINCIPIOS EDITORIALES</div>
+                    
+                    <div class="principle-box">
+                      <div class="principle-box-head">PRINCIPIO 01</div>
+                      <div class="field-group">
+                        <label for="set-principle-title-0">Título</label>
+                        <input type="text" id="set-principle-title-0" class="field-input" placeholder="01. Silencio visual">
+                      </div>
+                      <div class="field-group">
+                        <label for="set-principle-desc-0">Descripción</label>
+                        <textarea id="set-principle-desc-0" class="field-textarea" rows="2"></textarea>
+                      </div>
+                    </div>
+
+                    <div class="principle-box">
+                      <div class="principle-box-head">PRINCIPIO 02</div>
+                      <div class="field-group">
+                        <label for="set-principle-title-1">Título</label>
+                        <input type="text" id="set-principle-title-1" class="field-input" placeholder="02. Tipografía como voz">
+                      </div>
+                      <div class="field-group">
+                        <label for="set-principle-desc-1">Descripción</label>
+                        <textarea id="set-principle-desc-1" class="field-textarea" rows="2"></textarea>
+                      </div>
+                    </div>
+
+                    <div class="principle-box">
+                      <div class="principle-box-head">PRINCIPIO 03</div>
+                      <div class="field-group">
+                        <label for="set-principle-title-2">Título</label>
+                        <input type="text" id="set-principle-title-2" class="field-input" placeholder="03. Fricción analógica">
+                      </div>
+                      <div class="field-group">
+                        <label for="set-principle-desc-2">Descripción</label>
+                        <textarea id="set-principle-desc-2" class="field-textarea" rows="2"></textarea>
+                      </div>
+                    </div>
+
+                    <div class="principle-box">
+                      <div class="principle-box-head">PRINCIPIO 04</div>
+                      <div class="field-group">
+                        <label for="set-principle-title-3">Título</label>
+                        <input type="text" id="set-principle-title-3" class="field-input" placeholder="04. Permanencia">
+                      </div>
+                      <div class="field-group">
+                        <label for="set-principle-desc-3">Descripción</label>
+                        <textarea id="set-principle-desc-3" class="field-textarea" rows="2"></textarea>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </main>
+
+            <!-- 5. NEWSLETTER & FOOTER VIEW -->
+            <main class="admin-view-panel" id="view-newsletter">
+              <div class="settings-scroll-wrap">
+                <div class="settings-container">
+                  <div class="settings-card">
+                    <div class="settings-card-header">
+                      <div>
+                        <h2>Newsletter &amp; Pie de Página</h2>
+                        <p>Configura la franja de suscripción al boletín dominical y el texto de derechos y aviso legal del pie de página.</p>
+                      </div>
+                      <button type="button" class="admin-btn admin-btn-primary" onclick="saveSiteSettings()">Guardar Cambios</button>
+                    </div>
+
+                    <div class="fields-grid-2">
+                      <div class="field-group">
+                        <label for="set-newsletter-title">Título del Newsletter</label>
+                        <input type="text" id="set-newsletter-title" class="field-input" placeholder="El correo de los domingos" oninput="updateSettingsPreviews()">
+                      </div>
+                      <div class="field-group">
+                        <label for="set-newsletter-btn">Texto del Botón</label>
+                        <input type="text" id="set-newsletter-btn" class="field-input" placeholder="Suscribirme" oninput="updateSettingsPreviews()">
+                      </div>
+                    </div>
+
+                    <div class="field-group">
+                      <label for="set-newsletter-text">Descripción del Boletín</label>
+                      <textarea id="set-newsletter-text" class="field-textarea" rows="2" placeholder="Un único ensayo breve cada domingo..." oninput="updateSettingsPreviews()"></textarea>
+                    </div>
+
+                    <div class="field-group">
+                      <label for="set-footer-copyright">Texto de Copyright y Créditos del Pie</label>
+                      <textarea id="set-footer-copyright" class="field-textarea" rows="2" placeholder="© 2026 EDITOR. Publicación independiente..."></textarea>
+                    </div>
+
+                    <div class="preview-section-title">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                      VISTA PREVIA DE LA FRANJA NEWSLETTER
+                    </div>
+                    <div class="preview-box">
+                      <section class="newsletter-strip" style="margin: 0; padding: 2rem 1rem;">
+                        <div class="newsletter-content" style="max-width: 520px; margin: 0 auto; text-align: center;">
+                          <h3 id="prev-nl-title" style="margin: 0 0 0.5rem 0; font-family: var(--font-serif); font-size: 1.4rem;">El correo de los domingos</h3>
+                          <p id="prev-nl-text" style="color: var(--text-secondary); font-size: 0.88rem; margin: 0 0 1.25rem 0;">Un único ensayo breve cada domingo por la mañana.</p>
+                          <div style="display: flex; gap: 0.5rem; justify-content: center;">
+                            <input type="email" class="field-input" placeholder="tu@correo.com" style="max-width: 260px;" disabled>
+                            <button type="button" class="admin-btn admin-btn-primary" id="prev-nl-btn">Suscribirme</button>
+                          </div>
+                        </div>
+                      </section>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </main>
+
           </div>
 
           <div class="toast" id="admin-toast">Cambios guardados con éxito</div>
@@ -509,7 +979,10 @@ public struct AdminDashboard {
           <script>
             let currentPostSlug = null;
             let postsCache = [];
+            let currentView = 'posts';
+            let siteSettingsCache = null;
 
+            // Elements for Article Editor
             const titleInput = document.getElementById('post-title');
             const slugInput = document.getElementById('post-slug');
             const categoryInput = document.getElementById('post-category');
@@ -523,18 +996,75 @@ public struct AdminDashboard {
             const deleteBtn = document.getElementById('btn-delete');
             const toastEl = document.getElementById('admin-toast');
 
+            // View Switching
+            function switchView(viewName) {
+              currentView = viewName;
+
+              // Tabs styling
+              document.querySelectorAll('.sidebar-tab-btn').forEach(btn => btn.classList.remove('active'));
+              const activeTab = document.getElementById(`tab-${viewName}`);
+              if (activeTab) activeTab.classList.add('active');
+
+              // Panels
+              document.querySelectorAll('.admin-view-panel').forEach(p => p.classList.remove('active'));
+              const activePanel = document.getElementById(`view-${viewName}`);
+              if (activePanel) activePanel.classList.add('active');
+
+              // Sidebar subpane
+              const articlesPane = document.getElementById('sidebar-articles-pane');
+              const infoPane = document.getElementById('sidebar-info-pane');
+              const infoText = document.getElementById('sidebar-info-text');
+
+              if (viewName === 'posts') {
+                articlesPane.style.display = 'flex';
+                infoPane.style.display = 'none';
+                if (currentPostSlug) deleteBtn.style.display = 'inline-flex';
+              } else {
+                articlesPane.style.display = 'none';
+                infoPane.style.display = 'block';
+                deleteBtn.style.display = 'none';
+
+                const sectionDescriptions = {
+                  author: '<strong>Autor &amp; Biografía:</strong> Modifica la firma, rol, avatar y las frases biográficas que acompañan a cada artículo publicado y a tu página de presentación.',
+                  site: '<strong>Identidad del Sitio:</strong> Define el título oficial de tu publicación o revista, el lema visible en cabecera y la meta descripción SEO.',
+                  about: '<strong>Página &ldquo;Sobre mí&rdquo;:</strong> Ajusta el perfil, el manifiesto editorial, los 4 principios de lentitud y estética, y el encabezado de contacto.',
+                  newsletter: '<strong>Newsletter &amp; Pie:</strong> Configura la caja de captación de suscriptores y los avisos legales / copyright al pie de todas las páginas.'
+                };
+                infoText.innerHTML = sectionDescriptions[viewName] || '';
+              }
+            }
+
+            // Init
+            window.addEventListener('DOMContentLoaded', () => {
+              // Read server-embedded settings if present
+              const embedded = document.getElementById('server-settings');
+              if (embedded) {
+                try {
+                  siteSettingsCache = JSON.parse(embedded.textContent);
+                  populateSettingsForms(siteSettingsCache);
+                } catch (e) {
+                  console.warn('No se pudo parsear server-settings:', e);
+                }
+              }
+
+              loadPosts();
+              loadSiteSettings();
+            });
+
             // Load Posts List on Init
             async function loadPosts() {
               try {
                 const res = await fetch('/api/posts');
-                postsCache = await res.json();
-                renderSidebar(postsCache);
+                if (res.ok) {
+                  postsCache = await res.json();
+                  renderSidebar(postsCache);
 
-                if (!currentPostSlug && postsCache.length > 0) {
-                  selectPost(postsCache[0].slug);
+                  if (!currentPostSlug && postsCache.length > 0) {
+                    selectPost(postsCache[0].slug);
+                  }
                 }
               } catch (e) {
-                console.error("Error al cargar artículos:", e);
+                console.warn("Servidor dinámico no detectado (modo estático):", e);
               }
             }
 
@@ -546,13 +1076,13 @@ public struct AdminDashboard {
                 <li class="post-list-item ${p.slug === currentPostSlug ? 'active' : ''}" onclick="selectPost('${p.slug}')">
                   <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 0.5rem;">
                     <div style="flex: 1; min-width: 0;">
-                      <div class="item-category">${escapeHtml(p.category)} &bull; ${escapeHtml(p.format)}</div>
-                      <div class="item-title">${escapeHtml(p.title)}</div>
+                      <div class="item-category">${escapeHtml(p.category || 'Ensayo')} &bull; ${escapeHtml(p.format || 'standard')}</div>
+                      <div class="item-title">${escapeHtml(p.title || 'Sin título')}</div>
                     </div>
                     <button type="button" class="list-item-delete-btn" onclick="deleteArticle('${p.slug}', event)" title="Eliminar este artículo" aria-label="Eliminar">&times;</button>
                   </div>
                   <div class="item-meta" style="margin-top: 0.35rem;">
-                    <span>${escapeHtml(p.date)}</span>
+                    <span>${escapeHtml(p.date || '')}</span>
                     <span>${p.isPublished ? 'Publicado' : 'Borrador'}</span>
                   </div>
                 </li>
@@ -562,24 +1092,25 @@ public struct AdminDashboard {
             async function selectPost(slug) {
               currentPostSlug = slug;
               renderSidebar(postsCache);
+              switchView('posts');
               deleteBtn.style.display = 'inline-flex';
 
               try {
                 const res = await fetch(`/api/posts?slug=${encodeURIComponent(slug)}`);
-                const post = await res.json();
-
-                titleInput.value = post.title || '';
-                slugInput.value = post.slug || '';
-                slugInput.readOnly = true;
-                categoryInput.value = post.category || '';
-                formatSelect.value = post.format || 'standard';
-                coverInput.value = post.coverImage || '';
-                captionInput.value = post.imageCaption || '';
-                dateInput.value = post.date || '';
-                excerptInput.value = post.excerpt || '';
-                contentInput.value = post.content || '';
-
-                updateLivePreview();
+                if (res.ok) {
+                  const post = await res.json();
+                  titleInput.value = post.title || '';
+                  slugInput.value = post.slug || '';
+                  slugInput.readOnly = true;
+                  categoryInput.value = post.category || '';
+                  formatSelect.value = post.format || 'standard';
+                  coverInput.value = post.coverImage || '';
+                  captionInput.value = post.imageCaption || '';
+                  dateInput.value = post.date || '';
+                  excerptInput.value = post.excerpt || '';
+                  contentInput.value = post.content || '';
+                  updateLivePreview();
+                }
               } catch (e) {
                 console.error("Error al cargar post individual:", e);
               }
@@ -587,6 +1118,7 @@ public struct AdminDashboard {
 
             function resetForNewPost() {
               currentPostSlug = null;
+              switchView('posts');
               deleteBtn.style.display = 'none';
 
               titleInput.value = '';
@@ -600,23 +1132,26 @@ public struct AdminDashboard {
               excerptInput.value = '';
               contentInput.value = '';
 
-              document.querySelectorAll('.post-list-item').forEach(el => el.classList.remove('active'));
-              titleInput.focus();
               updateLivePreview();
+              titleInput.focus();
             }
 
-            // Auto-slugify title for new posts
+            // Auto slug generation on new post
             titleInput.addEventListener('input', () => {
-              if (!currentPostSlug || !slugInput.readOnly) {
-                slugInput.value = titleInput.value
+              if (!slugInput.readOnly) {
+                const title = titleInput.value;
+                const autoSlug = title
                   .toLowerCase()
-                  .trim()
-                  .replace(/[\s\W-]+/g, '-')
+                  .normalize("NFD").replace(/[\\u0300-\\u036f]/g, "")
+                  .replace(/[^a-z0-9]+/g, '-')
                   .replace(/^-+|-+$/g, '');
+                slugInput.value = autoSlug;
               }
               updateLivePreview();
             });
 
+            coverInput.addEventListener('input', updateLivePreview);
+            captionInput.addEventListener('input', updateLivePreview);
             contentInput.addEventListener('input', updateLivePreview);
             excerptInput.addEventListener('input', updateLivePreview);
 
@@ -635,8 +1170,7 @@ public struct AdminDashboard {
                 html += `<div style="margin: 1.5rem 0; border-radius: 4px; overflow: hidden;"><img src="${escapeHtml(cover)}" style="width: 100%; height: auto; max-height: 380px; object-fit: cover;"></div>`;
               }
 
-              const lines = text.split('\n');
-              let inBlockquote = false;
+              const lines = text.split('\\n');
               let inCode = false;
               let codeLines = [];
               let leadDone = false;
@@ -646,7 +1180,7 @@ public struct AdminDashboard {
 
                 if (trimmed.startsWith('```')) {
                   if (inCode) {
-                    html += `<pre style="background: var(--code-bg); padding: 1.25rem; border-radius: var(--radius-sm); font-family: monospace; overflow-x: auto; margin: 1.5rem 0;"><code>${escapeHtml(codeLines.join('\n'))}</code></pre>`;
+                    html += `<pre style="background: var(--code-bg); padding: 1.25rem; border-radius: var(--radius-sm); font-family: monospace; overflow-x: auto; margin: 1.5rem 0;"><code>${escapeHtml(codeLines.join('\\n'))}</code></pre>`;
                     codeLines = [];
                     inCode = false;
                   } else {
@@ -660,12 +1194,10 @@ public struct AdminDashboard {
                   continue;
                 }
 
-                if (!trimmed) {
-                  continue;
-                }
+                if (!trimmed) continue;
 
                 // 1. Standalone Images ![alt](url)
-                const imgMatch = trimmed.match(/^!\[(.*?)\]\((.*?)\)$/);
+                const imgMatch = trimmed.match(/^!\\[(.*?)\\]\\((.*?)\\)$/);
                 if (imgMatch) {
                   const alt = imgMatch[1];
                   const url = imgMatch[2];
@@ -681,7 +1213,7 @@ public struct AdminDashboard {
                 // 2. YouTube Video or Playlist Automatic Embed
                 if (trimmed.startsWith('http') && (trimmed.includes('youtube.com') || trimmed.includes('youtu.be'))) {
                   const ytPlaylist = trimmed.match(/[?&]list=([a-zA-Z0-9_-]+)/);
-                  const ytVideo = trimmed.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/))([a-zA-Z0-9_-]{11})/);
+                  const ytVideo = trimmed.match(/(?:youtu\\.be\\/|youtube\\.com\\/(?:watch\\?v=|embed\\/))([a-zA-Z0-9_-]{11})/);
 
                   if (ytPlaylist) {
                     const listId = ytPlaylist[1];
@@ -702,12 +1234,9 @@ public struct AdminDashboard {
                   }
                 }
 
-                // 3. Raw <iframe> or <div class="video-embed-wrap">
+                // 3. Raw <iframe>
                 if (trimmed.startsWith('<iframe') && trimmed.includes('</iframe>')) {
                   html += `<div class="video-embed-wrap" style="margin: 2.25rem 0;">${trimmed}</div>`;
-                  continue;
-                } else if (trimmed.startsWith('<div class="video-embed-wrap')) {
-                  html += trimmed;
                   continue;
                 }
 
@@ -718,7 +1247,7 @@ public struct AdminDashboard {
                   continue;
                 }
 
-                // 3. Headings
+                // 5. Headings
                 if (trimmed.startsWith('### ')) {
                   html += `<h3 style="font-family: var(--font-serif); font-size: 1.4rem; font-weight: 600; margin-top: 2rem; margin-bottom: 0.75rem;">${escapeHtml(trimmed.substring(4))}</h3>`;
                   continue;
@@ -730,36 +1259,23 @@ public struct AdminDashboard {
                   continue;
                 }
 
-                // 4. Horizontal Rules
+                // 6. Horizontal Rules
                 if (trimmed === '---' || trimmed === '***') {
                   html += `<hr style="margin: 3rem 0; border: none; border-top: 1px solid var(--border-color);">`;
                   continue;
                 }
 
-                // 5. Lists
+                // 7. Lists
                 if (trimmed.startsWith('- ') || trimmed.startsWith('* ')) {
                   html += `<ul style="margin: 1rem 0 1rem 1.5rem; list-style-type: disc;"><li>${escapeHtml(trimmed.substring(2))}</li></ul>`;
                   continue;
                 }
 
-                // 6. Paragraphs with inline formatting
+                // 8. Paragraphs with inline formatting
                 let formatted = escapeHtml(trimmed);
-
-                // Inline images: ![alt](url)
-                formatted = formatted.replace(/!\[(.*?)\]\((.*?)\)/g, (m, alt, url) => {
-                  return `<div class="post-media-bleed" style="margin: 2rem 0; text-align: center;"><img src="${url}" alt="${alt}" style="width: 100%; max-height: 520px; object-fit: cover; border-radius: var(--radius-sm);">${alt ? `<div class="media-caption" style="font-family: var(--font-sans); font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.5rem; font-style: italic;">${alt}</div>` : ''}</div>`;
-                });
-
-                // Inline links: [label](url)
-                formatted = formatted.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank" style="color: var(--accent); text-decoration: underline;">$1</a>');
-
-                // Bold: **text**
-                formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-
-                // Italic: *text*
-                formatted = formatted.replace(/\*([^*]+?)\*/g, '<em>$1</em>');
-
-                // Inline code: `code`
+                formatted = formatted.replace(/\\[(.*?)\\]\\((.*?)\\)/g, '<a href="$2" target="_blank" style="color: var(--accent); text-decoration: underline;">$1</a>');
+                formatted = formatted.replace(/\\*\\*(.*?)\\*\\*/g, '<strong>$1</strong>');
+                formatted = formatted.replace(/\\*([^*]+?)\\*/g, '<em>$1</em>');
                 formatted = formatted.replace(/`([^`]+)`/g, '<code style="background-color: var(--code-bg); color: var(--accent); padding: 0.15rem 0.35rem; border-radius: 3px; font-family: monospace;">$1</code>');
 
                 if (!leadDone && !trimmed.startsWith('![')) {
@@ -773,17 +1289,200 @@ public struct AdminDashboard {
               previewEl.innerHTML = html;
             }
 
-            // Save / Publish
+            // Toolbar syntax insertion helper
+            function insertSyntax(before, after) {
+              const start = contentInput.selectionStart;
+              const end = contentInput.selectionEnd;
+              const val = contentInput.value;
+              const sel = val.substring(start, end);
+              const rep = before + sel + after;
+              contentInput.value = val.substring(0, start) + rep + val.substring(end);
+              contentInput.focus();
+              contentInput.setSelectionRange(start + before.length, start + before.length + sel.length);
+              updateLivePreview();
+            }
+
+            // Settings Management
+            async function loadSiteSettings() {
+              try {
+                const res = await fetch('/api/settings');
+                if (res.ok) {
+                  siteSettingsCache = await res.json();
+                  populateSettingsForms(siteSettingsCache);
+                }
+              } catch (e) {
+                console.warn('Servidor no disponible para /api/settings:', e);
+              }
+            }
+
+            function setVal(id, val) {
+              const el = document.getElementById(id);
+              if (el) el.value = val != null ? val : '';
+            }
+            function getVal(id) {
+              const el = document.getElementById(id);
+              return el ? el.value.trim() : '';
+            }
+
+            function populateSettingsForms(s) {
+              if (!s) return;
+              // Author
+              setVal('set-author-name', s.authorName);
+              setVal('set-author-role', s.authorRole);
+              setVal('set-author-avatar', s.authorAvatar);
+              setVal('set-author-bio', s.authorBio);
+              setVal('set-author-quote', s.authorQuote);
+
+              // Site
+              setVal('set-site-title', s.siteTitle);
+              setVal('set-site-tagline', s.siteTagline);
+              setVal('set-site-description', s.siteDescription);
+
+              // About
+              setVal('set-about-title', s.aboutTitle);
+              setVal('set-about-tagline', s.aboutTagline);
+              setVal('set-about-lead', s.aboutLead);
+              setVal('set-contact-intro', s.contactIntro);
+
+              // Principles
+              if (Array.isArray(s.principles)) {
+                for (let i = 0; i < 4; i++) {
+                  const p = s.principles[i];
+                  if (p) {
+                    setVal(`set-principle-title-${i}`, p.title);
+                    setVal(`set-principle-desc-${i}`, p.description);
+                  }
+                }
+              }
+
+              // Newsletter & Footer
+              setVal('set-newsletter-title', s.newsletterTitle);
+              setVal('set-newsletter-text', s.newsletterText);
+              setVal('set-newsletter-btn', s.newsletterButton);
+              setVal('set-footer-copyright', s.footerCopyright);
+
+              updateSettingsPreviews();
+            }
+
+            function updateSettingsPreviews() {
+              // Topbar brand preview
+              const siteTitle = getVal('set-site-title') || 'EDITOR';
+              const topbarTitle = document.getElementById('topbar-site-title');
+              if (topbarTitle) topbarTitle.textContent = siteTitle;
+
+              // Author Preview
+              const authorName = getVal('set-author-name') || 'andreii';
+              const authorRole = getVal('set-author-role') || 'Editor';
+              const authorAvatar = getVal('set-author-avatar') || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80';
+              const authorBio = getVal('set-author-bio') || "i'll guess you're seeing me in another life hun";
+
+              const prevName = document.getElementById('prev-author-name');
+              const prevRole = document.getElementById('prev-author-role');
+              const prevAvatar = document.getElementById('prev-author-avatar');
+              const prevBio = document.getElementById('prev-author-bio');
+
+              if (prevName) prevName.textContent = authorName;
+              if (prevRole) prevRole.textContent = authorRole;
+              if (prevAvatar) {
+                prevAvatar.src = authorAvatar;
+                prevAvatar.alt = authorName;
+              }
+              if (prevBio) prevBio.textContent = authorBio;
+
+              // Site Preview
+              const prevSiteTitle = document.getElementById('prev-site-title');
+              const prevSiteTagline = document.getElementById('prev-site-tagline');
+              if (prevSiteTitle) prevSiteTitle.textContent = siteTitle;
+              if (prevSiteTagline) prevSiteTagline.textContent = getVal('set-site-tagline') || 'Diario de diseño reflexivo, arquitectura y cultura pausada';
+
+              // Newsletter Preview
+              const prevNlTitle = document.getElementById('prev-nl-title');
+              const prevNlText = document.getElementById('prev-nl-text');
+              const prevNlBtn = document.getElementById('prev-nl-btn');
+              if (prevNlTitle) prevNlTitle.textContent = getVal('set-newsletter-title') || 'El correo de los domingos';
+              if (prevNlText) prevNlText.textContent = getVal('set-newsletter-text') || 'Un único ensayo breve cada domingo por la mañana.';
+              if (prevNlBtn) prevNlBtn.textContent = getVal('set-newsletter-btn') || 'Suscribirme';
+            }
+
+            async function saveSiteSettings() {
+              const settings = {
+                siteTitle: getVal('set-site-title') || 'EDITOR',
+                siteTagline: getVal('set-site-tagline') || '',
+                siteDescription: getVal('set-site-description') || '',
+                authorName: getVal('set-author-name') || 'andreii',
+                authorRole: getVal('set-author-role') || 'Editor',
+                authorAvatar: getVal('set-author-avatar') || '',
+                authorBio: getVal('set-author-bio') || '',
+                authorQuote: getVal('set-author-quote') || '',
+                aboutTagline: getVal('set-about-tagline') || 'Perfil',
+                aboutTitle: getVal('set-about-title') || 'andreii',
+                aboutLead: getVal('set-about-lead') || '',
+                contactIntro: getVal('set-contact-intro') || '',
+                principles: [
+                  {
+                    number: '01',
+                    title: getVal('set-principle-title-0') || 'Silencio visual',
+                    description: getVal('set-principle-desc-0') || ''
+                  },
+                  {
+                    number: '02',
+                    title: getVal('set-principle-title-1') || 'Tipografía como voz',
+                    description: getVal('set-principle-desc-1') || ''
+                  },
+                  {
+                    number: '03',
+                    title: getVal('set-principle-title-2') || 'Fricción analógica',
+                    description: getVal('set-principle-desc-2') || ''
+                  },
+                  {
+                    number: '04',
+                    title: getVal('set-principle-title-3') || 'Permanencia',
+                    description: getVal('set-principle-desc-3') || ''
+                  }
+                ],
+                newsletterTitle: getVal('set-newsletter-title') || 'El correo de los domingos',
+                newsletterText: getVal('set-newsletter-text') || '',
+                newsletterButton: getVal('set-newsletter-btn') || 'Suscribirme',
+                footerCopyright: getVal('set-footer-copyright') || ''
+              };
+
+              try {
+                const res = await fetch('/api/settings', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify(settings)
+                });
+                const result = await res.json();
+                if (result.success) {
+                  siteSettingsCache = settings;
+                  showToast('✓ Ajustes guardados y sitio reconstruido');
+                  updateSettingsPreviews();
+                } else {
+                  alert('Error al guardar: ' + (result.error || 'Desconocido'));
+                }
+              } catch (e) {
+                alert('Aviso: Para guardar en disco de forma dinámica, ejecuta `swift run cms serve` en tu terminal.');
+              }
+            }
+
+            // Universal Save Button in Topbar
             document.getElementById('btn-save').addEventListener('click', async () => {
+              if (currentView !== 'posts') {
+                await saveSiteSettings();
+                return;
+              }
+
+              // Post Save
               const slug = slugInput.value.trim();
               if (!slug) {
                 alert('Por favor especifica un slug para el artículo.');
+                slugInput.focus();
                 return;
               }
 
               const payload = {
-                title: titleInput.value.trim() || 'Sin título',
                 slug: slug,
+                title: titleInput.value.trim() || 'Sin título',
                 category: categoryInput.value.trim() || 'Ensayo',
                 format: formatSelect.value,
                 coverImage: coverInput.value.trim(),
@@ -809,21 +1508,22 @@ public struct AdminDashboard {
                   alert('Error al guardar: ' + (result.error || 'Desconocido'));
                 }
               } catch (e) {
-                alert('Error al comunicarse con el servidor Swift CMS');
+                alert('Aviso: Para guardar en disco de forma dinámica, ejecuta `swift run cms serve` en tu terminal.');
               }
             });
 
-            // Rebuild
+            // Rebuild Button
             document.getElementById('btn-rebuild').addEventListener('click', async () => {
               try {
                 const res = await fetch('/api/build', { method: 'POST' });
                 const result = await res.json();
                 showToast('✓ ' + result.message);
               } catch (e) {
-                alert('Error al reconstruir el sitio');
+                alert('Aviso: Para reconstruir en disco, ejecuta `swift run cms build` o `swift run cms serve`.');
               }
             });
 
+            // Article Delete
             async function deleteArticle(slug, event) {
               if (event) event.stopPropagation();
               if (!slug) return;
@@ -836,99 +1536,55 @@ public struct AdminDashboard {
               }
 
               try {
-                // Try POST /api/posts/delete first for maximum browser compatibility
                 let res = await fetch(`/api/posts/delete?slug=${encodeURIComponent(slug)}`, {
-                  method: 'POST',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({ slug: slug })
+                  method: 'POST'
                 });
-
                 if (!res.ok) {
-                  // Fallback to DELETE /api/posts
                   res = await fetch(`/api/posts?slug=${encodeURIComponent(slug)}`, { method: 'DELETE' });
                 }
 
                 const result = await res.json();
                 if (result.success) {
-                  showToast('✓ ' + (result.message || 'Artículo eliminado con éxito'));
+                  showToast('✓ Artículo eliminado');
                   if (currentPostSlug === slug) {
                     resetForNewPost();
                   }
                   await loadPosts();
                 } else {
-                  alert('Error al eliminar: ' + (result.error || 'Respuesta no exitosa'));
+                  alert('Error al eliminar: ' + (result.error || 'Desconocido'));
                 }
-              } catch (err) {
-                console.error("Error al eliminar artículo:", err);
-                alert('No se pudo comunicar con el servidor para eliminar el artículo. Verifica que el servidor Swift esté corriendo.');
+              } catch (e) {
+                alert('Error al conectar con el servidor CMS');
               }
             }
 
-            // Top Bar Delete button with 2-step in-place confirmation
-            let deleteConfirmTimeout = null;
-            deleteBtn.addEventListener('click', async () => {
-              if (!currentPostSlug) return;
-
-              if (deleteBtn.dataset.confirming !== 'true') {
-                deleteBtn.dataset.confirming = 'true';
-                deleteBtn.textContent = '¿Confirmar eliminación?';
-                deleteBtn.style.backgroundColor = '#d93434';
-                deleteBtn.style.color = '#ffffff';
-
-                deleteConfirmTimeout = setTimeout(() => {
-                  deleteBtn.dataset.confirming = 'false';
-                  deleteBtn.textContent = 'Eliminar';
-                  deleteBtn.style.backgroundColor = '';
-                  deleteBtn.style.color = '';
-                }, 4000);
-                return;
+            deleteBtn.addEventListener('click', () => {
+              if (currentPostSlug) {
+                deleteArticle(currentPostSlug);
               }
-
-              // Confirmed!
-              clearTimeout(deleteConfirmTimeout);
-              deleteBtn.dataset.confirming = 'false';
-              deleteBtn.textContent = 'Eliminar';
-              deleteBtn.style.backgroundColor = '';
-              deleteBtn.style.color = '';
-
-              await deleteArticle(currentPostSlug, null);
             });
 
             document.getElementById('btn-new-post').addEventListener('click', resetForNewPost);
 
-            function insertSyntax(prefix, suffix) {
-              const start = contentInput.selectionStart;
-              const end = contentInput.selectionEnd;
-              const text = contentInput.value;
-              const selected = text.substring(start, end);
-              const replacement = prefix + selected + suffix;
-              contentInput.value = text.substring(0, start) + replacement + text.substring(end);
-              contentInput.focus();
-              contentInput.selectionStart = start + prefix.length;
-              contentInput.selectionEnd = start + prefix.length + selected.length;
-              updateLivePreview();
-            }
-
             function showToast(msg) {
               toastEl.textContent = msg;
               toastEl.classList.add('show');
-              setTimeout(() => toastEl.classList.remove('show'), 2800);
+              setTimeout(() => {
+                toastEl.classList.remove('show');
+              }, 3000);
             }
 
             function escapeHtml(str) {
-              if (!str) return '';
-              return String(str)
+              return String(str || '')
                 .replace(/&/g, '&amp;')
                 .replace(/</g, '&lt;')
                 .replace(/>/g, '&gt;')
-                .replace(/"/g, '&quot;');
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
             }
-
-            // Start
-            loadPosts();
           </script>
         </body>
         </html>
-"""#
+        """
     }
 }

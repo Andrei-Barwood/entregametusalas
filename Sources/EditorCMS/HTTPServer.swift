@@ -178,7 +178,7 @@ public final class HTTPServer {
 
         // 1. Admin Dashboard Route
         if path == "/admin" || path == "/admin/" {
-            let adminHTML = AdminDashboard.renderHTML()
+            let adminHTML = AdminDashboard.renderHTML(settings: generator.loadSettings())
             sendResponse(clientSocket: clientSocket, status: "200 OK", contentType: "text/html; charset=utf-8", data: adminHTML.data(using: .utf8)!)
             return
         }
@@ -194,6 +194,27 @@ public final class HTTPServer {
     }
 
     private func handleAPI(method: String, path: String, queryParams: [String: String], body: Data, clientSocket: Int32) {
+        if path == "/api/settings" {
+            switch method {
+            case "GET":
+                let settings = generator.loadSettings()
+                sendJSON(clientSocket: clientSocket, object: settings)
+                return
+            case "POST":
+                do {
+                    let settings = try JSONDecoder().decode(SiteSettings.self, from: body)
+                    settings.save(to: generator.settingsFile)
+                    generator.build()
+                    sendJSON(clientSocket: clientSocket, object: ApiResponse(success: true, message: "Ajustes del sitio guardados con éxito"))
+                } catch {
+                    sendJSON(clientSocket: clientSocket, status: "400 Bad Request", object: ApiResponse(error: "Datos de configuración inválidos: \(error.localizedDescription)"))
+                }
+                return
+            default:
+                break
+            }
+        }
+
         if path == "/api/posts" {
             switch method {
             case "GET":

@@ -4,31 +4,25 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sobre mí &mdash; andreii</title>
-  <meta name="description" content="Perfil de andreii &mdash; i'll guess you're seeing me in another life hun">
+  <meta name="description" content="Perfil de andreii &mdash; i&#39;ll guess you&#39;re seeing me in another life hun">
   <link rel="stylesheet" href="style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 </head>
 <body>
-
-  <!-- Reading Progress Bar -->
   <div class="reading-progress-container" aria-hidden="true">
     <div class="reading-progress-bar"></div>
   </div>
 
   <div class="site-wrapper">
-    <!-- Header -->
     <header class="site-header">
       <div class="header-top-bar">
-        <!-- Live Search Trigger -->
         <button class="header-action-btn search-open-btn" aria-label="Abrir buscador (Cmd+K)" title="Buscar (Cmd+K)">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
             <circle cx="11" cy="11" r="8"></circle>
             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
           </svg>
         </button>
-
-        <!-- Dark Mode Toggle -->
         <button class="header-action-btn theme-toggle-btn" aria-label="Cambiar tema de color" title="Alternar modo claro / oscuro">
           <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
             <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
@@ -62,11 +56,8 @@
       </nav>
     </header>
 
-    <!-- Main About Content -->
     <main class="site-main">
       <div class="container-prose">
-        
-        <!-- About Hero Section -->
         <section class="about-hero">
           <div class="about-portrait-wrap">
             <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80" 
@@ -74,18 +65,31 @@
           </div>
           <span class="about-tagline">Perfil</span>
           <h1 class="about-title">andreii</h1>
-          <p style="font-family: var(--font-serif); font-size: 1.25rem; font-style: italic; color: var(--text-primary); max-width: 540px; margin: 1rem auto 0 auto;">
-            &ldquo;i'll guess you're seeing me in another life hun&rdquo;
-          </p>
+          <p style="font-family: var(--font-serif); font-size: 1.25rem; font-style: italic; color: var(--text-primary); max-width: 540px; margin: 1rem auto 0 auto;">&ldquo;i&#39;ll guess you&#39;re seeing me in another life hun&rdquo;</p>
         </section>
 
-        <!-- Prose Narrative -->
         <div class="prose">
-          <p class="lead" style="text-align: center; font-style: italic; margin: 2rem auto 3rem auto;">
-            i'll guess you're seeing me in another life hun
-          </p>
+          <p class="lead" style="text-align: center; font-style: italic; margin: 2rem auto 3rem auto;">i&#39;ll guess you&#39;re seeing me in another life hun</p>
 
-          <!-- Minimalist Contact Section -->
+          <div class="principles-grid">
+  <div class="principle-item">
+  <h4>01. Silencio visual</h4>
+  <p>El espacio en blanco no es un vacío que espera relleno, sino el marco que confiere dignidad a cada idea.</p>
+</div>
+            <div class="principle-item">
+  <h4>02. Tipografía como voz</h4>
+  <p>La cadencia de las fuentes serif clásicas conecta el ojo del lector con la respiración natural del texto.</p>
+</div>
+            <div class="principle-item">
+  <h4>03. Fricción analógica</h4>
+  <p>Reivindicamos los procesos lentos: el papel de grano fino, las cámaras mecánicas y los borradores manuscritos.</p>
+</div>
+            <div class="principle-item">
+  <h4>04. Permanencia</h4>
+  <p>Escribimos sobre conceptos que conservarán su vigencia dentro de una década, no en el próximo ciclo de noticias.</p>
+</div>
+</div>
+
           <section class="contact-section" id="contacto">
             <h3>Iniciar una conversación</h3>
             <p class="contact-intro">
@@ -116,12 +120,10 @@
               <button type="submit" class="form-submit-btn">Enviar correspondencia &rarr;</button>
             </form>
           </section>
-
         </div>
       </div>
     </main>
 
-    <!-- Footer -->
     <footer class="site-footer">
       <div class="footer-inner">
         <nav class="footer-nav" aria-label="Navegación del pie">
@@ -133,7 +135,7 @@
         </nav>
         
         <p class="footer-copyright">
-          &copy; 2026 EDITOR. Publicación independiente dedicada a la estética editorial y la contemplación serena.
+          © 2026 EDITOR. Publicación independiente dedicada a la estética editorial y la contemplación serena.
         </p>
 
         <a href="#top" class="footer-back-to-top">
@@ -147,7 +149,6 @@
     </footer>
   </div>
 
-  <!-- Search Modal Overlay -->
   <div class="search-modal" id="search-modal" role="dialog" aria-modal="true" aria-label="Búsqueda instantánea de artículos">
     <button class="search-modal-close search-close-btn" aria-label="Cerrar búsqueda">
       <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
@@ -155,7 +156,6 @@
         <line x1="6" y1="6" x2="18" y2="18"></line>
       </svg>
     </button>
-
     <div class="search-box-wrap">
       <input type="search" class="search-input" placeholder="Escribe para buscar..." autocomplete="off" spellcheck="false">
       <div class="search-hint">
@@ -166,7 +166,6 @@
         </div>
       </div>
     </div>
-
     <div class="search-results-list" id="search-results"></div>
   </div>
 
