@@ -4,3 +4,10 @@
 !.dev.vars.example
 .env*
 !.env.example
+
+# Swift build
+.build/
+.swiftpm/
+
+# OS files
+.DS_Store
