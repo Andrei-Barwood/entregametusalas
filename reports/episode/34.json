@@ -1,0 +1,74 @@
+{
+  "type": "bundle",
+  "id": "bundle--cyberia-medsoc-ep34-2027",
+  "spec_version": "2.1",
+  "console": "CYBERIA-MED // SOC Console v19.96",
+  "palette_standard": "Ultimate Queen Chrysalis (#523)",
+  "objects": [
+    {
+      "type": "vulnerability",
+      "id": "vulnerability--ep34-cve-2027-0434",
+      "name": "CVE-2027-0434",
+      "description": "Drenaje acelerado de integridad vital (Vital Integrity Drop > 8%/sec) al transitar por la subred contaminada sin haber aplicado el sello de inoculación criptográfica.",
+      "x_cvss_score": 9.6,
+      "x_cvss_vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H",
+      "x_clinical_protocol": "PXE Cleanroom Secure Re-Imaging / TPM 2.0 Sealed Storage",
+      "x_iomt_asset": "Cámara de Inoculación y Desinfección de Endpoints Clínicos (Cleanroom Pod)"
+    },
+    {
+      "type": "indicator",
+      "id": "indicator--ep34-blades-dpi",
+      "name": "SIGMA_UNSAFE_DOOR_VIRAL_INTEGRITY_HEMORRHAGE",
+      "pattern_type": "yara-sigma-hybrid",
+      "pattern": "sector == 'BIOHAZARD_RED_ZONE_34' AND host_integrity_percent < 35 AND inoculator_pod == 'STANDBY'",
+      "description": "Caída crítica de signos vitales en el monitor ECG de Zak tras cruzar el umbral UNSAFE DOOR."
+    },
+    {
+      "type": "course-of-action",
+      "id": "course-of-action--ep34-mitigation",
+      "name": "MIT-EP34-INOCULATOR-PURGE",
+      "description": "Ingreso del token criptográfico CYB-3334-ALPHA en la terminal de bio-purga y activación del haz del Inoculador para restaurar la imagen limpia y llevar la salud al 100%.",
+      "x_cli_playbook": "medsoc-inoculator --token CYB-3334-ALPHA --step-on-pad ZAK_HOST --restore-golden-image",
+      "x_prevention_standard": "NIST SP 800-88 Rev. 1 (Media Sanitization) & IEC 62443-3-3 SR 7.3",
+      "x_zero_trust_control": "Bloqueo automático de salida de Zona Roja para cualquier nodo que no presente certificado de inoculación vigente."
+    }
+  ],
+  "episode_metadata": {
+    "id": 34,
+    "code": "EP34",
+    "act_number": 4,
+    "act": "ACTO IV: COMPLEJO CYBERIA - NIVEL 2 (LABORATORIOS DE BIOCONTENCIÓN, GAS HALÓN Y NANOMEDICINA)",
+    "title": "Cruce de la Zona Contaminada e Inoculador (UNSAFE DOOR)",
+    "game_node_code": "UNSAFE DOOR",
+    "game_location": "Corredor biológico sellado y plataforma circular del Inoculador en el Nivel 2",
+    "cyberia_spoiler": "Con el código del antídoto memorizado, Zak abre la compuerta de peligro biológico ('UNSAFE DOOR') y se adentra en la zona altamente contaminada. El virus ataca su organismo al instante y su indicador de energía vital cae en picada segundo a segundo. Zak debe correr hacia la consola del extremo opuesto, teclear sin errores el código sintetizado en DRUG STORE y subirse a la plataforma luminosa del Inoculador, donde un haz de purga celular elimina el virus de su torrente sanguíneo antes de que muera.",
+    "hospital_counterpart": "Ejecución de Protocolo de Cuarentena en Zona Roja, Desinfección Criptográfica de Endpoints Comprometidos y Restauración desde Imágenes Inmutables",
+    "clinical_protocol": "PXE Cleanroom Secure Re-Imaging / TPM 2.0 Sealed Storage",
+    "iomt_asset": "Cámara de Inoculación y Desinfección de Endpoints Clínicos (Cleanroom Pod)",
+    "mitre_technique": "T1490 - Inhibit System Recovery (Countered via Immutable Golden Image Inoculation)",
+    "pillars": {
+      "vulnerability": {
+        "cve": "CVE-2027-0434",
+        "cvss": 9.6,
+        "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H",
+        "description": "Drenaje acelerado de integridad vital (Vital Integrity Drop > 8%/sec) al transitar por la subred contaminada sin haber aplicado el sello de inoculación criptográfica."
+      },
+      "detection": {
+        "engine": "BLADES Biometric Vital Watchdog",
+        "rule_name": "SIGMA_UNSAFE_DOOR_VIRAL_INTEGRITY_HEMORRHAGE",
+        "signature": "sector == 'BIOHAZARD_RED_ZONE_34' AND host_integrity_percent < 35 AND inoculator_pod == 'STANDBY'",
+        "telemetry_indicator": "Caída crítica de signos vitales en el monitor ECG de Zak tras cruzar el umbral UNSAFE DOOR."
+      },
+      "mitigation": {
+        "action_code": "MIT-EP34-INOCULATOR-PURGE",
+        "immediate_response": "Ingreso del token criptográfico CYB-3334-ALPHA en la terminal de bio-purga y activación del haz del Inoculador para restaurar la imagen limpia y llevar la salud al 100%.",
+        "cli_command": "medsoc-inoculator --token CYB-3334-ALPHA --step-on-pad ZAK_HOST --restore-golden-image"
+      },
+      "prevention": {
+        "standard": "NIST SP 800-88 Rev. 1 (Media Sanitization) & IEC 62443-3-3 SR 7.3",
+        "hardening_policy": "Estaciones de purga y re-aprovisionamiento automatizado (Inoculator Pods) conectadas a almacenamiento ROM de solo lectura para restaurar equipos comprometidos en segundos.",
+        "zero_trust_control": "Bloqueo automático de salida de Zona Roja para cualquier nodo que no presente certificado de inoculación vigente."
+      }
+    }
+  }
+}

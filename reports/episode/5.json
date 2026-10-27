@@ -1,0 +1,74 @@
+{
+  "type": "bundle",
+  "id": "bundle--cyberia-medsoc-ep05-2027",
+  "spec_version": "2.1",
+  "console": "CYBERIA-MED // SOC Console v19.96",
+  "palette_standard": "Ultimate Queen Chrysalis (#523)",
+  "objects": [
+    {
+      "type": "vulnerability",
+      "id": "vulnerability--ep05-cve-2027-0105",
+      "name": "CVE-2027-0105",
+      "description": "Violación de confianza lateral entre operadores privilegiados (Gia/Santos) que permite a un administrador celoso o malintencionado revocar abruptamente la sesión del auditor.",
+      "x_cvss_score": 8.2,
+      "x_cvss_vector": "CVSS:3.1/AV:L/AC:L/PR:H/UI:R/S:C/C:H/I:H/A:H",
+      "x_clinical_protocol": "Kerberos / OAuth 2.0 OIDC Clinical PAM",
+      "x_iomt_asset": "Bóveda de Credenciales Privilegiadas (PAM) de Contratistas del Hospital"
+    },
+    {
+      "type": "indicator",
+      "id": "indicator--ep05-blades-dpi",
+      "name": "SIGMA_PAM_INSIDER_CONFLICT_SESSION_TERMINATION",
+      "pattern_type": "yara-sigma-hybrid",
+      "pattern": "event_type == 'PAM_SESSION_HIJACK' AND actor_group == 'SANTOS_CONTRACTORS' AND trigger == 'SOCIAL_PROXIMITY_ALERT'",
+      "description": "Intento de invalidación hostil de token de sesión tras interacción no autorizada en el nodo BIG KISS."
+    },
+    {
+      "type": "course-of-action",
+      "id": "course-of-action--ep05-mitigation",
+      "name": "MIT-EP05-ZERO-TRUST-SESSION",
+      "description": "Rechazo de solicitud de vinculación no verificada (Reject Kiss Protocol), congelación de privilegios del grupo de contratistas de Santos y bloqueo de sesión con llave hardware FIDO2.",
+      "x_cli_playbook": "blades-pam --decline-unverified-handshake --freeze-group SANTOS_MERC --lock-fido2",
+      "x_prevention_standard": "HIPAA Security Rule §164.308(a)(3) (Workforce Security)",
+      "x_zero_trust_control": "Sesiones efímeras Just-In-Time (JIT) sin confianza implícita entre operadores humanos."
+    }
+  ],
+  "episode_metadata": {
+    "id": 5,
+    "code": "EP05",
+    "act_number": 1,
+    "act": "ACTO I: PLATAFORMA OFFSHORE \"THE RIG\" (HOSPITAL DE CAMPAÑA MARÍTIMO Y NODO DE TRIAJE)",
+    "title": "El Dilema de Gia y los Celos de Santos (BIG KISS)",
+    "game_node_code": "BIG KISS",
+    "game_location": "Pasarela exterior junto a la torreta antiaérea en The Rig",
+    "cyberia_spoiler": "Tras salvar la plataforma del bombardeo del Cartel, Gia se acerca a Zak llena de adrenalina y le ofrece un beso apasionado. El jugador enfrenta una bifurcación crucial: si Zak acepta y besa a Gia, Santos aparece en ese instante consumido por los celos y ordena a su matón golpear a Zak en la nuca, dejándolo inconsciente en el acto; si Zak se aparta y rechaza el beso, evita el golpe inmediato y camina hacia el ascensor por su cuenta.",
+    "hospital_counterpart": "Módulo de Prevención de Ingeniería Social, Insider Threat y Compromiso PAM por Conflicto Interno",
+    "clinical_protocol": "Kerberos / OAuth 2.0 OIDC Clinical PAM",
+    "iomt_asset": "Bóveda de Credenciales Privilegiadas (PAM) de Contratistas del Hospital",
+    "mitre_technique": "T1566 / T1078.004 - Social Engineering & Insider Privilege Abuse",
+    "pillars": {
+      "vulnerability": {
+        "cve": "CVE-2027-0105",
+        "cvss": 8.2,
+        "vector": "CVSS:3.1/AV:L/AC:L/PR:H/UI:R/S:C/C:H/I:H/A:H",
+        "description": "Violación de confianza lateral entre operadores privilegiados (Gia/Santos) que permite a un administrador celoso o malintencionado revocar abruptamente la sesión del auditor."
+      },
+      "detection": {
+        "engine": "BLADES Behavioral Insider Analytics",
+        "rule_name": "SIGMA_PAM_INSIDER_CONFLICT_SESSION_TERMINATION",
+        "signature": "event_type == 'PAM_SESSION_HIJACK' AND actor_group == 'SANTOS_CONTRACTORS' AND trigger == 'SOCIAL_PROXIMITY_ALERT'",
+        "telemetry_indicator": "Intento de invalidación hostil de token de sesión tras interacción no autorizada en el nodo BIG KISS."
+      },
+      "mitigation": {
+        "action_code": "MIT-EP05-ZERO-TRUST-SESSION",
+        "immediate_response": "Rechazo de solicitud de vinculación no verificada (Reject Kiss Protocol), congelación de privilegios del grupo de contratistas de Santos y bloqueo de sesión con llave hardware FIDO2.",
+        "cli_command": "blades-pam --decline-unverified-handshake --freeze-group SANTOS_MERC --lock-fido2"
+      },
+      "prevention": {
+        "standard": "HIPAA Security Rule §164.308(a)(3) (Workforce Security)",
+        "hardening_policy": "Segregación estricta de funciones (SoD) y control dual para que ningún administrador tercero pueda suspender sesiones de auditoría forense.",
+        "zero_trust_control": "Sesiones efímeras Just-In-Time (JIT) sin confianza implícita entre operadores humanos."
+      }
+    }
+  }
+}

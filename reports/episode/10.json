@@ -1,0 +1,74 @@
+{
+  "type": "bundle",
+  "id": "bundle--cyberia-medsoc-ep10-2027",
+  "spec_version": "2.1",
+  "console": "CYBERIA-MED // SOC Console v19.96",
+  "palette_standard": "Ultimate Queen Chrysalis (#523)",
+  "objects": [
+    {
+      "type": "vulnerability",
+      "id": "vulnerability--ep10-cve-2027-0110",
+      "name": "CVE-2027-0110",
+      "description": "Despliegue de un transceptor oculto (Francotirador Lógico) entre los contenedores refrigerados que intercepta etiquetas RFID de fármacos críticos y ataca las sesiones del almacén.",
+      "x_cvss_score": 8.1,
+      "x_cvss_vector": "CVSS:3.1/AV:A/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:L",
+      "x_clinical_protocol": "EPCglobal UHF RFID / IEEE 802.11ax Clinical Warehouse",
+      "x_iomt_asset": "Contenedores Inteligentes de Cadena de Frío (Oncología/Hemoderivados) & Sensores RFID"
+    },
+    {
+      "type": "indicator",
+      "id": "indicator--ep10-blades-dpi",
+      "name": "YARA_RFID_ROGUE_SNIPER_OPEN_OCEAN",
+      "pattern_type": "yara-sigma-hybrid",
+      "pattern": "rf_power_dbm > -25 AND thermal_hotspot_celsius > 36.8 AND mac_oui NOT IN ($HOSPITAL_APPROVED_OUI)",
+      "description": "Firma térmica e infrarroja (#00F200) detectada tras el contenedor 04 junto a la escalera de enlace."
+    },
+    {
+      "type": "course-of-action",
+      "id": "course-of-action--ep10-mitigation",
+      "name": "MIT-EP10-ROGUE-NEUTRALIZE",
+      "description": "Contramedida dirigida de supresión RF y apagado administrativo del puerto PoE en el switch de distribución del almacén farmacéutico.",
+      "x_cli_playbook": "blades-rf --target-mac DE:AD:BE:EF:10:10 --poe-shutdown SW_PHARMA_PORT_09",
+      "x_prevention_standard": "IEEE 802.1X EAP-TLS / GDP (Good Distribution Practice) Pharma",
+      "x_zero_trust_control": "Inspección continua del espectro radioeléctrico (WIPS) en zonas de almacenamiento médico."
+    }
+  ],
+  "episode_metadata": {
+    "id": 10,
+    "code": "EP10",
+    "act_number": 1,
+    "act": "ACTO I: PLATAFORMA OFFSHORE \"THE RIG\" (HOSPITAL DE CAMPAÑA MARÍTIMO Y NODO DE TRIAJE)",
+    "title": "Laberinto de Suministros y Francotirador (OPEN OCEAN)",
+    "game_node_code": "OPEN OCEAN",
+    "game_location": "Almacén de contenedores y escaleras de acceso al hangar en The Rig",
+    "cyberia_spoiler": "Zak sale de la cámara de la bomba hacia el laberinto de contenedores de carga abiertos a la brisa helada del océano. Un francotirador mercenario aguarda oculto en las sombras junto a la escalerilla metálica que sube al hangar. Zak utiliza el visor infrarrojo de BLADES para detectar el calor corporal del guardia tras las cajas y lo abate de un disparo certero antes de ascender.",
+    "hospital_counterpart": "Almacén Robotizado de Cadena de Frío Farmacéutica y Detección Infrarroja de Nodos Rogue Wi-Fi/RFID",
+    "clinical_protocol": "EPCglobal UHF RFID / IEEE 802.11ax Clinical Warehouse",
+    "iomt_asset": "Contenedores Inteligentes de Cadena de Frío (Oncología/Hemoderivados) & Sensores RFID",
+    "mitre_technique": "T1200 - Hardware Additions (Rogue Wireless / RFID Skimmer in Supply Chain)",
+    "pillars": {
+      "vulnerability": {
+        "cve": "CVE-2027-0110",
+        "cvss": 8.1,
+        "vector": "CVSS:3.1/AV:A/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:L",
+        "description": "Despliegue de un transceptor oculto (Francotirador Lógico) entre los contenedores refrigerados que intercepta etiquetas RFID de fármacos críticos y ataca las sesiones del almacén."
+      },
+      "detection": {
+        "engine": "BLADES Infrared Thermal & RF Spectrum Analyzer",
+        "rule_name": "YARA_RFID_ROGUE_SNIPER_OPEN_OCEAN",
+        "signature": "rf_power_dbm > -25 AND thermal_hotspot_celsius > 36.8 AND mac_oui NOT IN ($HOSPITAL_APPROVED_OUI)",
+        "telemetry_indicator": "Firma térmica e infrarroja (#00F200) detectada tras el contenedor 04 junto a la escalera de enlace."
+      },
+      "mitigation": {
+        "action_code": "MIT-EP10-ROGUE-NEUTRALIZE",
+        "immediate_response": "Contramedida dirigida de supresión RF y apagado administrativo del puerto PoE en el switch de distribución del almacén farmacéutico.",
+        "cli_command": "blades-rf --target-mac DE:AD:BE:EF:10:10 --poe-shutdown SW_PHARMA_PORT_09"
+      },
+      "prevention": {
+        "standard": "IEEE 802.1X EAP-TLS / GDP (Good Distribution Practice) Pharma",
+        "hardening_policy": "Autenticación mutua basada en certificados para cada lector RFID y sensor térmico del almacén clínico.",
+        "zero_trust_control": "Inspección continua del espectro radioeléctrico (WIPS) en zonas de almacenamiento médico."
+      }
+    }
+  }
+}

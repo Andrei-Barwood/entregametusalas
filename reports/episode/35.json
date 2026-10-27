@@ -1,0 +1,74 @@
+{
+  "type": "bundle",
+  "id": "bundle--cyberia-medsoc-ep35-2027",
+  "spec_version": "2.1",
+  "console": "CYBERIA-MED // SOC Console v19.96",
+  "palette_standard": "Ultimate Queen Chrysalis (#523)",
+  "objects": [
+    {
+      "type": "vulnerability",
+      "id": "vulnerability--ep35-cve-2027-0435",
+      "name": "CVE-2027-0435",
+      "description": "Desincronización inducida en el firmware de las 4 electroválvulas de línea (venosa, oxigenador, intercambiador térmico y filtro arterial); arrancar el rotor maestro con las válvulas cerradas genera sobrepresión letal.",
+      "x_cvss_score": 9.4,
+      "x_cvss_vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:C/C:N/I:H/A:H",
+      "x_clinical_protocol": "IEC 60601-2-16 (Hemodialysis) & Extracorporeal Life Support (ECLS/ECMO) Bus",
+      "x_iomt_asset": "Consola de Perfusión Extracorpórea (ECMO), Bombas de Hemodiálisis y Circuito Hidráulico de Biocontención"
+    },
+    {
+      "type": "indicator",
+      "id": "indicator--ep35-blades-dpi",
+      "name": "SIGMA_GRAFFITI_ECMO_HYDRAULIC_VALVE_MISMATCH",
+      "pattern_type": "yara-sigma-hybrid",
+      "pattern": "mri_overlay == 'ACTIVE' AND (valve_1 == 'CLOSED' OR valve_2 == 'CLOSED' OR valve_3 == 'CLOSED' OR valve_4 == 'CLOSED') AND main_pump_cmd == 'START'",
+      "description": "El visor translúcido MRI (#249BA7 / #B2E5F2) revela las 4 válvulas periféricas obstruidas detrás del panel con grafiti."
+    },
+    {
+      "type": "course-of-action",
+      "id": "course-of-action--ep35-mitigation",
+      "name": "MIT-EP35-VALVE-ALIGN",
+      "description": "Alineación secuencial de las 4 válvulas periféricas (V1..V4 = OPEN) mediante el simulador MRI de BLADES antes de energizar la bomba maestra central.",
+      "x_cli_playbook": "blades-mri --open-valves V1,V2,V3,V4 --verify-laminar-flow --start-main-pump GRAFFITI_LIFT",
+      "x_prevention_standard": "IEC 60601-2-24 / ISO 8637 (Extracorporeal Systems for Blood Purification)",
+      "x_zero_trust_control": "Inspección no invasiva de estado interno de actuadores antes de cada ciclo de perfusión."
+    }
+  ],
+  "episode_metadata": {
+    "id": 35,
+    "code": "EP35",
+    "act_number": 4,
+    "act": "ACTO IV: COMPLEJO CYBERIA - NIVEL 2 (LABORATORIOS DE BIOCONTENCIÓN, GAS HALÓN Y NANOMEDICINA)",
+    "title": "Escaneo MRI de las Bombas Hidráulicas (GRAFFITI)",
+    "game_node_code": "GRAFFITI",
+    "game_location": "Interior del ascensor profundo bloqueado con marcas de grafiti hacia el Núcleo Cyberia",
+    "cyberia_spoiler": "Superada la zona viral, Zak entra en el ascensor de descenso profundo pero la cabina está muerta y la pared interior sólo muestra marcas de grafiti industrial ('GRAFFITI'). Zak activa el escáner de Resonancia Magnética (MRI) del implante BLADES para atravesar visualmente el muro metálico y descubre el circuito hidráulico oculto: 4 válvulas periféricas y 1 bomba maestra central. Si activa la bomba central primero, el circuito colapsa; debe abrir primero las 4 válvulas periféricas y finalmente encender la bomba central para descender al núcleo.",
+    "hospital_counterpart": "Calibración por Escaneo MRI y Aseguramiento de Bombas de Circulación Extracorpórea (ECMO), Hemodiálisis y Presión Hidráulica Crítica",
+    "clinical_protocol": "IEC 60601-2-16 (Hemodialysis) & Extracorporeal Life Support (ECLS/ECMO) Bus",
+    "iomt_asset": "Consola de Perfusión Extracorpórea (ECMO), Bombas de Hemodiálisis y Circuito Hidráulico de Biocontención",
+    "mitre_technique": "T0836 / T0831 - Manipulation of Hydraulic/Perfusion Valve Sequence",
+    "pillars": {
+      "vulnerability": {
+        "cve": "CVE-2027-0435",
+        "cvss": 9.4,
+        "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:C/C:N/I:H/A:H",
+        "description": "Desincronización inducida en el firmware de las 4 electroválvulas de línea (venosa, oxigenador, intercambiador térmico y filtro arterial); arrancar el rotor maestro con las válvulas cerradas genera sobrepresión letal."
+      },
+      "detection": {
+        "engine": "BLADES MRI Deep-Wall Hydraulic Scanner",
+        "rule_name": "SIGMA_GRAFFITI_ECMO_HYDRAULIC_VALVE_MISMATCH",
+        "signature": "mri_overlay == 'ACTIVE' AND (valve_1 == 'CLOSED' OR valve_2 == 'CLOSED' OR valve_3 == 'CLOSED' OR valve_4 == 'CLOSED') AND main_pump_cmd == 'START'",
+        "telemetry_indicator": "El visor translúcido MRI (#249BA7 / #B2E5F2) revela las 4 válvulas periféricas obstruidas detrás del panel con grafiti."
+      },
+      "mitigation": {
+        "action_code": "MIT-EP35-VALVE-ALIGN",
+        "immediate_response": "Alineación secuencial de las 4 válvulas periféricas (V1..V4 = OPEN) mediante el simulador MRI de BLADES antes de energizar la bomba maestra central.",
+        "cli_command": "blades-mri --open-valves V1,V2,V3,V4 --verify-laminar-flow --start-main-pump GRAFFITI_LIFT"
+      },
+      "prevention": {
+        "standard": "IEC 60601-2-24 / ISO 8637 (Extracorporeal Systems for Blood Purification)",
+        "hardening_policy": "Enclavamiento mecánico y de firmware que bloquea el impulsor centrífugo principal hasta recibir confirmación ultrasónica de flujo abierto en las 4 líneas periféricas.",
+        "zero_trust_control": "Inspección no invasiva de estado interno de actuadores antes de cada ciclo de perfusión."
+      }
+    }
+  }
+}

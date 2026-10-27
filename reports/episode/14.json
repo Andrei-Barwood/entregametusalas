@@ -1,0 +1,74 @@
+{
+  "type": "bundle",
+  "id": "bundle--cyberia-medsoc-ep14-2027",
+  "spec_version": "2.1",
+  "console": "CYBERIA-MED // SOC Console v19.96",
+  "palette_standard": "Ultimate Queen Chrysalis (#523)",
+  "objects": [
+    {
+      "type": "vulnerability",
+      "id": "vulnerability--ep14-cve-2027-0214",
+      "name": "CVE-2027-0214",
+      "description": "Desbordamiento de búfer en el parser legado MLLP de los gateways de borde cuando reciben ráfagas de segmentos HL7 OBX fragmentados lanzados como proyectiles SAM.",
+      "x_cvss_score": 8.5,
+      "x_cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+      "x_clinical_protocol": "HL7 v2.5 MLLP / FHIR Streaming over QUIC",
+      "x_iomt_asset": "Pasarelas Clínicas de Borde (Edge Gateways) y Routers de Telemetría"
+    },
+    {
+      "type": "indicator",
+      "id": "indicator--ep14-blades-dpi",
+      "name": "YARA_HL7_MLLP_SAM_PAYLOAD_OVERFLOW",
+      "pattern_type": "yara-sigma-hybrid",
+      "pattern": "rule HL7_ValleyRun_Overflow { strings: $mllp = { 0B 4D 53 48 7C } $nop = { 90 90 90 90 90 90 } condition: $mllp at 0 and $nop }",
+      "description": "Detección de shellcode oculto en segmentos de observación clínica disparados desde los nodos laterales del cañón."
+    },
+    {
+      "type": "course-of-action",
+      "id": "course-of-action--ep14-mitigation",
+      "name": "MIT-EP14-INLINE-DROP",
+      "description": "Intercepción y destrucción en línea (Inline IPS Drop) de los paquetes MLLP malformados en < 50 microsegundos antes de que impacten el procesador central.",
+      "x_cli_playbook": "blades-edge-ips --intercept-mllp-burst --sanitize-obx-frames --keep-session-alive",
+      "x_prevention_standard": "IEC 62443-4-1 (Secure Product Development Lifecycle)",
+      "x_zero_trust_control": "Inspección profunda de esquema (Schema Validation) en cada pasarela de borde antes de enrutar al núcleo."
+    }
+  ],
+  "episode_metadata": {
+    "id": 14,
+    "code": "EP14",
+    "act_number": 2,
+    "act": "ACTO II: RUTA DE EVACUACIÓN ÁRTICA Y TÚNELES DE SUMINISTRO (TELEMETRÍA EN TRÁNSITO)",
+    "title": "Cañón de Hielo y Baterías SAM (VALLEY RUN)",
+    "game_node_code": "VALLEY RUN",
+    "game_location": "Desfiladeros glaciares estrechos en la ruta de infiltración ártica",
+    "cyberia_spoiler": "El computador de vuelo del TF-22 desciende hacia un estrecho cañón de paredes de hielo para volar por debajo de la cobertura de radar enemiga. Dentro del desfiladero, Zak debe reaccionar en fracciones de segundo para destruir baterías de misiles tierra-aire (SAM) apostadas en las laderas y cazas interceptores que emergen de frente.",
+    "hospital_counterpart": "Filtrado de Paquetes Maliciosos de Baja Latencia en Pasarelas de Borde (Edge Medical Gateways)",
+    "clinical_protocol": "HL7 v2.5 MLLP / FHIR Streaming over QUIC",
+    "iomt_asset": "Pasarelas Clínicas de Borde (Edge Gateways) y Routers de Telemetría",
+    "mitre_technique": "T1203 - Exploitation for Client Execution (Malformed HL7 MLLP Packet Injection)",
+    "pillars": {
+      "vulnerability": {
+        "cve": "CVE-2027-0214",
+        "cvss": 8.5,
+        "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+        "description": "Desbordamiento de búfer en el parser legado MLLP de los gateways de borde cuando reciben ráfagas de segmentos HL7 OBX fragmentados lanzados como proyectiles SAM."
+      },
+      "detection": {
+        "engine": "BLADES Inline Edge IPS",
+        "rule_name": "YARA_HL7_MLLP_SAM_PAYLOAD_OVERFLOW",
+        "signature": "rule HL7_ValleyRun_Overflow { strings: $mllp = { 0B 4D 53 48 7C } $nop = { 90 90 90 90 90 90 } condition: $mllp at 0 and $nop }",
+        "telemetry_indicator": "Detección de shellcode oculto en segmentos de observación clínica disparados desde los nodos laterales del cañón."
+      },
+      "mitigation": {
+        "action_code": "MIT-EP14-INLINE-DROP",
+        "immediate_response": "Intercepción y destrucción en línea (Inline IPS Drop) de los paquetes MLLP malformados en < 50 microsegundos antes de que impacten el procesador central.",
+        "cli_command": "blades-edge-ips --intercept-mllp-burst --sanitize-obx-frames --keep-session-alive"
+      },
+      "prevention": {
+        "standard": "IEC 62443-4-1 (Secure Product Development Lifecycle)",
+        "hardening_policy": "Reemplazar analizadores sintácticos HL7 escritos en C/C++ por parsers verificados en memoria segura (Rust/Ruby congelado) con límites estrictos de longitud de campo.",
+        "zero_trust_control": "Inspección profunda de esquema (Schema Validation) en cada pasarela de borde antes de enrutar al núcleo."
+      }
+    }
+  }
+}

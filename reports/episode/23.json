@@ -1,0 +1,74 @@
+{
+  "type": "bundle",
+  "id": "bundle--cyberia-medsoc-ep23-2027",
+  "spec_version": "2.1",
+  "console": "CYBERIA-MED // SOC Console v19.96",
+  "palette_standard": "Ultimate Queen Chrysalis (#523)",
+  "objects": [
+    {
+      "type": "vulnerability",
+      "id": "vulnerability--ep23-cve-2027-0323",
+      "name": "CVE-2027-0323",
+      "description": "Sustitución de interbloqueos físicos por rutinas de software manipulables que disparan el arreglo láser quirúrgico a máxima potencia cuando se toca el panel secundario.",
+      "x_cvss_score": 9.8,
+      "x_cvss_vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:C/C:N/I:H/A:H",
+      "x_clinical_protocol": "IEC 60601-2-22 (Surgical Lasers) / DICOM-RT Plan Verification",
+      "x_iomt_asset": "Robot de Cirugía Láser de Alta Potencia y Acelerador Lineal de Radioterapia"
+    },
+    {
+      "type": "indicator",
+      "id": "indicator--ep23-blades-dpi",
+      "name": "SIGMA_SLICEOMATIC_UNAUTH_LASER_CAPACITOR_CHARGE",
+      "pattern_type": "yara-sigma-hybrid",
+      "pattern": "laser_array.capacitor_kv > 15.0 AND room_occupancy == TRUE AND surgical_token == 'MISSING'",
+      "description": "Alerta roja inmediata: capacitores del arreglo láser SLICEOMATIC cargados al 100% sobre el cabezal de la puerta."
+    },
+    {
+      "type": "course-of-action",
+      "id": "course-of-action--ep23-mitigation",
+      "name": "MIT-EP23-INTERLOCK-CUTOFF",
+      "description": "Abstención de tocar el panel trampa, apertura del interruptor electromecánico de parada de emergencia (Hardwired E-Stop) y descarga segura de los capacitores láser a tierra.",
+      "x_cli_playbook": "blades-safety --trip-hardwired-estop SLICEOMATIC_GRID --bleed-capacitors-gnd",
+      "x_prevention_standard": "IEC 60601-1 / IEC 62304 Class C (Life-Critical Medical Software)",
+      "x_zero_trust_control": "Doble llave física y validación criptográfica de dosimetría antes de energizar cualquier emisor láser."
+    }
+  ],
+  "episode_metadata": {
+    "id": 23,
+    "code": "EP23",
+    "act_number": 3,
+    "act": "ACTO III: COMPLEJO CYBERIA - NIVEL 1 (PERÍMETRO CLÍNICO, QUIRÓFANOS LÁSER Y ADMISIONES)",
+    "title": "El Cuarto Oscuro y la Trampa Láser (SLICEOMATIC)",
+    "game_node_code": "SLICEOMATIC",
+    "game_location": "Antesala oscura detrás de la puerta de mantenimiento del Nivel 1",
+    "cyberia_spoiler": "Tras resolver el puzzle lógico y entrar por la puerta trasera, Zak queda en una habitación oscura con una puerta interior cerrada. Si el jugador comete el error de tocar el panel de esa cerradura secundaria en la oscuridad, se activa la infame trampa mortal 'SLICEOMATIC': una rejilla de haces láser quirúrgicos de alta potencia cae del techo y rebana el cuerpo de Zak en cubos instantáneamente.",
+    "hospital_counterpart": "Sistemas de Seguridad Intrínseca (Hardwired Interlocks) en Equipos de Radioterapia (LINAC) y Cirugía Láser Robótica",
+    "clinical_protocol": "IEC 60601-2-22 (Surgical Lasers) / DICOM-RT Plan Verification",
+    "iomt_asset": "Robot de Cirugía Láser de Alta Potencia y Acelerador Lineal de Radioterapia",
+    "mitre_technique": "T0879 - Damage to Property / Bypass of Safety Interlocks (Therac-25 Class Hazard)",
+    "pillars": {
+      "vulnerability": {
+        "cve": "CVE-2027-0323",
+        "cvss": 9.8,
+        "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:R/S:C/C:N/I:H/A:H",
+        "description": "Sustitución de interbloqueos físicos por rutinas de software manipulables que disparan el arreglo láser quirúrgico a máxima potencia cuando se toca el panel secundario."
+      },
+      "detection": {
+        "engine": "BLADES Infrared & Safety Interlock Monitor",
+        "rule_name": "SIGMA_SLICEOMATIC_UNAUTH_LASER_CAPACITOR_CHARGE",
+        "signature": "laser_array.capacitor_kv > 15.0 AND room_occupancy == TRUE AND surgical_token == 'MISSING'",
+        "telemetry_indicator": "Alerta roja inmediata: capacitores del arreglo láser SLICEOMATIC cargados al 100% sobre el cabezal de la puerta."
+      },
+      "mitigation": {
+        "action_code": "MIT-EP23-INTERLOCK-CUTOFF",
+        "immediate_response": "Abstención de tocar el panel trampa, apertura del interruptor electromecánico de parada de emergencia (Hardwired E-Stop) y descarga segura de los capacitores láser a tierra.",
+        "cli_command": "blades-safety --trip-hardwired-estop SLICEOMATIC_GRID --bleed-capacitors-gnd"
+      },
+      "prevention": {
+        "standard": "IEC 60601-1 / IEC 62304 Class C (Life-Critical Medical Software)",
+        "hardening_policy": "Los interbloqueos que impiden emisiones letales de radiación o láser deben estar cableados en serie por hardware analógico, jamás dependientes solo de software.",
+        "zero_trust_control": "Doble llave física y validación criptográfica de dosimetría antes de energizar cualquier emisor láser."
+      }
+    }
+  }
+}

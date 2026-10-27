@@ -1,0 +1,74 @@
+{
+  "type": "bundle",
+  "id": "bundle--cyberia-medsoc-ep45-2027",
+  "spec_version": "2.1",
+  "console": "CYBERIA-MED // SOC Console v19.96",
+  "palette_standard": "Ultimate Queen Chrysalis (#523)",
+  "objects": [
+    {
+      "type": "vulnerability",
+      "id": "vulnerability--ep45-cve-2027-0645",
+      "name": "CVE-2027-0645",
+      "description": "Uso malicioso de la constelación satelital de la FWA por parte de Devlin para bloquear el tráfico médico legítimo y emitir coordenadas GNSS falsas.",
+      "x_cvss_score": 9.1,
+      "x_cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:C/C:H/I:H/A:H",
+      "x_clinical_protocol": "Galileo OSNMA / GPS Chimera Cryptographic Navigation & LEO Medical SatCom",
+      "x_iomt_asset": "Constelación de Satélites LEO de Telemedicina y Sincronización GNSS de Flotas de Ambulancias"
+    },
+    {
+      "type": "indicator",
+      "id": "indicator--ep45-blades-dpi",
+      "name": "SIGMA_ORBITAL_INSERTION_ROGUE_FWA_SATELLITES",
+      "pattern_type": "yara-sigma-hybrid",
+      "pattern": "orbit_regime == 'LEO_550KM' AND sat_authority == 'DEVLIN_FWA_GRID' AND hostile_lock == TRUE",
+      "description": "Anillos de radar concéntricos (#30FF00) detectan la barrera de satélites artillados en la capa de inserción orbital."
+    },
+    {
+      "type": "course-of-action",
+      "id": "course-of-action--ep45-mitigation",
+      "name": "MIT-EP45-ORBITAL-BREACH",
+      "description": "Destrucción selectiva de los transpondedores satelitales corrompidos por Devlin y restablecimiento de la señal de navegación autenticada OSNMA/Chimera para todos los hospitales en tierra.",
+      "x_cli_playbook": "cyberia-orbital --neutralize-sat-ring FWA_LEO_01..12 --restore-gnss-osnma",
+      "x_prevention_standard": "CCSDS 352.0-B-2 (Space Data Link Security Protocol)",
+      "x_zero_trust_control": "Verificación criptográfica de efemérides y telemetría orbital en cada estación terrena hospitalaria."
+    }
+  ],
+  "episode_metadata": {
+    "id": 45,
+    "code": "EP45",
+    "act_number": 6,
+    "act": "ACTO VI: VENGANZA ORBITAL CONTRA DEVLIN (ERRADICACIÓN DE AMENAZA PERSISTENTE)",
+    "title": "Cruce de la Ionosfera y Escudo Orbital (Orbital Insertion)",
+    "game_node_code": "ORBITAL INSERTION",
+    "game_location": "Ionosfera superior y órbita terrestre baja (LEO)",
+    "cyberia_spoiler": "La entidad Zak/Cyberia atraviesa la atmósfera terrestre envuelta en plasma y entra en el silencio del espacio exterior ('Orbital Insertion'). En órbita baja, la red de satélites de defensa de la First World Alliance (FWA) controlada por William Devlin detecta su ascenso y abre fuego para impedir que se acerque a la estación espacial de mando.",
+    "hospital_counterpart": "Aseguramiento de Constelaciones Satelitales de Emergencia Médica (GNSS / GPS de Ambulancias y Telemedicina Global) en Órbita Baja",
+    "clinical_protocol": "Galileo OSNMA / GPS Chimera Cryptographic Navigation & LEO Medical SatCom",
+    "iomt_asset": "Constelación de Satélites LEO de Telemedicina y Sincronización GNSS de Flotas de Ambulancias",
+    "mitre_technique": "T1584.008 / T0885 - Compromise Orbital SatCom & GNSS Spoofing Grid",
+    "pillars": {
+      "vulnerability": {
+        "cve": "CVE-2027-0645",
+        "cvss": 9.1,
+        "vector": "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:C/C:H/I:H/A:H",
+        "description": "Uso malicioso de la constelación satelital de la FWA por parte de Devlin para bloquear el tráfico médico legítimo y emitir coordenadas GNSS falsas."
+      },
+      "detection": {
+        "engine": "CYBERIA Orbital Radar & GNSS Auth Verifier",
+        "rule_name": "SIGMA_ORBITAL_INSERTION_ROGUE_FWA_SATELLITES",
+        "signature": "orbit_regime == 'LEO_550KM' AND sat_authority == 'DEVLIN_FWA_GRID' AND hostile_lock == TRUE",
+        "telemetry_indicator": "Anillos de radar concéntricos (#30FF00) detectan la barrera de satélites artillados en la capa de inserción orbital."
+      },
+      "mitigation": {
+        "action_code": "MIT-EP45-ORBITAL-BREACH",
+        "immediate_response": "Destrucción selectiva de los transpondedores satelitales corrompidos por Devlin y restablecimiento de la señal de navegación autenticada OSNMA/Chimera para todos los hospitales en tierra.",
+        "cli_command": "cyberia-orbital --neutralize-sat-ring FWA_LEO_01..12 --restore-gnss-osnma"
+      },
+      "prevention": {
+        "standard": "CCSDS 352.0-B-2 (Space Data Link Security Protocol)",
+        "hardening_policy": "Cifrado autenticado en capa de enlace espacial (CCSDS SDLS) con claves distribuidas mediante distribución cuántica de claves (QKD) satelital.",
+        "zero_trust_control": "Verificación criptográfica de efemérides y telemetría orbital en cada estación terrena hospitalaria."
+      }
+    }
+  }
+}

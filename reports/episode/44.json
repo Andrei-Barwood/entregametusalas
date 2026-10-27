@@ -1,0 +1,74 @@
+{
+  "type": "bundle",
+  "id": "bundle--cyberia-medsoc-ep44-2027",
+  "spec_version": "2.1",
+  "console": "CYBERIA-MED // SOC Console v19.96",
+  "palette_standard": "Ultimate Queen Chrysalis (#523)",
+  "objects": [
+    {
+      "type": "vulnerability",
+      "id": "vulnerability--ep44-cve-2027-0544",
+      "name": "CVE-2027-0544",
+      "description": "Cerco de bloqueo perimetral imposto sobre el complejo siberiano para impedir la salida de alertas forenses y contener al operador dentro del búnker.",
+      "x_cvss_score": 8.9,
+      "x_cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:N/I:H/A:H",
+      "x_clinical_protocol": "BGP Anycast Breakout / Out-of-Band Optical SatCom Uplink",
+      "x_iomt_asset": "Transmisor Troncal de Emergencia Hospitalaria y Antena de Enlace Estratosférico"
+    },
+    {
+      "type": "indicator",
+      "id": "indicator--ep44-blades-dpi",
+      "name": "SIGMA_SILO_BREAKOUT_PERIMETER_SHATTER",
+      "pattern_type": "yara-sigma-hybrid",
+      "pattern": "uplink_power_mw > 10000 AND silo_blast_doors == 'SHATTERED' AND trajectory == 'ORBITAL_INTERCEPT'",
+      "description": "Ruptura total del bloqueo siberiano: telemetría de Zak/Cyberia ascendiendo hacia la órbita terrestre a Mach 18."
+    },
+    {
+      "type": "course-of-action",
+      "id": "course-of-action--ep44-mitigation",
+      "name": "MIT-EP44-SILO-BREAKOUT",
+      "description": "Perforación de las listas de bloqueo perimetrales del Cartel, purga de todos los nodos C2 locales y apertura del canal directo hacia la órbita de la FWA.",
+      "x_cli_playbook": "cyberia-core --shatter-perimeter SILO_DOME_44 --purge-local-c2 --ascend-stratosphere",
+      "x_prevention_standard": "ISO 22301 (Business Continuity Management for Healthcare)",
+      "x_zero_trust_control": "Canal soberano de salida de telemetría forense garantizado."
+    }
+  ],
+  "episode_metadata": {
+    "id": 44,
+    "code": "EP44",
+    "act_number": 5,
+    "act": "ACTO V: EL NÚCLEO BIOCIBERNÉTICO Y LA REVELACIÓN DEL PROYECTO CYBERIA (SIMBIOSIS Y PURGA)",
+    "title": "Ascenso Explosivo desde el Silo Siberiano (Silo Breakout)",
+    "game_node_code": "SILO BREAKOUT",
+    "game_location": "Silo vertical de lanzamiento y cúpula helada del Complejo Cyberia en Siberia",
+    "cyberia_spoiler": "Transformado ahora en la imponente nave biomecánica viviente Cyberia, Zak despliega sus alas de caparazón energético, enciende los propulsores bio-plasmáticos y asciende a velocidad descomunal por el silo vertical del complejo, haciendo volar en pedazos la cúpula blindada de hielo de Siberia y lanzándose directo hacia la estratosfera en busca de William Devlin.",
+    "hospital_counterpart": "Purga Total de Canales C2 Subterráneos, Rompimiento del Cerco de Aislamiento y Restablecimiento de Enlaces de Emergencia Global",
+    "clinical_protocol": "BGP Anycast Breakout / Out-of-Band Optical SatCom Uplink",
+    "iomt_asset": "Transmisor Troncal de Emergencia Hospitalaria y Antena de Enlace Estratosférico",
+    "mitre_technique": "T1071 / DEF-BREAKOUT - Destruction of Hostile Containment Perimeter & C2 Purge",
+    "pillars": {
+      "vulnerability": {
+        "cve": "CVE-2027-0544",
+        "cvss": 8.9,
+        "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:N/I:H/A:H",
+        "description": "Cerco de bloqueo perimetral imposto sobre el complejo siberiano para impedir la salida de alertas forenses y contener al operador dentro del búnker."
+      },
+      "detection": {
+        "engine": "CYBERIA Bio-Plasma Propulsion & Uplink Monitor",
+        "rule_name": "SIGMA_SILO_BREAKOUT_PERIMETER_SHATTER",
+        "signature": "uplink_power_mw > 10000 AND silo_blast_doors == 'SHATTERED' AND trajectory == 'ORBITAL_INTERCEPT'",
+        "telemetry_indicator": "Ruptura total del bloqueo siberiano: telemetría de Zak/Cyberia ascendiendo hacia la órbita terrestre a Mach 18."
+      },
+      "mitigation": {
+        "action_code": "MIT-EP44-SILO-BREAKOUT",
+        "immediate_response": "Perforación de las listas de bloqueo perimetrales del Cartel, purga de todos los nodos C2 locales y apertura del canal directo hacia la órbita de la FWA.",
+        "cli_command": "cyberia-core --shatter-perimeter SILO_DOME_44 --purge-local-c2 --ascend-stratosphere"
+      },
+      "prevention": {
+        "standard": "ISO 22301 (Business Continuity Management for Healthcare)",
+        "hardening_policy": "Enlaces láser y satelitales de emergencia de alta potencia incapaces de ser silenciados por cortes de fibra terrestre o bloqueos regionales.",
+        "zero_trust_control": "Canal soberano de salida de telemetría forense garantizado."
+      }
+    }
+  }
+}

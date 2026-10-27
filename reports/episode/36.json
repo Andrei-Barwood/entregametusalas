@@ -1,0 +1,74 @@
+{
+  "type": "bundle",
+  "id": "bundle--cyberia-medsoc-ep36-2027",
+  "spec_version": "2.1",
+  "console": "CYBERIA-MED // SOC Console v19.96",
+  "palette_standard": "Ultimate Queen Chrysalis (#523)",
+  "objects": [
+    {
+      "type": "vulnerability",
+      "id": "vulnerability--ep36-cve-2027-0536",
+      "name": "CVE-2027-0536",
+      "description": "Ataque de repetición (Replay Attack) en el bus de telemetría de las cápsulas de criopreservación para ocultar una fuga de nitrógeno líquido y degradar los tejidos biológicos.",
+      "x_cvss_score": 8.8,
+      "x_cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:L/I:H/A:H",
+      "x_clinical_protocol": "OPC-UA Cryo Telemetry / Modbus PT100 Resistance Thermometry",
+      "x_iomt_asset": "Tanques de Nitrógeno Líquido (-196°C) de Biobanco de Tejidos, Células Madre y Órganos"
+    },
+    {
+      "type": "indicator",
+      "id": "indicator--ep36-blades-dpi",
+      "name": "SIGMA_CRYO_CHAMBER_INFRARED_REPLAY_DIVERGENCE",
+      "pattern_type": "yara-sigma-hybrid",
+      "pattern": "opcua.reported_temp_c == -196.0 AND blades.ir_measured_temp_c > -140.0",
+      "description": "Divergencia térmica de +56°C detectada por el sensor infrarrojo de Zak frente al valor estático reportado por la red."
+    },
+    {
+      "type": "course-of-action",
+      "id": "course-of-action--ep36-mitigation",
+      "name": "MIT-EP36-CRYO-NONCE",
+      "description": "Purga del flujo de telemetría falsificado, exigencia de Nonce criptográfico por muestra térmica y apertura de la válvula de emergencia de nitrógeno líquido.",
+      "x_cli_playbook": "blades-cryo --inject-ln2-reserve CHAMBER_36 --enforce-opcua-nonce --seal-biobank",
+      "x_prevention_standard": "FDA 21 CFR Part 11 / ISBER Best Practices for Biorepositories",
+      "x_zero_trust_control": "Validación cruzada físico-óptica continua sobre cada contenedor criogénico."
+    }
+  ],
+  "episode_metadata": {
+    "id": 36,
+    "code": "EP36",
+    "act_number": 5,
+    "act": "ACTO V: EL NÚCLEO BIOCIBERNÉTICO Y LA REVELACIÓN DEL PROYECTO CYBERIA (SIMBIOSIS Y PURGA)",
+    "title": "El Laboratorio Criogénico Subterráneo (Cryo-Stasis Chamber)",
+    "game_node_code": "CRYO-STASIS CHAMBER",
+    "game_location": "Bóvedas criogénicas profundas en el nivel más bajo del Complejo Cyberia",
+    "cyberia_spoiler": "El ascensor hidráulico deposita a Zak en las heladas bóvedas subterráneas del núcleo ('Cryo-Stasis Chamber'), donde cilindros de cristal iluminados en verde y cian conservan en estasis criogénica tejidos biomecánicos y clones experimentales cultivados por los científicos del proyecto Cyberia.",
+    "hospital_counterpart": "Monitoreo de Telemetría Térmica e Infrarroja en Ultracongeladores (-80°C y Nitrógeno Líquido -196°C) de Biobanco Genético y Órganos para Trasplante",
+    "clinical_protocol": "OPC-UA Cryo Telemetry / Modbus PT100 Resistance Thermometry",
+    "iomt_asset": "Tanques de Nitrógeno Líquido (-196°C) de Biobanco de Tejidos, Células Madre y Órganos",
+    "mitre_technique": "T0856 - Spoof Reporting Message (Cryogenic Sensor Replay Attack)",
+    "pillars": {
+      "vulnerability": {
+        "cve": "CVE-2027-0536",
+        "cvss": 8.8,
+        "vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:L/I:H/A:H",
+        "description": "Ataque de repetición (Replay Attack) en el bus de telemetría de las cápsulas de criopreservación para ocultar una fuga de nitrógeno líquido y degradar los tejidos biológicos."
+      },
+      "detection": {
+        "engine": "BLADES Infrared Thermography vs. OPC-UA Comparator",
+        "rule_name": "SIGMA_CRYO_CHAMBER_INFRARED_REPLAY_DIVERGENCE",
+        "signature": "opcua.reported_temp_c == -196.0 AND blades.ir_measured_temp_c > -140.0",
+        "telemetry_indicator": "Divergencia térmica de +56°C detectada por el sensor infrarrojo de Zak frente al valor estático reportado por la red."
+      },
+      "mitigation": {
+        "action_code": "MIT-EP36-CRYO-NONCE",
+        "immediate_response": "Purga del flujo de telemetría falsificado, exigencia de Nonce criptográfico por muestra térmica y apertura de la válvula de emergencia de nitrógeno líquido.",
+        "cli_command": "blades-cryo --inject-ln2-reserve CHAMBER_36 --enforce-opcua-nonce --seal-biobank"
+      },
+      "prevention": {
+        "standard": "FDA 21 CFR Part 11 / ISBER Best Practices for Biorepositories",
+        "hardening_policy": "Doble lazo de medición térmica independiente (fibra óptica con rejilla de Bragg + sonda PT100 cifrada) con registro inmutable.",
+        "zero_trust_control": "Validación cruzada físico-óptica continua sobre cada contenedor criogénico."
+      }
+    }
+  }
+}

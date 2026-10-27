@@ -1,0 +1,74 @@
+{
+  "type": "bundle",
+  "id": "bundle--cyberia-medsoc-ep18-2027",
+  "spec_version": "2.1",
+  "console": "CYBERIA-MED // SOC Console v19.96",
+  "palette_standard": "Ultimate Queen Chrysalis (#523)",
+  "objects": [
+    {
+      "type": "vulnerability",
+      "id": "vulnerability--ep18-cve-2027-0218",
+      "name": "CVE-2027-0218",
+      "description": "Explotación de cadenas de comunidad SNMPv2c por defecto ('private') en las tarjetas de red de los UPS clínicos para reportar 100% de batería mientras las celdas reales están descargadas.",
+      "x_cvss_score": 8.3,
+      "x_cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:L/I:H/A:H",
+      "x_clinical_protocol": "SNMPv3 / IEC 61850 Power Substation Automation",
+      "x_iomt_asset": "Bancos de Baterías UPS Online Doble Conversión de UCI y Generadores Diésel de Emergencia"
+    },
+    {
+      "type": "indicator",
+      "id": "indicator--ep18-blades-dpi",
+      "name": "SIGMA_UPS_PITSTOP_SNMP_SPOOFED_CHARGE",
+      "pattern_type": "yara-sigma-hybrid",
+      "pattern": "snmp.oid == '1.3.6.1.2.1.33.1.2.4' AND reported_charge == 100 AND dc_bus_voltage_v < 195.0",
+      "description": "Discrepancia detectada durante el PIT STOP entre el voltaje físico del banco de capacitores y la telemetría SNMP."
+    },
+    {
+      "type": "course-of-action",
+      "id": "course-of-action--ep18-mitigation",
+      "name": "MIT-EP18-UPS-RECHARGE",
+      "description": "Revocación de SNMPv1/v2c, conmutación inmediata al rectificador de respaldo en el búnker intermedio y recarga verificada por impedancia real al 100%.",
+      "x_cli_playbook": "medsoc-ups --disable-snmp-v2 --engage-bunker-charger PITSTOP_BAY --verify-dc-bus",
+      "x_prevention_standard": "NFPA 99 (Health Care Facilities Code - Essential Electrical System)",
+      "x_zero_trust_control": "Gestión exclusiva mediante SNMPv3 AuthPriv (SHA-512 / AES-256) con listas blancas de origen."
+    }
+  ],
+  "episode_metadata": {
+    "id": 18,
+    "code": "EP18",
+    "act_number": 2,
+    "act": "ACTO II: RUTA DE EVACUACIÓN ÁRTICA Y TÚNELES DE SUMINISTRO (TELEMETRÍA EN TRÁNSITO)",
+    "title": "Parada de Emergencia en el Búnker (PIT STOP)",
+    "game_node_code": "PIT STOP",
+    "game_location": "Caverna búnker de mantenimiento oculta a mitad del túnel subterráneo",
+    "cyberia_spoiler": "Con los escudos del TF-22 seriamente drenados tras las explosiones dentro del túnel, la computadora de a bordo ejecuta un aterrizaje técnico de emergencia ('PIT STOP') en una caverna auxiliar automatizada. Allí, brazos robóticos recargan las celdas de energía del escudo deflector y ejecutan un diagnóstico rápido de los sistemas antes de reanudar el vuelo hacia la salida glaciar.",
+    "hospital_counterpart": "Conmutación por Error (Failover) a Subestación de Generadores Diésel y Bancos de Baterías UPS de Soporte Vital",
+    "clinical_protocol": "SNMPv3 / IEC 61850 Power Substation Automation",
+    "iomt_asset": "Bancos de Baterías UPS Online Doble Conversión de UCI y Generadores Diésel de Emergencia",
+    "mitre_technique": "T0856 - Spoof Reporting Message (Fake UPS Battery Charge Telemetry)",
+    "pillars": {
+      "vulnerability": {
+        "cve": "CVE-2027-0218",
+        "cvss": 8.3,
+        "vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:U/C:L/I:H/A:H",
+        "description": "Explotación de cadenas de comunidad SNMPv2c por defecto ('private') en las tarjetas de red de los UPS clínicos para reportar 100% de batería mientras las celdas reales están descargadas."
+      },
+      "detection": {
+        "engine": "BLADES Power Impedance & SNMP Auditor",
+        "rule_name": "SIGMA_UPS_PITSTOP_SNMP_SPOOFED_CHARGE",
+        "signature": "snmp.oid == '1.3.6.1.2.1.33.1.2.4' AND reported_charge == 100 AND dc_bus_voltage_v < 195.0",
+        "telemetry_indicator": "Discrepancia detectada durante el PIT STOP entre el voltaje físico del banco de capacitores y la telemetría SNMP."
+      },
+      "mitigation": {
+        "action_code": "MIT-EP18-UPS-RECHARGE",
+        "immediate_response": "Revocación de SNMPv1/v2c, conmutación inmediata al rectificador de respaldo en el búnker intermedio y recarga verificada por impedancia real al 100%.",
+        "cli_command": "medsoc-ups --disable-snmp-v2 --engage-bunker-charger PITSTOP_BAY --verify-dc-bus"
+      },
+      "prevention": {
+        "standard": "NFPA 99 (Health Care Facilities Code - Essential Electrical System)",
+        "hardening_policy": "Monitoreo analógico fuera de banda de tensión e impedancia interna de baterías UPS independiente de la tarjeta de gestión IP.",
+        "zero_trust_control": "Gestión exclusiva mediante SNMPv3 AuthPriv (SHA-512 / AES-256) con listas blancas de origen."
+      }
+    }
+  }
+}

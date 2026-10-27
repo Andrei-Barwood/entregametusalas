@@ -1,0 +1,74 @@
+{
+  "type": "bundle",
+  "id": "bundle--cyberia-medsoc-ep16-2027",
+  "spec_version": "2.1",
+  "console": "CYBERIA-MED // SOC Console v19.96",
+  "palette_standard": "Ultimate Queen Chrysalis (#523)",
+  "objects": [
+    {
+      "type": "vulnerability",
+      "id": "vulnerability--ep16-cve-2027-0216",
+      "name": "CVE-2027-0216",
+      "description": "Servidor proxy inverso malicioso (el Generador Verde de Archangel) infiltrado en el nodo portuario que intercepta y envenena las actualizaciones de software del hospital.",
+      "x_cvss_score": 9.2,
+      "x_cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H",
+      "x_clinical_protocol": "TLS 1.3 Inspection / BGP Sinkhole / TUF (The Update Framework)",
+      "x_iomt_asset": "Repositorio Central de Actualizaciones de Firmware Clínico y Logística Portuaria"
+    },
+    {
+      "type": "indicator",
+      "id": "indicator--ep16-blades-dpi",
+      "name": "SIGMA_ARCHANGEL_GREEN_SHIELD_C2_NODE",
+      "pattern_type": "yara-sigma-hybrid",
+      "pattern": "tls.ja3_hash == 'e7d705a3286e19ea42f587b344ee6865' AND node_role == 'PORT_SHIELD_PROXY'",
+      "description": "El visor BLADES ilumina en verde brillante (#00F200) el servidor proxy que protege la red C2 del Cartel en el puerto."
+    },
+    {
+      "type": "course-of-action",
+      "id": "course-of-action--ep16-mitigation",
+      "name": "MIT-EP16-GREEN-NODE-TAKEDOWN",
+      "description": "Neutralización quirúrgica del servidor C2 verde mediante revocación de ruta BGP y purga del certificado raíz falso en todos los servidores hospitalarios.",
+      "x_cli_playbook": "medsoc-strike --takedown-c2 195.88.16.200 --revoke-ca ARCHANGEL_ROGUE_CA",
+      "x_prevention_standard": "NIST SP 800-147B / The Update Framework (TUF)",
+      "x_zero_trust_control": "Verificación criptográfica de extremo a extremo independiente del transporte de red."
+    }
+  ],
+  "episode_metadata": {
+    "id": 16,
+    "code": "EP16",
+    "act_number": 2,
+    "act": "ACTO II: RUTA DE EVACUACIÓN ÁRTICA Y TÚNELES DE SUMINISTRO (TELEMETRÍA EN TRÁNSITO)",
+    "title": "Puerto Militar de Arcángel (PORT FLYBY)",
+    "game_node_code": "PORT FLYBY",
+    "game_location": "Puerto industrial y militar fortificado de Archangel (Arcángel), Norte de Rusia",
+    "cyberia_spoiler": "El TF-22 irrumpe a baja altura sobre el gigantesco puerto militar de Archangel en la costa rusa, fuertemente defendido por destructores, grúas y baterías antiaéreas del Cartel. La computadora de a bordo y el visor BLADES resaltan con un intenso brillo verde el objetivo crítico: el generador de escudo principal del puerto. Zak debe concentrar todo su fuego sobre ese nodo verde en una única pasada a alta velocidad para colapsar las defensas y abrir la entrada al túnel subterráneo.",
+    "hospital_counterpart": "Identificación y Desmantelamiento de Servidor C2 Sinkhole / Cortafuegos Inverso Malicioso en el Nodo Logístico Portuario",
+    "clinical_protocol": "TLS 1.3 Inspection / BGP Sinkhole / TUF (The Update Framework)",
+    "iomt_asset": "Repositorio Central de Actualizaciones de Firmware Clínico y Logística Portuaria",
+    "mitre_technique": "T1102 / T1584.004 - Web Service C2 & Compromise Infrastructure: Server",
+    "pillars": {
+      "vulnerability": {
+        "cve": "CVE-2027-0216",
+        "cvss": 9.2,
+        "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H",
+        "description": "Servidor proxy inverso malicioso (el Generador Verde de Archangel) infiltrado en el nodo portuario que intercepta y envenena las actualizaciones de software del hospital."
+      },
+      "detection": {
+        "engine": "BLADES Visual Target Highlighter (#00F200)",
+        "rule_name": "SIGMA_ARCHANGEL_GREEN_SHIELD_C2_NODE",
+        "signature": "tls.ja3_hash == 'e7d705a3286e19ea42f587b344ee6865' AND node_role == 'PORT_SHIELD_PROXY'",
+        "telemetry_indicator": "El visor BLADES ilumina en verde brillante (#00F200) el servidor proxy que protege la red C2 del Cartel en el puerto."
+      },
+      "mitigation": {
+        "action_code": "MIT-EP16-GREEN-NODE-TAKEDOWN",
+        "immediate_response": "Neutralización quirúrgica del servidor C2 verde mediante revocación de ruta BGP y purga del certificado raíz falso en todos los servidores hospitalarios.",
+        "cli_command": "medsoc-strike --takedown-c2 195.88.16.200 --revoke-ca ARCHANGEL_ROGUE_CA"
+      },
+      "prevention": {
+        "standard": "NIST SP 800-147B / The Update Framework (TUF)",
+        "hardening_policy": "Distribución de parches y actualizaciones de equipos médicos firmada con claves offline multi-rol para que ningún servidor de tránsito pueda alterar los paquetes.",
+        "zero_trust_control": "Verificación criptográfica de extremo a extremo independiente del transporte de red."
+      }
+    }
+  }
+}

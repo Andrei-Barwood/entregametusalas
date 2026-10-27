@@ -1,0 +1,74 @@
+{
+  "type": "bundle",
+  "id": "bundle--cyberia-medsoc-ep41-2027",
+  "spec_version": "2.1",
+  "console": "CYBERIA-MED // SOC Console v19.96",
+  "palette_standard": "Ultimate Queen Chrysalis (#523)",
+  "objects": [
+    {
+      "type": "vulnerability",
+      "id": "vulnerability--ep41-cve-2027-0541",
+      "name": "CVE-2027-0541",
+      "description": "Artefacto Zero-Day viviente cuya emisión electromagnética y biológica trasciende el aislamiento de software convencional y busca acoplarse físicamente con el implante del analista.",
+      "x_cvss_score": 9.8,
+      "x_cvss_vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H",
+      "x_clinical_protocol": "TEMPEST Faraday Isolation / Hardware-In-The-Loop Bio-Sandbox",
+      "x_iomt_asset": "Cámara de Detonación y Resonancia Bio-Digital Aislada del Núcleo"
+    },
+    {
+      "type": "indicator",
+      "id": "indicator--ep41-blades-dpi",
+      "name": "SIGMA_LIVING_WEAPON_HARMONIC_HEARTBEAT_DETECTED",
+      "pattern_type": "yara-sigma-hybrid",
+      "pattern": "entity.carapace_pulse_hz == 1.20 AND blades.resonant_frequency_match == 99.98%",
+      "description": "El latido concéntrico de la entidad Cyberia (#00F200 -> #30FF00 -> #83FF65) entra en fase exacta con el pulso cardíaco de Zak."
+    },
+    {
+      "type": "course-of-action",
+      "id": "course-of-action--ep41-mitigation",
+      "name": "MIT-EP41-HARMONIC-SYNC",
+      "description": "Suspensión de protocolos de destrucción hostil en el Sandbox y apertura de canal de acoplamiento resonante controlado entre Zak y la entidad Cyberia.",
+      "x_cli_playbook": "blades-sandbox --disable-hostile-purge --align-harmonic-phase 1.20Hz --bridge-entity",
+      "x_prevention_standard": "IEC 60601-1 / TEMPEST NSA/CSS 90-01",
+      "x_zero_trust_control": "Aislamiento físico absoluto de núcleos de IA orgánica hasta verificar compatibilidad simbiótica."
+    }
+  ],
+  "episode_metadata": {
+    "id": 41,
+    "code": "EP41",
+    "act_number": 5,
+    "act": "ACTO V: EL NÚCLEO BIOCIBERNÉTICO Y LA REVELACIÓN DEL PROYECTO CYBERIA (SIMBIOSIS Y PURGA)",
+    "title": "La Cámara de la Entidad Cyberia (The Living Weapon)",
+    "game_node_code": "THE LIVING WEAPON",
+    "game_location": "Cámara central del reactor subterráneo donde flota la entidad Cyberia",
+    "cyberia_spoiler": "Consciente ahora de la traición de Devlin, Zak camina por la pasarela sobre el abismo del reactor y queda frente a frente con la entidad Cyberia ('The Living Weapon'): una colosal nave-armadura biomecánica de caparazón verde-azulado luminoso suspendida en haces de energía que respira, late y emite pulsos conscientes.",
+    "hospital_counterpart": "Cámara de Análisis Dinámico y Estático en Air-Gapped Sandbox con Jaula de Faraday del Artefacto Bio-Cibernético Zero-Day",
+    "clinical_protocol": "TEMPEST Faraday Isolation / Hardware-In-The-Loop Bio-Sandbox",
+    "iomt_asset": "Cámara de Detonación y Resonancia Bio-Digital Aislada del Núcleo",
+    "mitre_technique": "T1497 - Virtualization/Sandbox Evasion (Resonant Bio-Cybernetic Entity Inspection)",
+    "pillars": {
+      "vulnerability": {
+        "cve": "CVE-2027-0541",
+        "cvss": 9.8,
+        "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H",
+        "description": "Artefacto Zero-Day viviente cuya emisión electromagnética y biológica trasciende el aislamiento de software convencional y busca acoplarse físicamente con el implante del analista."
+      },
+      "detection": {
+        "engine": "BLADES Magnetic Resonance & Bio-Harmonic Spectrometer",
+        "rule_name": "SIGMA_LIVING_WEAPON_HARMONIC_HEARTBEAT_DETECTED",
+        "signature": "entity.carapace_pulse_hz == 1.20 AND blades.resonant_frequency_match == 99.98%",
+        "telemetry_indicator": "El latido concéntrico de la entidad Cyberia (#00F200 -> #30FF00 -> #83FF65) entra en fase exacta con el pulso cardíaco de Zak."
+      },
+      "mitigation": {
+        "action_code": "MIT-EP41-HARMONIC-SYNC",
+        "immediate_response": "Suspensión de protocolos de destrucción hostil en el Sandbox y apertura de canal de acoplamiento resonante controlado entre Zak y la entidad Cyberia.",
+        "cli_command": "blades-sandbox --disable-hostile-purge --align-harmonic-phase 1.20Hz --bridge-entity"
+      },
+      "prevention": {
+        "standard": "IEC 60601-1 / TEMPEST NSA/CSS 90-01",
+        "hardening_policy": "Jaulas de Faraday de triple revestimiento y monitoreo espectral continuo para contener emisiones resonantes en laboratorios de bio-nanotecnología.",
+        "zero_trust_control": "Aislamiento físico absoluto de núcleos de IA orgánica hasta verificar compatibilidad simbiótica."
+      }
+    }
+  }
+}

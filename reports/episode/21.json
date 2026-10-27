@@ -1,0 +1,74 @@
+{
+  "type": "bundle",
+  "id": "bundle--cyberia-medsoc-ep21-2027",
+  "spec_version": "2.1",
+  "console": "CYBERIA-MED // SOC Console v19.96",
+  "palette_standard": "Ultimate Queen Chrysalis (#523)",
+  "objects": [
+    {
+      "type": "vulnerability",
+      "id": "vulnerability--ep21-cve-2027-0321",
+      "name": "CVE-2027-0321",
+      "description": "Falta de limitación adaptativa de tasa (Rate Limiting) y ausencia de pre-autenticación por certificado en el portal norte de acceso remoto del hospital.",
+      "x_cvss_score": 8.4,
+      "x_cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:L",
+      "x_clinical_protocol": "IKEv2/IPSec & SSL-VPN with RADIUS/FIDO2",
+      "x_iomt_asset": "Concentrador VPN de Teletrabajo Clínico y Portal de Guardia Médica"
+    },
+    {
+      "type": "indicator",
+      "id": "indicator--ep21-blades-dpi",
+      "name": "SIGMA_VPN_DOORMAN_CREDENTIAL_BURST",
+      "pattern_type": "yara-sigma-hybrid",
+      "pattern": "auth_failures_per_sec > 25 AND gateway == 'NORTH_SSL_VPN' AND burst_interval_ms == 1200",
+      "description": "Detección del patrón cíclico de ráfagas de fuego/autenticación del centinela en el nodo DOOR MAN."
+    },
+    {
+      "type": "course-of-action",
+      "id": "course-of-action--ep21-mitigation",
+      "name": "MIT-EP21-TARPIT-COUNTER",
+      "description": "Aplicación de TCP Tarpitting sincronizado durante la pausa entre ráfagas y bloqueo definitivo de la fuente atacante mediante contramedida directa.",
+      "x_cli_playbook": "blades-vpn --counter-burst NORTH_GATE --enable-mtls-preauth --ban-hostile-sentry",
+      "x_prevention_standard": "NIST SP 800-63B (Digital Identity Guidelines - AAL3)",
+      "x_zero_trust_control": "Single Packet Authorization (SPA) que mantiene el puerto invisible ante cualquier escáner sin semilla criptográfica previa."
+    }
+  ],
+  "episode_metadata": {
+    "id": 21,
+    "code": "EP21",
+    "act_number": 3,
+    "act": "ACTO III: COMPLEJO CYBERIA - NIVEL 1 (PERÍMETRO CLÍNICO, QUIRÓFANOS LÁSER Y ADMISIONES)",
+    "title": "Duelo en el Acceso Norte (DOOR MAN)",
+    "game_node_code": "DOOR MAN",
+    "game_location": "Puerta blindada principal Norte del Complejo Cyberia",
+    "cyberia_spoiler": "Si Zak se aproxima a la entrada principal norte ('DOOR MAN'), la compuerta blindada se abre y emerge un soldado centinela con armadura pesada disparando ráfagas letales de plasma. Zak debe cubrirse detrás del pilar exterior de concreto, medir el ritmo de las ráfagas del guardia y asomarse en el instante exacto para abatirlo antes de que la puerta vuelva a cerrarse.",
+    "hospital_counterpart": "Neutralización de Ataques de Fuerza Bruta y Ráfagas de Credential Stuffing en el Concentrador VPN del Personal Médico",
+    "clinical_protocol": "IKEv2/IPSec & SSL-VPN with RADIUS/FIDO2",
+    "iomt_asset": "Concentrador VPN de Teletrabajo Clínico y Portal de Guardia Médica",
+    "mitre_technique": "T1110.004 - Brute Force: Credential Stuffing Burst at Main Gateway",
+    "pillars": {
+      "vulnerability": {
+        "cve": "CVE-2027-0321",
+        "cvss": 8.4,
+        "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:L",
+        "description": "Falta de limitación adaptativa de tasa (Rate Limiting) y ausencia de pre-autenticación por certificado en el portal norte de acceso remoto del hospital."
+      },
+      "detection": {
+        "engine": "BLADES Tactical Burst Timing Analyzer",
+        "rule_name": "SIGMA_VPN_DOORMAN_CREDENTIAL_BURST",
+        "signature": "auth_failures_per_sec > 25 AND gateway == 'NORTH_SSL_VPN' AND burst_interval_ms == 1200",
+        "telemetry_indicator": "Detección del patrón cíclico de ráfagas de fuego/autenticación del centinela en el nodo DOOR MAN."
+      },
+      "mitigation": {
+        "action_code": "MIT-EP21-TARPIT-COUNTER",
+        "immediate_response": "Aplicación de TCP Tarpitting sincronizado durante la pausa entre ráfagas y bloqueo definitivo de la fuente atacante mediante contramedida directa.",
+        "cli_command": "blades-vpn --counter-burst NORTH_GATE --enable-mtls-preauth --ban-hostile-sentry"
+      },
+      "prevention": {
+        "standard": "NIST SP 800-63B (Digital Identity Guidelines - AAL3)",
+        "hardening_policy": "Sustituir el acceso VPN tradicional basado en contraseñas por autenticación criptográfica resistente a phishing (FIDO2 / WebAuthn + certificados de dispositivo).",
+        "zero_trust_control": "Single Packet Authorization (SPA) que mantiene el puerto invisible ante cualquier escáner sin semilla criptográfica previa."
+      }
+    }
+  }
+}

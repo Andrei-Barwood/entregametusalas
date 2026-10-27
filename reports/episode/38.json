@@ -1,0 +1,74 @@
+{
+  "type": "bundle",
+  "id": "bundle--cyberia-medsoc-ep38-2027",
+  "spec_version": "2.1",
+  "console": "CYBERIA-MED // SOC Console v19.96",
+  "palette_standard": "Ultimate Queen Chrysalis (#523)",
+  "objects": [
+    {
+      "type": "vulnerability",
+      "id": "vulnerability--ep38-cve-2027-0538",
+      "name": "CVE-2027-0538",
+      "description": "Persistencia de certificados de cliente X.509 y tickets Kerberos de larga duración en manos de la guardia de élite del Cartel dentro del anillo interno del núcleo.",
+      "x_cvss_score": 9.1,
+      "x_cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:C/C:H/I:H/A:H",
+      "x_clinical_protocol": "X.509 PKI OCSP / Kerberos KDC Hardening / LDAP-S",
+      "x_iomt_asset": "Autoridad Certificadora Interna del Hospital (Medical PKI) y Controladores de Dominio"
+    },
+    {
+      "type": "indicator",
+      "id": "indicator--ep38-blades-dpi",
+      "name": "SIGMA_CORE_ELITE_GUARD_GOLDEN_TICKET_SWEEP",
+      "pattern_type": "yara-sigma-hybrid",
+      "pattern": "kerberos.ticket_lifetime_hours > 10 AND cert.issuer == 'CARTEL_SUB_CA_SIBERIA'",
+      "description": "Detección de los últimos 6 tokens de privilegio elevado defendiendo el anillo de acceso al reactor."
+    },
+    {
+      "type": "course-of-action",
+      "id": "course-of-action--ep38-mitigation",
+      "name": "MIT-EP38-PKI-PURGE",
+      "description": "Revocación instantánea por OCSP de todos los certificados del Cartel, doble reseteo de la cuenta krbtgt y terminación forzosa de todas las sesiones hostiles en el núcleo.",
+      "x_cli_playbook": "medsoc-pki --revoke-subca CARTEL_SUB_CA --krbtgt-double-reset --purge-active-sessions",
+      "x_prevention_standard": "NIST SP 800-57 (Key Management) & Zero Standing Privileges (ZSP)",
+      "x_zero_trust_control": "Eliminación total de cuentas con privilegios permanentes en el núcleo clínico."
+    }
+  ],
+  "episode_metadata": {
+    "id": 38,
+    "code": "EP38",
+    "act_number": 5,
+    "act": "ACTO V: EL NÚCLEO BIOCIBERNÉTICO Y LA REVELACIÓN DEL PROYECTO CYBERIA (SIMBIOSIS Y PURGA)",
+    "title": "Neutralización de la Guardia de Élite del Núcleo (Core Security Purge)",
+    "game_node_code": "CORE SECURITY PURGE",
+    "game_location": "Anillo de seguridad blindado previo a la cámara del reactor Cyberia",
+    "cyberia_spoiler": "Antes de que Zak pueda llegar a las esclusas del reactor, el escuadrón de élite del Cartel encargado de custodiar el núcleo lanza un último contraataque desesperado en los pasillos blindados. Zak utiliza toda la potencia de su arma recargada y la puntería predictiva de BLADES para abatir hasta el último guardia del complejo.",
+    "hospital_counterpart": "Revocación Masiva de Certificados Digitales Comprometidos (PKI CRL / OCSP Stapling) y Purga de Cuentas Privilegiadas del Cartel en Directorio Activo",
+    "clinical_protocol": "X.509 PKI OCSP / Kerberos KDC Hardening / LDAP-S",
+    "iomt_asset": "Autoridad Certificadora Interna del Hospital (Medical PKI) y Controladores de Dominio",
+    "mitre_technique": "T1558.001 - Steal or Forge Kerberos Tickets: Golden Ticket & Rogue PKI Purge",
+    "pillars": {
+      "vulnerability": {
+        "cve": "CVE-2027-0538",
+        "cvss": 9.1,
+        "vector": "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:C/C:H/I:H/A:H",
+        "description": "Persistencia de certificados de cliente X.509 y tickets Kerberos de larga duración en manos de la guardia de élite del Cartel dentro del anillo interno del núcleo."
+      },
+      "detection": {
+        "engine": "BLADES PKI & Kerberos Ticket Inspector",
+        "rule_name": "SIGMA_CORE_ELITE_GUARD_GOLDEN_TICKET_SWEEP",
+        "signature": "kerberos.ticket_lifetime_hours > 10 AND cert.issuer == 'CARTEL_SUB_CA_SIBERIA'",
+        "telemetry_indicator": "Detección de los últimos 6 tokens de privilegio elevado defendiendo el anillo de acceso al reactor."
+      },
+      "mitigation": {
+        "action_code": "MIT-EP38-PKI-PURGE",
+        "immediate_response": "Revocación instantánea por OCSP de todos los certificados del Cartel, doble reseteo de la cuenta krbtgt y terminación forzosa de todas las sesiones hostiles en el núcleo.",
+        "cli_command": "medsoc-pki --revoke-subca CARTEL_SUB_CA --krbtgt-double-reset --purge-active-sessions"
+      },
+      "prevention": {
+        "standard": "NIST SP 800-57 (Key Management) & Zero Standing Privileges (ZSP)",
+        "hardening_policy": "Certificados de corta duración (Short-Lived Certificates < 15 min) renovados automáticamente solo tras validación de integridad del nodo.",
+        "zero_trust_control": "Eliminación total de cuentas con privilegios permanentes en el núcleo clínico."
+      }
+    }
+  }
+}

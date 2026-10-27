@@ -1,0 +1,74 @@
+{
+  "type": "bundle",
+  "id": "bundle--cyberia-medsoc-ep04-2027",
+  "spec_version": "2.1",
+  "console": "CYBERIA-MED // SOC Console v19.96",
+  "palette_standard": "Ultimate Queen Chrysalis (#523)",
+  "objects": [
+    {
+      "type": "vulnerability",
+      "id": "vulnerability--ep04-cve-2027-0104",
+      "name": "CVE-2027-0104",
+      "description": "Agotamiento de la tabla de estados en los balanceadores clínicos por inundación volumétrica UDP/SYN dirigida simultáneamente contra los 6 clústeres de telemetría UCI.",
+      "x_cvss_score": 9.6,
+      "x_cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:N/I:H/A:H",
+      "x_clinical_protocol": "HL7 v2.5 MLLP / IEEE 11073 / BGP FlowSpec",
+      "x_iomt_asset": "6 Clústeres Azules de Soporte Vital (PACS, Infusión UCI, HIS, Gases SCADA, BSL-4, MedEvac)"
+    },
+    {
+      "type": "indicator",
+      "id": "indicator--ep04-blades-dpi",
+      "name": "SIGMA_DDOS_SIX_BLUE_HULL_NODES_CRITICAL",
+      "pattern_type": "yara-sigma-hybrid",
+      "pattern": "pps_rate > 500000 AND target_cluster IN ('NODE-01'..'NODE-06') AND hull_blue_indicator_integrity < 85%",
+      "description": "Parpadeo crítico en los 6 indicadores cian (#29C2DA) del panel de integridad del hospital."
+    },
+    {
+      "type": "course-of-action",
+      "id": "course-of-action--ep04-mitigation",
+      "name": "MIT-EP04-XDP-TURRET",
+      "description": "Activación de filtrado eBPF/XDP a velocidad de línea en la tarjeta de red (Turret Scrubbing Mode) para derribar paquetes atacantes preservando el 100% del tráfico HL7/ECG.",
+      "x_cli_playbook": "medsoc-turret --enable-xdp-scrubber --protect-nodes NODE-01..NODE-06 --qos-ef-vital",
+      "x_prevention_standard": "IEC 62443-3-3 SR 7.1 (Denial of Service Protection)",
+      "x_zero_trust_control": "Aislamiento de plano de datos clínico respecto a enlaces expuestos a Internet."
+    }
+  ],
+  "episode_metadata": {
+    "id": 4,
+    "code": "EP04",
+    "act_number": 1,
+    "act": "ACTO I: PLATAFORMA OFFSHORE \"THE RIG\" (HOSPITAL DE CAMPAÑA MARÍTIMO Y NODO DE TRIAJE)",
+    "title": "Defensa en la Silla de Artillería (SKEET SHOOT)",
+    "game_node_code": "SKEET SHOOT",
+    "game_location": "Torreta de cañón de plasma antiaéreo en la cubierta superior de The Rig",
+    "cyberia_spoiler": "Un escuadrón de cazas y bombarderos del Cartel lanza un ataque sorpresa masivo para destruir la plataforma antes de que Zak despegue. Gia lleva a Zak hasta la silla de artillería rotatoria. Zak debe operar los cañones gemelos de plasma guiándose por el radar circular para derribar los aviones enemigos mientras vigila los 6 indicadores azules de integridad estructural de la plataforma; si las bombas enemigas apagan los 6 nodos azules, la plataforma entera vuela en pedazos.",
+    "hospital_counterpart": "Centro de Mitigación Activa de DDoS Volumétrico sobre los 6 Nodos Críticos de Soporte Vital Hospitalario",
+    "clinical_protocol": "HL7 v2.5 MLLP / IEEE 11073 / BGP FlowSpec",
+    "iomt_asset": "6 Clústeres Azules de Soporte Vital (PACS, Infusión UCI, HIS, Gases SCADA, BSL-4, MedEvac)",
+    "mitre_technique": "T1498.001 - Network Denial of Service: Direct Network Flood",
+    "pillars": {
+      "vulnerability": {
+        "cve": "CVE-2027-0104",
+        "cvss": 9.6,
+        "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:N/I:H/A:H",
+        "description": "Agotamiento de la tabla de estados en los balanceadores clínicos por inundación volumétrica UDP/SYN dirigida simultáneamente contra los 6 clústeres de telemetría UCI."
+      },
+      "detection": {
+        "engine": "BLADES Radar Telemetry / eBPF Flow Monitor",
+        "rule_name": "SIGMA_DDOS_SIX_BLUE_HULL_NODES_CRITICAL",
+        "signature": "pps_rate > 500000 AND target_cluster IN ('NODE-01'..'NODE-06') AND hull_blue_indicator_integrity < 85%",
+        "telemetry_indicator": "Parpadeo crítico en los 6 indicadores cian (#29C2DA) del panel de integridad del hospital."
+      },
+      "mitigation": {
+        "action_code": "MIT-EP04-XDP-TURRET",
+        "immediate_response": "Activación de filtrado eBPF/XDP a velocidad de línea en la tarjeta de red (Turret Scrubbing Mode) para derribar paquetes atacantes preservando el 100% del tráfico HL7/ECG.",
+        "cli_command": "medsoc-turret --enable-xdp-scrubber --protect-nodes NODE-01..NODE-06 --qos-ef-vital"
+      },
+      "prevention": {
+        "standard": "IEC 62443-3-3 SR 7.1 (Denial of Service Protection)",
+        "hardening_policy": "Reserva de ancho de banda dedicada mediante colas estrictas DSCP EF para telemetría de soporte vital y sumideros BGP Anycast.",
+        "zero_trust_control": "Aislamiento de plano de datos clínico respecto a enlaces expuestos a Internet."
+      }
+    }
+  }
+}

@@ -1,0 +1,200 @@
+<main class="medsoc-grid" style="grid-template-columns: 1fr; max-width: 1040px; margin: 0 auto; padding: 1.25rem 1rem;">
+  <!-- CABECERA DEL MURO SOCIAL CLÍNICO -->
+  <header class="feed-hero-header">
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 0.75rem;">
+      <div>
+        <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.35rem;">
+          <span class="hud-tag" style="background: var(--iris-warning-high); color: #0E1111; font-weight: 800; font-size: 0.7rem; padding: 0.2rem 0.5rem; border-radius: 2px;">
+            🔴 POD NETACAD EN VIVO
+          </span>
+          <span style="font-size: 0.72rem; color: var(--magic-ring); display: inline-flex; align-items: center; gap: 0.3rem;">
+            <span style="display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--magic-pulse-core); box-shadow: 0 0 6px var(--magic-pulse-core);"></span>
+            CANAL P2P DESCENTRALIZADO (SIN LOGIN)
+          </span>
+        </div>
+        <h1 style="font-size: 1.45rem; font-weight: 800; color: #FFFFFF; margin: 0 0 0.3rem 0; letter-spacing: 0.5px;">
+          MURO SOCIAL CLÍNICO // CYBERIA POD NETACAD
+        </h1>
+        <p style="font-size: 0.8rem; color: var(--hud-glass-outline); margin: 0; line-height: 1.4;">
+          Feed en tiempo real para estudiantes de medicina e ingeniería de ciberseguridad. Comparte análisis de vulnerabilidades, comandos Kali Linux, configuraciones de transformadores de aislamiento (LIM) y depuración táctica de los 48 episodios.
+        </p>
+      </div>
+
+      <!-- BADGE DE ALMACENAMIENTO ULTRACOMPACTO JSONL -->
+      <div class="feed-stats-card" title="<%= @stats[:lifespan_estimate] %>">
+        <div style="font-size: 0.65rem; color: var(--hud-glass-outline); text-transform: uppercase; font-weight: 700;">
+          ARQUITECTURA DE ALMACENAMIENTO
+        </div>
+        <div style="font-size: 0.82rem; font-weight: 800; color: var(--magic-highlight); margin: 0.15rem 0;">
+          DOCUMENTO COMPACTO (.JSONL)
+        </div>
+        <div id="feed-storage-stats-badge" style="font-size: 0.7rem; color: var(--bauble-cyan-bright);">
+          <%= @stats[:kb] %> KB / 3,000 KB (JSONL • <%= @stats[:total_posts] %> posts)
+        </div>
+        <div style="font-size: 0.62rem; color: #888888; margin-top: 0.2rem;">
+          <code style="color: var(--magic-ring);">data/clinical_wall_feed.jsonl</code> • Autonomía: ~5 años sin base de datos pesada
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- TARJETA COMPONEDORA DE PUBLICACIÓN (TWITTER/X STYLE CON LÍMITE DE 2000 CARACTERES) -->
+  <section class="soc-panel feed-compose-panel" aria-label="Crear publicación en el muro clínico">
+    <div class="soc-panel-header" style="background: linear-gradient(90deg, #164E62, #1A566D);">
+      <span style="font-weight: 700; color: #FFFFFF;">
+        💬 TRANSMITIR AL FEED DEL POD CLÍNICO
+      </span>
+      <span style="font-size: 0.68rem; color: var(--magic-main);">
+        SIN AUTENTICACIÓN • PARTICIPACIÓN INMEDIATA
+      </span>
+    </div>
+
+    <div class="soc-panel-body" style="padding: 1rem;">
+      <% if @error %>
+        <div class="feed-alert-box" style="display: block; margin-bottom: 0.75rem;">
+          <%= @error %>
+        </div>
+      <% end %>
+      <form id="feed-post-form" action="/muro" method="POST">
+        <div class="feed-compose-meta-row">
+          <div style="flex: 1; min-width: 220px;">
+            <label for="feed-author-input" class="feed-label">
+              TU ALIAS O DISTINTIVO CLÍNICO:
+            </label>
+            <input
+              type="text"
+              id="feed-author-input"
+              name="author"
+              class="soc-input"
+              placeholder="Ej: Cadete_UCI_1996, Dra_BioCyber..."
+              maxlength="50"
+              required
+            >
+          </div>
+
+          <div style="flex: 1; min-width: 240px;">
+            <label for="feed-post-episode-select" class="feed-label">
+              EPISODIO ASOCIADO (OPCIONAL):
+            </label>
+            <select id="feed-post-episode-select" name="episode_id" class="soc-select">
+              <option value="">CANAL GENERAL (DISCUSIÓN GLOBAL)</option>
+              <% @episodes.each do |ep| %>
+                <option value="<%= ep['id'] %>">
+                  <%= ep['code'] %> — <%= ep['game_node_code'] %> (<%= ep['hospital_counterpart'] %>)
+                </option>
+              <% end %>
+            </select>
+          </div>
+        </div>
+
+        <div style="margin-top: 0.75rem;">
+          <label for="feed-post-content" class="feed-label">
+            MENSAJE, PROCEDIMIENTO KALI O ANÁLISIS MÉDICO (MÁXIMO 2,000 CARACTERES):
+          </label>
+          <textarea
+            id="feed-post-content"
+            name="content"
+            class="soc-input feed-textarea"
+            rows="4"
+            maxlength="2000"
+            placeholder="Escribe tu observación técnica, comando de terminal de Kali Linux, comportamiento de los signos vitales, o dudas sobre parches hospitalarios..."
+            required
+          ></textarea>
+        </div>
+
+        <div id="feed-form-alert" class="feed-alert-box" style="display: none;"></div>
+
+        <div class="feed-compose-footer">
+          <div id="feed-char-counter" class="feed-char-counter">
+            0 / 2000 caracteres
+          </div>
+          <button type="submit" id="btn-feed-submit" class="soc-btn soc-btn-warning" style="font-weight: 700; padding: 0.45rem 1.1rem;">
+            PUBLICAR EN EL MURO
+          </button>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- BARRA DE FILTRO Y ESTADO DEL MURO -->
+  <section class="feed-filter-bar">
+    <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+      <span style="font-size: 0.74rem; font-weight: 700; color: #FFFFFF;">FILTRAR MURO:</span>
+      <select id="feed-filter-select" class="soc-select" style="max-width: 320px; font-size: 0.72rem; padding: 0.25rem 0.5rem;">
+        <option value="all">TODOS LOS EPISODIOS (MURO UNIFICADO)</option>
+        <% @episodes.each do |ep| %>
+          <option value="<%= ep['id'] %>">
+            <%= ep['code'] %>: <%= ep['title'] %> (<%= ep['game_node_code'] %>)
+          </option>
+        <% end %>
+      </select>
+    </div>
+
+    <div class="feed-filter-pills">
+      <button type="button" class="soc-btn feed-filter-btn active" data-ep="all" style="font-size: 0.68rem; padding: 0.2rem 0.5rem;">
+        TODOS
+      </button>
+      <button type="button" class="soc-btn feed-filter-btn" data-ep="1" style="font-size: 0.68rem; padding: 0.2rem 0.5rem;">
+        EP01 (BOMBAS)
+      </button>
+      <button type="button" class="soc-btn feed-filter-btn" data-ep="4" style="font-size: 0.68rem; padding: 0.2rem 0.5rem;">
+        EP04 (VENTILADORES)
+      </button>
+      <button type="button" class="soc-btn feed-filter-btn" data-ep="12" style="font-size: 0.68rem; padding: 0.2rem 0.5rem;">
+        EP12 (AVIÓN/FIRMWARE)
+      </button>
+      <button type="button" class="soc-btn feed-filter-btn" data-ep="22" style="font-size: 0.68rem; padding: 0.2rem 0.5rem;">
+        EP22 (SLICEOMATIC)
+      </button>
+      <button type="button" class="soc-btn feed-filter-btn" data-ep="35" style="font-size: 0.68rem; padding: 0.2rem 0.5rem;">
+        EP35 (LIVING WEAPON)
+      </button>
+    </div>
+
+    <div style="font-size: 0.72rem; color: var(--hud-glass-outline); display: flex; align-items: center; gap: 0.4rem;">
+      <span id="feed-active-count-badge" class="hud-tag" style="color: var(--magic-pulse-core);">
+        <%= @posts.size %> MENSAJES
+      </span>
+      <span>• REACCIONES: 👍 👎 💝</span>
+    </div>
+  </section>
+
+  <!-- FLUJO DINÁMICO DE PUBLICACIONES (STREAM) -->
+  <section class="feed-stream-section" aria-label="Comentarios en tiempo real">
+    <div id="feed-stream-container" class="feed-stream-list">
+      <% @posts.each do |p| %>
+        <article class="feed-post-card" data-post-id="<%= p.id %>" data-episode-id="<%= p.episode_id %>">
+          <div class="feed-post-avatar" style="background-color: <%= p.avatar_color %>;">
+            <%= (p.author || 'C')[0].upcase %>
+          </div>
+          <div class="feed-post-main">
+            <div class="feed-post-header">
+              <span class="feed-post-author"><%= p.author %></span>
+              <span class="feed-post-pill <%= p.episode_id ? 'feed-post-ep-pill' : 'feed-post-gen-pill' %>">
+                <%= p.episode_id ? format('EP%02d', p.episode_id) : 'GENERAL' %>
+              </span>
+              <time class="feed-post-time" datetime="<%= p.created_at %>">hace poco</time>
+            </div>
+            <div class="feed-post-body">
+              <%= p.content.gsub("\n", "<br>") %>
+            </div>
+            <div class="feed-post-actions" aria-label="Reacciones al comentario">
+              <button type="button" class="feed-react-btn feed-react-like" data-post-id="<%= p.id %>" data-reaction="like" title="Pulgar arriba (Me gusta)">
+                <span class="react-emoji" aria-hidden="true">👍</span>
+                <span class="react-count" id="react-like-<%= p.id %>"><%= p.likes %></span>
+              </button>
+              <button type="button" class="feed-react-btn feed-react-dislike" data-post-id="<%= p.id %>" data-reaction="dislike" title="Pulgar abajo (No me gusta)">
+                <span class="react-emoji" aria-hidden="true">👎</span>
+                <span class="react-count" id="react-dislike-<%= p.id %>"><%= p.dislikes %></span>
+              </button>
+              <button type="button" class="feed-react-btn feed-react-love" data-post-id="<%= p.id %>" data-reaction="love" title="Amor Clínico (Corazón con lazo)">
+                <span class="react-emoji" aria-hidden="true">💝</span>
+                <span class="react-count" id="react-love-<%= p.id %>"><%= p.loves %></span>
+              </button>
+            </div>
+          </div>
+        </article>
+      <% end %>
+    </div>
+  </section>
+</main>

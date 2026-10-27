@@ -1,0 +1,782 @@
+<% ep0 = @initial_episode || @episodes.first %>
+<% v0 = ep0.dig('pillars', 'vulnerability') || {} %>
+<% d0 = ep0.dig('pillars', 'detection') || {} %>
+<% m0 = ep0.dig('pillars', 'mitigation') || {} %>
+<% p0 = ep0.dig('pillars', 'prevention') || {} %>
+
+<main class="medsoc-grid">
+  <!-- BANNER DE BIENVENIDA & ACCESO A GUÍA EDUCATIVA PARA ESTUDIANTES DE MEDICINA -->
+  <div class="tutorial-onboarding-banner" style="grid-column: 1 / -1; width: 100%; background: linear-gradient(90deg, rgba(0,72,92,0.95), rgba(15,81,80,0.95)); border: 1px solid var(--bauble-cyan-bright); padding: 0.55rem 0.85rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.6rem; box-shadow: 0 0 12px rgba(41,194,218,0.25); box-sizing: border-box;">
+    <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+      <span style="background: var(--iris-warning-high); color: #0E1111; font-weight: bold; font-size: 0.68rem; padding: 0.15rem 0.45rem; border-radius: 2px;">POD MEDSEC NETACAD</span>
+      <span style="font-size: 0.76rem; color: #FFFFFF;">
+        <strong>¿Estudiante de Medicina o Ingeniería Clínica?</strong> Aprende a usar la terminal Kali Linux White Hat y protege bombas de infusión (EP01) conociendo las configuraciones de electricidad hospitalaria.
+      </span>
+    </div>
+    <div style="display: flex; gap: 0.4rem;">
+      <a href="/tutorial" id="btn-banner-open-tutorial" class="soc-btn soc-btn-warning" style="font-size: 0.72rem; padding: 0.25rem 0.65rem; text-decoration: none;">
+        📖 ABRIR TUTORIAL PASO A PASO
+      </a>
+      <a href="#aegis9-sentinel-panel" class="soc-btn" style="font-size: 0.72rem; padding: 0.25rem 0.65rem; text-decoration: none;">
+        ⚡ IR A LA CONSOLA TÁCTICA
+      </a>
+      <a href="#clinical-wall-panel" class="soc-btn" style="font-size: 0.72rem; padding: 0.25rem 0.65rem; text-decoration: none; border-color: var(--bauble-cyan-bright); color: var(--bauble-cyan-bright);">
+        💬 MURO SOCIAL EN VIVO
+      </a>
+    </div>
+  </div>
+
+  <!-- COLUMNA IZQUIERDA: SELECTOR DE 6 ACTOS, FILTROS SIEM Y LÍNEA DE TIEMPO DE 48 EPISODIOS -->
+  <aside class="soc-panel" aria-label="Selector de los 48 Episodios">
+    <div class="soc-panel-header">
+      <span>CRÓNICA DE 48 EPISODIOS</span>
+      <span id="episode-counter-badge" class="ep-code-badge"><%= @episodes.size %> / 48</span>
+    </div>
+    <div class="soc-panel-body">
+      <div class="filter-controls">
+        <input
+          type="search"
+          id="soc-search-input"
+          class="soc-input"
+          placeholder="Buscar CVE, HL7, DICOM, SLICEOMATIC, Devlin..."
+          aria-label="Buscar por CVE, protocolo o escena de Cyberia"
+        >
+        <select id="soc-act-select" class="soc-select" aria-label="Filtrar por Acto">
+          <option value="all">TODOS LOS ACTOS (ACTOS I – VI // 48 EP)</option>
+          <option value="1">ACTO I: Plataforma Offshore "The Rig" (EP01–EP12)</option>
+          <option value="2">ACTO II: Ruta Ártica y Túneles (EP13–EP19)</option>
+          <option value="3">ACTO III: Complejo Cyberia Nivel 1 (EP20–EP27)</option>
+          <option value="4">ACTO IV: Complejo Cyberia Nivel 2 (EP28–EP35)</option>
+          <option value="5">ACTO V: Núcleo Biocibernético y Simbiosis (EP36–EP44)</option>
+          <option value="6">ACTO VI: Venganza Orbital contra Devlin (EP45–EP48)</option>
+        </select>
+        <select id="soc-protocol-select" class="soc-select" aria-label="Filtrar por Protocolo Clínico">
+          <option value="all">TODOS LOS PROTOCOLOS CLÍNICOS / OT</option>
+          <option value="HL7">HL7 v2 / FHIR R4</option>
+          <option value="DICOM">DICOM / PACS MRI</option>
+          <option value="11073">IEEE 11073 (Bombas UCI / Desfibriladores)</option>
+          <option value="Modbus">Modbus / PLC Quirófano / Gases</option>
+          <option value="BACnet">BACnet (HVAC / Halón / BSL-4)</option>
+          <option value="CAN">CAN Bus / ARINC / SatCom</option>
+          <option value="TPM">TPM 2.0 / PKI / BCI Neural</option>
+        </select>
+      </div>
+
+      <div class="episode-list" id="soc-episode-list">
+        <% @episodes.each_with_index do |ep, idx| %>
+          <button
+            type="button"
+            class="episode-card-item <%= idx.zero? ? 'active' : '' %>"
+            data-ep-id="<%= ep['id'] %>"
+            data-act="<%= ep['act_number'] %>"
+            data-protocol="<%= ep['clinical_protocol'] %>"
+            data-search="<%= [ep['code'], ep['title'], ep['game_node_code'], ep['hospital_counterpart'], ep['clinical_protocol'], ep.dig('pillars', 'vulnerability', 'cve'), ep['cyberia_spoiler']].join(' ').downcase %>"
+          >
+            <div class="episode-card-top">
+              <span class="ep-code-badge"><%= ep['code'] %></span>
+              <span class="ep-node-badge"><%= ep['game_node_code'] %></span>
+              <span class="cvss-pill">CVSS <%= ep.dig('pillars', 'vulnerability', 'cvss') %></span>
+            </div>
+            <div class="ep-card-title"><%= ep['title'] %></div>
+            <div style="font-size: 0.72rem; color: var(--magic-main); margin-top: 0.15rem;">
+              <%= ep['hospital_counterpart'] %>
+            </div>
+          </button>
+        <% end %>
+      </div>
+    </div>
+  </aside>
+
+  <!-- COLUMNA CENTRAL: VISOR ÓPTICO BLADES, SPOILER DE CYBERIA (1996) Y LOS 4 PILARES CLÍNICOS -->
+  <section class="soc-panel" aria-label="Visor Central de Análisis de Episodio">
+    <div class="soc-panel-header">
+      <span id="viewer-header-title">VISOR BLADES DPI &amp; MRI // <%= ep0['code'] %> — <%= ep0['game_node_code'] %></span>
+      <div style="display: flex; gap: 0.4rem;">
+        <a id="btn-export-md" href="/reports/episode/<%= ep0['id'] %>.md" class="soc-btn" style="padding: 0.2rem 0.55rem; font-size: 0.72rem;">
+          BOLETÍN .MD
+        </a>
+        <a id="btn-export-json" href="/reports/episode/<%= ep0['id'] %>.json" class="soc-btn" style="padding: 0.2rem 0.55rem; font-size: 0.72rem;">
+          STIX .JSON
+        </a>
+      </div>
+    </div>
+
+    <div class="soc-panel-body">
+      <!-- Banner Superior del Episodio -->
+      <div class="blades-hud-banner">
+        <div class="blades-hud-meta">
+          <span id="ep-badge-code" class="hud-tag"><%= ep0['code'] %></span>
+          <span id="ep-badge-node" class="hud-tag">NODO JUEGO: <%= ep0['game_node_code'] %></span>
+          <span id="ep-badge-protocol" class="hud-tag">PROTOCOLO: <%= ep0['clinical_protocol'] %></span>
+          <span id="ep-badge-mitre" class="hud-tag hud-tag-warning"><%= ep0['mitre_technique'] %></span>
+        </div>
+        <h2 id="ep-main-title" style="font-size: 1.25rem; color: var(--magic-highlight); margin-bottom: 0.3rem;">
+          <%= ep0['title'] %>
+        </h2>
+        <div id="ep-act-name" style="font-size: 0.78rem; color: var(--bauble-cyan-bright); font-weight: 700; margin-bottom: 0.35rem;">
+          <%= ep0['act'] %>
+        </div>
+        <div class="episode-location-grid">
+          <div style="background: var(--bg-core); padding: 0.45rem 0.6rem; border-left: 3px solid var(--hud-glass-outline);">
+            <strong style="color: var(--hud-glass-outline);">UBICACIÓN CYBERIA (1996):</strong>
+            <div id="ep-game-location"><%= ep0['game_location'] %></div>
+          </div>
+          <div style="background: var(--bg-core); padding: 0.45rem 0.6rem; border-left: 3px solid var(--magic-pulse-core);">
+            <strong style="color: var(--magic-highlight);">CONTRAPARTE SOC HOSPITALARIO:</strong>
+            <div id="ep-hospital-counterpart"><%= ep0['hospital_counterpart'] %></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Crónica y Spoiler Íntegro de Cyberia (1996) -->
+      <article class="spoiler-chronicle-box">
+        <h3>CRÓNICA NARRATIVA &amp; SPOILER EXACTO — CYBERIA (1996)</h3>
+        <p id="ep-spoiler-text" style="color: var(--hud-glass-outline); font-size: 0.86rem; line-height: 1.55;">
+          <%= ep0['cyberia_spoiler'] %>
+        </p>
+        <div style="margin-top: 0.5rem; font-size: 0.76rem; color: var(--bauble-cyan-bright);">
+          <strong>ACTIVO IoMT / BIOMÉDICO COMPROMETIDO:</strong>
+          <span id="ep-iomt-asset" style="color: var(--magic-main);"><%= ep0['iomt_asset'] %></span>
+        </div>
+      </article>
+
+      <!-- MATRIZ DE LOS 4 PILARES DE CIBERSEGURIDAD EN ENTORNOS HOSPITALARIOS -->
+      <div class="pillars-four-grid">
+        <!-- PILAR 1: ANÁLISIS DE VULNERABILIDAD -->
+        <div class="pillar-card">
+          <h4>
+            <span>1. ANÁLISIS DE VULNERABILIDAD</span>
+            <span id="pillar-cve-badge" class="cvss-pill"><%= v0['cve'] %> (CVSS <%= v0['cvss'] %>)</span>
+          </h4>
+          <div style="font-size: 0.74rem; color: var(--bauble-cyan-bright);">
+            Vector: <code id="pillar-cvss-vector"><%= v0['vector'] %></code>
+          </div>
+          <p id="pillar-vuln-desc" style="font-size: 0.82rem; color: var(--hud-glass-outline);">
+            <%= v0['description'] %>
+          </p>
+        </div>
+
+        <!-- PILAR 2: DETECCIÓN (BLADES DPI / SIEM) -->
+        <div class="pillar-card">
+          <h4>
+            <span>2. DETECCIÓN (BLADES DPI / SIEM)</span>
+            <span id="pillar-det-engine" class="ep-code-badge"><%= d0['engine'] %></span>
+          </h4>
+          <div style="font-size: 0.74rem; color: var(--iris-warning-mid);">
+            Regla: <strong id="pillar-det-rule"><%= d0['rule_name'] %></strong>
+          </div>
+          <pre id="pillar-det-sig" class="code-terminal"><%= d0['signature'] %></pre>
+          <div style="font-size: 0.76rem; color: var(--magic-main);">
+            <strong>Telemetría:</strong> <span id="pillar-det-indicator"><%= d0['telemetry_indicator'] %></span>
+          </div>
+        </div>
+
+        <!-- PILAR 3: MITIGACIÓN INMEDIATA -->
+        <div class="pillar-card">
+          <h4>
+            <span>3. MITIGACIÓN CONTENCIÓN ACTIVA</span>
+            <span id="pillar-mit-code" class="ep-code-badge"><%= m0['action_code'] %></span>
+          </h4>
+          <p id="pillar-mit-resp" style="font-size: 0.82rem; color: var(--hud-glass-outline);">
+            <%= m0['immediate_response'] %>
+          </p>
+          <pre id="pillar-mit-cli" class="code-terminal"><%= m0['cli_command'] %></pre>
+          <div class="horn-progress-track" title="Progreso de Mitigación (--horn-grad)">
+            <div id="mitigation-progress-bar" class="horn-progress-bar" style="width: 100%;"></div>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.35rem;">
+            <button type="button" id="btn-run-playbook" class="soc-btn" style="font-size: 0.73rem; padding: 0.3rem 0.65rem;">
+              EJECUTAR PLAYBOOK CLI EN CONSOLA
+            </button>
+            <span id="playbook-exec-status" style="font-size: 0.72rem; color: var(--magic-pulse-core);">
+              ESTADO: LISTO
+            </span>
+          </div>
+        </div>
+
+        <!-- PILAR 4: PREVENCIÓN DE INCIDENTES -->
+        <div class="pillar-card">
+          <h4>
+            <span>4. PREVENCIÓN DE INCIDENTES</span>
+            <span id="pillar-prev-std" class="ep-code-badge"><%= p0['standard'] %></span>
+          </h4>
+          <p style="font-size: 0.8rem; color: var(--hud-glass-outline);">
+            <strong style="color: var(--bauble-cyan-bright);">Hardening:</strong>
+            <span id="pillar-prev-hardening"><%= p0['hardening_policy'] %></span>
+          </p>
+          <p style="font-size: 0.8rem; color: var(--magic-main); margin-top: 0.25rem;">
+            <strong style="color: var(--magic-highlight);">Zero Trust:</strong>
+            <span id="pillar-prev-zt"><%= p0['zero_trust_control'] %></span>
+          </p>
+        </div>
+      </div>
+
+      <!-- Terminal de Salida en Vivo del Motor BLADES -->
+      <div class="soc-panel" style="background-color: var(--iris-bg-deep-1); border-color: var(--hud-glass-outline);">
+        <div class="soc-panel-header" style="background-color: var(--carapace-deep-1);">
+          <span>CONSOLA DE EJECUCIÓN BLADES CLI // LIVE TELEMETRY LOG</span>
+          <span style="font-size: 0.72rem; color: var(--magic-pulse-core);">TTY: /dev/blades0</span>
+        </div>
+        <pre id="blades-live-terminal" class="code-terminal" style="min-height: 76px; border: none;">[2027-SOC-INIT] Implante BLADES v19.96 sincronizado. Selecciona cualquiera de los 48 episodios o ejecuta un Playbook de mitigación...</pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- COLUMNA DERECHA: TOPOLOGÍA DEL COMPLEJO CYBERIA <-> PISOS DEL HOSPITAL & ACCESO A SIMULADORES -->
+  <aside class="soc-panel" aria-label="Topología Hospitalaria y Telemetría Global">
+    <div class="soc-panel-header">
+      <span>TOPOLOGÍA HOSPITAL / CYBERIA</span>
+      <span class="ep-code-badge">6 SECTORES</span>
+    </div>
+    <div class="soc-panel-body">
+      <div class="mri-viewport" style="margin-bottom: 0.85rem; padding: 0.75rem;">
+        <div style="font-size: 0.74rem; color: var(--hud-glass-outline); margin-bottom: 0.5rem; text-align: center;">
+          MAPA TÁCTICO INTERACTIVO (HAZ CLIC EN UN SECTOR)
+        </div>
+        <svg id="cyberia-topology-svg" viewBox="0 0 280 350" style="width: 100%; height: auto; display: block;">
+          <!-- Líneas de interconexión troncal -->
+          <line x1="140" y1="35" x2="140" y2="315" stroke="#2B87AB" stroke-width="2" stroke-dasharray="4 3" />
+
+          <!-- Sector 6: Órbita Devlin (EP45-EP48) -->
+          <g class="topo-sector-node" data-act="6" style="cursor: pointer;">
+            <rect x="20" y="10" width="240" height="42" rx="4" fill="#00383B" stroke="#29C2DA" stroke-width="1.5" />
+            <circle cx="40" cy="31" r="7" fill="#00F200" />
+            <text x="55" y="27" fill="#A4FF8E" font-size="10" font-weight="bold">ACTO VI: ESTACIÓN ORBITAL DEVLIN</text>
+            <text x="55" y="41" fill="#B2E5F2" font-size="8.5">SatCom GNSS, Botnet Swarm &amp; Kill-Switch (EP45-48)</text>
+          </g>
+
+          <!-- Sector 1: The Rig (EP01-EP12) -->
+          <g class="topo-sector-node" data-act="1" style="cursor: pointer;">
+            <rect x="20" y="66" width="240" height="42" rx="4" fill="#093534" stroke="#83FF65" stroke-width="2" />
+            <circle cx="40" cy="87" r="7" fill="#00F200" />
+            <text x="55" y="83" fill="#A4FF8E" font-size="10" font-weight="bold">ACTO I: THE RIG (OFFSHORE TRIAGE)</text>
+            <text x="55" y="97" fill="#B2E5F2" font-size="8.5">Gia, Santos, SKEET SHOOT, TF-22 Hangar (EP01-12)</text>
+          </g>
+
+          <!-- Sector 2: Ruta Ártica y Túnel (EP13-EP19) -->
+          <g class="topo-sector-node" data-act="2" style="cursor: pointer;">
+            <rect x="20" y="122" width="240" height="42" rx="4" fill="#00383B" stroke="#2B87AB" stroke-width="1.5" />
+            <circle cx="40" cy="143" r="7" fill="#29C2DA" />
+            <text x="55" y="139" fill="#A4FF8E" font-size="10" font-weight="bold">ACTO II: RUTA ÁRTICA &amp; TÚNEL CAN</text>
+            <text x="55" y="153" fill="#B2E5F2" font-size="8.5">Archangel Shield, UNDERGROUND, PIT STOP (EP13-19)</text>
+          </g>
+
+          <!-- Sector 3: Complejo Cyberia Nivel 1 (EP20-EP27) -->
+          <g class="topo-sector-node" data-act="3" style="cursor: pointer;">
+            <rect x="20" y="178" width="240" height="42" rx="4" fill="#00383B" stroke="#2B87AB" stroke-width="1.5" />
+            <circle cx="40" cy="199" r="7" fill="#29C2DA" />
+            <text x="55" y="195" fill="#A4FF8E" font-size="10" font-weight="bold">ACTO III: COMPLEJO NIVEL 1 (HIS/OR)</text>
+            <text x="55" y="209" fill="#B2E5F2" font-size="8.5">LOCKED OUT MRI, SLICEOMATIC, GENIUS (EP20-27)</text>
+          </g>
+
+          <!-- Sector 4: Complejo Cyberia Nivel 2 (EP28-EP35) -->
+          <g class="topo-sector-node" data-act="4" style="cursor: pointer;">
+            <rect x="20" y="234" width="240" height="42" rx="4" fill="#00383B" stroke="#2B87AB" stroke-width="1.5" />
+            <circle cx="40" cy="255" r="7" fill="#E7F800" />
+            <text x="55" y="251" fill="#A4FF8E" font-size="10" font-weight="bold">ACTO IV: NIVEL 2 (HALÓN &amp; NANOMED)</text>
+            <text x="55" y="265" fill="#B2E5F2" font-size="8.5">RED LIGHT, DRUG STORE, UNSAFE DOOR, GRAFFITI (EP28-35)</text>
+          </g>
+
+          <!-- Sector 5: Núcleo Biocibernético BSL-4 (EP36-EP44) -->
+          <g class="topo-sector-node" data-act="5" style="cursor: pointer;">
+            <rect x="20" y="290" width="240" height="46" rx="4" fill="#0F5150" stroke="#30FF00" stroke-width="1.5" />
+            <circle cx="40" cy="313" r="7" fill="#00F200" />
+            <text x="55" y="308" fill="#A4FF8E" font-size="10" font-weight="bold">ACTO V: NÚCLEO BSL-4 &amp; SIMBIOSIS</text>
+            <text x="55" y="322" fill="#B2E5F2" font-size="8.5">Zimmer, Traición Devlin, YOU WITH ME (EP36-44)</text>
+          </g>
+        </svg>
+      </div>
+
+      <!-- Métricas del SOC -->
+      <div class="pillar-card" style="margin-bottom: 0.85rem;">
+        <h4><span>TELEMETRÍA MAESTRA DEL SOC</span></h4>
+        <div style="font-size: 0.78rem; display: grid; gap: 0.35rem;">
+          <div style="display: flex; justify-content: space-between;">
+            <span style="color: var(--hud-glass-outline);">Episodios Cargados:</span>
+            <strong style="color: var(--magic-pulse-core);"><%= @metrics[:total_episodes] %> / 48</strong>
+          </div>
+          <div style="display: flex; justify-content: space-between;">
+            <span style="color: var(--hud-glass-outline);">Severidad CVSS Promedio:</span>
+            <strong style="color: var(--iris-warning-high);"><%= @metrics[:average_cvss] %> / 10.0</strong>
+          </div>
+          <div style="display: flex; justify-content: space-between;">
+            <span style="color: var(--hud-glass-outline);">CVEs Críticos (&ge; 9.0):</span>
+            <strong style="color: var(--iris-warning-mid);"><%= @metrics[:critical_vulnerabilities] %> Incidentes</strong>
+          </div>
+          <div style="display: flex; justify-content: space-between;">
+            <span style="color: var(--hud-glass-outline);">Estado Simbiosis:</span>
+            <strong style="color: var(--magic-main);"><%= @metrics[:symbiosis_status] %></strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- Acceso Directo a Simuladores de Puzzles y Dossiers Forenses por Acto -->
+      <div class="pillar-card" style="margin-bottom: 0.85rem;">
+        <h4><span>SIMULADORES INTERACTIVOS MEDSEC</span></h4>
+        <p style="font-size: 0.76rem; color: var(--hud-glass-outline);">
+          Opera los puzzles reales de <em>Cyberia (1996)</em> conectados a diagnósticos PLC de quirófano, válvulas ECMO y vacunas de ransomware:
+        </p>
+        <a href="/simulators" class="soc-btn" style="justify-content: center; margin-top: 0.3rem;">
+          ABRIR LABORATORIO DE SIMULADORES
+        </a>
+      </div>
+
+      <div class="pillar-card">
+        <h4><span>EXPORTAR DOSSIERS FORENSES POR ACTO (.MD)</span></h4>
+        <div class="act-report-grid">
+          <a href="/reports/act/1.md" class="soc-btn" style="justify-content: center; font-size: 0.7rem; padding: 0.3rem;">ACTO I</a>
+          <a href="/reports/act/2.md" class="soc-btn" style="justify-content: center; font-size: 0.7rem; padding: 0.3rem;">ACTO II</a>
+          <a href="/reports/act/3.md" class="soc-btn" style="justify-content: center; font-size: 0.7rem; padding: 0.3rem;">ACTO III</a>
+          <a href="/reports/act/4.md" class="soc-btn" style="justify-content: center; font-size: 0.7rem; padding: 0.3rem;">ACTO IV</a>
+          <a href="/reports/act/5.md" class="soc-btn" style="justify-content: center; font-size: 0.7rem; padding: 0.3rem;">ACTO V</a>
+          <a href="/reports/act/6.md" class="soc-btn" style="justify-content: center; font-size: 0.7rem; padding: 0.3rem;">ACTO VI</a>
+        </div>
+      </div>
+
+      <!-- Acceso a Bibliografía Luminosa y Créditos del Final -->
+      <div class="pillar-card" style="margin-top: 0.85rem;">
+        <h4><span style="color: hsl(150, 100%, 80%);">BIBLIOGRAFÍA &amp; CRÉDITOS NORMATIVOS</span></h4>
+        <p style="font-size: 0.76rem; color: var(--hud-glass-outline);">
+          Accede al compendio normativo de electricidad hospitalaria, ciberseguridad, matemáticas y bioética en formato créditos de videojuego:
+        </p>
+        <a href="/bibliografia" class="soc-btn nav-btn-bibliography" style="justify-content: center; margin-top: 0.3rem; text-decoration: none;">
+          ★ ABRIR BIBLIOGRAFÍA LUMINOSA
+        </a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- SECCIÓN SENTINELA NATIVO AEGIS9CYBERBRAINEDR: ANCHO COMPLETO DEL DISPLAY DISPONIBLE (grid-column: 1 / -1) -->
+  <section class="soc-panel sentinel-aegis-box" id="aegis9-sentinel-panel" aria-label="Sentinela Activo Aegis9CyberbrainEDR y Consola Táctica">
+    <div class="soc-panel-header" style="background: linear-gradient(90deg, #00485C, #1A566D, #409979);">
+      <span>SENTINELA ACTIVO // Aegis9CyberbrainEDR (LIVE DEBUGGER &amp; PATCH LEDGER)</span>
+      <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
+        <button type="button" id="btn-sentinel-verify-bin" class="soc-btn soc-btn-warning" style="padding: 0.2rem 0.55rem; font-size: 0.7rem;">
+          EJECUTAR BINARIO (--verify-killchain)
+        </button>
+      </div>
+    </div>
+
+    <div class="sentinel-status-bar">
+      <div>
+        <strong style="color: var(--magic-highlight);">BINARIO ACOPLADO:</strong>
+        <code id="sentinel-binary-path" style="color: var(--bauble-cyan-bright);">bin/Aegis9CyberbrainEDR</code>
+      </div>
+      <div style="display: flex; gap: 0.85rem;">
+        <span>SENSOR ACTIVO: <strong id="sentinel-active-sensor" style="color: var(--magic-main);">ProstheticSignatureValidator</strong></span>
+        <span>GHOST SYNC: <strong id="sentinel-ghost-score" style="color: var(--magic-pulse-core);">100.0%</strong></span>
+        <span>LEDGER BLOCKS: <strong id="sentinel-ledger-count" style="color: var(--iris-warning-high);">4</strong></span>
+      </div>
+    </div>
+
+    <div class="soc-panel-body">
+      <!-- Traza de depuración en vivo del Sentinela para el episodio actual -->
+      <div style="font-size: 0.76rem; color: var(--bauble-cyan-bright); font-weight: 700; margin-bottom: 0.3rem;">
+        1. TRAZA DE DEPURACIÓN EN VIVO DEL SENTINELA (<span id="sentinel-ep-label">EP01 — CVE-2027-0101</span>):
+      </div>
+      <pre id="sentinel-debug-trace" class="code-terminal" style="min-height: 92px; margin-bottom: 0.75rem;">[AEGIS9-ATTACH] Inicializando acoplamiento con bin/Aegis9CyberbrainEDR...</pre>
+
+      <!-- SECCIÓN 2: VIDEOJUEGO INTERACTIVO DE MITIGACIÓN Y PARCHES (NITE TEAM 4 // KALI LINUX SANDBOX) -->
+      <div class="tactical-mission-panel" id="sentinel-tactical-game">
+        <div class="tactical-header-bar">
+          <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+            <span class="hud-tag" style="background: var(--carapace-deep-1); color: var(--magic-highlight); font-weight: bold;">
+              2. CONSOLA TÁCTICA NITE TEAM 4 // KALI LINUX SANDBOX
+            </span>
+            <span id="tactical-target-ip-badge" class="hud-tag hud-tag-warning">OBJETIVO: 10.19.96.01</span>
+            <span id="tactical-status-badge" class="hud-tag" style="background: var(--iris-warning-high); color: #0E1111; font-weight: bold;">
+              ESTADO: COMPROMETIDO
+            </span>
+            <span class="hud-tag" style="background: var(--iris-bg-deep-3); border: 1px solid var(--iris-warning-high); color: var(--iris-warning-high); font-size: 0.69rem; font-weight: bold;" title="Tipea pistas en la consola para ubicarte">
+              💡 TIPEA 'pistas' PARA UBICARTE
+            </span>
+          </div>
+          <div style="display: flex; gap: 0.4rem; align-items: center; flex-wrap: wrap;">
+            <span id="tactical-warmup-timer" style="font-size: 0.72rem; color: var(--bauble-cyan-bright); font-family: monospace;">WARM-UP: 03:00</span>
+            <button type="button" id="btn-tactical-warmup" class="soc-btn" style="padding: 0.18rem 0.5rem; font-size: 0.68rem;" title="Reiniciar temporizador de calentamiento para el pod NetAcad">
+              ⏱ REINICIAR WARM-UP (3 MIN)
+            </button>
+            <button type="button" id="btn-tactical-script-studio" class="soc-btn soc-btn-warning" style="padding: 0.18rem 0.5rem; font-size: 0.68rem;" title="Abrir constructor asistido de script Bash">
+              ⚡ BASH SCRIPT STUDIO [F2]
+            </button>
+            <button type="button" id="btn-tactical-export-evidence" class="soc-btn" style="padding: 0.18rem 0.5rem; font-size: 0.68rem;" title="Copiar informe de evidencia para entrega NetAcad">
+              📋 EVIDENCIA NETACAD (.MD)
+            </button>
+          </div>
+        </div>
+
+        <!-- HUD de Telemetría Clínica del Objetivo Remoto -->
+        <div class="tactical-target-hud">
+          <div class="target-asset-meta">
+            <div>
+              <span style="font-size: 0.68rem; color: var(--hud-glass-outline);">ACTIVO CLÍNICO REMOTO:</span>
+              <div id="tactical-target-name" style="font-size: 0.85rem; font-weight: bold; color: var(--magic-highlight);">
+                InfusionPump-ICU-01 [HL7-FHIR v4]
+              </div>
+            </div>
+            <div>
+              <span style="font-size: 0.68rem; color: var(--hud-glass-outline);">VULNERABILIDAD / CVSS:</span>
+              <div id="tactical-target-cve" style="font-size: 0.82rem; font-weight: bold; color: var(--iris-warning-high);">
+                CVE-2027-0101 (CVSS 8.2)
+              </div>
+            </div>
+          </div>
+
+          <!-- Vitals Readout: Pulso / Presión / Flujo según el tipo de dispositivo IoMT -->
+          <div class="target-vitals-readout">
+            <div class="vital-item">
+              <span class="vital-label">CONSTANTE CLÍNICA:</span>
+              <span id="tactical-vital-param" class="vital-value" style="color: var(--iris-warning-high);">SOBREDOSIS: 145 mL/h [CRÍTICO]</span>
+            </div>
+            <div class="vital-item">
+              <span class="vital-label">INTEGRIDAD GHOST:</span>
+              <div class="tactical-sync-meter">
+                <div id="tactical-sync-bar" class="tactical-sync-fill" style="width: 45%;"></div>
+              </div>
+              <span id="tactical-sync-pct" style="font-size: 0.72rem; font-weight: bold; color: var(--magic-main);">45.0%</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Ventana de Consola Terminal Kali Linux Simulada -->
+        <div class="tactical-terminal-window">
+          <div class="tactical-term-topbar">
+            <div class="term-dots">
+              <span class="dot dot-red"></span>
+              <span class="dot dot-yellow"></span>
+              <span class="dot dot-green"></span>
+            </div>
+            <div class="term-title">kali@cyberia-soc: ~/netacad-pod/clinical-defense</div>
+            <div class="term-shortcut-pills">
+              <span class="term-shortcut" id="btn-quick-pistas" style="background: var(--iris-warning-high); color: var(--bg-core); font-weight: bold; border-color: var(--iris-warning-high);" title="Obtén pistas y orientación táctica para este episodio">💡 TIPEA: pistas</span>
+              <span class="term-shortcut" id="btn-quick-nmap" title="Escaneo rápido de puertos">nmap -sV</span>
+              <span class="term-shortcut" id="btn-quick-iptables" title="Bloqueo perimetral">iptables -A</span>
+              <span class="term-shortcut" id="btn-quick-patch" title="Ejecutar parche de mitigación">./deploy_patch.sh</span>
+              <span class="term-shortcut" id="btn-quick-help" title="Ver comandos disponibles">help</span>
+            </div>
+          </div>
+
+          <div class="tactical-term-body" id="tactical-term-output">
+            <!-- Se imprimen los logs de la consola en tiempo real -->
+          </div>
+
+          <div class="tactical-term-prompt-line">
+            <span class="tactical-prompt-text" id="tactical-prompt-prefix">kali@cyberia-soc:~/pod-soc$</span>
+            <input type="text" id="tactical-cli-input" class="tactical-cli-input" autocomplete="off" spellcheck="false" placeholder="💡 Tipea 'pistas' para ubicarte, o un comando Kali (nmap, iptables, ./deploy_patch.sh)..." />
+            <button type="button" id="btn-tactical-send" class="soc-btn" style="padding: 0.2rem 0.6rem; font-size: 0.72rem;">EJECUTAR</button>
+          </div>
+        </div>
+
+        <!-- Cajón Desplegable del BASH SCRIPT STUDIO // CONSTRUCTOR CLICABLE -->
+        <div class="tactical-script-studio-drawer" id="tactical-script-studio-drawer" style="display: none;">
+          <div class="script-studio-header">
+            <div>
+              <strong style="color: var(--magic-highlight); font-size: 0.82rem;">⚡ BASH SCRIPT STUDIO // CONSTRUCTOR DE PARCHES MULTI-FASE</strong>
+              <span style="font-size: 0.7rem; color: var(--hud-glass-outline); display: block;">
+                Haz clic en cualquier palabra, comando, parámetro o variable para insertarlo en la posición del cursor. El script se va autocompletando dinámicamente.
+              </span>
+            </div>
+            <div style="display: flex; gap: 0.4rem; align-items: center;">
+              <button type="button" id="btn-close-script-studio" class="soc-btn" style="padding: 0.15rem 0.5rem; font-size: 0.7rem;">CERRAR [ESC]</button>
+            </div>
+          </div>
+
+          <div class="studio-builder-grid">
+            <!-- Paleta de Componentes Clicables (Click-to-Build Word Palette) -->
+            <div class="script-token-palette-box" id="script-token-palette-box">
+              <div style="font-size: 0.72rem; color: var(--bauble-cyan-bright); font-weight: bold; margin-bottom: 0.25rem; display: flex; justify-content: space-between; align-items: center;">
+                <span>[PALETA CLICABLE] HAZ CLIC PARA AUTOCOMPLETAR:</span>
+                <span style="font-size: 0.65rem; color: var(--hud-glass-outline);">Inserta en la posición del cursor</span>
+              </div>
+
+              <!-- 1. COMANDOS & HERRAMIENTAS KALI -->
+              <div class="token-category-group">
+                <span class="token-category-title" style="color: var(--bauble-cyan-bright);">1. Comandos &amp; Herramientas:</span>
+                <div class="token-pills-row">
+                  <button type="button" class="script-word-token token-cmd" data-token="iptables">iptables</button>
+                  <button type="button" class="script-word-token token-cmd" data-token="nmap">nmap</button>
+                  <button type="button" class="script-word-token token-cmd" data-token="suricata-update">suricata-update</button>
+                  <button type="button" class="script-word-token token-cmd" data-token="openssl">openssl</button>
+                  <button type="button" class="script-word-token token-cmd" data-token="systemctl">systemctl</button>
+                  <button type="button" class="script-word-token token-cmd" data-token="logger">logger</button>
+                  <button type="button" class="script-word-token token-cmd" data-token="sed">sed</button>
+                  <button type="button" class="script-word-token token-cmd" data-token="curl">curl</button>
+                  <button type="button" class="script-word-token token-cmd" data-token="tcpdump">tcpdump</button>
+                  <button type="button" class="script-word-token token-cmd" data-token="sha256sum">sha256sum</button>
+                  <button type="button" class="script-word-token token-cmd" data-token="echo">echo</button>
+                  <button type="button" class="script-word-token token-cmd" data-token="sleep 1">sleep 1</button>
+                </div>
+              </div>
+
+              <!-- 2. PARÁMETROS & FLAGS -->
+              <div class="token-category-group">
+                <span class="token-category-title" style="color: var(--iris-warning-high);">2. Parámetros &amp; Opciones de Red:</span>
+                <div class="token-pills-row">
+                  <button type="button" class="script-word-token token-flag" data-token="-I FORWARD -p tcp">-I FORWARD -p tcp</button>
+                  <button type="button" class="script-word-token token-flag" data-token="-A INPUT -p tcp">-A INPUT -p tcp</button>
+                  <button type="button" class="script-word-token token-flag" data-token="--dport">--dport</button>
+                  <button type="button" class="script-word-token token-flag" data-token="-d">-d</button>
+                  <button type="button" class="script-word-token token-flag" data-token="-s">-s</button>
+                  <button type="button" class="script-word-token token-flag" data-token="-j DROP">-j DROP</button>
+                  <button type="button" class="script-word-token token-flag" data-token="-j ACCEPT">-j ACCEPT</button>
+                  <button type="button" class="script-word-token token-flag" data-token="-sV -p">-sV -p</button>
+                  <button type="button" class="script-word-token token-flag" data-token="s_client -connect">s_client -connect</button>
+                  <button type="button" class="script-word-token token-flag" data-token="-brief </dev/null">-brief &lt;/dev/null</button>
+                  <button type="button" class="script-word-token token-flag" data-token="-i 's/EXPLOIT/SAFE/g'">-i 's/EXPLOIT/SAFE/g'</button>
+                  <button type="button" class="script-word-token token-flag" data-token="restart iomt-sentinel-agent">restart iomt-sentinel-agent</button>
+                  <button type="button" class="script-word-token token-flag" data-token="-t MEDSOC_PATCH">-t MEDSOC_PATCH</button>
+                </div>
+              </div>
+
+              <!-- 3. VARIABLES DEL EPISODIO ACTUAL (DINÁMICAS) -->
+              <div class="token-category-group">
+                <span class="token-category-title" style="color: var(--magic-pulse-core);">3. Variables del Objetivo Actual:</span>
+                <div class="token-pills-row" id="studio-dynamic-vars-pills">
+                  <button type="button" class="script-word-token token-var" data-token="$TARGET_IP">$TARGET_IP</button>
+                  <button type="button" class="script-word-token token-var" id="var-pill-ip-val" data-token="10.19.96.01">10.19.96.01</button>
+                  <button type="button" class="script-word-token token-var" data-token="$PORT">$PORT</button>
+                  <button type="button" class="script-word-token token-var" id="var-pill-port-val" data-token="8080">8080</button>
+                  <button type="button" class="script-word-token token-var" data-token="$CVE">$CVE</button>
+                  <button type="button" class="script-word-token token-var" id="var-pill-cve-val" data-token="CVE-2027-0101">CVE-2027-0101</button>
+                  <button type="button" class="script-word-token token-var" data-token="$ASSET">$ASSET</button>
+                </div>
+              </div>
+
+              <!-- 4. ESTRUCTURA BASH & OPERADORES -->
+              <div class="token-category-group">
+                <span class="token-category-title" style="color: var(--magic-highlight);">4. Estructura Bash &amp; Control:</span>
+                <div class="token-pills-row">
+                  <button type="button" class="script-word-token token-ctrl" data-token="#!/bin/bash" data-block="true">#!/bin/bash</button>
+                  <button type="button" class="script-word-token token-ctrl" data-token="set -e" data-block="true">set -e</button>
+                  <button type="button" class="script-word-token token-ctrl" data-token="if [ $? -eq 0 ]; then">if [ $? -eq 0 ]; then</button>
+                  <button type="button" class="script-word-token token-ctrl" data-token="else">else</button>
+                  <button type="button" class="script-word-token token-ctrl" data-token="fi">fi</button>
+                  <button type="button" class="script-word-token token-ctrl" data-token="exit 0">exit 0</button>
+                  <button type="button" class="script-word-token token-ctrl" data-token="&&">&amp;&amp;</button>
+                  <button type="button" class="script-word-token token-ctrl" data-token="|">|</button>
+                  <button type="button" class="script-word-token token-ctrl" data-token=">">&gt;</button>
+                  <button type="button" class="script-word-token token-ctrl" data-token="2>&1">2&gt;&amp;1</button>
+                </div>
+              </div>
+
+              <!-- 5. BLOQUES RÁPIDOS DE 1-CLIC -->
+              <div class="token-category-group">
+                <span class="token-category-title" style="color: #FFFFFF;">5. Bloques de Solución Rápida (1-Clic):</span>
+                <div class="token-pills-row">
+                  <button type="button" class="script-word-token token-block" id="btn-insert-block-isolate">+ Bloque Aislamiento (iptables)</button>
+                  <button type="button" class="script-word-token token-block" id="btn-insert-block-sanitize">+ Bloque Sanitización (suricata/sed)</button>
+                  <button type="button" class="script-word-token token-block" id="btn-insert-block-crypto">+ Bloque mTLS (openssl)</button>
+                  <button type="button" class="script-word-token token-block" id="btn-insert-block-restart">+ Bloque Servicio &amp; Log (systemctl)</button>
+                </div>
+              </div>
+
+              <!-- Utilidades del Constructor -->
+              <div style="margin-top: 0.4rem; display: flex; gap: 0.35rem; flex-wrap: wrap; border-top: 1px solid var(--border-structural); padding-top: 0.4rem;">
+                <button type="button" id="btn-studio-template-netacad" class="soc-btn" style="padding: 0.15rem 0.45rem; font-size: 0.68rem;">
+                  PLANTILLA NETACAD
+                </button>
+                <button type="button" id="btn-studio-reset-script" class="soc-btn" style="padding: 0.15rem 0.45rem; font-size: 0.68rem;">
+                  AUTORRELLENAR CANÓNICO
+                </button>
+                <button type="button" id="btn-studio-clear-script" class="soc-btn soc-btn-warning" style="padding: 0.15rem 0.45rem; font-size: 0.68rem;">
+                  🧹 LIMPIAR EDITOR
+                </button>
+              </div>
+            </div>
+
+            <!-- Editor de Código de Script Bash -->
+            <div class="studio-script-editor-wrap">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.25rem;">
+                <div style="display: flex; align-items: center; gap: 0.4rem;">
+                  <span style="font-size: 0.7rem; color: var(--bauble-cyan-bright); font-family: monospace;">deploy_patch.sh</span>
+                  <span id="studio-script-valid-badge" class="hud-tag" style="font-size: 0.65rem; background: var(--iris-bg-deep-3); color: var(--hud-glass-outline);">ESTADO: EN CONSTRUCCIÓN</span>
+                </div>
+                <div style="display: flex; gap: 0.3rem;">
+                  <button type="button" id="btn-studio-copy-script" class="soc-btn" style="padding: 0.1rem 0.4rem; font-size: 0.65rem;">📋 COPIAR</button>
+                  <span style="font-size: 0.68rem; color: var(--hud-glass-outline);">Bash 5.2</span>
+                </div>
+              </div>
+              <textarea id="tactical-script-editor" class="tactical-script-textarea" spellcheck="false" placeholder="# Haz clic en las palabras de la paleta izquierda para ir ensamblando el script..."></textarea>
+              <div style="margin-top: 0.4rem; display: flex; justify-content: space-between; align-items: center; gap: 0.4rem; flex-wrap: wrap;">
+                <span id="studio-cursor-pos" style="font-size: 0.68rem; color: var(--hud-glass-outline); font-family: monospace;">Cursor: Línea 1, Col 1</span>
+                <button type="button" id="btn-studio-run-script" class="soc-btn soc-btn-warning" style="padding: 0.3rem 0.8rem; font-weight: bold;">
+                  ▶ EJECUTAR SCRIPT EN TERMINAL (./deploy_patch.sh)
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Título y tarjetas de parches canónicos (Mantiene la funcionalidad existente) -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin: 0.65rem 0 0.35rem 0;">
+          <span style="font-size: 0.74rem; color: var(--magic-highlight); font-weight: 700;">
+            SELLO DE LOS 4 PARCHES DESPLEGADOS (ORDEN ESTRICTO #1 &rarr; #4):
+          </span>
+          <span id="tactical-patches-progress-badge" class="hud-tag" style="font-size: 0.68rem; color: var(--hud-glass-outline);">
+            PROGRESO: 4/4 REGLAS ACTIVAS
+          </span>
+        </div>
+
+        <div class="patch-sequence-grid" id="sentinel-episode-patches-grid">
+          <!-- Se puebla dinámicamente -->
+        </div>
+      </div>
+
+      <!-- Historial Cronológico Acumulado de Parches a medida que ocurren los episodios -->
+      <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 0.5rem; margin-top: 0.85rem;">
+        <span style="font-size: 0.76rem; color: var(--bauble-cyan-bright); font-weight: 700;">
+          3. REGISTRO CRONOLÓGICO ACUMULADO DE PARCHES DESPLEGADOS (<span id="sentinel-total-patches-badge">0</span> PARCHES SELLADOS EN BLOCKCHAIN):
+        </span>
+        <div style="display: flex; gap: 0.35rem; flex-wrap: wrap;">
+          <button type="button" class="soc-btn patch-filter-btn active" data-cat="all" style="padding: 0.15rem 0.45rem; font-size: 0.68rem;">TODOS</button>
+          <button type="button" class="soc-btn patch-filter-btn" data-cat="PREVENTION" style="padding: 0.15rem 0.45rem; font-size: 0.68rem;">PREVENCIÓN</button>
+          <button type="button" class="soc-btn patch-filter-btn" data-cat="DETECTION" style="padding: 0.15rem 0.45rem; font-size: 0.68rem;">DETECCIÓN</button>
+          <button type="button" class="soc-btn patch-filter-btn" data-cat="MITIGATION" style="padding: 0.15rem 0.45rem; font-size: 0.68rem;">MITIGACIÓN</button>
+          <button type="button" class="soc-btn patch-filter-btn" data-cat="INCIDENT_RESPONSE" style="padding: 0.15rem 0.45rem; font-size: 0.68rem;">INCIDENT RESPONSE</button>
+        </div>
+      </div>
+
+      <div class="patch-ledger-table-wrap">
+        <table class="patch-ledger-table">
+          <thead>
+            <tr>
+              <th>ORDEN #</th>
+              <th>EPISODIO</th>
+              <th>VULNERABILIDAD</th>
+              <th>ID PARCHE</th>
+              <th>CLASIFICACIÓN</th>
+              <th>MÓDULO AEGIS-9 / CONTROL APLICADO</th>
+              <th>SELLO SHA-256</th>
+            </tr>
+          </thead>
+          <tbody id="sentinel-patch-ledger-tbody">
+            <!-- Se actualiza en tiempo real conforme ocurren los episodios -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECCIÓN MURO SOCIAL CLÍNICO (TWITTER-STYLE LIVE FEED EN TIEMPO REAL SIN AUTENTICACIÓN) -->
+  <section class="soc-panel clinical-feed-panel" id="clinical-wall-panel" style="grid-column: 1 / -1; width: 100%; box-sizing: border-box;" aria-label="Muro Social Clínico y Feed en Vivo del Pod NetAcad">
+    <div class="soc-panel-header" style="background: linear-gradient(90deg, #164E62 0%, #1A566D 40%, #218984 100%);">
+      <div style="display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap;">
+        <span style="font-weight: 800; color: #FFFFFF; letter-spacing: 0.5px;">
+          💬 MURO SOCIAL CLÍNICO // POD NETACAD (FEED EN VIVO)
+        </span>
+        <span class="hud-tag" style="background: rgba(48,255,0,0.15); border: 1px solid var(--magic-ring); color: var(--magic-highlight); font-size: 0.65rem;">
+          CANAL EN TIEMPO REAL • SIN LOGIN
+        </span>
+        <span style="font-size: 0.7rem; color: var(--bauble-cyan-bright);">
+          EPISODIO ACTIVO: <strong id="feed-active-ep-label" style="color: var(--iris-warning-high);"><%= ep0['code'] %></strong>
+        </span>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+        <!-- Indicador de formato ultracompacto en texto JSONL para 5 años -->
+        <span id="feed-storage-stats-badge" class="hud-tag" style="font-size: 0.66rem; color: var(--hud-glass-outline); cursor: help;" title="Almacenamiento ultracompacto append-only (.jsonl): 3MB rinden ~5 años de debates clínicos">
+          JSONL COMPACTO • AUTO-SYNC
+        </span>
+        <a href="/muro" class="soc-btn" style="font-size: 0.68rem; padding: 0.2rem 0.55rem; text-decoration: none; border-color: var(--bauble-cyan-bright); color: var(--bauble-cyan-bright);">
+          ↗ PANTALLA COMPLETA
+        </a>
+      </div>
+    </div>
+
+    <div class="soc-panel-body" style="padding: 0.85rem;">
+      <div class="feed-layout-columns">
+        <!-- COLUMNA IZQUIERDA: FORMULARIO DE COMPOSICIÓN (MÁXIMO 2000 CARACTERES) -->
+        <div class="feed-compose-box">
+          <form id="feed-post-form" action="/api/feed" method="POST">
+            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.5rem;">
+              <div style="flex: 1; min-width: 160px;">
+                <label for="feed-author-input" class="feed-label">TU ALIAS O CADETE ID:</label>
+                <input
+                  type="text"
+                  id="feed-author-input"
+                  name="author"
+                  class="soc-input"
+                  placeholder="Cadete_NetAcad..."
+                  maxlength="50"
+                  required
+                >
+              </div>
+              <div style="flex: 1; min-width: 170px;">
+                <label for="feed-post-episode-select" class="feed-label">EPISODIO ASOCIADO:</label>
+                <select id="feed-post-episode-select" name="episode_id" class="soc-select">
+                  <option value="">CANAL GENERAL</option>
+                  <% @episodes.each do |ep| %>
+                    <option value="<%= ep['id'] %>" <%= ep['id'] == ep0['id'] ? 'selected' : '' %>>
+                      <%= ep['code'] %>: <%= ep['game_node_code'] %>
+                    </option>
+                  <% end %>
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label for="feed-post-content" class="feed-label">
+                OBSERVACIÓN CLÍNICA / COMANDO KALI / PARCHE (MÁX. 2000 CARACTERES):
+              </label>
+              <textarea
+                id="feed-post-content"
+                name="content"
+                class="soc-input feed-textarea"
+                rows="4"
+                maxlength="2000"
+                placeholder="Comparte con tus compañeros del pod hallazgos de CVE, reglas iptables, comandos nmap o configuraciones eléctricas del episodio..."
+                required
+              ></textarea>
+            </div>
+
+            <div id="feed-form-alert" class="feed-alert-box" style="display: none;"></div>
+
+            <div class="feed-compose-footer">
+              <div id="feed-char-counter" class="feed-char-counter">
+                0 / 2000 caracteres
+              </div>
+              <button type="submit" id="btn-feed-submit" class="soc-btn soc-btn-warning" style="font-weight: 700; padding: 0.35rem 0.9rem; font-size: 0.76rem;">
+                PUBLICAR EN EL MURO
+              </button>
+            </div>
+          </form>
+
+          <!-- NOTA EXPLICATIVA SOBRE EL ALMACENAMIENTO LIGERO -->
+          <div style="margin-top: 0.85rem; padding: 0.6rem; background: rgba(14,17,17,0.7); border: 1px dashed var(--border-structural); font-size: 0.69rem; color: var(--hud-glass-outline); line-height: 1.4;">
+            <div style="color: var(--iris-warning-high); font-weight: 700; margin-bottom: 0.2rem;">
+              💡 ARQUITECTURA ULTRACOMPACTA SIN FIREBASE:
+            </div>
+            Cada mensaje se apenda atómicamente a un documento de texto compacto (<code style="color: var(--magic-ring);">data/clinical_wall_feed.jsonl</code>). Con ~200 bytes por mensaje, 3 Megabytes proporcionan hasta 5 años de historial infinito sin requerir servidores externos ni costes en la nube.
+          </div>
+        </div>
+
+        <!-- COLUMNA DERECHA: STREAM DEL MURO SOCIAL Y FILTROS -->
+        <div class="feed-stream-column">
+          <div class="feed-stream-toolbar">
+            <div style="display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap;">
+              <span style="font-size: 0.72rem; font-weight: 700; color: #FFFFFF;">FILTRAR:</span>
+              <select id="feed-filter-select" class="soc-select" style="max-width: 220px; font-size: 0.7rem; padding: 0.2rem 0.4rem;">
+                <option value="all">TODOS LOS EPISODIOS</option>
+                <% @episodes.each do |ep| %>
+                  <option value="<%= ep['id'] %>"><%= ep['code'] %>: <%= ep['game_node_code'] %></option>
+                <% end %>
+              </select>
+            </div>
+            <div class="feed-filter-pills">
+              <button type="button" class="soc-btn feed-filter-btn active" data-ep="all" style="font-size: 0.65rem; padding: 0.15rem 0.4rem;">TODOS</button>
+              <button type="button" class="soc-btn feed-filter-btn" data-ep="1" style="font-size: 0.65rem; padding: 0.15rem 0.4rem;">EP01</button>
+              <button type="button" class="soc-btn feed-filter-btn" data-ep="4" style="font-size: 0.65rem; padding: 0.15rem 0.4rem;">EP04</button>
+              <button type="button" class="soc-btn feed-filter-btn" data-ep="12" style="font-size: 0.65rem; padding: 0.15rem 0.4rem;">EP12</button>
+              <button type="button" class="soc-btn feed-filter-btn" data-ep="22" style="font-size: 0.65rem; padding: 0.15rem 0.4rem;">EP22</button>
+            </div>
+          </div>
+
+          <!-- CONTENEDOR CON SCROLL DEL STREAM DE MENSAJES -->
+          <div id="feed-stream-container" class="feed-stream-list" style="max-height: 480px; overflow-y: auto;">
+            <!-- Renderizado dinámico vía JavaScript y auto-polling cada 5 segundos -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>

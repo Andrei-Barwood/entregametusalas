@@ -1,0 +1,74 @@
+{
+  "type": "bundle",
+  "id": "bundle--cyberia-medsoc-ep19-2027",
+  "spec_version": "2.1",
+  "console": "CYBERIA-MED // SOC Console v19.96",
+  "palette_standard": "Ultimate Queen Chrysalis (#523)",
+  "objects": [
+    {
+      "type": "vulnerability",
+      "id": "vulnerability--ep19-cve-2027-0219",
+      "name": "CVE-2027-0219",
+      "description": "Inyección de comandos BACnet WriteProperty sin autenticar que elevan el punto de consigna térmico de las cámaras del banco de sangre de -40°C a +25°C.",
+      "x_cvss_score": 9.0,
+      "x_cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:N/I:H/A:H",
+      "x_clinical_protocol": "BACnet/IP & Modbus TCP Chiller Control",
+      "x_iomt_asset": "Plantas Enfriadoras (Chillers), Banco de Sangre, Plasma y Cámaras Criogénicas"
+    },
+    {
+      "type": "indicator",
+      "id": "indicator--ep19-blades-dpi",
+      "name": "SIGMA_BACNET_ICESCREAM_THERMAL_SABOTAGE",
+      "pattern_type": "yara-sigma-hybrid",
+      "pattern": "bacnet.service == 'WriteProperty' AND object_type == 'AnalogValue_Setpoint' AND new_temp_c > -15.0",
+      "description": "Intento hostil de deshielo masivo detectado en los controladores glaciares del sector ICE SCREAM."
+    },
+    {
+      "type": "course-of-action",
+      "id": "course-of-action--ep19-mitigation",
+      "name": "MIT-EP19-CRYO-LOCK",
+      "description": "Bloqueo de registros de consigna en modo solo lectura por hardware y activación de compresores redundantes de nitrógeno líquido.",
+      "x_cli_playbook": "blades-hvac --lock-setpoint -40C --drop-bacnet-write --engage-backup-chiller SIBERIA_01",
+      "x_prevention_standard": "AABB Standards for Blood Banks / IEC 62443-3-3",
+      "x_zero_trust_control": "Segmentación física del bus de refrigeración criogénica con inspección profunda de paquetes BACnet."
+    }
+  ],
+  "episode_metadata": {
+    "id": 19,
+    "code": "EP19",
+    "act_number": 2,
+    "act": "ACTO II: RUTA DE EVACUACIÓN ÁRTICA Y TÚNELES DE SUMINISTRO (TELEMETRÍA EN TRÁNSITO)",
+    "title": "Glaciares de Aproximación a Siberia (ICE SCREAM)",
+    "game_node_code": "ICE SCREAM",
+    "game_location": "Salida del túnel hacia los glaciares de Siberia Oriental, perímetro aéreo del Complejo Cyberia",
+    "cyberia_spoiler": "Con los escudos recargados tras el Pit Stop, el TF-22 sale disparado del túnel subterráneo hacia la superficie helada de Siberia. En esta última fase de vuelo ('ICE SCREAM'), Zak atraviesa un cañón glaciar plagado de torretas camufladas en la nieve y escuadrones de élite del Cartel que defienden la aproximación final a la base secreta.",
+    "hospital_counterpart": "Defensa de los Sistemas HVAC de Ultracongelación, Criogenia y Banco de Sangre ante Ataques de Denegación de Servicio Térmico",
+    "clinical_protocol": "BACnet/IP & Modbus TCP Chiller Control",
+    "iomt_asset": "Plantas Enfriadoras (Chillers), Banco de Sangre, Plasma y Cámaras Criogénicas",
+    "mitre_technique": "T0836 - Modify Parameter (Thermal Setpoint Sabotage on Cryo/Blood Bank)",
+    "pillars": {
+      "vulnerability": {
+        "cve": "CVE-2027-0219",
+        "cvss": 9.0,
+        "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:N/I:H/A:H",
+        "description": "Inyección de comandos BACnet WriteProperty sin autenticar que elevan el punto de consigna térmico de las cámaras del banco de sangre de -40°C a +25°C."
+      },
+      "detection": {
+        "engine": "BLADES Infrared Cryo-Watchdog",
+        "rule_name": "SIGMA_BACNET_ICESCREAM_THERMAL_SABOTAGE",
+        "signature": "bacnet.service == 'WriteProperty' AND object_type == 'AnalogValue_Setpoint' AND new_temp_c > -15.0",
+        "telemetry_indicator": "Intento hostil de deshielo masivo detectado en los controladores glaciares del sector ICE SCREAM."
+      },
+      "mitigation": {
+        "action_code": "MIT-EP19-CRYO-LOCK",
+        "immediate_response": "Bloqueo de registros de consigna en modo solo lectura por hardware y activación de compresores redundantes de nitrógeno líquido.",
+        "cli_command": "blades-hvac --lock-setpoint -40C --drop-bacnet-write --engage-backup-chiller SIBERIA_01"
+      },
+      "prevention": {
+        "standard": "AABB Standards for Blood Banks / IEC 62443-3-3",
+        "hardening_policy": "Termostatos de seguridad bimetálicos independientes de la red IP que mantienen el enfriamiento aun si el PLC principal es comprometido.",
+        "zero_trust_control": "Segmentación física del bus de refrigeración criogénica con inspección profunda de paquetes BACnet."
+      }
+    }
+  }
+}

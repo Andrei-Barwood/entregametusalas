@@ -1,0 +1,74 @@
+{
+  "type": "bundle",
+  "id": "bundle--cyberia-medsoc-ep47-2027",
+  "spec_version": "2.1",
+  "console": "CYBERIA-MED // SOC Console v19.96",
+  "palette_standard": "Ultimate Queen Chrysalis (#523)",
+  "objects": [
+    {
+      "type": "vulnerability",
+      "id": "vulnerability--ep47-cve-2027-0647",
+      "name": "CVE-2027-0647",
+      "description": "Intento de disparo del comando ejecutivo oculto 0xDEAD_DEVLIN_KILLSWITCH diseñado para inducir parada neurológica/cardíaca en el portador del implante desde la consola de mando.",
+      "x_cvss_score": 10.0,
+      "x_cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:C/C:H/I:H/A:H",
+      "x_clinical_protocol": "ISO 14708-1 (Implantable Medical Devices) / Hardware Kill-Switch Nullification",
+      "x_iomt_asset": "Marcapasos, Desfibriladores Implantables (ICD) y Prótesis Neuro-Cibernéticas BLADES"
+    },
+    {
+      "type": "indicator",
+      "id": "indicator--ep47-blades-dpi",
+      "name": "YARA_DEVLIN_KILLSWITCH_COMMAND_NULLIFIED",
+      "pattern_type": "yara-sigma-hybrid",
+      "pattern": "incoming_cmd == '0xDEAD_DEVLIN_KILLSWITCH' AND symbiosis_shield == 'ACTIVE' -> return 'ACCESS_DENIED_SOVEREIGN_HOST'",
+      "description": "Trama de ejecución remota de Devlin bloqueada y reflejada; integridad vital de Zak firme al 100.0% (#00F200)."
+    },
+    {
+      "type": "course-of-action",
+      "id": "course-of-action--ep47-mitigation",
+      "name": "MIT-EP47-KILLSWITCH-NULLIFY",
+      "description": "Rechazo total del pulso de terminación remota mediante el escudo simbiótico de Cyberia y sobrecarga inversa de la consola de control de Devlin.",
+      "x_cli_playbook": "cyberia-shield --nullify-killswitch 0xDEAD_DEVLIN --reflect-overload COMMAND_BRIDGE_47",
+      "x_prevention_standard": "FDA Guidance on Radio Frequency Wireless Technology in Medical Devices & ISO 14708",
+      "x_zero_trust_control": "Soberanía biológica total del paciente/operador sobre sus propios implantes médicos."
+    }
+  ],
+  "episode_metadata": {
+    "id": 47,
+    "code": "EP47",
+    "act_number": 6,
+    "act": "ACTO VI: VENGANZA ORBITAL CONTRA DEVLIN (ERRADICACIÓN DE AMENAZA PERSISTENTE)",
+    "title": "Brecha en el Reactor de la Fortaleza de Devlin (Command Core Breach)",
+    "game_node_code": "COMMAND CORE BREACH",
+    "game_location": "Superestructura interna y antesala del puente de mando de la estación espacial de Devlin",
+    "cyberia_spoiler": "Con las defensas externas destruidas, Zak/Cyberia perfora el casco de la estación espacial y se planta directamente frente al ventanal blindado del puente de mando ('Command Core Breach'). Aterrorizado al ver al monstruo biomecánico que creó sin querer, William Devlin golpea frenéticamente en su consola el botón de apagado remoto letal (Kill-Switch) conectado al implante craneal de Zak para matarlo... pero en su pantalla sólo parpadea un error: la simbiosis con Cyberia desconectó y anuló su control para siempre.",
+    "hospital_counterpart": "Anulación Definitiva de Kill-Switch Remoto Malicioso y Blindaje Inmutable de Firmware en Marcapasos, Neuroestimuladores e Implantes de Soporte Vital",
+    "clinical_protocol": "ISO 14708-1 (Implantable Medical Devices) / Hardware Kill-Switch Nullification",
+    "iomt_asset": "Marcapasos, Desfibriladores Implantables (ICD) y Prótesis Neuro-Cibernéticas BLADES",
+    "mitre_technique": "T0816 / T1489 - Attempted Remote Device Shutdown / Kill-Switch Nullified by Symbiosis",
+    "pillars": {
+      "vulnerability": {
+        "cve": "CVE-2027-0647",
+        "cvss": 10.0,
+        "vector": "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:C/C:H/I:H/A:H",
+        "description": "Intento de disparo del comando ejecutivo oculto 0xDEAD_DEVLIN_KILLSWITCH diseñado para inducir parada neurológica/cardíaca en el portador del implante desde la consola de mando."
+      },
+      "detection": {
+        "engine": "CYBERIA Sovereign Firewall & Implant Guard",
+        "rule_name": "YARA_DEVLIN_KILLSWITCH_COMMAND_NULLIFIED",
+        "signature": "incoming_cmd == '0xDEAD_DEVLIN_KILLSWITCH' AND symbiosis_shield == 'ACTIVE' -> return 'ACCESS_DENIED_SOVEREIGN_HOST'",
+        "telemetry_indicator": "Trama de ejecución remota de Devlin bloqueada y reflejada; integridad vital de Zak firme al 100.0% (#00F200)."
+      },
+      "mitigation": {
+        "action_code": "MIT-EP47-KILLSWITCH-NULLIFY",
+        "immediate_response": "Rechazo total del pulso de terminación remota mediante el escudo simbiótico de Cyberia y sobrecarga inversa de la consola de control de Devlin.",
+        "cli_command": "cyberia-shield --nullify-killswitch 0xDEAD_DEVLIN --reflect-overload COMMAND_BRIDGE_47"
+      },
+      "prevention": {
+        "standard": "FDA Guidance on Radio Frequency Wireless Technology in Medical Devices & ISO 14708",
+        "hardening_policy": "Prohibición absoluta por hardware de funciones de apagado remoto por red en implantes de soporte vital; toda reprogramación requiere acoplamiento inductivo cercano (< 2 cm) y autorización biológica del huésped.",
+        "zero_trust_control": "Soberanía biológica total del paciente/operador sobre sus propios implantes médicos."
+      }
+    }
+  }
+}

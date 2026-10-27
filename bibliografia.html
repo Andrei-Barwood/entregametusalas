@@ -1,0 +1,1686 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CYBERIA-MED // SOC Console v19.96 — BLADES Neural &amp; IoMT Telemetry</title>
+  <link rel="stylesheet" href="/css/chrysalis_medsoc.css">
+</head>
+<body>
+  <div class="blades-crt-overlay" aria-hidden="true"></div>
+
+  <!-- CABECERA GLOBAL DEL MEDICAL SOC -->
+  <header class="medsoc-topbar">
+    <div class="brand-block">
+      <div class="blades-emblem" title="BLADES Biocybernetic Sensor v19.96">B</div>
+      <div>
+        <div class="brand-title">CYBERIA-MED // SOC CONSOLE v19.96</div>
+        <div class="brand-subtitle">
+          SUBJECT: ZAK // IMPLANT: BLADES (IR / MRI / BIOMETRIC DPI) // PALETTE: QUEEN CHRYSALIS #523
+        </div>
+      </div>
+    </div>
+
+    <nav class="top-nav-links" aria-label="Navegación Principal del SOC">
+      <a href="/tutorial" id="btn-nav-tutorial" class="soc-btn " style="border-color: var(--iris-warning-high); color: var(--iris-warning-high);">
+        [00] GUÍA CLÍNICA &amp; TUTORIAL KALI (EP01)
+      </a>
+      <a href="/" class="soc-btn ">
+        [01] CONSOLA SOC (48 EPISODIOS)
+      </a>
+      <a href="/simulators" class="soc-btn ">
+        [02] SIMULADORES BLADES MRI &amp; NANOMED EDR
+      </a>
+      <a href="/reports/postmortem-full-48.md" class="soc-btn soc-btn-warning">
+        [03] DESCARGAR POST-MORTEM 48 EP (.MD)
+      </a>
+      <a href="/bibliografia" class="soc-btn nav-btn-bibliography active">
+        [★] BIBLIOGRAFÍA
+      </a>
+      <a href="/muro" class="soc-btn nav-btn-feed " style="border-color: var(--bauble-cyan-bright); color: var(--bauble-cyan-bright);">
+        [💬] MURO SOCIAL CLÍNICO
+      </a>
+      <a href="/mobile" class="soc-btn nav-btn-mobile" style="border-color: var(--magic-ring); color: var(--magic-highlight);" title="Versión móvil optimizada exclusiva para el feed">
+        [📱] MÓVIL
+      </a>
+    </nav>
+  </header>
+
+  <!-- FRANJA DE SIGNOS VITALES ECG (#00F200) Y 6 INDICADORES AZULES DE INTEGRIDAD (EP04 SKEET SHOOT) -->
+  <section class="vitals-ribbon" aria-label="Telemetría de Signos Vitales y Nodos Críticos">
+    <div class="ecg-monitor-box">
+      <div>
+        <div style="font-size: 0.7rem; color: var(--hud-glass-outline);">ZAK // CYBERIA ECG</div>
+        <div id="live-bpm-readout" style="font-size: 0.95rem; font-weight: 700; color: var(--magic-pulse-core);">
+          72 BPM [SYNC 100%]
+        </div>
+      </div>
+      <canvas id="blades-ecg-canvas" class="ecg-canvas" width="165" height="38"></canvas>
+    </div>
+
+    <div class="nodes-six-grid" id="six-hull-nodes">
+      
+        <div class="hull-node-pill" title="EP04 SKEET SHOOT // Hull Shield 01 — Protocol: DICOM TLS / TCP 2762">
+          <div class="node-id">
+            <span>NODE-01</span>
+            <span style="color: var(--magic-main);">98%</span>
+          </div>
+          <div class="node-name">PACS / DICOM MRI Core</div>
+        </div>
+      
+        <div class="hull-node-pill" title="EP33 DRUG STORE // Nanomed Array — Protocol: IEEE 11073-20601">
+          <div class="node-id">
+            <span>NODE-02</span>
+            <span style="color: var(--magic-main);">96%</span>
+          </div>
+          <div class="node-name">ICU Smart Infusion Cluster</div>
+        </div>
+      
+        <div class="hull-node-pill" title="EP26 GENIUS // Conference Supercomputer — Protocol: HL7 FHIR R4 / MLLP">
+          <div class="node-id">
+            <span>NODE-03</span>
+            <span style="color: var(--magic-main);">99%</span>
+          </div>
+          <div class="node-name">HIS / EHR Master Vault</div>
+        </div>
+      
+        <div class="hull-node-pill" title="EP28 RED LIGHT // Halon Suppression — Protocol: Modbus/TCP & BACnet/IP">
+          <div class="node-id">
+            <span>NODE-04</span>
+            <span style="color: var(--magic-main);">94%</span>
+          </div>
+          <div class="node-name">Medical Gas & Halon SCADA</div>
+        </div>
+      
+        <div class="hull-node-pill" title="EP36-EP39 // Cryo & BSL-4 Core — Protocol: TPM 2.0 / OPC-UA">
+          <div class="node-id">
+            <span>NODE-05</span>
+            <span style="color: var(--magic-main);">100%</span>
+          </div>
+          <div class="node-name">BSL-4 Airlock & Cryo Biobank</div>
+        </div>
+      
+        <div class="hull-node-pill" title="EP12 STEAL PLANE & EP43 YOU WITH ME — Protocol: ARINC 653 / BCI Neural-TLS">
+          <div class="node-id">
+            <span>NODE-06</span>
+            <span style="color: var(--magic-main);">100%</span>
+          </div>
+          <div class="node-name">MedEvac TF-22 & BLADES Neural Link</div>
+        </div>
+      
+    </div>
+  </section>
+
+  <!-- OVERLAY LANDING PAGE: GUÍA CLÍNICA Y TUTORIAL KALI LINUX (SOBREPUESTA CON TRANSPARENCIA SOBRE NEGRO) -->
+  <!-- OVERLAY LANDING PAGE: GUÍA CLÍNICA Y TUTORIAL KALI LINUX (SOBREPUESTA CON TRANSPARENCIA SOBRE NEGRO) -->
+<div id="tutorial-overlay" class="tutorial-overlay-backdrop hidden" role="dialog" aria-modal="true" aria-label="Guía Clínica y Tutorial Kali Linux">
+  <div class="tutorial-overlay-sheet">
+    <!-- BARRA SUPERIOR DE CONTROL DEL OVERLAY -->
+    <div class="tutorial-overlay-topbar">
+      <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+        <span class="hud-tag" style="background: var(--carapace-deep-1); color: var(--magic-highlight); font-weight: bold;">
+          [00] GUÍA CLÍNICA &amp; TUTORIAL KALI (EP01)
+        </span>
+        <span class="hud-tag hud-tag-warning">
+          INTRODUCCIÓN AL MEDICAL SOC // POD NETACAD
+        </span>
+        <span style="font-size: 0.72rem; color: var(--bauble-cyan-bright);">
+          Manual de Operaciones White Hat &amp; Electricidad Hospitalaria
+        </span>
+      </div>
+      <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+        <button type="button" id="btn-close-tutorial-overlay" class="btn-enter-soc-from-tutorial soc-btn soc-btn-warning" style="font-size: 0.74rem; padding: 0.28rem 0.75rem; font-weight: bold;">
+          ✕ CERRAR GUÍA E IR AL SOC [ESC]
+        </button>
+      </div>
+    </div>
+
+    <!-- CONTENEDOR DE LA GUÍA DIDÁCTICA -->
+    <div class="tutorial-landing-container">
+      <!-- HERO BANNER EDUCATIVO -->
+      <section class="tutorial-hero-box">
+        <div class="tutorial-hero-badge-row">
+          <span class="hud-tag" style="background: var(--carapace-deep-1); color: var(--magic-highlight); font-weight: bold;">
+            CYBERIA-MED // MANUAL DIDÁCTICO CLÍNICO
+          </span>
+          <span class="hud-tag hud-tag-warning">CISCO NETACAD MED-SEC POD</span>
+          <span class="hud-tag" style="background: var(--iris-bg-deep-3); color: var(--bauble-cyan-bright);">
+            ESTUDIANTES DE MEDICINA &amp; INGENIERÍA CLÍNICA
+          </span>
+        </div>
+
+        <h1 class="tutorial-main-title">
+          GUÍA PASO A PASO: DEFENDIENDO DISPOSITIVOS BIOMÉDICOS CON KALI LINUX
+        </h1>
+        <p class="tutorial-hero-subtitle">
+          Aprende a ejecutar las operaciones defensivas del <strong>Episodio 1 (InfusionPump-ICU-01)</strong>, comprende la arquitectura de <strong>electricidad hospitalaria aislada</strong> y domina la metodología universal aplicable a los <strong>48 episodios</strong> de Cyberia.
+        </p>
+
+        <div class="tutorial-cta-bar">
+          <button type="button" class="btn-enter-soc-from-tutorial soc-btn soc-btn-warning" style="font-size: 0.82rem; padding: 0.5rem 1rem;">
+            ▶ IR A LA CONSOLA TÁCTICA (EPISODIO 1)
+          </button>
+          <a href="#tutorial-sandbox-practice" class="soc-btn" style="font-size: 0.82rem; padding: 0.5rem 1rem; text-decoration: none;">
+            ⚡ PROBAR COMANDOS EN LA CONSOLA DEMO
+          </a>
+          <a href="#hospital-electrical-safety" class="soc-btn" style="font-size: 0.82rem; padding: 0.5rem 1rem; text-decoration: none;">
+            🔌 ELECTRICIDAD HOSPITALARIA &amp; TABLEROS IT
+          </a>
+          <a href="#universal-48-methodology" class="soc-btn" style="font-size: 0.82rem; padding: 0.5rem 1rem; text-decoration: none;">
+            🌐 PATRÓN UNIVERSAL EN LOS 48 NIVELES
+          </a>
+        </div>
+      </section>
+
+      <!-- MÓDULO 1: ¿QUÉ ES UNA TERMINAL KALI LINUX PARA OPERACIONES WHITE HAT EN MEDICINA? -->
+      <section class="soc-panel" id="white-hat-concept">
+        <div class="soc-panel-header" style="background: linear-gradient(90deg, #00485C, #1A566D);">
+          <span>MÓDULO 1 // KALI LINUX &amp; EL JURAMENTO HIPOCRÁTICO DE LA CIBERDEFENSA</span>
+          <span class="ep-code-badge">FUNDAMENTOS WHITE HAT</span>
+        </div>
+        <div class="soc-panel-body">
+          <div class="tutorial-columns-two">
+            <div>
+              <h3 style="color: var(--magic-highlight); font-size: 1.05rem; margin-bottom: 0.5rem;">
+                El Bisturí Digital: ¿Por qué Kali Linux en un Hospital?
+              </h3>
+              <p style="font-size: 0.85rem; line-height: 1.6; color: var(--hud-glass-outline); margin-bottom: 0.75rem;">
+                En la práctica médica, un cirujano utiliza el bisturí para extirpar tejido necrosado o descomprimir un hematoma, nunca para herir. De la misma manera, en ciberseguridad defensiva, <strong>Kali Linux</strong> es una distribución especializada repleta de instrumentos de diagnóstico de red.
+              </p>
+              <p style="font-size: 0.85rem; line-height: 1.6; color: var(--hud-glass-outline); margin-bottom: 0.75rem;">
+                Un hacker <em>Black Hat</em> (sombrero negro) busca explotar puertos abiertos para infectar sistemas hospitalarios con ransomware (como el ataque real de WannaCry que colapsó ambulancias en el NHS británico). Por el contrario, un analista <strong>White Hat</strong> (hacker ético o médico defensor) utiliza la consola de comandos para auditar dispositivos, detectar vulnerabilidades y colocar torniquetes perimetrales antes de que el paciente sufra daño.
+              </p>
+
+              <div class="tutorial-alert-callout">
+                <strong style="color: var(--magic-pulse-core);">EL JURAMENTO HIPOCRÁTICO DIGITAL: "Primum non nocere" (Primero no hacer daño)</strong>
+                <p style="font-size: 0.8rem; margin-top: 0.25rem; color: #FFFFFF;">
+                  A diferencia de servidores corporativos donde se puede reiniciar un equipo a voluntad, en una UCI o quirófano <strong>un comando imprudente puede apagar una bomba de fentanilo o desconectar un ventilador mecánico</strong>. Por eso, en nuestro simulador táctico todos los comandos de Kali Linux son no destructivos y de aislamiento quirúrgico estricto.
+                </p>
+              </div>
+            </div>
+
+            <div class="tutorial-card-highlight">
+              <h4 style="color: var(--bauble-cyan-bright); font-size: 0.9rem; margin-bottom: 0.45rem;">
+                COMPARATIVA CONCEPTUAL: MEDICINA VS CIBERDEFENSA
+              </h4>
+              <table class="tutorial-mini-table">
+                <thead>
+                  <tr>
+                    <th>Práctica Médica</th>
+                    <th>Operación White Hat (Kali Linux)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>Auscultación con Estetoscopio</strong></td>
+                    <td><code>nmap -sV -p &lt;puerto&gt;</code> (Escanear servicios expuestos)</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Torniquete Hemostático / Aislamiento</strong></td>
+                    <td><code>iptables -A INPUT -j DROP</code> (Cortar paquetes atacantes)</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Antibiótico de Amplio Espectro</strong></td>
+                    <td><code>./deploy_patch.sh</code> (Inoculación y actualización de firmware)</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Ficha Clínica y Auditoría Médico-Legal</strong></td>
+                    <td><code>sha256sum &amp; Aegis9 Ledger</code> (Registro inmutable en blockchain)</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- MÓDULO 2: ELECTRICIDAD HOSPITALARIA, TABLEROS AISLADOS (IT) & DISPOSITIVOS BIOMÉDICOS IoMT -->
+      <section class="soc-panel" id="hospital-electrical-safety">
+        <div class="soc-panel-header" style="background: linear-gradient(90deg, #1A566D, #0F5150);">
+          <span>MÓDULO 2 // CONFIGURACIONES DE ELECTRICIDAD HOSPITALARIA &amp; RIESGO CIBER-FÍSICO</span>
+          <span class="ep-code-badge">IEC 60364-7-710 / NFPA 99</span>
+        </div>
+        <div class="soc-panel-body">
+          <p style="font-size: 0.85rem; line-height: 1.6; color: var(--hud-glass-outline); margin-bottom: 0.75rem;">
+            Un médico intensivista o anestesiólogo no solo administra fármacos: comanda un ecosistema donde la <strong>energía eléctrica y la red de datos confluyen directamente en el cuerpo del paciente</strong>. Si la infraestructura eléctrica falla o es manipulada por malware, las consecuencias son letales.
+          </p>
+
+          <div class="tutorial-cards-triplet">
+            <div class="tutorial-feature-card">
+              <div class="feature-card-icon">⚡</div>
+              <h4 style="color: var(--magic-highlight); font-size: 0.88rem;">1. Sistema IT Aislado Grado Médico</h4>
+              <p style="font-size: 0.78rem; color: var(--hud-glass-outline); line-height: 1.5;">
+                En quirófanos y UCI (Grupos de aplicación médica 2 según IEC 60364-7-710), la corriente <strong>no tiene referencia directa a tierra</strong>. Se usa un <em>Transformador de Aislamiento 1:1</em> y un <em>Monitor de Corriente de Fuga (LIM/DSI)</em>. ¿El motivo? Prevenir el <strong>microchoque cardíaco</strong>: corrientes tan minúsculas como <strong>10 a 50 microamperios (µA)</strong> conducidas a través de un catéter central o marcapasos provocan fibrilación ventricular instantánea.
+              </p>
+            </div>
+
+            <div class="tutorial-feature-card">
+              <div class="feature-card-icon">🔋</div>
+              <h4 style="color: var(--bauble-cyan-bright); font-size: 0.88rem;">2. Redundancia Eléctrica y UPS Médica</h4>
+              <p style="font-size: 0.78rem; color: var(--hud-glass-outline); line-height: 1.5;">
+                Si se corta la red pública de 13.2 kV, los <strong>Grupos Electrógenos diésel</strong> arrancan automáticamente mediante transferencia (ATS) en <strong>menos de 10 segundos</strong>. Durante ese intervalo crítico, las <strong>UPS Online de Doble Conversión</strong> y las baterías internas de litio de las bombas de infusión sostienen el bombeo de drogas vasoactivas sin perder un solo milisegundo.
+              </p>
+            </div>
+
+            <div class="tutorial-feature-card">
+              <div class="feature-card-icon">⚠️</div>
+              <h4 style="color: var(--iris-warning-high); font-size: 0.88rem;">3. El Vector de Ataque Ciber-Físico</h4>
+              <p style="font-size: 0.78rem; color: var(--hud-glass-outline); line-height: 1.5;">
+                Cuando un ciberataque compromete la bomba de infusión (como la vulnerabilidad <code>CVE-2027-0101</code> en el EP01), el atacante altera el microcontrolador del motor paso a paso. Esto <strong>quintuplica el consumo de corriente</strong>, sobrecalienta los circuitos, drena la batería de respaldo en minutos y altera los sensores piezoeléctricos de oclusión, inyectando una sobredosis descontrolada.
+              </p>
+            </div>
+          </div>
+
+          <!-- Esquema Visual SVG del Circuito Eléctrico y de Datos Hospitalario -->
+          <div class="electrical-schematic-wrap" style="margin-top: 1rem;">
+            <div style="font-size: 0.75rem; color: var(--bauble-cyan-bright); font-weight: 700; margin-bottom: 0.5rem; text-align: center;">
+              DIAGRAMA CIBER-FÍSICO: ARQUITECTURA DE POTENCIA AISLADA Y FLUJO DE DATOS IoMT (EPISODIO 1)
+            </div>
+            <svg viewBox="0 0 980 180" style="width: 100%; height: auto; display: block; background: var(--bg-core); border: 1px solid var(--border-structural);">
+              <!-- Bloque Red Externa -->
+              <rect x="15" y="40" width="130" height="90" rx="4" fill="#00383B" stroke="#2B87AB" stroke-width="1.5" />
+              <text x="80" y="65" fill="#83FF65" font-size="11" font-weight="bold" text-anchor="middle">RED COMERCIAL</text>
+              <text x="80" y="85" fill="#B2E5F2" font-size="9.5" text-anchor="middle">13.2 kV / 50-60 Hz</text>
+              <text x="80" y="105" fill="#FFC83B" font-size="8.5" text-anchor="middle">+ Generador Diésel</text>
+
+              <!-- Flecha de potencia 1 -->
+              <line x1="145" y1="85" x2="190" y2="85" stroke="#00F200" stroke-width="3" />
+              <polygon points="190,85 180,80 180,90" fill="#00F200" />
+
+              <!-- Bloque UPS Grado Médico -->
+              <rect x="195" y="40" width="140" height="90" rx="4" fill="#00485C" stroke="#29C2DA" stroke-width="1.5" />
+              <text x="265" y="65" fill="#83FF65" font-size="11" font-weight="bold" text-anchor="middle">UPS MÉDICA ONLINE</text>
+              <text x="265" y="85" fill="#B2E5F2" font-size="9.5" text-anchor="middle">Doble Conversión</text>
+              <text x="265" y="105" fill="#00F200" font-size="8.5" text-anchor="middle">Transferencia 0 ms</text>
+
+              <!-- Flecha de potencia 2 -->
+              <line x1="335" y1="85" x2="380" y2="85" stroke="#00F200" stroke-width="3" />
+              <polygon points="380,85 370,80 370,90" fill="#00F200" />
+
+              <!-- Bloque Transformador de Aislamiento IT -->
+              <rect x="385" y="40" width="165" height="90" rx="4" fill="#0F5150" stroke="#00F200" stroke-width="2" />
+              <text x="467" y="62" fill="#83FF65" font-size="11" font-weight="bold" text-anchor="middle">TABLERO AISLADO IT</text>
+              <text x="467" y="80" fill="#FFFFFF" font-size="9" text-anchor="middle">Transformador 1:1 Galvánico</text>
+              <text x="467" y="98" fill="#FBB034" font-size="8.5" text-anchor="middle">Monitor LIM (&lt; 2 mA fuga)</text>
+              <text x="467" y="115" fill="#83FF65" font-size="8" text-anchor="middle">IEC 60364-7-710 / Pabellón</text>
+
+              <!-- Flecha de potencia aislada -->
+              <line x1="550" y1="85" x2="595" y2="85" stroke="#00F200" stroke-width="3" stroke-dasharray="6 3" />
+              <polygon points="595,85 585,80 585,90" fill="#00F200" />
+
+              <!-- Bloque Bomba de Infusión IoMT (Objetivo EP01) -->
+              <rect x="600" y="30" width="180" height="110" rx="4" fill="#0E1111" stroke="#FBB034" stroke-width="2" />
+              <text x="690" y="52" fill="#FBB034" font-size="11" font-weight="bold" text-anchor="middle">InfusionPump-ICU-01</text>
+              <text x="690" y="70" fill="#B2E5F2" font-size="9" text-anchor="middle">IP: 10.19.96.01:8080</text>
+              <text x="690" y="88" fill="#FF4444" font-size="8.5" font-weight="bold" text-anchor="middle">CVE-2027-0101 (SOBREDOSIS)</text>
+              <text x="690" y="106" fill="#83FF65" font-size="8" text-anchor="middle">Motor paso a paso + Batería Li</text>
+              <text x="690" y="124" fill="#00F200" font-size="8" text-anchor="middle">Flujo: 145 mL/h &rarr; 5 mL/h</text>
+
+              <!-- Flecha a paciente -->
+              <line x1="780" y1="85" x2="825" y2="85" stroke="#FF4444" stroke-width="2" />
+              <polygon points="825,85 815,80 815,90" fill="#FF4444" />
+
+              <!-- Bloque Paciente -->
+              <rect x="830" y="45" width="135" height="80" rx="4" fill="#1A566D" stroke="#00F200" stroke-width="1.5" />
+              <text x="897" y="72" fill="#83FF65" font-size="11" font-weight="bold" text-anchor="middle">PACIENTE EN UCI</text>
+              <text x="897" y="90" fill="#FFFFFF" font-size="9" text-anchor="middle">Catéter Venoso Central</text>
+              <text x="897" y="108" fill="#B2E5F2" font-size="8" text-anchor="middle">Seguro ante microchoques</text>
+            </svg>
+          </div>
+        </div>
+      </section>
+
+      <!-- MÓDULO 3: TUTORIAL PASO A PASO // RESOLVIENDO EL EPISODIO 1 (InfusionPump-ICU-01) -->
+      <section class="soc-panel" id="step-by-step">
+        <div class="soc-panel-header" style="background: linear-gradient(90deg, #00485C, #409979);">
+          <span>MÓDULO 3 // TUTORIAL PASO A PASO: COMANDOS DEL EPISODIO 1</span>
+          <span class="ep-code-badge">KALI LINUX &amp; BASH STUDIO</span>
+        </div>
+        <div class="soc-panel-body">
+          <div style="font-size: 0.85rem; color: var(--hud-glass-outline); margin-bottom: 1rem; line-height: 1.55;">
+            El <strong>Episodio 1 ("Despertar Neuronal")</strong> presenta una bomba de infusión en la UCI con la dirección IP <code>10.19.96.01</code> y puerto <code>8080</code> comprometida mediante la vulnerabilidad <code>CVE-2027-0101</code>. El paciente está recibiendo una sobredosis letal de <strong>145 mL/h</strong>. Sigue este orden exacto de ejecución en la terminal táctica:
+          </div>
+
+          <!-- PASO 0 -->
+          <div class="tutorial-step-row">
+            <div class="step-badge-col">
+              <span class="step-num-badge">PASO 0</span>
+            </div>
+            <div class="step-content-col">
+              <h4 style="color: var(--iris-warning-high); font-size: 0.95rem;">
+                💡 Orientación Táctica Inmediata: Tipea <code>pistas</code>
+              </h4>
+              <p style="font-size: 0.8rem; color: var(--hud-glass-outline); line-height: 1.5; margin: 0.35rem 0;">
+                Si en cualquier momento estás desorientado, no sabes qué IP atacar o qué parámetros usar, simplemente escribe <strong><code>pistas</code></strong> en la consola Kali y presiona Enter.
+              </p>
+              <div class="code-snippet-box">
+                <code>kali@cyberia-soc:~/pod-soc$ pistas</code>
+                <button type="button" class="btn-copy-code soc-btn" data-copy="pistas" title="Copiar comando">📋 COPIAR</button>
+              </div>
+              <p style="font-size: 0.74rem; color: var(--bauble-cyan-bright); margin-top: 0.3rem;">
+                <strong>Resultado:</strong> La consola imprimirá el activo (InfusionPump-ICU-01), el vector HL7, los rangos de dosis y los comandos recomendados para mitigar la emergencia.
+              </p>
+            </div>
+          </div>
+
+          <!-- PASO 1 -->
+          <div class="tutorial-step-row">
+            <div class="step-badge-col">
+              <span class="step-num-badge">PASO 1</span>
+            </div>
+            <div class="step-content-col">
+              <h4 style="color: var(--bauble-cyan-bright); font-size: 0.95rem;">
+                🔍 Reconocimiento Clínico del Puerto IoMT con <code>nmap</code>
+              </h4>
+              <p style="font-size: 0.8rem; color: var(--hud-glass-outline); line-height: 1.5; margin: 0.35rem 0;">
+                Ejecuta un escaneo de versión de servicio sobre el puerto <code>8080</code> del dispositivo médico para verificar el demonio vulnerable sin saturar el procesador de la bomba:
+              </p>
+              <div class="code-snippet-box">
+                <code>kali@cyberia-soc:~/pod-soc$ nmap -sV -p 8080 10.19.96.01</code>
+                <button type="button" class="btn-copy-code soc-btn" data-copy="nmap -sV -p 8080 10.19.96.01" title="Copiar comando">📋 COPIAR</button>
+              </div>
+              <p style="font-size: 0.74rem; color: var(--magic-main); margin-top: 0.3rem;">
+                <strong>Significado Médico:</strong> Confirmamos que el servicio HL7-FHIR está expuesto en texto plano y no exige certificado TLS mutuo (mTLS).
+              </p>
+            </div>
+          </div>
+
+          <!-- PASO 2 -->
+          <div class="tutorial-step-row">
+            <div class="step-badge-col">
+              <span class="step-num-badge">PASO 2</span>
+            </div>
+            <div class="step-content-col">
+              <h4 style="color: var(--magic-highlight); font-size: 0.95rem;">
+                🛡️ Aislamiento Perimetral Quirúrgico con <code>iptables</code>
+              </h4>
+              <p style="font-size: 0.8rem; color: var(--hud-glass-outline); line-height: 1.5; margin: 0.35rem 0;">
+                Aplica una regla de filtrado en el gateway hospitalario para descartar de inmediato los paquetes de red maliciosos que inyectan los comandos de sobredosis, <strong>manteniendo la bomba energizada</strong>:
+              </p>
+              <div class="code-snippet-box">
+                <code>kali@cyberia-soc:~/pod-soc$ iptables -A INPUT -p tcp --dport 8080 -j DROP</code>
+                <button type="button" class="btn-copy-code soc-btn" data-copy="iptables -A INPUT -p tcp --dport 8080 -j DROP" title="Copiar comando">📋 COPIAR</button>
+              </div>
+              <p style="font-size: 0.74rem; color: var(--magic-main); margin-top: 0.3rem;">
+                <strong>Significado Médico:</strong> Se detiene la llegada de paquetes de inyección remota. El paciente deja de recibir nuevas instrucciones de sobredosis.
+              </p>
+            </div>
+          </div>
+
+          <!-- PASO 3 -->
+          <div class="tutorial-step-row">
+            <div class="step-badge-col">
+              <span class="step-num-badge">PASO 3</span>
+            </div>
+            <div class="step-content-col">
+              <h4 style="color: var(--iris-warning-high); font-size: 0.95rem;">
+                ⚡ Abrir "Bash Script Studio" [F2] y Ensamblar el Parche Clic a Clic
+              </h4>
+              <p style="font-size: 0.8rem; color: var(--hud-glass-outline); line-height: 1.5; margin: 0.35rem 0;">
+                Presiona la tecla <strong>F2</strong> o el botón <strong>⚡ BASH SCRIPT STUDIO</strong> en la cabecera táctica. Se desplegará el taller de ensamble visual. <em>¡No necesitas tipear código bash desde cero!</em>
+              </p>
+              <div style="background: var(--bg-core); border: 1px solid var(--border-structural); padding: 0.65rem; margin: 0.4rem 0;">
+                <div style="font-size: 0.76rem; color: var(--bauble-cyan-bright); font-weight: bold; margin-bottom: 0.35rem;">
+                  CÓMO USAR LA PALETA CLICABLE DE PALABRAS:
+                </div>
+                <ul style="font-size: 0.75rem; color: var(--hud-glass-outline); line-height: 1.6; margin-left: 1rem;">
+                  <li>Haz clic en <code>#!/bin/bash</code> para insertar la cabecera canónica.</li>
+                  <li>Haz clic en <code>+ Bloque Aislamiento (iptables)</code> para insertar la contención perimetral con comentarios descriptivos auto-generados.</li>
+                  <li>Haz clic en <code>+ Bloque Sanitización</code> y <code>+ Bloque mTLS</code> para asegurar el puerto de infusión.</li>
+                  <li>O presiona directamente el botón <strong>PLANTILLA NETACAD</strong> o <strong>AUTORRELLENAR CANÓNICO</strong> para cargar el script completo perfectamente formateado.</li>
+                </ul>
+              </div>
+              <div class="code-snippet-box">
+                <code>kali@cyberia-soc:~/pod-soc$ ./deploy_patch.sh</code>
+                <button type="button" class="btn-copy-code soc-btn" data-copy="./deploy_patch.sh" title="Copiar comando">📋 COPIAR</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- PASO 4 -->
+          <div class="tutorial-step-row">
+            <div class="step-badge-col">
+              <span class="step-num-badge">PASO 4</span>
+            </div>
+            <div class="step-content-col">
+              <h4 style="color: var(--magic-pulse-core); font-size: 0.95rem;">
+                ✅ Verificación de Telemetría Clínica &amp; Sello en Blockchain
+              </h4>
+              <p style="font-size: 0.8rem; color: var(--hud-glass-outline); line-height: 1.5; margin: 0.35rem 0;">
+                Al pulsar <strong>▶ EJECUTAR SCRIPT EN TERMINAL</strong> o escribir <code>./deploy_patch.sh</code>:
+              </p>
+              <ul style="font-size: 0.76rem; color: var(--magic-main); line-height: 1.6; margin-left: 1rem;">
+                <li>El sistema valida la sintaxis y los bloques requeridos (evitando falsas mitigaciones).</li>
+                <li>La tasa de infusión regresa inmediatamente al estándar seguro de <strong>5.0 mL/h</strong>.</li>
+                <li>La barra de <strong>Ghost Sync</strong> se eleva al <strong>100.0%</strong>.</li>
+                <li>El sintetizador emite un <strong>tono armónico de éxito (880 Hz)</strong>.</li>
+                <li>El parche queda sellado con un hash <strong>SHA-256</strong> en el <strong>Registro Cronológico Blockchain</strong> de Aegis-9.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- MÓDULO 4: ¿POR QUÉ ESTE MÉTODO ES MUY SIMILAR EN LOS DEMÁS 47 NIVELES? -->
+      <section class="soc-panel" id="universal-48-methodology">
+        <div class="soc-panel-header" style="background: linear-gradient(90deg, #1A566D, #409979);">
+          <span>MÓDULO 4 // EL PATRÓN UNIVERSAL EN LOS 48 NIVELES DE CYBERIA (ACTOS I AL VI)</span>
+          <span class="ep-code-badge">SOC-MEDSEC REPETIBILITY</span>
+        </div>
+        <div class="soc-panel-body">
+          <h3 style="color: var(--magic-highlight); font-size: 1rem; margin-bottom: 0.45rem;">
+            Una Sola Doctrina Defensiva: Reconocer &rarr; Aislar &rarr; Inocular &rarr; Auditar
+          </h3>
+          <p style="font-size: 0.84rem; line-height: 1.6; color: var(--hud-glass-outline); margin-bottom: 0.85rem;">
+            Una vez que domines los comandos del <strong>Episodio 1</strong>, ¡has aprendido el 90% de la lógica requerida para superar los <strong>47 episodios restantes</strong>! La interfaz, los atajos de teclado y la filosofía operativa se mantienen idénticos en todos los niveles:
+          </p>
+
+          <div class="tutorial-workflow-grid">
+            <div class="workflow-card">
+              <div class="workflow-step-tag">FASE 1: DIAGNÓSTICO</div>
+              <h4 style="color: var(--bauble-cyan-bright); font-size: 0.84rem; margin: 0.3rem 0;">Reconocimiento IoMT</h4>
+              <p style="font-size: 0.74rem; color: var(--hud-glass-outline); line-height: 1.45;">
+                Tipear <code>pistas</code> para identificar la IP y puerto del dispositivo comprometido en el episodio actual, o usar <code>nmap -sV -p $PORT $TARGET_IP</code>.
+              </p>
+            </div>
+
+            <div class="workflow-card">
+              <div class="workflow-step-tag">FASE 2: AISLAMIENTO</div>
+              <h4 style="color: var(--iris-warning-high); font-size: 0.84rem; margin: 0.3rem 0;">Contención Perimetral</h4>
+              <p style="font-size: 0.74rem; color: var(--hud-glass-outline); line-height: 1.45;">
+                Dropear el puerto atacado con <code>iptables</code> para detener la propagación del malware sin desconectar la energía eléctrica del paciente.
+              </p>
+            </div>
+
+            <div class="workflow-card">
+              <div class="workflow-step-tag">FASE 3: REMEDIACIÓN</div>
+              <h4 style="color: var(--magic-highlight); font-size: 0.84rem; margin: 0.3rem 0;">Bash Script Studio [F2]</h4>
+              <p style="font-size: 0.74rem; color: var(--hud-glass-outline); line-height: 1.45;">
+                Abrir el constructor clicable, cargar la plantilla o presionar los bloques de solución rápida y ejecutar <code>./deploy_patch.sh</code>.
+              </p>
+            </div>
+
+            <div class="workflow-card">
+              <div class="workflow-step-tag">FASE 4: AUDITORÍA</div>
+              <h4 style="color: var(--magic-pulse-core); font-size: 0.84rem; margin: 0.3rem 0;">Sello en Blockchain</h4>
+              <p style="font-size: 0.74rem; color: var(--hud-glass-outline); line-height: 1.45;">
+                Verificar que los signos vitales se estabilicen y que el bloque SHA-256 se incorpore al registro cronológico acumulado de Aegis-9.
+              </p>
+            </div>
+          </div>
+
+          <!-- Tabla de Ejemplos en Otros Actos de Cyberia -->
+          <div style="margin-top: 1rem;">
+            <div style="font-size: 0.76rem; color: var(--bauble-cyan-bright); font-weight: bold; margin-bottom: 0.4rem;">
+              EJEMPLOS COMPARATIVOS DE ACTIVOS Y COMANDOS A LO LARGO DE LOS 6 ACTOS:
+            </div>
+            <table class="tutorial-mini-table">
+              <thead>
+                <tr>
+                  <th>Acto &amp; Episodio</th>
+                  <th>Activo Clínico / IoMT</th>
+                  <th>Vector de Riesgo</th>
+                  <th>Comando Equivalente</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Acto I: EP01 (Rig)</strong></td>
+                  <td>InfusionPump-ICU-01</td>
+                  <td>Sobredosis letal HL7 (145 mL/h)</td>
+                  <td><code>iptables -A INPUT -p tcp --dport 8080 -j DROP</code></td>
+                </tr>
+                <tr>
+                  <td><strong>Acto I: EP12 (Rig Out)</strong></td>
+                  <td>Bypass Cardiopulmonar ECMO</td>
+                  <td>Embolia por cavitación de bomba</td>
+                  <td><code>iptables -A INPUT -p tcp --dport 502 -j DROP</code> (Modbus)</td>
+                </tr>
+                <tr>
+                  <td><strong>Acto II: EP22 (Locked Out)</strong></td>
+                  <td>Presión Positiva en Quirófano</td>
+                  <td>Contaminación aérea cruzada</td>
+                  <td><code>sed -i 's/EXPLOIT/SAFE/g'</code> + Compuertas PLC</td>
+                </tr>
+                <tr>
+                  <td><strong>Acto IV: EP35 (Graffiti)</strong></td>
+                  <td>Telemetría de Marcapasos</td>
+                  <td>Inyección de taquicardia ventricular</td>
+                  <td><code>openssl s_client -connect 10.19.96.35:8443</code> (mTLS)</td>
+                </tr>
+                <tr>
+                  <td><strong>Acto VI: EP48 (Devlin Orbit)</strong></td>
+                  <td>SatCom GNSS &amp; Kill-Switch</td>
+                  <td>Desconexión masiva de telemetría</td>
+                  <td><code>systemctl restart iomt-sentinel-agent</code></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- MÓDULO 5: CONSOLA DEMO INTERACTIVA EMBEBIDA (PRÁCTICA PREVIA) -->
+      <section class="soc-panel" id="tutorial-sandbox-practice">
+        <div class="soc-panel-header" style="background: linear-gradient(90deg, #00485C, #0F5150);">
+          <span>MÓDULO 5 // CONSOLA DE ENTRENAMIENTO PREVIO (PRACTICA ANTES DE IR A LA CONSOLA SOC)</span>
+          <span class="ep-code-badge">DEMO INTERACTIVA SANDBOX</span>
+        </div>
+        <div class="soc-panel-body">
+          <p style="font-size: 0.8rem; color: var(--hud-glass-outline); margin-bottom: 0.65rem;">
+            Prueba los comandos del Episodio 1 aquí mismo. Puedes hacer clic en los botones de acceso rápido o tipear directamente en el prompt y presionar <strong>Enter</strong>:
+          </p>
+
+          <div class="tutorial-interactive-terminal-box">
+            <div class="tactical-term-topbar">
+              <div class="term-dots">
+                <span class="dot dot-red"></span>
+                <span class="dot dot-yellow"></span>
+                <span class="dot dot-green"></span>
+              </div>
+              <div class="term-title">kali@cyberia-soc: ~/netacad-pod/tutorial-sandbox</div>
+              <div class="term-shortcut-pills">
+                <button type="button" class="term-shortcut" id="demo-btn-pistas">💡 pistas</button>
+                <button type="button" class="term-shortcut" id="demo-btn-nmap">nmap -sV -p 8080</button>
+                <button type="button" class="term-shortcut" id="demo-btn-iptables">iptables -A DROP</button>
+                <button type="button" class="term-shortcut" id="demo-btn-patch">./deploy_patch.sh</button>
+                <button type="button" class="term-shortcut" id="demo-btn-clear">clear</button>
+              </div>
+            </div>
+
+            <div class="tactical-term-body" id="demo-term-output" style="min-height: 180px; max-height: 260px;">
+[KALI-INIT] Consola de práctica interactiva lista para el pod NetAcad.
+Tipea 'pistas' para ver la información del Episodio 1 (InfusionPump-ICU-01)...
+            </div>
+
+            <div class="tactical-term-prompt-line">
+              <span class="tactical-prompt-text">kali@cyberia-soc:~/pod-soc$</span>
+              <input type="text" id="demo-cli-input" class="tactical-cli-input" autocomplete="off" spellcheck="false" placeholder="Tipea 'pistas', 'nmap', 'iptables' o './deploy_patch.sh'..." />
+              <button type="button" id="demo-btn-send" class="soc-btn" style="padding: 0.2rem 0.6rem; font-size: 0.72rem;">ENVIAR</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- MÓDULO 6: GLOSARIO CLÍNICO-INFORMÁTICO -->
+      <section class="soc-panel" id="glossary-section">
+        <div class="soc-panel-header" style="background: linear-gradient(90deg, #1A566D, #00485C);">
+          <span>MÓDULO 6 // GLOSARIO BILINGÜE: JERGA HACKER TRADUCIDA AL LENGUAJE MÉDICO</span>
+          <span class="ep-code-badge">DICCIONARIO DE BIOSEGURIDAD</span>
+        </div>
+        <div class="soc-panel-body">
+          <div class="tutorial-glossary-grid">
+            <div class="glossary-item-card">
+              <div class="glossary-tech-term">Port (Puerto de Red)</div>
+              <div class="glossary-med-term">Canal Iónico o Receptor Farmacológico</div>
+              <p class="glossary-desc">
+                Compuerta lógica por donde entra o sale información. Si un puerto está abierto sin autenticación, es como un canal de sodio sin compuerta de inactivación.
+              </p>
+            </div>
+
+            <div class="glossary-item-card">
+              <div class="glossary-tech-term">CVE (Common Vulnerabilities and Exposures)</div>
+              <div class="glossary-med-term">Código Diagnóstico CIE-11 / Etiología de Enfermedad</div>
+              <p class="glossary-desc">
+                Identificador universal de una falla de seguridad en el software del dispositivo médico (ej. <code>CVE-2027-0101</code>: inyección remota en bomba de infusión).
+              </p>
+            </div>
+
+            <div class="glossary-item-card">
+              <div class="glossary-tech-term">Firewall / iptables</div>
+              <div class="glossary-med-term">Barrera Hematoencefálica / Apósitos Quirúrgicos</div>
+              <p class="glossary-desc">
+                Filtro perimetral que impide el paso de moléculas o paquetes no deseados manteniendo intacta la circulación general del sistema.
+              </p>
+            </div>
+
+            <div class="glossary-item-card">
+              <div class="glossary-tech-term">Zero Trust Architecture</div>
+              <div class="glossary-med-term">Protocolo de Asepsia y Lavado Quirúrgico</div>
+              <p class="glossary-desc">
+                Principio que establece que nunca se debe confiar en ningún dispositivo dentro o fuera de la red sin verificar continuamente su identidad y credenciales.
+              </p>
+            </div>
+
+            <div class="glossary-item-card">
+              <div class="glossary-tech-term">Tablero Eléctrico de Aislamiento IT</div>
+              <div class="glossary-med-term">Barrera Antifibrilación por Microchoques</div>
+              <p class="glossary-desc">
+                Transformador 1:1 que desacopla la red eléctrica de tierra para evitar que fugas de corriente &gt; 10 µA causen paro cardíaco al paciente en pabellón o UCI.
+              </p>
+            </div>
+
+            <div class="glossary-item-card">
+              <div class="glossary-tech-term">Ghost Sync</div>
+              <div class="glossary-med-term">Índice de Simbiosis Vital y Sincronía Neuro-Implante</div>
+              <p class="glossary-desc">
+                Métrica que mide la integridad del implante biológico y la estabilidad del paciente. Al mitigar el ataque, se restablece al 100%.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CALL TO ACTION FINAL -->
+      <section class="tutorial-cta-final-box">
+        <h3 style="color: var(--magic-highlight); font-size: 1.15rem; margin-bottom: 0.35rem;">
+          ¿Listo para Iniciar tu Primera Misión de Ciberdefensa Clínica?
+        </h3>
+        <p style="font-size: 0.85rem; color: var(--hud-glass-outline); max-width: 720px; margin: 0 auto 0.9rem auto; line-height: 1.5;">
+          Entra a la Consola Principal de Cyberia, selecciona el <strong>Episodio 1</strong>, desciende al <strong>Sentinela Activo Aegis-9</strong> y aplica los comandos que acabas de aprender.
+        </p>
+        <div style="display: flex; justify-content: center; gap: 0.65rem; flex-wrap: wrap;">
+          <button type="button" class="btn-enter-soc-from-tutorial soc-btn soc-btn-warning" style="font-size: 0.85rem; padding: 0.5rem 1.25rem; font-weight: bold;">
+            ▶ ENTRAR AL SOC Y SALVAR LA BOMBA DE INFUSIÓN (EP01)
+          </button>
+          <button type="button" class="btn-enter-soc-from-tutorial soc-btn" style="font-size: 0.85rem; padding: 0.5rem 1.25rem;">
+            ✕ EXPLORAR LA CONSOLA SOC (48 EPISODIOS)
+          </button>
+          <a href="/reports/episode/1.md" class="soc-btn" style="font-size: 0.85rem; padding: 0.5rem 1.25rem; text-decoration: none;">
+            📋 DESCARGAR BOLETÍN FORENSE EP01 (.MD)
+          </a>
+          <a href="/bibliografia" class="soc-btn nav-btn-bibliography" style="font-size: 0.85rem; padding: 0.5rem 1.25rem; text-decoration: none;">
+            [★] BIBLIOGRAFÍA &amp; CRÉDITOS
+          </a>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+
+<!-- SCRIPT INTERACTIVO DEL TUTORIAL (SANDBOX DEMO, COPIADO Y CONTROL DEL OVERLAY) -->
+<script>
+  (function() {
+    // 1. Control del Overlay (Apertura / Cierre y Persistencia de Sesión)
+    const overlay = document.getElementById('tutorial-overlay');
+    const path = window.location.pathname;
+    const isExplicitTutorialUrl = (path === '/tutorial' || path === '/landing' || path === '/guia');
+
+    // Comprobar si el usuario ya vio/cerró la guía durante su navegación en el sitio
+    let alreadyDismissed = false;
+    try {
+      alreadyDismissed = sessionStorage.getItem('cyberia_tutorial_dismissed') === 'true';
+    } catch (e) {}
+
+    // Si ya fue cerrada y no se abrió explícitamente por URL de tutorial, ocultar de inmediato
+    if (overlay && alreadyDismissed && !isExplicitTutorialUrl) {
+      overlay.classList.add('hidden');
+      document.body.style.overflow = '';
+    } else if (overlay && !overlay.classList.contains('hidden')) {
+      document.body.style.overflow = 'hidden';
+    }
+
+    window.closeTutorialOverlay = function() {
+      if (!overlay) return;
+      overlay.classList.add('hidden');
+      document.body.style.overflow = '';
+      try {
+        sessionStorage.setItem('cyberia_tutorial_dismissed', 'true');
+      } catch (e) {}
+    };
+
+    window.openTutorialOverlay = function() {
+      if (!overlay) return;
+      overlay.classList.remove('hidden');
+      overlay.scrollTop = 0;
+      document.body.style.overflow = 'hidden';
+    };
+
+    // Botones de cierre dentro del overlay
+    document.querySelectorAll('.btn-enter-soc-from-tutorial').forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        window.closeTutorialOverlay();
+      });
+    });
+
+    // Cerrar al hacer clic en el fondo negro (backdrop) fuera del sheet
+    if (overlay) {
+      overlay.addEventListener('click', function(e) {
+        if (e.target === overlay) {
+          window.closeTutorialOverlay();
+        }
+      });
+    }
+
+    // Tecla ESC para cerrar el overlay
+    window.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && overlay && !overlay.classList.contains('hidden')) {
+        window.closeTutorialOverlay();
+      }
+    });
+
+    // Enlace en el navbar: [00] GUÍA CLÍNICA (Apertura explícita a demanda)
+    const navBtn = document.getElementById('btn-nav-tutorial');
+    if (navBtn) {
+      navBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        window.openTutorialOverlay();
+      });
+    }
+
+    // Banner de bienvenida en la consola
+    const bannerBtn = document.getElementById('btn-banner-open-tutorial');
+    if (bannerBtn) {
+      bannerBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        window.openTutorialOverlay();
+      });
+    }
+
+    // Al hacer clic en otros enlaces de navegación (ej. Muro social, Simuladores, Bibliografía), marcar como dismissed
+    document.querySelectorAll('.top-nav-links a:not(#btn-nav-tutorial)').forEach(link => {
+      link.addEventListener('click', function() {
+        try {
+          sessionStorage.setItem('cyberia_tutorial_dismissed', 'true');
+        } catch (e) {}
+      });
+    });
+
+    // 2. Manejador de Copiado de Código
+    document.querySelectorAll('.btn-copy-code').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const textToCopy = this.getAttribute('data-copy');
+        if (textToCopy && navigator.clipboard) {
+          navigator.clipboard.writeText(textToCopy).then(() => {
+            const originalText = this.textContent;
+            this.textContent = '✓ COPIADO';
+            this.style.background = 'var(--magic-main)';
+            this.style.color = '#0E1111';
+            setTimeout(() => {
+              this.textContent = originalText;
+              this.style.background = '';
+              this.style.color = '';
+            }, 1800);
+          }).catch(err => {
+            console.error('Error al copiar:', err);
+          });
+        }
+      });
+    });
+
+    // 3. Mini Terminal Demo de Práctica
+    const demoTerm = document.getElementById('demo-term-output');
+    const demoInput = document.getElementById('demo-cli-input');
+    const demoSend = document.getElementById('demo-btn-send');
+
+    function appendDemoOutput(text, isCmd = false) {
+      if (!demoTerm) return;
+      const line = document.createElement('div');
+      if (isCmd) {
+        line.style.color = 'var(--magic-highlight)';
+        line.style.fontWeight = 'bold';
+        line.textContent = `kali@cyberia-soc:~/pod-soc$ ${text}`;
+      } else {
+        line.style.color = 'var(--bauble-cyan-bright)';
+        line.textContent = text;
+      }
+      demoTerm.appendChild(line);
+      demoTerm.scrollTop = demoTerm.scrollHeight;
+    }
+
+    function executeDemoCommand(cmdStr) {
+      const clean = (cmdStr || '').trim();
+      if (!clean) return;
+      appendDemoOutput(clean, true);
+
+      const lower = clean.toLowerCase();
+      if (lower === 'clear') {
+        if (demoTerm) demoTerm.innerHTML = '';
+        return;
+      }
+
+      if (lower === 'pistas') {
+        appendDemoOutput(`[💡 PISTAS TÁCTICAS // EP01 - InfusionPump-ICU-01]
+- Objetivo Remoto: 10.19.96.01 en puerto 8080 (HL7-FHIR REST API sin TLS).
+- Estado: SOBREDOSIS ACTIVA (145 mL/h). Riesgo inminente de parada cardíaca.
+- Plan de Acción Recomendado:
+  1. Reconocimiento: nmap -sV -p 8080 10.19.96.01
+  2. Aislamiento:    iptables -A INPUT -p tcp --dport 8080 -j DROP
+  3. Despliegue:    ./deploy_patch.sh (O usa F2 en la consola SOC)`);
+      } else if (lower.startsWith('nmap')) {
+        appendDemoOutput(`Starting Nmap 7.94 ( https://nmap.org ) at 2027-SOC-AUDIT
+Nmap scan report for 10.19.96.01 (InfusionPump-ICU-01.local)
+PORT     STATE SERVICE      VERSION
+8080/tcp open  http-hl7fhir InfusionPump-Firmware v1.4.2 [UNAUTHENTICATED]
+|_ http-title: Baxter-ICU Telemetry Node (VULNERABLE: CVE-2027-0101)
+Nmap done: 1 IP address (1 host up) scanned in 0.42 seconds`);
+      } else if (lower.startsWith('iptables')) {
+        appendDemoOutput(`[IPTABLES-APPLIED] Regla insertada en la cadena INPUT:
+  target: DROP, prot: tcp, dport: 8080, in: eth0
+[FIREWALL-OK] Paquetes de sobredosis remota bloqueados en el gateway. Bomba energizada y aislada.`);
+      } else if (lower.includes('deploy_patch') || lower === './deploy_patch.sh') {
+        appendDemoOutput(`[EXEC] ./deploy_patch.sh --target 10.19.96.01 --cve CVE-2027-0101
+========================================================================
+[1/4] PREVENCIÓN:          Zero-Trust ACL instalada en VLAN Médica 96.
+[2/4] DETECCIÓN:            Regla Suricata DPI activada para puertos HL7.
+[3/4] MITIGACIÓN:           Sanitización de actuador PLC y mTLS forzado.
+[4/4] INCIDENT RESPONSE:   Agente Aegis9 reiniciado. Firma de telemetría OK.
+========================================================================
+[STATUS: MITIGADO] Tasa de infusión normalizada a 5.0 mL/h.
+[GHOST SYNC: 100.0%] Bloque sellado en Blockchain con hash SHA-256.`);
+      } else if (lower === 'help') {
+        appendDemoOutput(`Comandos disponibles en esta demo:
+- pistas                       : Orientación táctica y parámetros recomendados
+- nmap -sV -p 8080 10.19.96.01 : Escanear puerto de infusión
+- iptables -A ...              : Aislar paquetes maliciosos
+- ./deploy_patch.sh            : Simular ejecución del script de mitigación
+- clear                        : Limpiar pantalla`);
+      } else {
+        appendDemoOutput(`Comando '${clean}' recibido en el sandbox.
+💡 Tipea 'pistas' para ver los comandos recomendados del Episodio 1.`);
+      }
+
+      if (window.TacticalGame && window.TacticalGame.playBeep) {
+        window.TacticalGame.playBeep(620, 0.08, 'sine');
+      }
+    }
+
+    if (demoInput) {
+      demoInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          executeDemoCommand(this.value);
+          this.value = '';
+        }
+      });
+    }
+
+    if (demoSend && demoInput) {
+      demoSend.addEventListener('click', function() {
+        executeDemoCommand(demoInput.value);
+        demoInput.value = '';
+        demoInput.focus();
+      });
+    }
+
+    // Botones rápidos del sandbox demo
+    const quickButtons = [
+      { id: 'demo-btn-pistas', cmd: 'pistas' },
+      { id: 'demo-btn-nmap', cmd: 'nmap -sV -p 8080 10.19.96.01' },
+      { id: 'demo-btn-iptables', cmd: 'iptables -A INPUT -p tcp --dport 8080 -j DROP' },
+      { id: 'demo-btn-patch', cmd: './deploy_patch.sh' },
+      { id: 'demo-btn-clear', cmd: 'clear' }
+    ];
+
+    quickButtons.forEach(qb => {
+      const el = document.getElementById(qb.id);
+      if (el) {
+        el.addEventListener('click', () => {
+          executeDemoCommand(qb.cmd);
+        });
+      }
+    });
+  })();
+</script>
+
+
+  <main class="credits-console-container" id="credits-viewport">
+  <!-- CABECERA LUMINOSA DE CRÉDITOS ESTILO FINAL DE VIDEOJUEGO -->
+  <header class="credits-luminous-header">
+    <div class="credits-glow-tag">
+      ★ CYBERIA (1996) // MEDICAL SOC v19.96 — ROLL DE CRÉDITOS &amp; BIBLIOGRAFÍA NORMATIVA ★
+    </div>
+    <h1 class="credits-epic-title">
+      BIBLIOGRAFÍA NORMATIVA, CIENTÍFICA &amp; FILOSÓFICA
+    </h1>
+    <p class="credits-epic-subtitle">
+      Compendio canónico de estándares internacionales de <strong>electricidad hospitalaria, ciberseguridad clínica (IoMT), modelos matemáticos, cibernética y bioética médica</strong>. Desciende por la consola para iluminar cada una de las referencias normativas.
+    </p>
+
+    <!-- Barra de Control de la Consola de Créditos -->
+    <div class="credits-control-panel">
+      <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+        <button type="button" id="btn-toggle-autoscroll" class="luminous-btn luminous-btn-green" title="Iniciar o pausar el avance automático de créditos">
+          ▶ AUTO-SCROLL CRÉDITOS
+        </button>
+        <button type="button" id="btn-speed-crawl" class="luminous-btn" title="Cambiar velocidad de avance">
+          VELOCIDAD: 1X
+        </button>
+        <button type="button" id="btn-rewind-credits" class="luminous-btn" title="Rebobinar al inicio">
+          ▲ REBOBINAR
+        </button>
+      </div>
+
+      <div class="credits-telemetry-hud">
+        <span>LUMENS: <strong id="credits-lum-readout" style="color: hsl(150, 100%, 80%);">100%</strong></span>
+        <span>NORMATIVAS: <strong style="color: hsl(188, 100%, 80%);">27 TOTAL</strong></span>
+        <span>MODO: <strong style="color: hsl(45, 100%, 80%);">HSB / HSL LUMINESCENT</strong></span>
+      </div>
+    </div>
+  </header>
+
+  <!-- FLUJO CRAWL DE CRÉDITOS Y REFERENCIAS BIBLIOGRÁFICAS -->
+  <div class="credits-scroll-track" id="credits-scroll-track">
+
+    <!-- SECCIÓN I: ELECTRICIDAD HOSPITALARIA Y SEGURIDAD BIOMÉDICA -->
+    <div class="credits-act-banner">
+      <span class="act-glow-number">ACTO I</span>
+      <h2>NORMATIVAS DE ELECTRICIDAD HOSPITALARIA &amp; SEGURIDAD DE INSTALACIONES (IEC / NFPA / FDA)</h2>
+      <div class="act-glow-line"></div>
+    </div>
+
+    <!-- Referencia 1 -->
+    <article class="credit-card" data-index="1" style="--card-base-l: 78%;" id="ref-1">
+      <div class="credit-card-header">
+        <span class="ref-badge">[NORMA 01 // IEC SISTEMAS IT]</span>
+        <span class="ref-year">IEC 60364-7-710:2021</span>
+      </div>
+      <h3 class="ref-title">
+        IEC 60364-7-710: Requisitos para Instalaciones en Locales de Uso Médico
+      </h3>
+      <div class="ref-organization">International Electrotechnical Commission (Ginebra, Suiza)</div>
+      <p class="ref-summary">
+        Define la arquitectura obligatoria de <strong>Sistemas Eléctricos Aislados IT</strong> en quirófanos y unidades de cuidados intensivos (Grupo de aplicación médica 2). Establece el desacoplo galvánico con transformador de aislamiento 1:1, supervisión continua mediante Monitor de Aislamiento de Línea (LIM / DSI) y protección contra microchoques cardíacos.
+      </p>
+      <div class="ref-links-bar">
+        <a href="https://webstore.iec.ch/publication/63474" target="_blank" rel="noopener noreferrer" class="pdf-download-btn">
+          📄 VER DOCUMENTO NORMATIVO EN PDF
+        </a>
+        <span class="ref-topic-tag">Electricidad Hospitalaria &amp; Aislamiento Galvánico</span>
+      </div>
+    </article>
+
+    <!-- Referencia 2 -->
+    <article class="credit-card" data-index="2" style="--card-base-l: 75%;" id="ref-2">
+      <div class="credit-card-header">
+        <span class="ref-badge">[NORMA 02 // NFPA CÓDIGO CLÍNICO]</span>
+        <span class="ref-year">NFPA 99 (Edición 2024)</span>
+      </div>
+      <h3 class="ref-title">
+        NFPA 99: Health Care Facilities Code
+      </h3>
+      <div class="ref-organization">National Fire Protection Association (Quincy, Massachusetts)</div>
+      <p class="ref-summary">
+        Código canónico de seguridad en infraestructura de salud. Categoriza los riesgos del paciente de Categoría 1 (riesgo vital por pérdida de potencia eléctrica) a Categoría 4. Dicta las especificaciones para grupos electrógenos diésel de arranque automático en menos de 10 segundos y circuitos de transferencia de emergencia.
+      </p>
+      <div class="ref-links-bar">
+        <a href="https://www.nfpa.org/codes-and-standards/nfpa-99-standard-development/99" target="_blank" rel="noopener noreferrer" class="pdf-download-btn">
+          📄 VER DOCUMENTO NORMATIVO EN PDF
+        </a>
+        <span class="ref-topic-tag">NFPA 99 &amp; Generadores de Emergencia</span>
+      </div>
+    </article>
+
+    <!-- Referencia 3 -->
+    <article class="credit-card" data-index="3" style="--card-base-l: 72%;" id="ref-3">
+      <div class="credit-card-header">
+        <span class="ref-badge">[NORMA 03 // IEC SEGURIDAD EQUIPOS]</span>
+        <span class="ref-year">IEC 60601-1:2023 (Ed. 3.2)</span>
+      </div>
+      <h3 class="ref-title">
+        IEC 60601-1: Equipos Electromédicos – Seguridad Básica y Funcionamiento Esencial
+      </h3>
+      <div class="ref-organization">Comisión Electrotécnica Internacional / ISO TC 62</div>
+      <p class="ref-summary">
+        Estándar fundamental para fabricantes de dispositivos IoMT (bombas de infusión, respiradores, monitores). Fija los límites de corriente de fuga al paciente en condiciones normales y primer fallo (&lt; 10 µA en partes aplicables tipo CF, &lt; 100 µA tipo BF) para evitar la fibrilación ventricular por microchoque.
+      </p>
+      <div class="ref-links-bar">
+        <a href="https://www.iec.ch/standards-development/iec-60601" target="_blank" rel="noopener noreferrer" class="pdf-download-btn">
+          📄 VER DOCUMENTO NORMATIVO EN PDF
+        </a>
+        <span class="ref-topic-tag">Corrientes de Fuga &amp; Microchoque CF</span>
+      </div>
+    </article>
+
+    <!-- Referencia 4 -->
+    <article class="credit-card" data-index="4" style="--card-base-l: 69%;" id="ref-4">
+      <div class="credit-card-header">
+        <span class="ref-badge">[NORMA 04 // GESTIÓN REDES TI]</span>
+        <span class="ref-year">IEC 80001-1:2021</span>
+      </div>
+      <h3 class="ref-title">
+        IEC 80001-1: Aplicación de la Gestión de Riesgos para Redes de TI que Incorporan Dispositivos Médicos
+      </h3>
+      <div class="ref-organization">ISO / IEC Joint Technical Committee</div>
+      <p class="ref-summary">
+        Aborda la convergencia entre equipos biomédicos y la infraestructura informática hospitalaria. Establece responsabilidades entre fabricantes de dispositivos, ingenieros clínicos y administradores de red para mantener la interoperabilidad, la integridad de los datos y la seguridad del paciente.
+      </p>
+      <div class="ref-links-bar">
+        <a href="https://www.iso.org/standard/72026.html" target="_blank" rel="noopener noreferrer" class="pdf-download-btn">
+          📄 VER DOCUMENTO NORMATIVO EN PDF
+        </a>
+        <span class="ref-topic-tag">Redes Clínicas &amp; Seguridad de Datos</span>
+      </div>
+    </article>
+
+    <!-- Referencia 5 -->
+    <article class="credit-card" data-index="5" style="--card-base-l: 66%;" id="ref-5">
+      <div class="credit-card-header">
+        <span class="ref-badge">[NORMA 05 // GESTIÓN DE RIESGO BIOMÉDICO]</span>
+        <span class="ref-year">ISO 14971:2019</span>
+      </div>
+      <h3 class="ref-title">
+        ISO 14971: Gestión de Riesgos para Productos Sanitarios
+      </h3>
+      <div class="ref-organization">International Organization for Standardization</div>
+      <p class="ref-summary">
+        Marco metodológico global para la identificación de peligros, estimación y evaluación de riesgos, control de riesgos y seguimiento post-comercialización en software y hardware biomédico ante vectores cibernéticos.
+      </p>
+      <div class="ref-links-bar">
+        <a href="https://www.iso.org/standard/72704.html" target="_blank" rel="noopener noreferrer" class="pdf-download-btn">
+          📄 VER DOCUMENTO NORMATIVO EN PDF
+        </a>
+        <span class="ref-topic-tag">Evaluación de Riesgo Sanitario</span>
+      </div>
+    </article>
+
+    <!-- Referencia 6 -->
+    <article class="credit-card" data-index="6" style="--card-base-l: 63%;" id="ref-6">
+      <div class="credit-card-header">
+        <span class="ref-badge">[NORMA 06 // FDA CIBERSEGURIDAD IoMT]</span>
+        <span class="ref-year">FDA Guidance (Septiembre 2023)</span>
+      </div>
+      <h3 class="ref-title">
+        Cybersecurity in Medical Devices: Quality System Considerations and Content of Premarket Submissions
+      </h3>
+      <div class="ref-organization">U.S. Food and Drug Administration (Center for Devices and Radiological Health)</div>
+      <p class="ref-summary">
+        Guía vinculante de la FDA que exige arquitectura Secure-by-Design, Software Bill of Materials (SBOM), firma criptográfica de actualizaciones de firmware y planes de divulgación coordinada de vulnerabilidades en todo dispositivo conectado a pacientes.
+      </p>
+      <div class="ref-links-bar">
+        <a href="https://www.fda.gov/media/119933/download" target="_blank" rel="noopener noreferrer" class="pdf-download-btn">
+          📄 VER DOCUMENTO NORMATIVO EN PDF
+        </a>
+        <span class="ref-topic-tag">FDA Premarket &amp; SBOM Biomédico</span>
+      </div>
+    </article>
+
+    <!-- Referencia 7 -->
+    <article class="credit-card" data-index="7" style="--card-base-l: 60%;" id="ref-7">
+      <div class="credit-card-header">
+        <span class="ref-badge">[NORMA 07 // REBT ESPAÑA / UE]</span>
+        <span class="ref-year">ITC-BT-38 (Real Decreto 842/2002)</span>
+      </div>
+      <h3 class="ref-title">
+        Reglamento Electrotécnico para Baja Tensión: Instalaciones con Fines Especiales – Quirófanos y Salas de Intervención
+      </h3>
+      <div class="ref-organization">Ministerio de Ciencia y Tecnología / Boletín Oficial del Estado (BOE)</div>
+      <p class="ref-summary">
+        Regulación técnica que impone transformadores de aislamiento monofásicos con tensión secundaria no superior a 230 V, suelo conductor antielectrostático, monitor de aislamiento acústico-luminoso y embarrado de equipotencialidad en quirófanos.
+      </p>
+      <div class="ref-links-bar">
+        <a href="https://www.boe.es/buscar/act.php?id=BOE-A-2002-18099" target="_blank" rel="noopener noreferrer" class="pdf-download-btn">
+          📄 VER DOCUMENTO NORMATIVO EN PDF
+        </a>
+        <span class="ref-topic-tag">Quirófanos &amp; Equipotencialidad</span>
+      </div>
+    </article>
+
+
+    <!-- SECCIÓN II: CIBERSEGURIDAD, REDES CLÍNICAS E INTEROPERABILIDAD -->
+    <div class="credits-act-banner">
+      <span class="act-glow-number">ACTO II</span>
+      <h2>ESTÁNDARES DE CIBERSEGURIDAD, REDES CLÍNICAS &amp; INTEROPERABILIDAD (NIST / ISO / HL7 / DICOM / MITRE)</h2>
+      <div class="act-glow-line"></div>
+    </div>
+
+    <!-- Referencia 8 -->
+    <article class="credit-card" data-index="8" style="--card-base-l: 57%;" id="ref-8">
+      <div class="credit-card-header">
+        <span class="ref-badge">[NORMA 08 // NIST CONTROLES DE SEGURIDAD]</span>
+        <span class="ref-year">NIST SP 800-53 Rev. 5</span>
+      </div>
+      <h3 class="ref-title">
+        Security and Privacy Controls for Information Systems and Organizations
+      </h3>
+      <div class="ref-organization">National Institute of Standards and Technology (Gaithersburg, Maryland)</div>
+      <p class="ref-summary">
+        Catálogo comprensivo de controles de ciberseguridad clasificados en 20 familias (Control de Acceso AC, Auditoría AU, Integridad del Sistema SI, Protección de Medios MP). Es la base del motor de auditoría y playbooks CLI de BLADES.
+      </p>
+      <div class="ref-links-bar">
+        <a href="https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-53r5.pdf" target="_blank" rel="noopener noreferrer" class="pdf-download-btn">
+          📄 VER DOCUMENTO NORMATIVO EN PDF
+        </a>
+        <span class="ref-topic-tag">NIST 800-53 &amp; Controles Críticos</span>
+      </div>
+    </article>
+
+    <!-- Referencia 9 -->
+    <article class="credit-card" data-index="9" style="--card-base-l: 54%;" id="ref-9">
+      <div class="credit-card-header">
+        <span class="ref-badge">[NORMA 09 // NIST REGLA HIPAA]</span>
+        <span class="ref-year">NIST SP 800-66 Rev. 2 (2024)</span>
+      </div>
+      <h3 class="ref-title">
+        Implementing the Health Insurance Portability and Accountability Act (HIPAA) Security Rule
+      </h3>
+      <div class="ref-organization">NIST / U.S. Department of Health and Human Services (HHS)</div>
+      <p class="ref-summary">
+        Guía técnica para resguardar la Información de Salud Electrónica Protegida (ePHI) contra accesos no autorizados, asegurando confidencialidad, integridad y disponibilidad continua durante contingencias o ciberataques.
+      </p>
+      <div class="ref-links-bar">
+        <a href="https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-66r2.pdf" target="_blank" rel="noopener noreferrer" class="pdf-download-btn">
+          📄 VER DOCUMENTO NORMATIVO EN PDF
+        </a>
+        <span class="ref-topic-tag">HIPAA Security &amp; ePHI Protection</span>
+      </div>
+    </article>
+
+    <!-- Referencia 10 -->
+    <article class="credit-card" data-index="10" style="--card-base-l: 51%;" id="ref-10">
+      <div class="credit-card-header">
+        <span class="ref-badge">[NORMA 10 // ISO GESTIÓN DE SEGURIDAD EN SALUD]</span>
+        <span class="ref-year">ISO 27799:2016</span>
+      </div>
+      <h3 class="ref-title">
+        Health Informatics – Information Security Management in Health Using ISO/IEC 27002
+      </h3>
+      <div class="ref-organization">ISO / TC 215 Informática Sanitaria</div>
+      <p class="ref-summary">
+        Adapta los controles de ISO/IEC 27002 al contexto clínico hospitalario, estableciendo directrices específicas para historiales clínicos electrónicos, biobancos, telemedicina y dispositivos implantables con enlace telemétrico.
+      </p>
+      <div class="ref-links-bar">
+        <a href="https://www.iso.org/standard/62777.html" target="_blank" rel="noopener noreferrer" class="pdf-download-btn">
+          📄 VER DOCUMENTO NORMATIVO EN PDF
+        </a>
+        <span class="ref-topic-tag">ISO 27799 &amp; Privacidad Hospitalaria</span>
+      </div>
+    </article>
+
+    <!-- Referencia 11 -->
+    <article class="credit-card" data-index="11" style="--card-base-l: 48%;" id="ref-11">
+      <div class="credit-card-header">
+        <span class="ref-badge">[NORMA 11 // PROTOCOLO HL7 INTEROPERABILIDAD]</span>
+        <span class="ref-year">HL7 FHIR Release 5.0.0</span>
+      </div>
+      <h3 class="ref-title">
+        Fast Healthcare Interoperability Resources (FHIR): Security &amp; Access Control
+      </h3>
+      <div class="ref-organization">Health Level Seven International (Ann Arbor, Michigan)</div>
+      <p class="ref-summary">
+        Estándar moderno para intercambio de recursos clínicos (Pacientes, Observaciones, Dispositivos). La sección de seguridad prescribe SMART on FHIR, perfiles OAuth 2.0 y mTLS obligatorio para prevenir inyecciones como la del Episodio 1 (CVE-2027-0101).
+      </p>
+      <div class="ref-links-bar">
+        <a href="https://hl7.org/fhir/R5/security.html" target="_blank" rel="noopener noreferrer" class="pdf-download-btn">
+          📄 VER ESPECIFICACIÓN TÉCNICA OFICIAL
+        </a>
+        <span class="ref-topic-tag">HL7 FHIR &amp; SMART on FHIR</span>
+      </div>
+    </article>
+
+    <!-- Referencia 12 -->
+    <article class="credit-card" data-index="12" style="--card-base-l: 45%;" id="ref-12">
+      <div class="credit-card-header">
+        <span class="ref-badge">[NORMA 12 // DICOM SEGURIDAD IMAGENOLÓGICA]</span>
+        <span class="ref-year">NEMA DICOM PS 3.15 (2023)</span>
+      </div>
+      <h3 class="ref-title">
+        DICOM Part 15: Security and System Management Profiles
+      </h3>
+      <div class="ref-organization">National Electrical Manufacturers Association / Medical Imaging &amp; Technology Alliance</div>
+      <p class="ref-summary">
+        Perfiles de seguridad para transmisión, almacenamiento y firmado criptográfico de tomografías computarizadas (TAC), resonancias magnéticas (MRI) y ecocardiografías. Previene la manipulación de vóxeles y diagnósticos falsos.
+      </p>
+      <div class="ref-links-bar">
+        <a href="https://www.dicomstandard.org/current" target="_blank" rel="noopener noreferrer" class="pdf-download-btn">
+          📄 VER ESPECIFICACIÓN DICOM EN PDF
+        </a>
+        <span class="ref-topic-tag">DICOM PS 3.15 &amp; Imagenología TAC/MRI</span>
+      </div>
+    </article>
+
+    <!-- Referencia 13 -->
+    <article class="credit-card" data-index="13" style="--card-base-l: 42%;" id="ref-13">
+      <div class="credit-card-header">
+        <span class="ref-badge">[NORMA 13 // MITRE TÁCTICAS Y TÉCNICAS]</span>
+        <span class="ref-year">MITRE ATT&amp;CK Enterprise v14</span>
+      </div>
+      <h3 class="ref-title">
+        MITRE Adversarial Tactics, Techniques, and Common Knowledge
+      </h3>
+      <div class="ref-organization">The MITRE Corporation (McLean, Virginia)</div>
+      <p class="ref-summary">
+        Matriz estructurada del comportamiento adversario en ciberdefensa. En la consola SOC de Cyberia, fundamenta la detección y mitigación de técnicas como T1014 (Rootkits), T1200 (Manipulación de hardware) y T1210 (Servicios remotos).
+      </p>
+      <div class="ref-links-bar">
+        <a href="https://attack.mitre.org/matrices/enterprise/" target="_blank" rel="noopener noreferrer" class="pdf-download-btn">
+          📄 VER MATRIZ OFICIAL ATT&amp;CK
+        </a>
+        <span class="ref-topic-tag">MITRE ATT&amp;CK Killchain</span>
+      </div>
+    </article>
+
+    <!-- Referencia 14 -->
+    <article class="credit-card" data-index="14" style="--card-base-l: 39%;" id="ref-14">
+      <div class="credit-card-header">
+        <span class="ref-badge">[NORMA 14 // IETF CRIPTOGRAFÍA EN TRÁNSITO]</span>
+        <span class="ref-year">IETF RFC 8446 (Agosto 2018)</span>
+      </div>
+      <h3 class="ref-title">
+        The Transport Layer Security (TLS) Protocol Version 1.3
+      </h3>
+      <div class="ref-organization">Internet Engineering Task Force (IETF)</div>
+      <p class="ref-summary">
+        Estándar moderno para canales seguros en Internet y redes de datos clínicas. Elimina algoritmos obsoletos, impone confidencialidad perfecta hacia adelante (PFS) y acelera el handshake con 0-RTT y mTLS obligatorio.
+      </p>
+      <div class="ref-links-bar">
+        <a href="https://www.rfc-editor.org/rfc/rfc8446.pdf" target="_blank" rel="noopener noreferrer" class="pdf-download-btn">
+          📄 VER RFC 8446 EN PDF
+        </a>
+        <span class="ref-topic-tag">TLS 1.3 &amp; Criptografía mTLS</span>
+      </div>
+    </article>
+
+
+    <!-- SECCIÓN III: FUNDAMENTOS MATEMÁTICOS, CRIPTOGRAFÍA & CIBERNÉTICA -->
+    <div class="credits-act-banner">
+      <span class="act-glow-number">ACTO III</span>
+      <h2>FUNDAMENTOS MATEMÁTICOS, CRIPTOGRAFÍA &amp; TEORÍA CIBERNÉTICA (FIPS / SHANNON / TURING / WIENER / VON NEUMANN)</h2>
+      <div class="act-glow-line"></div>
+    </div>
+
+    <!-- Referencia 15 -->
+    <article class="credit-card" data-index="15" style="--card-base-l: 36%;" id="ref-15">
+      <div class="credit-card-header">
+        <span class="ref-badge">[NORMA 15 // NIST SECURE HASH]</span>
+        <span class="ref-year">FIPS PUB 180-4 (Agosto 2015)</span>
+      </div>
+      <h3 class="ref-title">
+        Secure Hash Standard (SHS): Algoritmos Criptográficos SHA-256 y SHA-512
+      </h3>
+      <div class="ref-organization">National Institute of Standards and Technology / Federal Information Processing Standards</div>
+      <p class="ref-summary">
+        Especificación matemática de las funciones hash unidireccionales de 256 y 512 bits. Garantiza la resistencia a colisiones y preimágenes utilizada en el Blockchain Memory Ledger de Aegis-9 para sellar de forma inmutable cada parche.
+      </p>
+      <div class="ref-links-bar">
+        <a href="https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.180-4.pdf" target="_blank" rel="noopener noreferrer" class="pdf-download-btn">
+          📄 VER DOCUMENTO FIPS 180-4 EN PDF
+        </a>
+        <span class="ref-topic-tag">SHA-256 &amp; Blockchain Ledger</span>
+      </div>
+    </article>
+
+    <!-- Referencia 16 -->
+    <article class="credit-card" data-index="16" style="--card-base-l: 33%;" id="ref-16">
+      <div class="credit-card-header">
+        <span class="ref-badge">[NORMA 16 // CURVAS ELÍPTICAS NIST]</span>
+        <span class="ref-year">NIST SP 800-56A Rev. 3</span>
+      </div>
+      <h3 class="ref-title">
+        Recommendation for Pair-Wise Key-Establishment Schemes Using Discrete Logarithm Cryptography (ECC)
+      </h3>
+      <div class="ref-organization">NIST Information Technology Laboratory</div>
+      <p class="ref-summary">
+        Fundamenta la criptografía asimétrica sobre curvas elípticas (secp256r1) para intercambio seguro de claves (ECDH) y firmas digitales (ECDSA) con bajo consumo de potencia en microcontroladores biomédicos.
+      </p>
+      <div class="ref-links-bar">
+        <a href="https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-56Ar3.pdf" target="_blank" rel="noopener noreferrer" class="pdf-download-btn">
+          📄 VER DOCUMENTO NIST SP 800-56A EN PDF
+        </a>
+        <span class="ref-topic-tag">Criptografía de Curvas Elípticas</span>
+      </div>
+    </article>
+
+    <!-- Referencia 17 -->
+    <article class="credit-card" data-index="17" style="--card-base-l: 30%;" id="ref-17">
+      <div class="credit-card-header">
+        <span class="ref-badge">[CLÁSICO 17 // TEORÍA DE LA INFORMACIÓN]</span>
+        <span class="ref-year">Claude Shannon (1948)</span>
+      </div>
+      <h3 class="ref-title">
+        A Mathematical Theory of Communication
+      </h3>
+      <div class="ref-organization">Bell System Technical Journal, Vol. 27, pp. 379–423 &amp; 623–656</div>
+      <p class="ref-summary">
+        Fundación matemática de la era digital. Introduce el bit como unidad de medida, define la entropía informacional $H = -\sum p_i \log_2 p_i$ y formula el teorema fundamental para canales de transmisión en presencia de ruido.
+      </p>
+      <div class="ref-links-bar">
+        <a href="https://math.harvard.edu/~ctm/home/text/others/shannon/entropy/entropy.pdf" target="_blank" rel="noopener noreferrer" class="pdf-download-btn">
+          📄 VER PAPER CLÁSICO EN PDF (BELL LABS)
+        </a>
+        <span class="ref-topic-tag">Entropía &amp; Teoría de Información</span>
+      </div>
+    </article>
+
+    <!-- Referencia 18 -->
+    <article class="credit-card" data-index="18" style="--card-base-l: 27%;" id="ref-18">
+      <div class="credit-card-header">
+        <span class="ref-badge">[CLÁSICO 18 // TEORÍA DE LA COMPUTACIÓN]</span>
+        <span class="ref-year">Alan M. Turing (1936)</span>
+      </div>
+      <h3 class="ref-title">
+        On Computable Numbers, with an Application to the Entscheidungsproblem
+      </h3>
+      <div class="ref-organization">Proceedings of the London Mathematical Society, Series 2, 42: 230–265</div>
+      <p class="ref-summary">
+        Presenta el concepto formal de máquina universal de Turing, definiendo los límites matemáticos de la computación algorítmica y demostrando la indecidibilidad del problema de la parada.
+      </p>
+      <div class="ref-links-bar">
+        <a href="https://www.cs.virginia.edu/~robins/Turing_Paper_1936.pdf" target="_blank" rel="noopener noreferrer" class="pdf-download-btn">
+          📄 VER PAPER CLÁSICO EN PDF (LMS)
+        </a>
+        <span class="ref-topic-tag">Máquina Universal de Turing</span>
+      </div>
+    </article>
+
+    <!-- Referencia 19 -->
+    <article class="credit-card" data-index="19" style="--card-base-l: 24%;" id="ref-19">
+      <div class="credit-card-header">
+        <span class="ref-badge">[CLÁSICO 19 // CIBERNÉTICA Y FEEDBACK]</span>
+        <span class="ref-year">Norbert Wiener (1948)</span>
+      </div>
+      <h3 class="ref-title">
+        Cybernetics: Or Control and Communication in the Animal and the Machine
+      </h3>
+      <div class="ref-organization">The MIT Press &amp; John Wiley &amp; Sons (Cambridge, Massachusetts)</div>
+      <p class="ref-summary">
+        Crea la disciplina de la cibernética. Analiza los lazos de retroalimentación negativa, la homeostasis fisiológica y el paralelismo de control entre el sistema nervioso humano y los servomecanismos electromecánicos.
+      </p>
+      <div class="ref-links-bar">
+        <a href="https://monoskop.org/images/9/9b/Wiener_Norbert_Cybernetics_or_Control_and_Communication_in_the_Animal_and_the_Machine.pdf" target="_blank" rel="noopener noreferrer" class="pdf-download-btn">
+          📄 VER OBRA CLÁSICA EN PDF (MIT PRESS)
+        </a>
+        <span class="ref-topic-tag">Retroalimentación &amp; Homeostasis</span>
+      </div>
+    </article>
+
+    <!-- Referencia 20 -->
+    <article class="credit-card" data-index="20" style="--card-base-l: 21%;" id="ref-20">
+      <div class="credit-card-header">
+        <span class="ref-badge">[CLÁSICO 20 // NEURO-ARQUITECTURA DE CÓMPUTO]</span>
+        <span class="ref-year">John von Neumann (1958)</span>
+      </div>
+      <h3 class="ref-title">
+        The Computer and the Brain (Silliman Memorial Lectures)
+      </h3>
+      <div class="ref-organization">Yale University Press (New Haven, Connecticut)</div>
+      <p class="ref-summary">
+        Análisis pionero comparativo entre la arquitectura digital serie y la computación neuronal electroquímica masivamente distribuida del cerebro, explorando umbrales de precisión, memoria y confiabilidad biológica.
+      </p>
+      <div class="ref-links-bar">
+        <a href="https://monoskop.org/images/2/29/Von_Neumann_John_The_Computer_and_the_Brain_1958.pdf" target="_blank" rel="noopener noreferrer" class="pdf-download-btn">
+          📄 VER OBRA CLÁSICA EN PDF (YALE)
+        </a>
+        <span class="ref-topic-tag">Neurobiología &amp; Procesamiento Digital</span>
+      </div>
+    </article>
+
+
+    <!-- SECCIÓN IV: BIOÉTICA, FILOSOFÍA DE LA TÉCNICA & TRANSHUMANISMO -->
+    <div class="credits-act-banner">
+      <span class="act-glow-number">ACTO IV</span>
+      <h2>POSTURAS FILOSÓFICAS, BIOÉTICA CLÍNICA &amp; TRANSHUMANISMO (BEAUCHAMP / JONAS / HARAWAY / SIMONDON / HELSINKI)</h2>
+      <div class="act-glow-line"></div>
+    </div>
+
+    <!-- Referencia 21 -->
+    <article class="credit-card" data-index="21" style="--card-base-l: 18%;" id="ref-21">
+      <div class="credit-card-header">
+        <span class="ref-badge">[FILOSOFÍA 21 // PRINCIPIALISMO BIOÉTICO]</span>
+        <span class="ref-year">Tom L. Beauchamp &amp; James F. Childress (1979/2019)</span>
+      </div>
+      <h3 class="ref-title">
+        Principles of Biomedical Ethics (8va Edición)
+      </h3>
+      <div class="ref-organization">Oxford University Press (Nueva York)</div>
+      <p class="ref-summary">
+        Estatuto bioético universal de cuatro principios: <strong>Autonomía</strong> (consentimiento informado del paciente), <strong>No Maleficencia</strong> (primum non nocere), <strong>Beneficencia</strong> y <strong>Justicia</strong>. Regula éticamente la implementación de sistemas de inteligencia artificial y control autónomo en medicina.
+      </p>
+      <div class="ref-links-bar">
+        <a href="https://global.oup.com/academic/product/principles-of-biomedical-ethics-9780190618414" target="_blank" rel="noopener noreferrer" class="pdf-download-btn">
+          📄 VER REFERENCIA ACADÉMICA OXFORD
+        </a>
+        <span class="ref-topic-tag">Bioética &amp; Principios Clínicos</span>
+      </div>
+    </article>
+
+    <!-- Referencia 22 -->
+    <article class="credit-card" data-index="22" style="--card-base-l: 16%;" id="ref-22">
+      <div class="credit-card-header">
+        <span class="ref-badge">[FILOSOFÍA 22 // RESPONSABILIDAD TECNOLÓGICA]</span>
+        <span class="ref-year">Hans Jonas (1979)</span>
+      </div>
+      <h3 class="ref-title">
+        Das Prinzip Verantwortung / El Principio de Responsabilidad
+      </h3>
+      <div class="ref-organization">Insel Verlag / Editorial Herder</div>
+      <p class="ref-summary">
+        Propone un imperativo ético para la civilización tecnológica: <em>"Obra de tal modo que los efectos de tu acción sean compatibles con la permanencia de una vida humana auténtica en la Tierra"</em>. Advierte sobre la degradación existencial por manipulación cibernética y biogenética irreversible.
+      </p>
+      <div class="ref-links-bar">
+        <a href="https://www.herdereditorial.com/el-principio-de-responsabilidad" target="_blank" rel="noopener noreferrer" class="pdf-download-btn">
+          📄 VER REFERENCIA FILOSÓFICA HERDER
+        </a>
+        <span class="ref-topic-tag">Ética Tecnológica &amp; Vulnerabilidad</span>
+      </div>
+    </article>
+
+    <!-- Referencia 23 -->
+    <article class="credit-card" data-index="23" style="--card-base-l: 14%;" id="ref-23">
+      <div class="credit-card-header">
+        <span class="ref-badge">[FILOSOFÍA 23 // TRANSHUMANISMO CRÍTICO]</span>
+        <span class="ref-year">Donna J. Haraway (1985)</span>
+      </div>
+      <h3 class="ref-title">
+        A Cyborg Manifesto: Science, Technology, and Socialist-Feminism in the Late Twentieth Century
+      </h3>
+      <div class="ref-organization">Socialist Review, Vol. 15, No. 2, pp. 65–108</div>
+      <p class="ref-summary">
+        Cuestiona las dicotomías ontológicas entre organismo y máquina, naturaleza y artificio, mente y cuerpo. Analiza la condición ciborg como una realidad socio-médica ineludible en el mundo de implantes neuronales e interfaces bioelectrónicas.
+      </p>
+      <div class="ref-links-bar">
+        <a href="https://warwick.ac.uk/fac/arts/english/currentstudents/undergraduate/modules/fictionnownarrativeandtheoryinthetwentyfirstcentury/manifestly_haraway_----_a_cyborg_manifesto_science_technology_and_socialist-feminism_in_the_....pdf" target="_blank" rel="noopener noreferrer" class="pdf-download-btn">
+          📄 VER MANIFIESTO EN PDF (WARWICK)
+        </a>
+        <span class="ref-topic-tag">Teoría Ciborg &amp; Bio-Hibridación</span>
+      </div>
+    </article>
+
+    <!-- Referencia 24 -->
+    <article class="credit-card" data-index="24" style="--card-base-l: 12%;" id="ref-24">
+      <div class="credit-card-header">
+        <span class="ref-badge">[FILOSOFÍA 24 // ONTOLOGÍA TÉCNICA]</span>
+        <span class="ref-year">Gilbert Simondon (1958)</span>
+      </div>
+      <h3 class="ref-title">
+        Du mode d'existence des objets techniques
+      </h3>
+      <div class="ref-organization">Aubier-Montaigne (París)</div>
+      <p class="ref-summary">
+        Teoría de la individuación y transducción técnica. Explica cómo las máquinas evolucionan de dispositivos abstractos y aislados hacia conjuntos concretos sinérgicos integrados orgánicamente con el medio biológico del operador.
+      </p>
+      <div class="ref-links-bar">
+        <a href="https://monoskop.org/images/8/87/Simondon_Gilbert_Du_mode_d_existence_des_objets_techniques.pdf" target="_blank" rel="noopener noreferrer" class="pdf-download-btn">
+          📄 VER OBRA EN PDF (AUBIER)
+        </a>
+        <span class="ref-topic-tag">Génesis Técnica &amp; Individuación</span>
+      </div>
+    </article>
+
+    <!-- Referencia 25 -->
+    <article class="credit-card" data-index="25" style="--card-base-l: 10%;" id="ref-25">
+      <div class="credit-card-header">
+        <span class="ref-badge">[ÉTICA 25 // INVESTIGACIÓN MÉDICA]</span>
+        <span class="ref-year">Asociación Médica Mundial (AMM, 1964/2013)</span>
+      </div>
+      <h3 class="ref-title">
+        Declaración de Helsinki: Principios Éticos para las Investigaciones Médicas en Seres Humanos
+      </h3>
+      <div class="ref-organization">Asamblea Médica Mundial (Helsinki / Fortaleza)</div>
+      <p class="ref-summary">
+        Pilar deontológico médico global. Establece que en la investigación y experimentación con sujetos humanos, el bienestar del individuo debe prevalecer siempre sobre los intereses exclusivos de la ciencia, la corporación o la sociedad.
+      </p>
+      <div class="ref-links-bar">
+        <a href="https://www.wma.net/es/policies-post/declaracion-de-helsinki-de-la-amm-principios-eticos-para-las-investigaciones-medicas-en-seres-humanos/" target="_blank" rel="noopener noreferrer" class="pdf-download-btn">
+          📄 VER DECLARACIÓN OFICIAL EN PDF (WMA)
+        </a>
+        <span class="ref-topic-tag">Declaración de Helsinki &amp; Sujetos Humanos</span>
+      </div>
+    </article>
+
+    <!-- Referencia 26 -->
+    <article class="credit-card" data-index="26" style="--card-base-l: 8%;" id="ref-26">
+      <div class="credit-card-header">
+        <span class="ref-badge">[FILOSOFÍA 26 // EPISTEMOLOGÍA MÉDICA]</span>
+        <span class="ref-year">Georges Canguilhem (1966)</span>
+      </div>
+      <h3 class="ref-title">
+        Le Normal et le Pathologique
+      </h3>
+      <div class="ref-organization">Presses Universitaires de France (París)</div>
+      <p class="ref-summary">
+        Demuestra que la salud no es una norma fija estadística impuesta por un instrumento de medición, sino la capacidad biológica del organismo de instaurar nuevas normas y tolerar infracciones fisiológicas en un entorno hostil.
+      </p>
+      <div class="ref-links-bar">
+        <a href="https://monoskop.org/images/c/c9/Canguilhem_Georges_The_Normal_and_the_Pathological.pdf" target="_blank" rel="noopener noreferrer" class="pdf-download-btn">
+          📄 VER OBRA EN PDF (PUF)
+        </a>
+        <span class="ref-topic-tag">Normatividad Vital &amp; Patología</span>
+      </div>
+    </article>
+
+
+    <!-- SECCIÓN V: CIERRE Y FINAL DE CRÉDITOS — INVITADO ANTAGÓNICO -->
+    <div class="credits-act-banner credits-antagonist-banner">
+      <span class="act-glow-number" style="color: hsl(0, 100%, 75%); border-color: hsl(0, 100%, 65%);">ACTO FINAL</span>
+      <h2 style="color: hsl(0, 100%, 75%); text-shadow: 0 0 15px hsl(0, 100%, 60%);">
+        invitado antagonico
+      </h2>
+      <div class="act-glow-line" style="background: linear-gradient(90deg, transparent, hsl(0, 100%, 60%), transparent);"></div>
+    </div>
+
+    <!-- Tarjeta del Invitado Antagónico -->
+    <article class="credit-card credit-card-antagonist" id="ref-antagonista" style="--card-base-l: 6%;">
+      <div class="credit-card-header">
+        <span class="ref-badge antagonist-badge">[ANOMALÍA // DEVLIN CORP CYBERIA]</span>
+        <span class="ref-year" style="color: hsl(0, 100%, 75%);">VECTOR EXTRA-SISTEMA</span>
+      </div>
+      <h3 class="ref-title antagonist-title">
+        invitado antagonico
+      </h3>
+      <div class="ref-organization" style="color: hsl(30, 100%, 75%);">
+        Espejo Fractal, Geometría Sagrada &amp; Perturbación Ontológica del Swarm
+      </div>
+      <p class="ref-summary antagonist-text">
+        En las profundidades del Complejo Devlin y la estación orbital final, emerge la disrupción cuántica y fractal que desafía las fronteras de la bio-computación euclidiana. Aquello que la telemetría del implante BLADES clasifica como una anomalía de señal irreductible:
+      </p>
+      <div class="ref-links-bar antagonist-link-bar">
+        <a href="https://sacred-geometry.uk/blog?post=11" target="_blank" rel="noopener noreferrer" class="pdf-download-btn antagonist-btn">
+          👁️ ACCEDER AL PORTAL DEL INVITADO ANTAGÓNICO (https://sacred-geometry.uk/blog?post=11)
+        </a>
+        <span class="ref-topic-tag antagonist-tag">Invitado Antagónico // Sacred Geometry Post #11</span>
+      </div>
+    </article>
+
+    <!-- CRÉDITO FINAL CONSOLA CYBERIA (1996) -->
+    <div class="credits-terminal-outro">
+      <div class="outro-emblem">B</div>
+      <div class="outro-code">CYBERIA // SOC CONSOLE v19.96 — ALL SYSTEMS MONITORED</div>
+      <div style="font-size: 0.76rem; color: hsl(150, 100%, 70%); margin-top: 0.5rem;">
+        SUBJECT: ZAK // NEURAL INTERFACE: BLADES // GHOST SYNC: 100.0% // BLOCKCHAIN LEDGER SEALED
+      </div>
+      <div style="margin-top: 1.25rem;">
+        <a href="/#aegis9-sentinel-panel" class="luminous-btn luminous-btn-green" style="text-decoration: none; padding: 0.6rem 1.4rem; font-size: 0.85rem;">
+          ▶ RETORNAR A LA CONSOLA SOC (EPISODIO 1)
+        </a>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<!-- SCRIPT DE CONTROL DE LUMINOSIDAD SCROLL-DRIVEN & AUTO-SCROLL DE CRÉDITOS -->
+<script>
+  (function() {
+    const track = document.getElementById('credits-scroll-track');
+    const cards = document.querySelectorAll('.credit-card');
+    const lumReadout = document.getElementById('credits-lum-readout');
+    const btnAuto = document.getElementById('btn-toggle-autoscroll');
+    const btnSpeed = document.getElementById('btn-speed-crawl');
+    const btnRewind = document.getElementById('btn-rewind-credits');
+
+    // 1. Observer de Luminosidad Scroll-Driven
+    // Cada referencia bibliográfica es ligeramente más oscura que la anterior.
+    // Para observar la iluminación completa al 100%, el usuario debe scrollear hacia abajo.
+    if ('IntersectionObserver' in window) {
+      const lumObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('fully-illuminated');
+            if (lumReadout) {
+              const idx = entry.target.getAttribute('data-index') || 'FINAL';
+              lumReadout.textContent = `100% [REF ${idx}]`;
+              lumReadout.style.textShadow = '0 0 12px hsl(150, 100%, 75%)';
+            }
+          } else {
+            // Fuera de la vista activa vuelve a su gradiente tenue
+            entry.target.classList.remove('fully-illuminated');
+          }
+        });
+      }, {
+        threshold: 0.25,
+        rootMargin: '-5% 0px -15% 0px'
+      });
+
+      cards.forEach(card => lumObserver.observe(card));
+    }
+
+    // 2. Sistema de Auto-Scroll Cinemático estilo Fin de Videojuego
+    let autoScrollInterval = null;
+    let scrollSpeed = 1.0; // px por tick
+    let speedTier = 1;
+
+    function startAutoScroll() {
+      if (autoScrollInterval) return;
+      btnAuto.textContent = '⏸ PAUSAR CRÉDITOS';
+      btnAuto.classList.add('active-crawl');
+      autoScrollInterval = setInterval(() => {
+        window.scrollBy({ top: scrollSpeed, behavior: 'auto' });
+        // Si llega al final, detenerse suavemente
+        if ((window.innerHeight + window.scrollY) >= (document.body.offsetHeight - 10)) {
+          stopAutoScroll();
+        }
+      }, 25);
+    }
+
+    function stopAutoScroll() {
+      if (autoScrollInterval) {
+        clearInterval(autoScrollInterval);
+        autoScrollInterval = null;
+      }
+      btnAuto.textContent = '▶ AUTO-SCROLL CRÉDITOS';
+      btnAuto.classList.remove('active-crawl');
+    }
+
+    if (btnAuto) {
+      btnAuto.addEventListener('click', () => {
+        if (autoScrollInterval) {
+          stopAutoScroll();
+        } else {
+          startAutoScroll();
+        }
+      });
+    }
+
+    if (btnSpeed) {
+      btnSpeed.addEventListener('click', () => {
+        speedTier = (speedTier % 3) + 1;
+        scrollSpeed = speedTier === 1 ? 1.0 : (speedTier === 2 ? 2.5 : 5.0);
+        btnSpeed.textContent = `VELOCIDAD: ${speedTier}X`;
+      });
+    }
+
+    if (btnRewind) {
+      btnRewind.addEventListener('click', () => {
+        stopAutoScroll();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
+
+    // Al interactuar con scroll de rueda o teclado manual, pausar el autoscroll para no interferir
+    window.addEventListener('wheel', () => {
+      if (autoScrollInterval) stopAutoScroll();
+    }, { passive: true });
+    window.addEventListener('touchmove', () => {
+      if (autoScrollInterval) stopAutoScroll();
+    }, { passive: true });
+  })();
+</script>
+
+
+  <script src="/js/sentinel_tactical_game.js"></script>
+  <script src="/js/cyberia_console.js"></script>
+  <script src="/js/clinical_feed.js"></script>
+</body>
+</html>

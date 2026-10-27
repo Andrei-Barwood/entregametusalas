@@ -1,0 +1,762 @@
+<main class="credits-console-container" id="credits-viewport">
+  <!-- CABECERA LUMINOSA DE CRÉDITOS ESTILO FINAL DE VIDEOJUEGO -->
+  <header class="credits-luminous-header">
+    <div class="credits-glow-tag">
+      ★ CYBERIA (1996) // MEDICAL SOC v19.96 — ROLL DE CRÉDITOS &amp; BIBLIOGRAFÍA NORMATIVA ★
+    </div>
+    <h1 class="credits-epic-title">
+      BIBLIOGRAFÍA NORMATIVA, CIENTÍFICA &amp; FILOSÓFICA
+    </h1>
+    <p class="credits-epic-subtitle">
+      Compendio canónico de estándares internacionales de <strong>electricidad hospitalaria, ciberseguridad clínica (IoMT), modelos matemáticos, cibernética y bioética médica</strong>. Desciende por la consola para iluminar cada una de las referencias normativas.
+    </p>
+
+    <!-- Barra de Control de la Consola de Créditos -->
+    <div class="credits-control-panel">
+      <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+        <button type="button" id="btn-toggle-autoscroll" class="luminous-btn luminous-btn-green" title="Iniciar o pausar el avance automático de créditos">
+          ▶ AUTO-SCROLL CRÉDITOS
+        </button>
+        <button type="button" id="btn-speed-crawl" class="luminous-btn" title="Cambiar velocidad de avance">
+          VELOCIDAD: 1X
+        </button>
+        <button type="button" id="btn-rewind-credits" class="luminous-btn" title="Rebobinar al inicio">
+          ▲ REBOBINAR
+        </button>
+      </div>
+
+      <div class="credits-telemetry-hud">
+        <span>LUMENS: <strong id="credits-lum-readout" style="color: hsl(150, 100%, 80%);">100%</strong></span>
+        <span>NORMATIVAS: <strong style="color: hsl(188, 100%, 80%);">27 TOTAL</strong></span>
+        <span>MODO: <strong style="color: hsl(45, 100%, 80%);">HSB / HSL LUMINESCENT</strong></span>
+      </div>
+    </div>
+  </header>
+
+  <!-- FLUJO CRAWL DE CRÉDITOS Y REFERENCIAS BIBLIOGRÁFICAS -->
+  <div class="credits-scroll-track" id="credits-scroll-track">
+
+    <!-- SECCIÓN I: ELECTRICIDAD HOSPITALARIA Y SEGURIDAD BIOMÉDICA -->
+    <div class="credits-act-banner">
+      <span class="act-glow-number">ACTO I</span>
+      <h2>NORMATIVAS DE ELECTRICIDAD HOSPITALARIA &amp; SEGURIDAD DE INSTALACIONES (IEC / NFPA / FDA)</h2>
+      <div class="act-glow-line"></div>
+    </div>
+
+    <!-- Referencia 1 -->
+    <article class="credit-card" data-index="1" style="--card-base-l: 78%;" id="ref-1">
+      <div class="credit-card-header">
+        <span class="ref-badge">[NORMA 01 // IEC SISTEMAS IT]</span>
+        <span class="ref-year">IEC 60364-7-710:2021</span>
+      </div>
+      <h3 class="ref-title">
+        IEC 60364-7-710: Requisitos para Instalaciones en Locales de Uso Médico
+      </h3>
+      <div class="ref-organization">International Electrotechnical Commission (Ginebra, Suiza)</div>
+      <p class="ref-summary">
+        Define la arquitectura obligatoria de <strong>Sistemas Eléctricos Aislados IT</strong> en quirófanos y unidades de cuidados intensivos (Grupo de aplicación médica 2). Establece el desacoplo galvánico con transformador de aislamiento 1:1, supervisión continua mediante Monitor de Aislamiento de Línea (LIM / DSI) y protección contra microchoques cardíacos.
+      </p>
+      <div class="ref-links-bar">
+        <a href="https://webstore.iec.ch/publication/63474" target="_blank" rel="noopener noreferrer" class="pdf-download-btn">
+          📄 VER DOCUMENTO NORMATIVO EN PDF
+        </a>
+        <span class="ref-topic-tag">Electricidad Hospitalaria &amp; Aislamiento Galvánico</span>
+      </div>
+    </article>
+
+    <!-- Referencia 2 -->
+    <article class="credit-card" data-index="2" style="--card-base-l: 75%;" id="ref-2">
+      <div class="credit-card-header">
+        <span class="ref-badge">[NORMA 02 // NFPA CÓDIGO CLÍNICO]</span>
+        <span class="ref-year">NFPA 99 (Edición 2024)</span>
+      </div>
+      <h3 class="ref-title">
+        NFPA 99: Health Care Facilities Code
+      </h3>
+      <div class="ref-organization">National Fire Protection Association (Quincy, Massachusetts)</div>
+      <p class="ref-summary">
+        Código canónico de seguridad en infraestructura de salud. Categoriza los riesgos del paciente de Categoría 1 (riesgo vital por pérdida de potencia eléctrica) a Categoría 4. Dicta las especificaciones para grupos electrógenos diésel de arranque automático en menos de 10 segundos y circuitos de transferencia de emergencia.
+      </p>
+      <div class="ref-links-bar">
+        <a href="https://www.nfpa.org/codes-and-standards/nfpa-99-standard-development/99" target="_blank" rel="noopener noreferrer" class="pdf-download-btn">
+          📄 VER DOCUMENTO NORMATIVO EN PDF
+        </a>
+        <span class="ref-topic-tag">NFPA 99 &amp; Generadores de Emergencia</span>
+      </div>
+    </article>
+
+    <!-- Referencia 3 -->
+    <article class="credit-card" data-index="3" style="--card-base-l: 72%;" id="ref-3">
+      <div class="credit-card-header">
+        <span class="ref-badge">[NORMA 03 // IEC SEGURIDAD EQUIPOS]</span>
+        <span class="ref-year">IEC 60601-1:2023 (Ed. 3.2)</span>
+      </div>
+      <h3 class="ref-title">
+        IEC 60601-1: Equipos Electromédicos – Seguridad Básica y Funcionamiento Esencial
+      </h3>
+      <div class="ref-organization">Comisión Electrotécnica Internacional / ISO TC 62</div>
+      <p class="ref-summary">
+        Estándar fundamental para fabricantes de dispositivos IoMT (bombas de infusión, respiradores, monitores). Fija los límites de corriente de fuga al paciente en condiciones normales y primer fallo (&lt; 10 µA en partes aplicables tipo CF, &lt; 100 µA tipo BF) para evitar la fibrilación ventricular por microchoque.
+      </p>
+      <div class="ref-links-bar">
+        <a href="https://www.iec.ch/standards-development/iec-60601" target="_blank" rel="noopener noreferrer" class="pdf-download-btn">
+          📄 VER DOCUMENTO NORMATIVO EN PDF
+        </a>
+        <span class="ref-topic-tag">Corrientes de Fuga &amp; Microchoque CF</span>
+      </div>
+    </article>
+
+    <!-- Referencia 4 -->
+    <article class="credit-card" data-index="4" style="--card-base-l: 69%;" id="ref-4">
+      <div class="credit-card-header">
+        <span class="ref-badge">[NORMA 04 // GESTIÓN REDES TI]</span>
+        <span class="ref-year">IEC 80001-1:2021</span>
+      </div>
+      <h3 class="ref-title">
+        IEC 80001-1: Aplicación de la Gestión de Riesgos para Redes de TI que Incorporan Dispositivos Médicos
+      </h3>
+      <div class="ref-organization">ISO / IEC Joint Technical Committee</div>
+      <p class="ref-summary">
+        Aborda la convergencia entre equipos biomédicos y la infraestructura informática hospitalaria. Establece responsabilidades entre fabricantes de dispositivos, ingenieros clínicos y administradores de red para mantener la interoperabilidad, la integridad de los datos y la seguridad del paciente.
+      </p>
+      <div class="ref-links-bar">
+        <a href="https://www.iso.org/standard/72026.html" target="_blank" rel="noopener noreferrer" class="pdf-download-btn">
+          📄 VER DOCUMENTO NORMATIVO EN PDF
+        </a>
+        <span class="ref-topic-tag">Redes Clínicas &amp; Seguridad de Datos</span>
+      </div>
+    </article>
+
+    <!-- Referencia 5 -->
+    <article class="credit-card" data-index="5" style="--card-base-l: 66%;" id="ref-5">
+      <div class="credit-card-header">
+        <span class="ref-badge">[NORMA 05 // GESTIÓN DE RIESGO BIOMÉDICO]</span>
+        <span class="ref-year">ISO 14971:2019</span>
+      </div>
+      <h3 class="ref-title">
+        ISO 14971: Gestión de Riesgos para Productos Sanitarios
+      </h3>
+      <div class="ref-organization">International Organization for Standardization</div>
+      <p class="ref-summary">
+        Marco metodológico global para la identificación de peligros, estimación y evaluación de riesgos, control de riesgos y seguimiento post-comercialización en software y hardware biomédico ante vectores cibernéticos.
+      </p>
+      <div class="ref-links-bar">
+        <a href="https://www.iso.org/standard/72704.html" target="_blank" rel="noopener noreferrer" class="pdf-download-btn">
+          📄 VER DOCUMENTO NORMATIVO EN PDF
+        </a>
+        <span class="ref-topic-tag">Evaluación de Riesgo Sanitario</span>
+      </div>
+    </article>
+
+    <!-- Referencia 6 -->
+    <article class="credit-card" data-index="6" style="--card-base-l: 63%;" id="ref-6">
+      <div class="credit-card-header">
+        <span class="ref-badge">[NORMA 06 // FDA CIBERSEGURIDAD IoMT]</span>
+        <span class="ref-year">FDA Guidance (Septiembre 2023)</span>
+      </div>
+      <h3 class="ref-title">
+        Cybersecurity in Medical Devices: Quality System Considerations and Content of Premarket Submissions
+      </h3>
+      <div class="ref-organization">U.S. Food and Drug Administration (Center for Devices and Radiological Health)</div>
+      <p class="ref-summary">
+        Guía vinculante de la FDA que exige arquitectura Secure-by-Design, Software Bill of Materials (SBOM), firma criptográfica de actualizaciones de firmware y planes de divulgación coordinada de vulnerabilidades en todo dispositivo conectado a pacientes.
+      </p>
+      <div class="ref-links-bar">
+        <a href="https://www.fda.gov/media/119933/download" target="_blank" rel="noopener noreferrer" class="pdf-download-btn">
+          📄 VER DOCUMENTO NORMATIVO EN PDF
+        </a>
+        <span class="ref-topic-tag">FDA Premarket &amp; SBOM Biomédico</span>
+      </div>
+    </article>
+
+    <!-- Referencia 7 -->
+    <article class="credit-card" data-index="7" style="--card-base-l: 60%;" id="ref-7">
+      <div class="credit-card-header">
+        <span class="ref-badge">[NORMA 07 // REBT ESPAÑA / UE]</span>
+        <span class="ref-year">ITC-BT-38 (Real Decreto 842/2002)</span>
+      </div>
+      <h3 class="ref-title">
+        Reglamento Electrotécnico para Baja Tensión: Instalaciones con Fines Especiales – Quirófanos y Salas de Intervención
+      </h3>
+      <div class="ref-organization">Ministerio de Ciencia y Tecnología / Boletín Oficial del Estado (BOE)</div>
+      <p class="ref-summary">
+        Regulación técnica que impone transformadores de aislamiento monofásicos con tensión secundaria no superior a 230 V, suelo conductor antielectrostático, monitor de aislamiento acústico-luminoso y embarrado de equipotencialidad en quirófanos.
+      </p>
+      <div class="ref-links-bar">
+        <a href="https://www.boe.es/buscar/act.php?id=BOE-A-2002-18099" target="_blank" rel="noopener noreferrer" class="pdf-download-btn">
+          📄 VER DOCUMENTO NORMATIVO EN PDF
+        </a>
+        <span class="ref-topic-tag">Quirófanos &amp; Equipotencialidad</span>
+      </div>
+    </article>
+
+
+    <!-- SECCIÓN II: CIBERSEGURIDAD, REDES CLÍNICAS E INTEROPERABILIDAD -->
+    <div class="credits-act-banner">
+      <span class="act-glow-number">ACTO II</span>
+      <h2>ESTÁNDARES DE CIBERSEGURIDAD, REDES CLÍNICAS &amp; INTEROPERABILIDAD (NIST / ISO / HL7 / DICOM / MITRE)</h2>
+      <div class="act-glow-line"></div>
+    </div>
+
+    <!-- Referencia 8 -->
+    <article class="credit-card" data-index="8" style="--card-base-l: 57%;" id="ref-8">
+      <div class="credit-card-header">
+        <span class="ref-badge">[NORMA 08 // NIST CONTROLES DE SEGURIDAD]</span>
+        <span class="ref-year">NIST SP 800-53 Rev. 5</span>
+      </div>
+      <h3 class="ref-title">
+        Security and Privacy Controls for Information Systems and Organizations
+      </h3>
+      <div class="ref-organization">National Institute of Standards and Technology (Gaithersburg, Maryland)</div>
+      <p class="ref-summary">
+        Catálogo comprensivo de controles de ciberseguridad clasificados en 20 familias (Control de Acceso AC, Auditoría AU, Integridad del Sistema SI, Protección de Medios MP). Es la base del motor de auditoría y playbooks CLI de BLADES.
+      </p>
+      <div class="ref-links-bar">
+        <a href="https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-53r5.pdf" target="_blank" rel="noopener noreferrer" class="pdf-download-btn">
+          📄 VER DOCUMENTO NORMATIVO EN PDF
+        </a>
+        <span class="ref-topic-tag">NIST 800-53 &amp; Controles Críticos</span>
+      </div>
+    </article>
+
+    <!-- Referencia 9 -->
+    <article class="credit-card" data-index="9" style="--card-base-l: 54%;" id="ref-9">
+      <div class="credit-card-header">
+        <span class="ref-badge">[NORMA 09 // NIST REGLA HIPAA]</span>
+        <span class="ref-year">NIST SP 800-66 Rev. 2 (2024)</span>
+      </div>
+      <h3 class="ref-title">
+        Implementing the Health Insurance Portability and Accountability Act (HIPAA) Security Rule
+      </h3>
+      <div class="ref-organization">NIST / U.S. Department of Health and Human Services (HHS)</div>
+      <p class="ref-summary">
+        Guía técnica para resguardar la Información de Salud Electrónica Protegida (ePHI) contra accesos no autorizados, asegurando confidencialidad, integridad y disponibilidad continua durante contingencias o ciberataques.
+      </p>
+      <div class="ref-links-bar">
+        <a href="https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-66r2.pdf" target="_blank" rel="noopener noreferrer" class="pdf-download-btn">
+          📄 VER DOCUMENTO NORMATIVO EN PDF
+        </a>
+        <span class="ref-topic-tag">HIPAA Security &amp; ePHI Protection</span>
+      </div>
+    </article>
+
+    <!-- Referencia 10 -->
+    <article class="credit-card" data-index="10" style="--card-base-l: 51%;" id="ref-10">
+      <div class="credit-card-header">
+        <span class="ref-badge">[NORMA 10 // ISO GESTIÓN DE SEGURIDAD EN SALUD]</span>
+        <span class="ref-year">ISO 27799:2016</span>
+      </div>
+      <h3 class="ref-title">
+        Health Informatics – Information Security Management in Health Using ISO/IEC 27002
+      </h3>
+      <div class="ref-organization">ISO / TC 215 Informática Sanitaria</div>
+      <p class="ref-summary">
+        Adapta los controles de ISO/IEC 27002 al contexto clínico hospitalario, estableciendo directrices específicas para historiales clínicos electrónicos, biobancos, telemedicina y dispositivos implantables con enlace telemétrico.
+      </p>
+      <div class="ref-links-bar">
+        <a href="https://www.iso.org/standard/62777.html" target="_blank" rel="noopener noreferrer" class="pdf-download-btn">
+          📄 VER DOCUMENTO NORMATIVO EN PDF
+        </a>
+        <span class="ref-topic-tag">ISO 27799 &amp; Privacidad Hospitalaria</span>
+      </div>
+    </article>
+
+    <!-- Referencia 11 -->
+    <article class="credit-card" data-index="11" style="--card-base-l: 48%;" id="ref-11">
+      <div class="credit-card-header">
+        <span class="ref-badge">[NORMA 11 // PROTOCOLO HL7 INTEROPERABILIDAD]</span>
+        <span class="ref-year">HL7 FHIR Release 5.0.0</span>
+      </div>
+      <h3 class="ref-title">
+        Fast Healthcare Interoperability Resources (FHIR): Security &amp; Access Control
+      </h3>
+      <div class="ref-organization">Health Level Seven International (Ann Arbor, Michigan)</div>
+      <p class="ref-summary">
+        Estándar moderno para intercambio de recursos clínicos (Pacientes, Observaciones, Dispositivos). La sección de seguridad prescribe SMART on FHIR, perfiles OAuth 2.0 y mTLS obligatorio para prevenir inyecciones como la del Episodio 1 (CVE-2027-0101).
+      </p>
+      <div class="ref-links-bar">
+        <a href="https://hl7.org/fhir/R5/security.html" target="_blank" rel="noopener noreferrer" class="pdf-download-btn">
+          📄 VER ESPECIFICACIÓN TÉCNICA OFICIAL
+        </a>
+        <span class="ref-topic-tag">HL7 FHIR &amp; SMART on FHIR</span>
+      </div>
+    </article>
+
+    <!-- Referencia 12 -->
+    <article class="credit-card" data-index="12" style="--card-base-l: 45%;" id="ref-12">
+      <div class="credit-card-header">
+        <span class="ref-badge">[NORMA 12 // DICOM SEGURIDAD IMAGENOLÓGICA]</span>
+        <span class="ref-year">NEMA DICOM PS 3.15 (2023)</span>
+      </div>
+      <h3 class="ref-title">
+        DICOM Part 15: Security and System Management Profiles
+      </h3>
+      <div class="ref-organization">National Electrical Manufacturers Association / Medical Imaging &amp; Technology Alliance</div>
+      <p class="ref-summary">
+        Perfiles de seguridad para transmisión, almacenamiento y firmado criptográfico de tomografías computarizadas (TAC), resonancias magnéticas (MRI) y ecocardiografías. Previene la manipulación de vóxeles y diagnósticos falsos.
+      </p>
+      <div class="ref-links-bar">
+        <a href="https://www.dicomstandard.org/current" target="_blank" rel="noopener noreferrer" class="pdf-download-btn">
+          📄 VER ESPECIFICACIÓN DICOM EN PDF
+        </a>
+        <span class="ref-topic-tag">DICOM PS 3.15 &amp; Imagenología TAC/MRI</span>
+      </div>
+    </article>
+
+    <!-- Referencia 13 -->
+    <article class="credit-card" data-index="13" style="--card-base-l: 42%;" id="ref-13">
+      <div class="credit-card-header">
+        <span class="ref-badge">[NORMA 13 // MITRE TÁCTICAS Y TÉCNICAS]</span>
+        <span class="ref-year">MITRE ATT&amp;CK Enterprise v14</span>
+      </div>
+      <h3 class="ref-title">
+        MITRE Adversarial Tactics, Techniques, and Common Knowledge
+      </h3>
+      <div class="ref-organization">The MITRE Corporation (McLean, Virginia)</div>
+      <p class="ref-summary">
+        Matriz estructurada del comportamiento adversario en ciberdefensa. En la consola SOC de Cyberia, fundamenta la detección y mitigación de técnicas como T1014 (Rootkits), T1200 (Manipulación de hardware) y T1210 (Servicios remotos).
+      </p>
+      <div class="ref-links-bar">
+        <a href="https://attack.mitre.org/matrices/enterprise/" target="_blank" rel="noopener noreferrer" class="pdf-download-btn">
+          📄 VER MATRIZ OFICIAL ATT&amp;CK
+        </a>
+        <span class="ref-topic-tag">MITRE ATT&amp;CK Killchain</span>
+      </div>
+    </article>
+
+    <!-- Referencia 14 -->
+    <article class="credit-card" data-index="14" style="--card-base-l: 39%;" id="ref-14">
+      <div class="credit-card-header">
+        <span class="ref-badge">[NORMA 14 // IETF CRIPTOGRAFÍA EN TRÁNSITO]</span>
+        <span class="ref-year">IETF RFC 8446 (Agosto 2018)</span>
+      </div>
+      <h3 class="ref-title">
+        The Transport Layer Security (TLS) Protocol Version 1.3
+      </h3>
+      <div class="ref-organization">Internet Engineering Task Force (IETF)</div>
+      <p class="ref-summary">
+        Estándar moderno para canales seguros en Internet y redes de datos clínicas. Elimina algoritmos obsoletos, impone confidencialidad perfecta hacia adelante (PFS) y acelera el handshake con 0-RTT y mTLS obligatorio.
+      </p>
+      <div class="ref-links-bar">
+        <a href="https://www.rfc-editor.org/rfc/rfc8446.pdf" target="_blank" rel="noopener noreferrer" class="pdf-download-btn">
+          📄 VER RFC 8446 EN PDF
+        </a>
+        <span class="ref-topic-tag">TLS 1.3 &amp; Criptografía mTLS</span>
+      </div>
+    </article>
+
+
+    <!-- SECCIÓN III: FUNDAMENTOS MATEMÁTICOS, CRIPTOGRAFÍA & CIBERNÉTICA -->
+    <div class="credits-act-banner">
+      <span class="act-glow-number">ACTO III</span>
+      <h2>FUNDAMENTOS MATEMÁTICOS, CRIPTOGRAFÍA &amp; TEORÍA CIBERNÉTICA (FIPS / SHANNON / TURING / WIENER / VON NEUMANN)</h2>
+      <div class="act-glow-line"></div>
+    </div>
+
+    <!-- Referencia 15 -->
+    <article class="credit-card" data-index="15" style="--card-base-l: 36%;" id="ref-15">
+      <div class="credit-card-header">
+        <span class="ref-badge">[NORMA 15 // NIST SECURE HASH]</span>
+        <span class="ref-year">FIPS PUB 180-4 (Agosto 2015)</span>
+      </div>
+      <h3 class="ref-title">
+        Secure Hash Standard (SHS): Algoritmos Criptográficos SHA-256 y SHA-512
+      </h3>
+      <div class="ref-organization">National Institute of Standards and Technology / Federal Information Processing Standards</div>
+      <p class="ref-summary">
+        Especificación matemática de las funciones hash unidireccionales de 256 y 512 bits. Garantiza la resistencia a colisiones y preimágenes utilizada en el Blockchain Memory Ledger de Aegis-9 para sellar de forma inmutable cada parche.
+      </p>
+      <div class="ref-links-bar">
+        <a href="https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.180-4.pdf" target="_blank" rel="noopener noreferrer" class="pdf-download-btn">
+          📄 VER DOCUMENTO FIPS 180-4 EN PDF
+        </a>
+        <span class="ref-topic-tag">SHA-256 &amp; Blockchain Ledger</span>
+      </div>
+    </article>
+
+    <!-- Referencia 16 -->
+    <article class="credit-card" data-index="16" style="--card-base-l: 33%;" id="ref-16">
+      <div class="credit-card-header">
+        <span class="ref-badge">[NORMA 16 // CURVAS ELÍPTICAS NIST]</span>
+        <span class="ref-year">NIST SP 800-56A Rev. 3</span>
+      </div>
+      <h3 class="ref-title">
+        Recommendation for Pair-Wise Key-Establishment Schemes Using Discrete Logarithm Cryptography (ECC)
+      </h3>
+      <div class="ref-organization">NIST Information Technology Laboratory</div>
+      <p class="ref-summary">
+        Fundamenta la criptografía asimétrica sobre curvas elípticas (secp256r1) para intercambio seguro de claves (ECDH) y firmas digitales (ECDSA) con bajo consumo de potencia en microcontroladores biomédicos.
+      </p>
+      <div class="ref-links-bar">
+        <a href="https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-56Ar3.pdf" target="_blank" rel="noopener noreferrer" class="pdf-download-btn">
+          📄 VER DOCUMENTO NIST SP 800-56A EN PDF
+        </a>
+        <span class="ref-topic-tag">Criptografía de Curvas Elípticas</span>
+      </div>
+    </article>
+
+    <!-- Referencia 17 -->
+    <article class="credit-card" data-index="17" style="--card-base-l: 30%;" id="ref-17">
+      <div class="credit-card-header">
+        <span class="ref-badge">[CLÁSICO 17 // TEORÍA DE LA INFORMACIÓN]</span>
+        <span class="ref-year">Claude Shannon (1948)</span>
+      </div>
+      <h3 class="ref-title">
+        A Mathematical Theory of Communication
+      </h3>
+      <div class="ref-organization">Bell System Technical Journal, Vol. 27, pp. 379–423 &amp; 623–656</div>
+      <p class="ref-summary">
+        Fundación matemática de la era digital. Introduce el bit como unidad de medida, define la entropía informacional $H = -\sum p_i \log_2 p_i$ y formula el teorema fundamental para canales de transmisión en presencia de ruido.
+      </p>
+      <div class="ref-links-bar">
+        <a href="https://math.harvard.edu/~ctm/home/text/others/shannon/entropy/entropy.pdf" target="_blank" rel="noopener noreferrer" class="pdf-download-btn">
+          📄 VER PAPER CLÁSICO EN PDF (BELL LABS)
+        </a>
+        <span class="ref-topic-tag">Entropía &amp; Teoría de Información</span>
+      </div>
+    </article>
+
+    <!-- Referencia 18 -->
+    <article class="credit-card" data-index="18" style="--card-base-l: 27%;" id="ref-18">
+      <div class="credit-card-header">
+        <span class="ref-badge">[CLÁSICO 18 // TEORÍA DE LA COMPUTACIÓN]</span>
+        <span class="ref-year">Alan M. Turing (1936)</span>
+      </div>
+      <h3 class="ref-title">
+        On Computable Numbers, with an Application to the Entscheidungsproblem
+      </h3>
+      <div class="ref-organization">Proceedings of the London Mathematical Society, Series 2, 42: 230–265</div>
+      <p class="ref-summary">
+        Presenta el concepto formal de máquina universal de Turing, definiendo los límites matemáticos de la computación algorítmica y demostrando la indecidibilidad del problema de la parada.
+      </p>
+      <div class="ref-links-bar">
+        <a href="https://www.cs.virginia.edu/~robins/Turing_Paper_1936.pdf" target="_blank" rel="noopener noreferrer" class="pdf-download-btn">
+          📄 VER PAPER CLÁSICO EN PDF (LMS)
+        </a>
+        <span class="ref-topic-tag">Máquina Universal de Turing</span>
+      </div>
+    </article>
+
+    <!-- Referencia 19 -->
+    <article class="credit-card" data-index="19" style="--card-base-l: 24%;" id="ref-19">
+      <div class="credit-card-header">
+        <span class="ref-badge">[CLÁSICO 19 // CIBERNÉTICA Y FEEDBACK]</span>
+        <span class="ref-year">Norbert Wiener (1948)</span>
+      </div>
+      <h3 class="ref-title">
+        Cybernetics: Or Control and Communication in the Animal and the Machine
+      </h3>
+      <div class="ref-organization">The MIT Press &amp; John Wiley &amp; Sons (Cambridge, Massachusetts)</div>
+      <p class="ref-summary">
+        Crea la disciplina de la cibernética. Analiza los lazos de retroalimentación negativa, la homeostasis fisiológica y el paralelismo de control entre el sistema nervioso humano y los servomecanismos electromecánicos.
+      </p>
+      <div class="ref-links-bar">
+        <a href="https://monoskop.org/images/9/9b/Wiener_Norbert_Cybernetics_or_Control_and_Communication_in_the_Animal_and_the_Machine.pdf" target="_blank" rel="noopener noreferrer" class="pdf-download-btn">
+          📄 VER OBRA CLÁSICA EN PDF (MIT PRESS)
+        </a>
+        <span class="ref-topic-tag">Retroalimentación &amp; Homeostasis</span>
+      </div>
+    </article>
+
+    <!-- Referencia 20 -->
+    <article class="credit-card" data-index="20" style="--card-base-l: 21%;" id="ref-20">
+      <div class="credit-card-header">
+        <span class="ref-badge">[CLÁSICO 20 // NEURO-ARQUITECTURA DE CÓMPUTO]</span>
+        <span class="ref-year">John von Neumann (1958)</span>
+      </div>
+      <h3 class="ref-title">
+        The Computer and the Brain (Silliman Memorial Lectures)
+      </h3>
+      <div class="ref-organization">Yale University Press (New Haven, Connecticut)</div>
+      <p class="ref-summary">
+        Análisis pionero comparativo entre la arquitectura digital serie y la computación neuronal electroquímica masivamente distribuida del cerebro, explorando umbrales de precisión, memoria y confiabilidad biológica.
+      </p>
+      <div class="ref-links-bar">
+        <a href="https://monoskop.org/images/2/29/Von_Neumann_John_The_Computer_and_the_Brain_1958.pdf" target="_blank" rel="noopener noreferrer" class="pdf-download-btn">
+          📄 VER OBRA CLÁSICA EN PDF (YALE)
+        </a>
+        <span class="ref-topic-tag">Neurobiología &amp; Procesamiento Digital</span>
+      </div>
+    </article>
+
+
+    <!-- SECCIÓN IV: BIOÉTICA, FILOSOFÍA DE LA TÉCNICA & TRANSHUMANISMO -->
+    <div class="credits-act-banner">
+      <span class="act-glow-number">ACTO IV</span>
+      <h2>POSTURAS FILOSÓFICAS, BIOÉTICA CLÍNICA &amp; TRANSHUMANISMO (BEAUCHAMP / JONAS / HARAWAY / SIMONDON / HELSINKI)</h2>
+      <div class="act-glow-line"></div>
+    </div>
+
+    <!-- Referencia 21 -->
+    <article class="credit-card" data-index="21" style="--card-base-l: 18%;" id="ref-21">
+      <div class="credit-card-header">
+        <span class="ref-badge">[FILOSOFÍA 21 // PRINCIPIALISMO BIOÉTICO]</span>
+        <span class="ref-year">Tom L. Beauchamp &amp; James F. Childress (1979/2019)</span>
+      </div>
+      <h3 class="ref-title">
+        Principles of Biomedical Ethics (8va Edición)
+      </h3>
+      <div class="ref-organization">Oxford University Press (Nueva York)</div>
+      <p class="ref-summary">
+        Estatuto bioético universal de cuatro principios: <strong>Autonomía</strong> (consentimiento informado del paciente), <strong>No Maleficencia</strong> (primum non nocere), <strong>Beneficencia</strong> y <strong>Justicia</strong>. Regula éticamente la implementación de sistemas de inteligencia artificial y control autónomo en medicina.
+      </p>
+      <div class="ref-links-bar">
+        <a href="https://global.oup.com/academic/product/principles-of-biomedical-ethics-9780190618414" target="_blank" rel="noopener noreferrer" class="pdf-download-btn">
+          📄 VER REFERENCIA ACADÉMICA OXFORD
+        </a>
+        <span class="ref-topic-tag">Bioética &amp; Principios Clínicos</span>
+      </div>
+    </article>
+
+    <!-- Referencia 22 -->
+    <article class="credit-card" data-index="22" style="--card-base-l: 16%;" id="ref-22">
+      <div class="credit-card-header">
+        <span class="ref-badge">[FILOSOFÍA 22 // RESPONSABILIDAD TECNOLÓGICA]</span>
+        <span class="ref-year">Hans Jonas (1979)</span>
+      </div>
+      <h3 class="ref-title">
+        Das Prinzip Verantwortung / El Principio de Responsabilidad
+      </h3>
+      <div class="ref-organization">Insel Verlag / Editorial Herder</div>
+      <p class="ref-summary">
+        Propone un imperativo ético para la civilización tecnológica: <em>"Obra de tal modo que los efectos de tu acción sean compatibles con la permanencia de una vida humana auténtica en la Tierra"</em>. Advierte sobre la degradación existencial por manipulación cibernética y biogenética irreversible.
+      </p>
+      <div class="ref-links-bar">
+        <a href="https://www.herdereditorial.com/el-principio-de-responsabilidad" target="_blank" rel="noopener noreferrer" class="pdf-download-btn">
+          📄 VER REFERENCIA FILOSÓFICA HERDER
+        </a>
+        <span class="ref-topic-tag">Ética Tecnológica &amp; Vulnerabilidad</span>
+      </div>
+    </article>
+
+    <!-- Referencia 23 -->
+    <article class="credit-card" data-index="23" style="--card-base-l: 14%;" id="ref-23">
+      <div class="credit-card-header">
+        <span class="ref-badge">[FILOSOFÍA 23 // TRANSHUMANISMO CRÍTICO]</span>
+        <span class="ref-year">Donna J. Haraway (1985)</span>
+      </div>
+      <h3 class="ref-title">
+        A Cyborg Manifesto: Science, Technology, and Socialist-Feminism in the Late Twentieth Century
+      </h3>
+      <div class="ref-organization">Socialist Review, Vol. 15, No. 2, pp. 65–108</div>
+      <p class="ref-summary">
+        Cuestiona las dicotomías ontológicas entre organismo y máquina, naturaleza y artificio, mente y cuerpo. Analiza la condición ciborg como una realidad socio-médica ineludible en el mundo de implantes neuronales e interfaces bioelectrónicas.
+      </p>
+      <div class="ref-links-bar">
+        <a href="https://warwick.ac.uk/fac/arts/english/currentstudents/undergraduate/modules/fictionnownarrativeandtheoryinthetwentyfirstcentury/manifestly_haraway_----_a_cyborg_manifesto_science_technology_and_socialist-feminism_in_the_....pdf" target="_blank" rel="noopener noreferrer" class="pdf-download-btn">
+          📄 VER MANIFIESTO EN PDF (WARWICK)
+        </a>
+        <span class="ref-topic-tag">Teoría Ciborg &amp; Bio-Hibridación</span>
+      </div>
+    </article>
+
+    <!-- Referencia 24 -->
+    <article class="credit-card" data-index="24" style="--card-base-l: 12%;" id="ref-24">
+      <div class="credit-card-header">
+        <span class="ref-badge">[FILOSOFÍA 24 // ONTOLOGÍA TÉCNICA]</span>
+        <span class="ref-year">Gilbert Simondon (1958)</span>
+      </div>
+      <h3 class="ref-title">
+        Du mode d'existence des objets techniques
+      </h3>
+      <div class="ref-organization">Aubier-Montaigne (París)</div>
+      <p class="ref-summary">
+        Teoría de la individuación y transducción técnica. Explica cómo las máquinas evolucionan de dispositivos abstractos y aislados hacia conjuntos concretos sinérgicos integrados orgánicamente con el medio biológico del operador.
+      </p>
+      <div class="ref-links-bar">
+        <a href="https://monoskop.org/images/8/87/Simondon_Gilbert_Du_mode_d_existence_des_objets_techniques.pdf" target="_blank" rel="noopener noreferrer" class="pdf-download-btn">
+          📄 VER OBRA EN PDF (AUBIER)
+        </a>
+        <span class="ref-topic-tag">Génesis Técnica &amp; Individuación</span>
+      </div>
+    </article>
+
+    <!-- Referencia 25 -->
+    <article class="credit-card" data-index="25" style="--card-base-l: 10%;" id="ref-25">
+      <div class="credit-card-header">
+        <span class="ref-badge">[ÉTICA 25 // INVESTIGACIÓN MÉDICA]</span>
+        <span class="ref-year">Asociación Médica Mundial (AMM, 1964/2013)</span>
+      </div>
+      <h3 class="ref-title">
+        Declaración de Helsinki: Principios Éticos para las Investigaciones Médicas en Seres Humanos
+      </h3>
+      <div class="ref-organization">Asamblea Médica Mundial (Helsinki / Fortaleza)</div>
+      <p class="ref-summary">
+        Pilar deontológico médico global. Establece que en la investigación y experimentación con sujetos humanos, el bienestar del individuo debe prevalecer siempre sobre los intereses exclusivos de la ciencia, la corporación o la sociedad.
+      </p>
+      <div class="ref-links-bar">
+        <a href="https://www.wma.net/es/policies-post/declaracion-de-helsinki-de-la-amm-principios-eticos-para-las-investigaciones-medicas-en-seres-humanos/" target="_blank" rel="noopener noreferrer" class="pdf-download-btn">
+          📄 VER DECLARACIÓN OFICIAL EN PDF (WMA)
+        </a>
+        <span class="ref-topic-tag">Declaración de Helsinki &amp; Sujetos Humanos</span>
+      </div>
+    </article>
+
+    <!-- Referencia 26 -->
+    <article class="credit-card" data-index="26" style="--card-base-l: 8%;" id="ref-26">
+      <div class="credit-card-header">
+        <span class="ref-badge">[FILOSOFÍA 26 // EPISTEMOLOGÍA MÉDICA]</span>
+        <span class="ref-year">Georges Canguilhem (1966)</span>
+      </div>
+      <h3 class="ref-title">
+        Le Normal et le Pathologique
+      </h3>
+      <div class="ref-organization">Presses Universitaires de France (París)</div>
+      <p class="ref-summary">
+        Demuestra que la salud no es una norma fija estadística impuesta por un instrumento de medición, sino la capacidad biológica del organismo de instaurar nuevas normas y tolerar infracciones fisiológicas en un entorno hostil.
+      </p>
+      <div class="ref-links-bar">
+        <a href="https://monoskop.org/images/c/c9/Canguilhem_Georges_The_Normal_and_the_Pathological.pdf" target="_blank" rel="noopener noreferrer" class="pdf-download-btn">
+          📄 VER OBRA EN PDF (PUF)
+        </a>
+        <span class="ref-topic-tag">Normatividad Vital &amp; Patología</span>
+      </div>
+    </article>
+
+
+    <!-- SECCIÓN V: CIERRE Y FINAL DE CRÉDITOS — INVITADO ANTAGÓNICO -->
+    <div class="credits-act-banner credits-antagonist-banner">
+      <span class="act-glow-number" style="color: hsl(0, 100%, 75%); border-color: hsl(0, 100%, 65%);">ACTO FINAL</span>
+      <h2 style="color: hsl(0, 100%, 75%); text-shadow: 0 0 15px hsl(0, 100%, 60%);">
+        invitado antagonico
+      </h2>
+      <div class="act-glow-line" style="background: linear-gradient(90deg, transparent, hsl(0, 100%, 60%), transparent);"></div>
+    </div>
+
+    <!-- Tarjeta del Invitado Antagónico -->
+    <article class="credit-card credit-card-antagonist" id="ref-antagonista" style="--card-base-l: 6%;">
+      <div class="credit-card-header">
+        <span class="ref-badge antagonist-badge">[ANOMALÍA // DEVLIN CORP CYBERIA]</span>
+        <span class="ref-year" style="color: hsl(0, 100%, 75%);">VECTOR EXTRA-SISTEMA</span>
+      </div>
+      <h3 class="ref-title antagonist-title">
+        invitado antagonico
+      </h3>
+      <div class="ref-organization" style="color: hsl(30, 100%, 75%);">
+        Espejo Fractal, Geometría Sagrada &amp; Perturbación Ontológica del Swarm
+      </div>
+      <p class="ref-summary antagonist-text">
+        En las profundidades del Complejo Devlin y la estación orbital final, emerge la disrupción cuántica y fractal que desafía las fronteras de la bio-computación euclidiana. Aquello que la telemetría del implante BLADES clasifica como una anomalía de señal irreductible:
+      </p>
+      <div class="ref-links-bar antagonist-link-bar">
+        <a href="https://sacred-geometry.uk/blog?post=11" target="_blank" rel="noopener noreferrer" class="pdf-download-btn antagonist-btn">
+          👁️ ACCEDER AL PORTAL DEL INVITADO ANTAGÓNICO (https://sacred-geometry.uk/blog?post=11)
+        </a>
+        <span class="ref-topic-tag antagonist-tag">Invitado Antagónico // Sacred Geometry Post #11</span>
+      </div>
+    </article>
+
+    <!-- CRÉDITO FINAL CONSOLA CYBERIA (1996) -->
+    <div class="credits-terminal-outro">
+      <div class="outro-emblem">B</div>
+      <div class="outro-code">CYBERIA // SOC CONSOLE v19.96 — ALL SYSTEMS MONITORED</div>
+      <div style="font-size: 0.76rem; color: hsl(150, 100%, 70%); margin-top: 0.5rem;">
+        SUBJECT: ZAK // NEURAL INTERFACE: BLADES // GHOST SYNC: 100.0% // BLOCKCHAIN LEDGER SEALED
+      </div>
+      <div style="margin-top: 1.25rem;">
+        <a href="/#aegis9-sentinel-panel" class="luminous-btn luminous-btn-green" style="text-decoration: none; padding: 0.6rem 1.4rem; font-size: 0.85rem;">
+          ▶ RETORNAR A LA CONSOLA SOC (EPISODIO 1)
+        </a>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<!-- SCRIPT DE CONTROL DE LUMINOSIDAD SCROLL-DRIVEN & AUTO-SCROLL DE CRÉDITOS -->
+<script>
+  (function() {
+    const track = document.getElementById('credits-scroll-track');
+    const cards = document.querySelectorAll('.credit-card');
+    const lumReadout = document.getElementById('credits-lum-readout');
+    const btnAuto = document.getElementById('btn-toggle-autoscroll');
+    const btnSpeed = document.getElementById('btn-speed-crawl');
+    const btnRewind = document.getElementById('btn-rewind-credits');
+
+    // 1. Observer de Luminosidad Scroll-Driven
+    // Cada referencia bibliográfica es ligeramente más oscura que la anterior.
+    // Para observar la iluminación completa al 100%, el usuario debe scrollear hacia abajo.
+    if ('IntersectionObserver' in window) {
+      const lumObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('fully-illuminated');
+            if (lumReadout) {
+              const idx = entry.target.getAttribute('data-index') || 'FINAL';
+              lumReadout.textContent = `100% [REF ${idx}]`;
+              lumReadout.style.textShadow = '0 0 12px hsl(150, 100%, 75%)';
+            }
+          } else {
+            // Fuera de la vista activa vuelve a su gradiente tenue
+            entry.target.classList.remove('fully-illuminated');
+          }
+        });
+      }, {
+        threshold: 0.25,
+        rootMargin: '-5% 0px -15% 0px'
+      });
+
+      cards.forEach(card => lumObserver.observe(card));
+    }
+
+    // 2. Sistema de Auto-Scroll Cinemático estilo Fin de Videojuego
+    let autoScrollInterval = null;
+    let scrollSpeed = 1.0; // px por tick
+    let speedTier = 1;
+
+    function startAutoScroll() {
+      if (autoScrollInterval) return;
+      btnAuto.textContent = '⏸ PAUSAR CRÉDITOS';
+      btnAuto.classList.add('active-crawl');
+      autoScrollInterval = setInterval(() => {
+        window.scrollBy({ top: scrollSpeed, behavior: 'auto' });
+        // Si llega al final, detenerse suavemente
+        if ((window.innerHeight + window.scrollY) >= (document.body.offsetHeight - 10)) {
+          stopAutoScroll();
+        }
+      }, 25);
+    }
+
+    function stopAutoScroll() {
+      if (autoScrollInterval) {
+        clearInterval(autoScrollInterval);
+        autoScrollInterval = null;
+      }
+      btnAuto.textContent = '▶ AUTO-SCROLL CRÉDITOS';
+      btnAuto.classList.remove('active-crawl');
+    }
+
+    if (btnAuto) {
+      btnAuto.addEventListener('click', () => {
+        if (autoScrollInterval) {
+          stopAutoScroll();
+        } else {
+          startAutoScroll();
+        }
+      });
+    }
+
+    if (btnSpeed) {
+      btnSpeed.addEventListener('click', () => {
+        speedTier = (speedTier % 3) + 1;
+        scrollSpeed = speedTier === 1 ? 1.0 : (speedTier === 2 ? 2.5 : 5.0);
+        btnSpeed.textContent = `VELOCIDAD: ${speedTier}X`;
+      });
+    }
+
+    if (btnRewind) {
+      btnRewind.addEventListener('click', () => {
+        stopAutoScroll();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
+
+    // Al interactuar con scroll de rueda o teclado manual, pausar el autoscroll para no interferir
+    window.addEventListener('wheel', () => {
+      if (autoScrollInterval) stopAutoScroll();
+    }, { passive: true });
+    window.addEventListener('touchmove', () => {
+      if (autoScrollInterval) stopAutoScroll();
+    }, { passive: true });
+  })();
+</script>

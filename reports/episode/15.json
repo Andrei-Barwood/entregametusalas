@@ -1,0 +1,74 @@
+{
+  "type": "bundle",
+  "id": "bundle--cyberia-medsoc-ep15-2027",
+  "spec_version": "2.1",
+  "console": "CYBERIA-MED // SOC Console v19.96",
+  "palette_standard": "Ultimate Queen Chrysalis (#523)",
+  "objects": [
+    {
+      "type": "vulnerability",
+      "id": "vulnerability--ep15-cve-2027-0215",
+      "name": "CVE-2027-0215",
+      "description": "Inducción de falsas alarmas de fibrilación ventricular y desincronización de marcas de tiempo clínicas debido a ruido electromagnético extremo y ataques de Jitter NTP/PTP.",
+      "x_cvss_score": 7.7,
+      "x_cvss_vector": "CVSS:3.1/AV:A/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:H",
+      "x_clinical_protocol": "IEEE 1588 PTP (Precision Time Protocol) / IEEE 11073",
+      "x_iomt_asset": "Monitores Multiparamétricos de Signos Vitales (ECG/SpO2/IBP) & Bombas de Infusión"
+    },
+    {
+      "type": "indicator",
+      "id": "indicator--ep15-blades-dpi",
+      "name": "SIGMA_BIOMETRIC_STORM_NOISE_VS_INJECTION",
+      "pattern_type": "yara-sigma-hybrid",
+      "pattern": "ptp.offset_ns > 50000 AND ecg.baseline_wander_hz > 40 AND spo2.pleth_correlation == VALID",
+      "description": "Discrepancia entre el ruido eléctrico en el canal ECG y la onda pletismográfica óptica estable durante ROUGH RIDE."
+    },
+    {
+      "type": "course-of-action",
+      "id": "course-of-action--ep15-mitigation",
+      "name": "MIT-EP15-KALMAN-STABILIZE",
+      "description": "Activación del filtro adaptativo Kalman en el procesador BLADES para suprimir el ruido de tormenta y conmutación a reloj atómico local de respaldo.",
+      "x_cli_playbook": "blades-vitals --enable-kalman-denoise --lock-ptp-grandmaster LOCAL_RUBIDIUM",
+      "x_prevention_standard": "IEC 60601-1-2 (Compatibilidad Electromagnética en Equipos Médicos)",
+      "x_zero_trust_control": "Sincronización de tiempo autenticada criptográficamente (NTS - Network Time Security)."
+    }
+  ],
+  "episode_metadata": {
+    "id": 15,
+    "code": "EP15",
+    "act_number": 2,
+    "act": "ACTO II: RUTA DE EVACUACIÓN ÁRTICA Y TÚNELES DE SUMINISTRO (TELEMETRÍA EN TRÁNSITO)",
+    "title": "Turbulencia en la Tormenta Polar (ROUGH RIDE)",
+    "game_node_code": "ROUGH RIDE",
+    "game_location": "Corredor aéreo ártico bajo tormenta de nieve y turbulencia severa",
+    "cyberia_spoiler": "Una violenta tormenta polar nocturna azota al TF-22 reduciendo la visibilidad óptica a cero y sacudiendo la cabina con turbulencia extrema. En medio de la ventisca, oleadas de cazas del Cartel atacan desde ángulos ciegos; Zak debe confiar plenamente en los sensores de su implante BLADES y en la retícula predictiva para derribarlos sin perder el control del avión.",
+    "hospital_counterpart": "Resiliencia de Sensores Biométricos y Bombas de Infusión ante Ruido Electromagnético Extremo y Jitter de Red",
+    "clinical_protocol": "IEEE 1588 PTP (Precision Time Protocol) / IEEE 11073",
+    "iomt_asset": "Monitores Multiparamétricos de Signos Vitales (ECG/SpO2/IBP) & Bombas de Infusión",
+    "mitre_technique": "T0832 - Manipulation of View / Electromagnetic Noise & Time-Sync Spoofing",
+    "pillars": {
+      "vulnerability": {
+        "cve": "CVE-2027-0215",
+        "cvss": 7.7,
+        "vector": "CVSS:3.1/AV:A/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:H",
+        "description": "Inducción de falsas alarmas de fibrilación ventricular y desincronización de marcas de tiempo clínicas debido a ruido electromagnético extremo y ataques de Jitter NTP/PTP."
+      },
+      "detection": {
+        "engine": "BLADES Kalman Filter & PTP Integrity Monitor",
+        "rule_name": "SIGMA_BIOMETRIC_STORM_NOISE_VS_INJECTION",
+        "signature": "ptp.offset_ns > 50000 AND ecg.baseline_wander_hz > 40 AND spo2.pleth_correlation == VALID",
+        "telemetry_indicator": "Discrepancia entre el ruido eléctrico en el canal ECG y la onda pletismográfica óptica estable durante ROUGH RIDE."
+      },
+      "mitigation": {
+        "action_code": "MIT-EP15-KALMAN-STABILIZE",
+        "immediate_response": "Activación del filtro adaptativo Kalman en el procesador BLADES para suprimir el ruido de tormenta y conmutación a reloj atómico local de respaldo.",
+        "cli_command": "blades-vitals --enable-kalman-denoise --lock-ptp-grandmaster LOCAL_RUBIDIUM"
+      },
+      "prevention": {
+        "standard": "IEC 60601-1-2 (Compatibilidad Electromagnética en Equipos Médicos)",
+        "hardening_policy": "Blindaje de cables de paciente, filtrado notch por hardware y fusión multimodal de sensores antes de disparar actuaciones clínicas automáticas.",
+        "zero_trust_control": "Sincronización de tiempo autenticada criptográficamente (NTS - Network Time Security)."
+      }
+    }
+  }
+}

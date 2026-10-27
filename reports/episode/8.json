@@ -1,0 +1,74 @@
+{
+  "type": "bundle",
+  "id": "bundle--cyberia-medsoc-ep08-2027",
+  "spec_version": "2.1",
+  "console": "CYBERIA-MED // SOC Console v19.96",
+  "palette_standard": "Ultimate Queen Chrysalis (#523)",
+  "objects": [
+    {
+      "type": "vulnerability",
+      "id": "vulnerability--ep08-cve-2027-0108",
+      "name": "CVE-2027-0108",
+      "description": "Sabotaje en el Monitor de Aislamiento de Línea (LIM) que silencia la alarma de primera falla a tierra mientras programa una bomba lógica de apagado total del tablero eléctrico.",
+      "x_cvss_score": 8.9,
+      "x_cvss_vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:C/C:L/I:H/A:H",
+      "x_clinical_protocol": "IEC 61850 / Modbus Power Telemetry",
+      "x_iomt_asset": "Tablero de Potencia Aislada de Quirófano (IPS) & Transformador de Aislamiento"
+    },
+    {
+      "type": "indicator",
+      "id": "indicator--ep08-blades-dpi",
+      "name": "SIGMA_OR_POWER_GRID_LETHAL_ARC_FAULT",
+      "pattern_type": "yara-sigma-hybrid",
+      "pattern": "leakage_current_ma > 300 AND floor_grid_voltage > 2400 AND cron_job == 'detonate_rig_storage'",
+      "description": "Descarga térmica masiva (carbonización del nodo hostil Santos) en la rejilla conductora y conteo regresivo activo."
+    },
+    {
+      "type": "course-of-action",
+      "id": "course-of-action--ep08-mitigation",
+      "name": "MIT-EP08-LIM-ISOLATE",
+      "description": "Aislamiento del segmento en cortocircuito mediante disyuntor diferencial de alta velocidad y congelación del hilo temporizador de la bomba lógica.",
+      "x_cli_playbook": "blades-power --isolate-fault-grid FLOOR_SECTOR_08 --suspend-timer BOMBD_PID",
+      "x_prevention_standard": "IEC 60364-7-710 (Instalaciones Eléctricas en Locales Médicos Grupo 2)",
+      "x_zero_trust_control": "Verificación física de puesta a tierra equipotencial en quirófanos y salas críticas."
+    }
+  ],
+  "episode_metadata": {
+    "id": 8,
+    "code": "EP08",
+    "act_number": 1,
+    "act": "ACTO I: PLATAFORMA OFFSHORE \"THE RIG\" (HOSPITAL DE CAMPAÑA MARÍTIMO Y NODO DE TRIAJE)",
+    "title": "Despertar en la Morgue de Carga (EASY RIDE)",
+    "game_node_code": "EASY RIDE",
+    "game_location": "Bodega de almacenamiento inferior de The Rig con rejilla de alta tensión",
+    "cyberia_spoiler": "Zak despierta atado de pies y manos en el suelo de la oscura bodega de carga, justo al lado de una bomba de tiempo activada que cuenta regresivamente hacia la detonación. Santos se burla de él antes de marcharse, pero en su arrogancia da un paso en falso en la penumbra: pisa directamente sobre la rejilla metálica electrificada de alta tensión del suelo y muere horriblemente electrocutado y carbonizado frente a Zak.",
+    "hospital_counterpart": "Sistema de Aislamiento Eléctrico de Quirófano (Tablero IT / Monitor de Aislamiento de Línea LIM) y Morgue Clínica",
+    "clinical_protocol": "IEC 61850 / Modbus Power Telemetry",
+    "iomt_asset": "Tablero de Potencia Aislada de Quirófano (IPS) & Transformador de Aislamiento",
+    "mitre_technique": "T1499 / T0816 - Sabotage of Electrical Isolation & Scheduled Logic Bomb",
+    "pillars": {
+      "vulnerability": {
+        "cve": "CVE-2027-0108",
+        "cvss": 8.9,
+        "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:C/C:L/I:H/A:H",
+        "description": "Sabotaje en el Monitor de Aislamiento de Línea (LIM) que silencia la alarma de primera falla a tierra mientras programa una bomba lógica de apagado total del tablero eléctrico."
+      },
+      "detection": {
+        "engine": "BLADES Thermal & Differential Current Sensor",
+        "rule_name": "SIGMA_OR_POWER_GRID_LETHAL_ARC_FAULT",
+        "signature": "leakage_current_ma > 300 AND floor_grid_voltage > 2400 AND cron_job == 'detonate_rig_storage'",
+        "telemetry_indicator": "Descarga térmica masiva (carbonización del nodo hostil Santos) en la rejilla conductora y conteo regresivo activo."
+      },
+      "mitigation": {
+        "action_code": "MIT-EP08-LIM-ISOLATE",
+        "immediate_response": "Aislamiento del segmento en cortocircuito mediante disyuntor diferencial de alta velocidad y congelación del hilo temporizador de la bomba lógica.",
+        "cli_command": "blades-power --isolate-fault-grid FLOOR_SECTOR_08 --suspend-timer BOMBD_PID"
+      },
+      "prevention": {
+        "standard": "IEC 60364-7-710 (Instalaciones Eléctricas en Locales Médicos Grupo 2)",
+        "hardening_policy": "Uso obligatorio de sistemas IT médicos con transformadores de aislamiento vigilados por relés analógicos no modificables por red.",
+        "zero_trust_control": "Verificación física de puesta a tierra equipotencial en quirófanos y salas críticas."
+      }
+    }
+  }
+}

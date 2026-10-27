@@ -1,0 +1,74 @@
+{
+  "type": "bundle",
+  "id": "bundle--cyberia-medsoc-ep03-2027",
+  "spec_version": "2.1",
+  "console": "CYBERIA-MED // SOC Console v19.96",
+  "palette_standard": "Ultimate Queen Chrysalis (#523)",
+  "objects": [
+    {
+      "type": "vulnerability",
+      "id": "vulnerability--ep03-cve-2027-0103",
+      "name": "CVE-2027-0103",
+      "description": "Condición de carrera en la máquina de estados del lector biométrico de la esclusa que permite escalada de privilegios o disparo del bloqueo letal de emergencia ante latencia de respuesta.",
+      "x_cvss_score": 7.8,
+      "x_cvss_vector": "CVSS:3.1/AV:P/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H",
+      "x_clinical_protocol": "OSDP v2 (Open Supervised Device Protocol) / SAML 2.0 Biometric",
+      "x_iomt_asset": "Controlador Biométrico de Esclusa UCI & Terminal de Verificación de Guardia"
+    },
+    {
+      "type": "indicator",
+      "id": "indicator--ep03-blades-dpi",
+      "name": "UEBA_AIRLOCK_HANDSHAKE_SEQUENCE_VIOLATION",
+      "pattern_type": "yara-sigma-hybrid",
+      "pattern": "event.module == 'osdp_airlock' AND auth.sequence != 'HOLSTER_TOKEN -> ROTATE_VERIFY' AND latency_ms > 2500",
+      "description": "Desviación cinética y de secuencia en la validación de postura del operador frente al sensor óptico de Gia."
+    },
+    {
+      "type": "course-of-action",
+      "id": "course-of-action--ep03-mitigation",
+      "name": "MIT-EP03-UEBA-STEPDOWN",
+      "description": "Transición forzada de la sesión de Zak a modo de privilegio mínimo supervisado (Read-Only Escort Mode) y sincronización del token OSDP con clave AES-128.",
+      "x_cli_playbook": "blades-ueba --session zak_01 --mode supervised-escort --sync-osdp-scbk",
+      "x_prevention_standard": "NIST SP 800-207 (Zero Trust Architecture) / ISO 27799",
+      "x_zero_trust_control": "Autenticación adaptativa continua sensible al contexto físico y biométrico."
+    }
+  ],
+  "episode_metadata": {
+    "id": 3,
+    "code": "EP03",
+    "act_number": 1,
+    "act": "ACTO I: PLATAFORMA OFFSHORE \"THE RIG\" (HOSPITAL DE CAMPAÑA MARÍTIMO Y NODO DE TRIAJE)",
+    "title": "Desarme frente a Gia (MEET GIA)",
+    "game_node_code": "MEET GIA",
+    "game_location": "Corredor blindado de acceso a la batería de artillería en The Rig",
+    "cyberia_spoiler": "Al avanzar por el corredor metálico de la plataforma, Zak es interceptado por Gia, la letal lugarteniente de Santos, quien le apunta directamente al rostro con su arma. Gia le ordena enfundar su pistola y girar lentamente con las manos visibles. Si el jugador tarda demasiado, intenta disparar a Gia o gira sin haber guardado el arma primero, Gia abre fuego a quemarropa y ejecuta a Zak en el acto. Al cumplir el protocolo de desarme, Gia baja su arma y lo escolta hacia la silla de artillería.",
+    "hospital_counterpart": "Esclusa de Control de Acceso Físico-Lógico y Motor UEBA de la Sala de Control UCI",
+    "clinical_protocol": "OSDP v2 (Open Supervised Device Protocol) / SAML 2.0 Biometric",
+    "iomt_asset": "Controlador Biométrico de Esclusa UCI & Terminal de Verificación de Guardia",
+    "mitre_technique": "T1078 - Valid Accounts / Behavioral Anomaly in Physical-Logical Airlock",
+    "pillars": {
+      "vulnerability": {
+        "cve": "CVE-2027-0103",
+        "cvss": 7.8,
+        "vector": "CVSS:3.1/AV:P/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H",
+        "description": "Condición de carrera en la máquina de estados del lector biométrico de la esclusa que permite escalada de privilegios o disparo del bloqueo letal de emergencia ante latencia de respuesta."
+      },
+      "detection": {
+        "engine": "BLADES Biometric UEBA Engine",
+        "rule_name": "UEBA_AIRLOCK_HANDSHAKE_SEQUENCE_VIOLATION",
+        "signature": "event.module == 'osdp_airlock' AND auth.sequence != 'HOLSTER_TOKEN -> ROTATE_VERIFY' AND latency_ms > 2500",
+        "telemetry_indicator": "Desviación cinética y de secuencia en la validación de postura del operador frente al sensor óptico de Gia."
+      },
+      "mitigation": {
+        "action_code": "MIT-EP03-UEBA-STEPDOWN",
+        "immediate_response": "Transición forzada de la sesión de Zak a modo de privilegio mínimo supervisado (Read-Only Escort Mode) y sincronización del token OSDP con clave AES-128.",
+        "cli_command": "blades-ueba --session zak_01 --mode supervised-escort --sync-osdp-scbk"
+      },
+      "prevention": {
+        "standard": "NIST SP 800-207 (Zero Trust Architecture) / ISO 27799",
+        "hardening_policy": "Verificación continua de postura del dispositivo y del operador antes de conceder acceso a consolas de soporte vital.",
+        "zero_trust_control": "Autenticación adaptativa continua sensible al contexto físico y biométrico."
+      }
+    }
+  }
+}

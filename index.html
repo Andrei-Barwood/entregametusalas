@@ -3,162 +3,2874 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ENTREGAR &mdash; Este podría ser mi diario pero soy muy perezoso</title>
-  <meta name="description" content="sobrio...">
-  <link rel="stylesheet" href="style.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <title>CYBERIA-MED // SOC Console v19.96 — BLADES Neural &amp; IoMT Telemetry</title>
+  <link rel="stylesheet" href="/css/chrysalis_medsoc.css">
 </head>
 <body>
-  <div class="reading-progress-container" aria-hidden="true">
-    <div class="reading-progress-bar"></div>
-  </div>
+  <div class="blades-crt-overlay" aria-hidden="true"></div>
 
-  <div class="site-wrapper">
-    <header class="site-header">
-      <div class="header-top-bar">
-        <button class="header-action-btn search-open-btn" aria-label="Abrir buscador (Cmd+K)" title="Buscar (Cmd+K)">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-            <circle cx="11" cy="11" r="8"></circle>
-            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-          </svg>
-        </button>
-        <button class="header-action-btn theme-toggle-btn" aria-label="Cambiar tema de color" title="Alternar modo claro / oscuro">
-          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-          </svg>
-          <svg class="icon-sun" style="display: none;" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-            <circle cx="12" cy="12" r="5"></circle>
-            <line x1="12" y1="1" x2="12" y2="3"></line>
-            <line x1="12" y1="21" x2="12" y2="23"></line>
-            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-            <line x1="1" y1="12" x2="3" y2="12"></line>
-            <line x1="21" y1="12" x2="23" y2="12"></line>
-            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-          </svg>
-        </button>
+  <!-- CABECERA GLOBAL DEL MEDICAL SOC -->
+  <header class="medsoc-topbar">
+    <div class="brand-block">
+      <div class="blades-emblem" title="BLADES Biocybernetic Sensor v19.96">B</div>
+      <div>
+        <div class="brand-title">CYBERIA-MED // SOC CONSOLE v19.96</div>
+        <div class="brand-subtitle">
+          SUBJECT: ZAK // IMPLANT: BLADES (IR / MRI / BIOMETRIC DPI) // PALETTE: QUEEN CHRYSALIS #523
+        </div>
       </div>
-
-      <div class="site-branding">
-        <h1 class="site-title">
-          <a href="index.html">ENTREGAR</a>
-        </h1>
-        <p class="site-tagline">Este podría ser mi diario pero soy muy perezoso</p>
-      </div>
-
-      <nav class="site-nav" aria-label="Navegación principal">
-        <a href="index.html" class="active">Inicio</a>
-        <a href="#feed">Artículos</a>
-        <a href="about.html">Sobre mí</a>
-        <a href="about.html#contacto">Contacto</a>
-        <a href="/admin" style="color: var(--accent);">CMS Admin</a>
-      </nav>
-    </header>
-
-    <main class="site-main" id="feed">
-      <div class="container-feed posts-feed">
-        <article class="post-entry" id="post-problemas-con-project-marie">
-  <header class="post-entry-header">
-    <a href="posts/problemas-con-project-marie.html" class="post-meta-category">Ensayo</a>
-    <h2 class="post-entry-title">
-      <a href="posts/problemas-con-project-marie.html">problemas con project marie y drew newmann</a>
-    </h2>
-    <div class="post-meta-bar">
-      <time datetime="19 de octubre de 2026">19 de octubre de 2026</time>
-      <span class="post-meta-divider" aria-hidden="true"></span>
-      <span class="post-read-time">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="12" cy="12" r="10"></circle>
-          <polyline points="12 6 12 12 16 14"></polyline>
-        </svg>
-        <span class="calc-read-time">4 min de lectura</span>
-      </span>
     </div>
+
+    <nav class="top-nav-links" aria-label="Navegación Principal del SOC">
+      <a href="/tutorial" id="btn-nav-tutorial" class="soc-btn " style="border-color: var(--iris-warning-high); color: var(--iris-warning-high);">
+        [00] GUÍA CLÍNICA &amp; TUTORIAL KALI (EP01)
+      </a>
+      <a href="/" class="soc-btn active">
+        [01] CONSOLA SOC (48 EPISODIOS)
+      </a>
+      <a href="/simulators" class="soc-btn ">
+        [02] SIMULADORES BLADES MRI &amp; NANOMED EDR
+      </a>
+      <a href="/reports/postmortem-full-48.md" class="soc-btn soc-btn-warning">
+        [03] DESCARGAR POST-MORTEM 48 EP (.MD)
+      </a>
+      <a href="/bibliografia" class="soc-btn nav-btn-bibliography ">
+        [★] BIBLIOGRAFÍA
+      </a>
+      <a href="/muro" class="soc-btn nav-btn-feed " style="border-color: var(--bauble-cyan-bright); color: var(--bauble-cyan-bright);">
+        [💬] MURO SOCIAL CLÍNICO
+      </a>
+      <a href="/mobile" class="soc-btn nav-btn-mobile" style="border-color: var(--magic-ring); color: var(--magic-highlight);" title="Versión móvil optimizada exclusiva para el feed">
+        [📱] MÓVIL
+      </a>
+    </nav>
   </header>
 
-  <div class="post-media-bleed">
-  <a href="posts/problemas-con-project-marie.html" aria-label="Ver artículo completo: problemas con project marie y drew newmann">
-    <img src="https://media.istockphoto.com/id/2244203318/photo/young-man-holding-skateboard-smiling-walking-in-autumn-park.jpg?s=612x612&w=0&k=20&c=wulP3zVpzmEDpHCvEwi9e7XN5QrlZGZ9z8cIi4SGtD4=" alt="problemas con project marie y drew newmann" loading="lazy">
-  </a>
-  
-</div>
-
-  <div class="post-entry-excerpt">
-    problemas de siempre, desde la parte mas terrorifica hasta la mas absurda
-  </div>
-
-  <div class="post-entry-footer">
-    <a href="posts/problemas-con-project-marie.html" class="post-read-more">
-      Continuar leyendo <span class="arrow" aria-hidden="true">&rarr;</span>
-    </a>
-  </div>
-</article>
-
-        <div class="pagination-wrap">
-          <button class="pagination-btn" id="load-more-btn" onclick="this.textContent = 'Has llegado al final del archivo'; this.style.pointerEvents = 'none';">
-            Cargar más ensayos
-          </button>
+  <!-- FRANJA DE SIGNOS VITALES ECG (#00F200) Y 6 INDICADORES AZULES DE INTEGRIDAD (EP04 SKEET SHOOT) -->
+  <section class="vitals-ribbon" aria-label="Telemetría de Signos Vitales y Nodos Críticos">
+    <div class="ecg-monitor-box">
+      <div>
+        <div style="font-size: 0.7rem; color: var(--hud-glass-outline);">ZAK // CYBERIA ECG</div>
+        <div id="live-bpm-readout" style="font-size: 0.95rem; font-weight: 700; color: var(--magic-pulse-core);">
+          72 BPM [SYNC 100%]
         </div>
       </div>
-    </main>
+      <canvas id="blades-ecg-canvas" class="ecg-canvas" width="165" height="38"></canvas>
+    </div>
 
-    <section class="newsletter-strip">
-      <div class="newsletter-content">
-        <h3>El correo de los domingos</h3>
-        <p>algún día voy a conectar un servicio de envio masivo de email, pero no será hoy</p>
-        <form class="newsletter-form" onsubmit="event.preventDefault(); alert('¡Gracias por unirte a nuestro círculo de lectura dominical!'); this.reset();">
-          <input type="email" class="newsletter-input" placeholder="Tu correo electrónico..." required aria-label="Correo electrónico">
-          <button type="submit" class="newsletter-btn">Suscribirme</button>
-        </form>
+    <div class="nodes-six-grid" id="six-hull-nodes">
+      
+        <div class="hull-node-pill" title="EP04 SKEET SHOOT // Hull Shield 01 — Protocol: DICOM TLS / TCP 2762">
+          <div class="node-id">
+            <span>NODE-01</span>
+            <span style="color: var(--magic-main);">98%</span>
+          </div>
+          <div class="node-name">PACS / DICOM MRI Core</div>
+        </div>
+      
+        <div class="hull-node-pill" title="EP33 DRUG STORE // Nanomed Array — Protocol: IEEE 11073-20601">
+          <div class="node-id">
+            <span>NODE-02</span>
+            <span style="color: var(--magic-main);">96%</span>
+          </div>
+          <div class="node-name">ICU Smart Infusion Cluster</div>
+        </div>
+      
+        <div class="hull-node-pill" title="EP26 GENIUS // Conference Supercomputer — Protocol: HL7 FHIR R4 / MLLP">
+          <div class="node-id">
+            <span>NODE-03</span>
+            <span style="color: var(--magic-main);">99%</span>
+          </div>
+          <div class="node-name">HIS / EHR Master Vault</div>
+        </div>
+      
+        <div class="hull-node-pill" title="EP28 RED LIGHT // Halon Suppression — Protocol: Modbus/TCP & BACnet/IP">
+          <div class="node-id">
+            <span>NODE-04</span>
+            <span style="color: var(--magic-main);">94%</span>
+          </div>
+          <div class="node-name">Medical Gas & Halon SCADA</div>
+        </div>
+      
+        <div class="hull-node-pill" title="EP36-EP39 // Cryo & BSL-4 Core — Protocol: TPM 2.0 / OPC-UA">
+          <div class="node-id">
+            <span>NODE-05</span>
+            <span style="color: var(--magic-main);">100%</span>
+          </div>
+          <div class="node-name">BSL-4 Airlock & Cryo Biobank</div>
+        </div>
+      
+        <div class="hull-node-pill" title="EP12 STEAL PLANE & EP43 YOU WITH ME — Protocol: ARINC 653 / BCI Neural-TLS">
+          <div class="node-id">
+            <span>NODE-06</span>
+            <span style="color: var(--magic-main);">100%</span>
+          </div>
+          <div class="node-name">MedEvac TF-22 & BLADES Neural Link</div>
+        </div>
+      
+    </div>
+  </section>
+
+  <!-- OVERLAY LANDING PAGE: GUÍA CLÍNICA Y TUTORIAL KALI LINUX (SOBREPUESTA CON TRANSPARENCIA SOBRE NEGRO) -->
+  <!-- OVERLAY LANDING PAGE: GUÍA CLÍNICA Y TUTORIAL KALI LINUX (SOBREPUESTA CON TRANSPARENCIA SOBRE NEGRO) -->
+<div id="tutorial-overlay" class="tutorial-overlay-backdrop " role="dialog" aria-modal="true" aria-label="Guía Clínica y Tutorial Kali Linux">
+  <div class="tutorial-overlay-sheet">
+    <!-- BARRA SUPERIOR DE CONTROL DEL OVERLAY -->
+    <div class="tutorial-overlay-topbar">
+      <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+        <span class="hud-tag" style="background: var(--carapace-deep-1); color: var(--magic-highlight); font-weight: bold;">
+          [00] GUÍA CLÍNICA &amp; TUTORIAL KALI (EP01)
+        </span>
+        <span class="hud-tag hud-tag-warning">
+          INTRODUCCIÓN AL MEDICAL SOC // POD NETACAD
+        </span>
+        <span style="font-size: 0.72rem; color: var(--bauble-cyan-bright);">
+          Manual de Operaciones White Hat &amp; Electricidad Hospitalaria
+        </span>
       </div>
-    </section>
+      <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+        <button type="button" id="btn-close-tutorial-overlay" class="btn-enter-soc-from-tutorial soc-btn soc-btn-warning" style="font-size: 0.74rem; padding: 0.28rem 0.75rem; font-weight: bold;">
+          ✕ CERRAR GUÍA E IR AL SOC [ESC]
+        </button>
+      </div>
+    </div>
 
-    <footer class="site-footer">
-      <div class="footer-inner">
-        <nav class="footer-nav" aria-label="Navegación del pie">
-          <a href="index.html">Inicio</a>
-          <a href="post.html">Artículo destacado</a>
-          <a href="about.html">Sobre mí</a>
-          <a href="about.html#contacto">Contacto</a>
-          <a href="/admin">Panel CMS</a>
-          <a href="#feed" class="search-open-btn">Buscar</a>
-        </nav>
-        <p class="footer-copyright">
-          © 2026 que bueno señora jueza, a mi si me pareció muy justo lo que usted le dijo, si, pudo haberse excedido y le borró el cassette pero a nadie le importaba tanto esa persona
+    <!-- CONTENEDOR DE LA GUÍA DIDÁCTICA -->
+    <div class="tutorial-landing-container">
+      <!-- HERO BANNER EDUCATIVO -->
+      <section class="tutorial-hero-box">
+        <div class="tutorial-hero-badge-row">
+          <span class="hud-tag" style="background: var(--carapace-deep-1); color: var(--magic-highlight); font-weight: bold;">
+            CYBERIA-MED // MANUAL DIDÁCTICO CLÍNICO
+          </span>
+          <span class="hud-tag hud-tag-warning">CISCO NETACAD MED-SEC POD</span>
+          <span class="hud-tag" style="background: var(--iris-bg-deep-3); color: var(--bauble-cyan-bright);">
+            ESTUDIANTES DE MEDICINA &amp; INGENIERÍA CLÍNICA
+          </span>
+        </div>
+
+        <h1 class="tutorial-main-title">
+          GUÍA PASO A PASO: DEFENDIENDO DISPOSITIVOS BIOMÉDICOS CON KALI LINUX
+        </h1>
+        <p class="tutorial-hero-subtitle">
+          Aprende a ejecutar las operaciones defensivas del <strong>Episodio 1 (InfusionPump-ICU-01)</strong>, comprende la arquitectura de <strong>electricidad hospitalaria aislada</strong> y domina la metodología universal aplicable a los <strong>48 episodios</strong> de Cyberia.
         </p>
-        <a href="#top" class="footer-back-to-top">
-          Volver arriba
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <line x1="12" y1="19" x2="12" y2="5"></line>
-            <polyline points="5 12 12 5 19 12"></polyline>
-          </svg>
-        </a>
-      </div>
-    </footer>
+
+        <div class="tutorial-cta-bar">
+          <button type="button" class="btn-enter-soc-from-tutorial soc-btn soc-btn-warning" style="font-size: 0.82rem; padding: 0.5rem 1rem;">
+            ▶ IR A LA CONSOLA TÁCTICA (EPISODIO 1)
+          </button>
+          <a href="#tutorial-sandbox-practice" class="soc-btn" style="font-size: 0.82rem; padding: 0.5rem 1rem; text-decoration: none;">
+            ⚡ PROBAR COMANDOS EN LA CONSOLA DEMO
+          </a>
+          <a href="#hospital-electrical-safety" class="soc-btn" style="font-size: 0.82rem; padding: 0.5rem 1rem; text-decoration: none;">
+            🔌 ELECTRICIDAD HOSPITALARIA &amp; TABLEROS IT
+          </a>
+          <a href="#universal-48-methodology" class="soc-btn" style="font-size: 0.82rem; padding: 0.5rem 1rem; text-decoration: none;">
+            🌐 PATRÓN UNIVERSAL EN LOS 48 NIVELES
+          </a>
+        </div>
+      </section>
+
+      <!-- MÓDULO 1: ¿QUÉ ES UNA TERMINAL KALI LINUX PARA OPERACIONES WHITE HAT EN MEDICINA? -->
+      <section class="soc-panel" id="white-hat-concept">
+        <div class="soc-panel-header" style="background: linear-gradient(90deg, #00485C, #1A566D);">
+          <span>MÓDULO 1 // KALI LINUX &amp; EL JURAMENTO HIPOCRÁTICO DE LA CIBERDEFENSA</span>
+          <span class="ep-code-badge">FUNDAMENTOS WHITE HAT</span>
+        </div>
+        <div class="soc-panel-body">
+          <div class="tutorial-columns-two">
+            <div>
+              <h3 style="color: var(--magic-highlight); font-size: 1.05rem; margin-bottom: 0.5rem;">
+                El Bisturí Digital: ¿Por qué Kali Linux en un Hospital?
+              </h3>
+              <p style="font-size: 0.85rem; line-height: 1.6; color: var(--hud-glass-outline); margin-bottom: 0.75rem;">
+                En la práctica médica, un cirujano utiliza el bisturí para extirpar tejido necrosado o descomprimir un hematoma, nunca para herir. De la misma manera, en ciberseguridad defensiva, <strong>Kali Linux</strong> es una distribución especializada repleta de instrumentos de diagnóstico de red.
+              </p>
+              <p style="font-size: 0.85rem; line-height: 1.6; color: var(--hud-glass-outline); margin-bottom: 0.75rem;">
+                Un hacker <em>Black Hat</em> (sombrero negro) busca explotar puertos abiertos para infectar sistemas hospitalarios con ransomware (como el ataque real de WannaCry que colapsó ambulancias en el NHS británico). Por el contrario, un analista <strong>White Hat</strong> (hacker ético o médico defensor) utiliza la consola de comandos para auditar dispositivos, detectar vulnerabilidades y colocar torniquetes perimetrales antes de que el paciente sufra daño.
+              </p>
+
+              <div class="tutorial-alert-callout">
+                <strong style="color: var(--magic-pulse-core);">EL JURAMENTO HIPOCRÁTICO DIGITAL: "Primum non nocere" (Primero no hacer daño)</strong>
+                <p style="font-size: 0.8rem; margin-top: 0.25rem; color: #FFFFFF;">
+                  A diferencia de servidores corporativos donde se puede reiniciar un equipo a voluntad, en una UCI o quirófano <strong>un comando imprudente puede apagar una bomba de fentanilo o desconectar un ventilador mecánico</strong>. Por eso, en nuestro simulador táctico todos los comandos de Kali Linux son no destructivos y de aislamiento quirúrgico estricto.
+                </p>
+              </div>
+            </div>
+
+            <div class="tutorial-card-highlight">
+              <h4 style="color: var(--bauble-cyan-bright); font-size: 0.9rem; margin-bottom: 0.45rem;">
+                COMPARATIVA CONCEPTUAL: MEDICINA VS CIBERDEFENSA
+              </h4>
+              <table class="tutorial-mini-table">
+                <thead>
+                  <tr>
+                    <th>Práctica Médica</th>
+                    <th>Operación White Hat (Kali Linux)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><strong>Auscultación con Estetoscopio</strong></td>
+                    <td><code>nmap -sV -p &lt;puerto&gt;</code> (Escanear servicios expuestos)</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Torniquete Hemostático / Aislamiento</strong></td>
+                    <td><code>iptables -A INPUT -j DROP</code> (Cortar paquetes atacantes)</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Antibiótico de Amplio Espectro</strong></td>
+                    <td><code>./deploy_patch.sh</code> (Inoculación y actualización de firmware)</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Ficha Clínica y Auditoría Médico-Legal</strong></td>
+                    <td><code>sha256sum &amp; Aegis9 Ledger</code> (Registro inmutable en blockchain)</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- MÓDULO 2: ELECTRICIDAD HOSPITALARIA, TABLEROS AISLADOS (IT) & DISPOSITIVOS BIOMÉDICOS IoMT -->
+      <section class="soc-panel" id="hospital-electrical-safety">
+        <div class="soc-panel-header" style="background: linear-gradient(90deg, #1A566D, #0F5150);">
+          <span>MÓDULO 2 // CONFIGURACIONES DE ELECTRICIDAD HOSPITALARIA &amp; RIESGO CIBER-FÍSICO</span>
+          <span class="ep-code-badge">IEC 60364-7-710 / NFPA 99</span>
+        </div>
+        <div class="soc-panel-body">
+          <p style="font-size: 0.85rem; line-height: 1.6; color: var(--hud-glass-outline); margin-bottom: 0.75rem;">
+            Un médico intensivista o anestesiólogo no solo administra fármacos: comanda un ecosistema donde la <strong>energía eléctrica y la red de datos confluyen directamente en el cuerpo del paciente</strong>. Si la infraestructura eléctrica falla o es manipulada por malware, las consecuencias son letales.
+          </p>
+
+          <div class="tutorial-cards-triplet">
+            <div class="tutorial-feature-card">
+              <div class="feature-card-icon">⚡</div>
+              <h4 style="color: var(--magic-highlight); font-size: 0.88rem;">1. Sistema IT Aislado Grado Médico</h4>
+              <p style="font-size: 0.78rem; color: var(--hud-glass-outline); line-height: 1.5;">
+                En quirófanos y UCI (Grupos de aplicación médica 2 según IEC 60364-7-710), la corriente <strong>no tiene referencia directa a tierra</strong>. Se usa un <em>Transformador de Aislamiento 1:1</em> y un <em>Monitor de Corriente de Fuga (LIM/DSI)</em>. ¿El motivo? Prevenir el <strong>microchoque cardíaco</strong>: corrientes tan minúsculas como <strong>10 a 50 microamperios (µA)</strong> conducidas a través de un catéter central o marcapasos provocan fibrilación ventricular instantánea.
+              </p>
+            </div>
+
+            <div class="tutorial-feature-card">
+              <div class="feature-card-icon">🔋</div>
+              <h4 style="color: var(--bauble-cyan-bright); font-size: 0.88rem;">2. Redundancia Eléctrica y UPS Médica</h4>
+              <p style="font-size: 0.78rem; color: var(--hud-glass-outline); line-height: 1.5;">
+                Si se corta la red pública de 13.2 kV, los <strong>Grupos Electrógenos diésel</strong> arrancan automáticamente mediante transferencia (ATS) en <strong>menos de 10 segundos</strong>. Durante ese intervalo crítico, las <strong>UPS Online de Doble Conversión</strong> y las baterías internas de litio de las bombas de infusión sostienen el bombeo de drogas vasoactivas sin perder un solo milisegundo.
+              </p>
+            </div>
+
+            <div class="tutorial-feature-card">
+              <div class="feature-card-icon">⚠️</div>
+              <h4 style="color: var(--iris-warning-high); font-size: 0.88rem;">3. El Vector de Ataque Ciber-Físico</h4>
+              <p style="font-size: 0.78rem; color: var(--hud-glass-outline); line-height: 1.5;">
+                Cuando un ciberataque compromete la bomba de infusión (como la vulnerabilidad <code>CVE-2027-0101</code> en el EP01), el atacante altera el microcontrolador del motor paso a paso. Esto <strong>quintuplica el consumo de corriente</strong>, sobrecalienta los circuitos, drena la batería de respaldo en minutos y altera los sensores piezoeléctricos de oclusión, inyectando una sobredosis descontrolada.
+              </p>
+            </div>
+          </div>
+
+          <!-- Esquema Visual SVG del Circuito Eléctrico y de Datos Hospitalario -->
+          <div class="electrical-schematic-wrap" style="margin-top: 1rem;">
+            <div style="font-size: 0.75rem; color: var(--bauble-cyan-bright); font-weight: 700; margin-bottom: 0.5rem; text-align: center;">
+              DIAGRAMA CIBER-FÍSICO: ARQUITECTURA DE POTENCIA AISLADA Y FLUJO DE DATOS IoMT (EPISODIO 1)
+            </div>
+            <svg viewBox="0 0 980 180" style="width: 100%; height: auto; display: block; background: var(--bg-core); border: 1px solid var(--border-structural);">
+              <!-- Bloque Red Externa -->
+              <rect x="15" y="40" width="130" height="90" rx="4" fill="#00383B" stroke="#2B87AB" stroke-width="1.5" />
+              <text x="80" y="65" fill="#83FF65" font-size="11" font-weight="bold" text-anchor="middle">RED COMERCIAL</text>
+              <text x="80" y="85" fill="#B2E5F2" font-size="9.5" text-anchor="middle">13.2 kV / 50-60 Hz</text>
+              <text x="80" y="105" fill="#FFC83B" font-size="8.5" text-anchor="middle">+ Generador Diésel</text>
+
+              <!-- Flecha de potencia 1 -->
+              <line x1="145" y1="85" x2="190" y2="85" stroke="#00F200" stroke-width="3" />
+              <polygon points="190,85 180,80 180,90" fill="#00F200" />
+
+              <!-- Bloque UPS Grado Médico -->
+              <rect x="195" y="40" width="140" height="90" rx="4" fill="#00485C" stroke="#29C2DA" stroke-width="1.5" />
+              <text x="265" y="65" fill="#83FF65" font-size="11" font-weight="bold" text-anchor="middle">UPS MÉDICA ONLINE</text>
+              <text x="265" y="85" fill="#B2E5F2" font-size="9.5" text-anchor="middle">Doble Conversión</text>
+              <text x="265" y="105" fill="#00F200" font-size="8.5" text-anchor="middle">Transferencia 0 ms</text>
+
+              <!-- Flecha de potencia 2 -->
+              <line x1="335" y1="85" x2="380" y2="85" stroke="#00F200" stroke-width="3" />
+              <polygon points="380,85 370,80 370,90" fill="#00F200" />
+
+              <!-- Bloque Transformador de Aislamiento IT -->
+              <rect x="385" y="40" width="165" height="90" rx="4" fill="#0F5150" stroke="#00F200" stroke-width="2" />
+              <text x="467" y="62" fill="#83FF65" font-size="11" font-weight="bold" text-anchor="middle">TABLERO AISLADO IT</text>
+              <text x="467" y="80" fill="#FFFFFF" font-size="9" text-anchor="middle">Transformador 1:1 Galvánico</text>
+              <text x="467" y="98" fill="#FBB034" font-size="8.5" text-anchor="middle">Monitor LIM (&lt; 2 mA fuga)</text>
+              <text x="467" y="115" fill="#83FF65" font-size="8" text-anchor="middle">IEC 60364-7-710 / Pabellón</text>
+
+              <!-- Flecha de potencia aislada -->
+              <line x1="550" y1="85" x2="595" y2="85" stroke="#00F200" stroke-width="3" stroke-dasharray="6 3" />
+              <polygon points="595,85 585,80 585,90" fill="#00F200" />
+
+              <!-- Bloque Bomba de Infusión IoMT (Objetivo EP01) -->
+              <rect x="600" y="30" width="180" height="110" rx="4" fill="#0E1111" stroke="#FBB034" stroke-width="2" />
+              <text x="690" y="52" fill="#FBB034" font-size="11" font-weight="bold" text-anchor="middle">InfusionPump-ICU-01</text>
+              <text x="690" y="70" fill="#B2E5F2" font-size="9" text-anchor="middle">IP: 10.19.96.01:8080</text>
+              <text x="690" y="88" fill="#FF4444" font-size="8.5" font-weight="bold" text-anchor="middle">CVE-2027-0101 (SOBREDOSIS)</text>
+              <text x="690" y="106" fill="#83FF65" font-size="8" text-anchor="middle">Motor paso a paso + Batería Li</text>
+              <text x="690" y="124" fill="#00F200" font-size="8" text-anchor="middle">Flujo: 145 mL/h &rarr; 5 mL/h</text>
+
+              <!-- Flecha a paciente -->
+              <line x1="780" y1="85" x2="825" y2="85" stroke="#FF4444" stroke-width="2" />
+              <polygon points="825,85 815,80 815,90" fill="#FF4444" />
+
+              <!-- Bloque Paciente -->
+              <rect x="830" y="45" width="135" height="80" rx="4" fill="#1A566D" stroke="#00F200" stroke-width="1.5" />
+              <text x="897" y="72" fill="#83FF65" font-size="11" font-weight="bold" text-anchor="middle">PACIENTE EN UCI</text>
+              <text x="897" y="90" fill="#FFFFFF" font-size="9" text-anchor="middle">Catéter Venoso Central</text>
+              <text x="897" y="108" fill="#B2E5F2" font-size="8" text-anchor="middle">Seguro ante microchoques</text>
+            </svg>
+          </div>
+        </div>
+      </section>
+
+      <!-- MÓDULO 3: TUTORIAL PASO A PASO // RESOLVIENDO EL EPISODIO 1 (InfusionPump-ICU-01) -->
+      <section class="soc-panel" id="step-by-step">
+        <div class="soc-panel-header" style="background: linear-gradient(90deg, #00485C, #409979);">
+          <span>MÓDULO 3 // TUTORIAL PASO A PASO: COMANDOS DEL EPISODIO 1</span>
+          <span class="ep-code-badge">KALI LINUX &amp; BASH STUDIO</span>
+        </div>
+        <div class="soc-panel-body">
+          <div style="font-size: 0.85rem; color: var(--hud-glass-outline); margin-bottom: 1rem; line-height: 1.55;">
+            El <strong>Episodio 1 ("Despertar Neuronal")</strong> presenta una bomba de infusión en la UCI con la dirección IP <code>10.19.96.01</code> y puerto <code>8080</code> comprometida mediante la vulnerabilidad <code>CVE-2027-0101</code>. El paciente está recibiendo una sobredosis letal de <strong>145 mL/h</strong>. Sigue este orden exacto de ejecución en la terminal táctica:
+          </div>
+
+          <!-- PASO 0 -->
+          <div class="tutorial-step-row">
+            <div class="step-badge-col">
+              <span class="step-num-badge">PASO 0</span>
+            </div>
+            <div class="step-content-col">
+              <h4 style="color: var(--iris-warning-high); font-size: 0.95rem;">
+                💡 Orientación Táctica Inmediata: Tipea <code>pistas</code>
+              </h4>
+              <p style="font-size: 0.8rem; color: var(--hud-glass-outline); line-height: 1.5; margin: 0.35rem 0;">
+                Si en cualquier momento estás desorientado, no sabes qué IP atacar o qué parámetros usar, simplemente escribe <strong><code>pistas</code></strong> en la consola Kali y presiona Enter.
+              </p>
+              <div class="code-snippet-box">
+                <code>kali@cyberia-soc:~/pod-soc$ pistas</code>
+                <button type="button" class="btn-copy-code soc-btn" data-copy="pistas" title="Copiar comando">📋 COPIAR</button>
+              </div>
+              <p style="font-size: 0.74rem; color: var(--bauble-cyan-bright); margin-top: 0.3rem;">
+                <strong>Resultado:</strong> La consola imprimirá el activo (InfusionPump-ICU-01), el vector HL7, los rangos de dosis y los comandos recomendados para mitigar la emergencia.
+              </p>
+            </div>
+          </div>
+
+          <!-- PASO 1 -->
+          <div class="tutorial-step-row">
+            <div class="step-badge-col">
+              <span class="step-num-badge">PASO 1</span>
+            </div>
+            <div class="step-content-col">
+              <h4 style="color: var(--bauble-cyan-bright); font-size: 0.95rem;">
+                🔍 Reconocimiento Clínico del Puerto IoMT con <code>nmap</code>
+              </h4>
+              <p style="font-size: 0.8rem; color: var(--hud-glass-outline); line-height: 1.5; margin: 0.35rem 0;">
+                Ejecuta un escaneo de versión de servicio sobre el puerto <code>8080</code> del dispositivo médico para verificar el demonio vulnerable sin saturar el procesador de la bomba:
+              </p>
+              <div class="code-snippet-box">
+                <code>kali@cyberia-soc:~/pod-soc$ nmap -sV -p 8080 10.19.96.01</code>
+                <button type="button" class="btn-copy-code soc-btn" data-copy="nmap -sV -p 8080 10.19.96.01" title="Copiar comando">📋 COPIAR</button>
+              </div>
+              <p style="font-size: 0.74rem; color: var(--magic-main); margin-top: 0.3rem;">
+                <strong>Significado Médico:</strong> Confirmamos que el servicio HL7-FHIR está expuesto en texto plano y no exige certificado TLS mutuo (mTLS).
+              </p>
+            </div>
+          </div>
+
+          <!-- PASO 2 -->
+          <div class="tutorial-step-row">
+            <div class="step-badge-col">
+              <span class="step-num-badge">PASO 2</span>
+            </div>
+            <div class="step-content-col">
+              <h4 style="color: var(--magic-highlight); font-size: 0.95rem;">
+                🛡️ Aislamiento Perimetral Quirúrgico con <code>iptables</code>
+              </h4>
+              <p style="font-size: 0.8rem; color: var(--hud-glass-outline); line-height: 1.5; margin: 0.35rem 0;">
+                Aplica una regla de filtrado en el gateway hospitalario para descartar de inmediato los paquetes de red maliciosos que inyectan los comandos de sobredosis, <strong>manteniendo la bomba energizada</strong>:
+              </p>
+              <div class="code-snippet-box">
+                <code>kali@cyberia-soc:~/pod-soc$ iptables -A INPUT -p tcp --dport 8080 -j DROP</code>
+                <button type="button" class="btn-copy-code soc-btn" data-copy="iptables -A INPUT -p tcp --dport 8080 -j DROP" title="Copiar comando">📋 COPIAR</button>
+              </div>
+              <p style="font-size: 0.74rem; color: var(--magic-main); margin-top: 0.3rem;">
+                <strong>Significado Médico:</strong> Se detiene la llegada de paquetes de inyección remota. El paciente deja de recibir nuevas instrucciones de sobredosis.
+              </p>
+            </div>
+          </div>
+
+          <!-- PASO 3 -->
+          <div class="tutorial-step-row">
+            <div class="step-badge-col">
+              <span class="step-num-badge">PASO 3</span>
+            </div>
+            <div class="step-content-col">
+              <h4 style="color: var(--iris-warning-high); font-size: 0.95rem;">
+                ⚡ Abrir "Bash Script Studio" [F2] y Ensamblar el Parche Clic a Clic
+              </h4>
+              <p style="font-size: 0.8rem; color: var(--hud-glass-outline); line-height: 1.5; margin: 0.35rem 0;">
+                Presiona la tecla <strong>F2</strong> o el botón <strong>⚡ BASH SCRIPT STUDIO</strong> en la cabecera táctica. Se desplegará el taller de ensamble visual. <em>¡No necesitas tipear código bash desde cero!</em>
+              </p>
+              <div style="background: var(--bg-core); border: 1px solid var(--border-structural); padding: 0.65rem; margin: 0.4rem 0;">
+                <div style="font-size: 0.76rem; color: var(--bauble-cyan-bright); font-weight: bold; margin-bottom: 0.35rem;">
+                  CÓMO USAR LA PALETA CLICABLE DE PALABRAS:
+                </div>
+                <ul style="font-size: 0.75rem; color: var(--hud-glass-outline); line-height: 1.6; margin-left: 1rem;">
+                  <li>Haz clic en <code>#!/bin/bash</code> para insertar la cabecera canónica.</li>
+                  <li>Haz clic en <code>+ Bloque Aislamiento (iptables)</code> para insertar la contención perimetral con comentarios descriptivos auto-generados.</li>
+                  <li>Haz clic en <code>+ Bloque Sanitización</code> y <code>+ Bloque mTLS</code> para asegurar el puerto de infusión.</li>
+                  <li>O presiona directamente el botón <strong>PLANTILLA NETACAD</strong> o <strong>AUTORRELLENAR CANÓNICO</strong> para cargar el script completo perfectamente formateado.</li>
+                </ul>
+              </div>
+              <div class="code-snippet-box">
+                <code>kali@cyberia-soc:~/pod-soc$ ./deploy_patch.sh</code>
+                <button type="button" class="btn-copy-code soc-btn" data-copy="./deploy_patch.sh" title="Copiar comando">📋 COPIAR</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- PASO 4 -->
+          <div class="tutorial-step-row">
+            <div class="step-badge-col">
+              <span class="step-num-badge">PASO 4</span>
+            </div>
+            <div class="step-content-col">
+              <h4 style="color: var(--magic-pulse-core); font-size: 0.95rem;">
+                ✅ Verificación de Telemetría Clínica &amp; Sello en Blockchain
+              </h4>
+              <p style="font-size: 0.8rem; color: var(--hud-glass-outline); line-height: 1.5; margin: 0.35rem 0;">
+                Al pulsar <strong>▶ EJECUTAR SCRIPT EN TERMINAL</strong> o escribir <code>./deploy_patch.sh</code>:
+              </p>
+              <ul style="font-size: 0.76rem; color: var(--magic-main); line-height: 1.6; margin-left: 1rem;">
+                <li>El sistema valida la sintaxis y los bloques requeridos (evitando falsas mitigaciones).</li>
+                <li>La tasa de infusión regresa inmediatamente al estándar seguro de <strong>5.0 mL/h</strong>.</li>
+                <li>La barra de <strong>Ghost Sync</strong> se eleva al <strong>100.0%</strong>.</li>
+                <li>El sintetizador emite un <strong>tono armónico de éxito (880 Hz)</strong>.</li>
+                <li>El parche queda sellado con un hash <strong>SHA-256</strong> en el <strong>Registro Cronológico Blockchain</strong> de Aegis-9.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- MÓDULO 4: ¿POR QUÉ ESTE MÉTODO ES MUY SIMILAR EN LOS DEMÁS 47 NIVELES? -->
+      <section class="soc-panel" id="universal-48-methodology">
+        <div class="soc-panel-header" style="background: linear-gradient(90deg, #1A566D, #409979);">
+          <span>MÓDULO 4 // EL PATRÓN UNIVERSAL EN LOS 48 NIVELES DE CYBERIA (ACTOS I AL VI)</span>
+          <span class="ep-code-badge">SOC-MEDSEC REPETIBILITY</span>
+        </div>
+        <div class="soc-panel-body">
+          <h3 style="color: var(--magic-highlight); font-size: 1rem; margin-bottom: 0.45rem;">
+            Una Sola Doctrina Defensiva: Reconocer &rarr; Aislar &rarr; Inocular &rarr; Auditar
+          </h3>
+          <p style="font-size: 0.84rem; line-height: 1.6; color: var(--hud-glass-outline); margin-bottom: 0.85rem;">
+            Una vez que domines los comandos del <strong>Episodio 1</strong>, ¡has aprendido el 90% de la lógica requerida para superar los <strong>47 episodios restantes</strong>! La interfaz, los atajos de teclado y la filosofía operativa se mantienen idénticos en todos los niveles:
+          </p>
+
+          <div class="tutorial-workflow-grid">
+            <div class="workflow-card">
+              <div class="workflow-step-tag">FASE 1: DIAGNÓSTICO</div>
+              <h4 style="color: var(--bauble-cyan-bright); font-size: 0.84rem; margin: 0.3rem 0;">Reconocimiento IoMT</h4>
+              <p style="font-size: 0.74rem; color: var(--hud-glass-outline); line-height: 1.45;">
+                Tipear <code>pistas</code> para identificar la IP y puerto del dispositivo comprometido en el episodio actual, o usar <code>nmap -sV -p $PORT $TARGET_IP</code>.
+              </p>
+            </div>
+
+            <div class="workflow-card">
+              <div class="workflow-step-tag">FASE 2: AISLAMIENTO</div>
+              <h4 style="color: var(--iris-warning-high); font-size: 0.84rem; margin: 0.3rem 0;">Contención Perimetral</h4>
+              <p style="font-size: 0.74rem; color: var(--hud-glass-outline); line-height: 1.45;">
+                Dropear el puerto atacado con <code>iptables</code> para detener la propagación del malware sin desconectar la energía eléctrica del paciente.
+              </p>
+            </div>
+
+            <div class="workflow-card">
+              <div class="workflow-step-tag">FASE 3: REMEDIACIÓN</div>
+              <h4 style="color: var(--magic-highlight); font-size: 0.84rem; margin: 0.3rem 0;">Bash Script Studio [F2]</h4>
+              <p style="font-size: 0.74rem; color: var(--hud-glass-outline); line-height: 1.45;">
+                Abrir el constructor clicable, cargar la plantilla o presionar los bloques de solución rápida y ejecutar <code>./deploy_patch.sh</code>.
+              </p>
+            </div>
+
+            <div class="workflow-card">
+              <div class="workflow-step-tag">FASE 4: AUDITORÍA</div>
+              <h4 style="color: var(--magic-pulse-core); font-size: 0.84rem; margin: 0.3rem 0;">Sello en Blockchain</h4>
+              <p style="font-size: 0.74rem; color: var(--hud-glass-outline); line-height: 1.45;">
+                Verificar que los signos vitales se estabilicen y que el bloque SHA-256 se incorpore al registro cronológico acumulado de Aegis-9.
+              </p>
+            </div>
+          </div>
+
+          <!-- Tabla de Ejemplos en Otros Actos de Cyberia -->
+          <div style="margin-top: 1rem;">
+            <div style="font-size: 0.76rem; color: var(--bauble-cyan-bright); font-weight: bold; margin-bottom: 0.4rem;">
+              EJEMPLOS COMPARATIVOS DE ACTIVOS Y COMANDOS A LO LARGO DE LOS 6 ACTOS:
+            </div>
+            <table class="tutorial-mini-table">
+              <thead>
+                <tr>
+                  <th>Acto &amp; Episodio</th>
+                  <th>Activo Clínico / IoMT</th>
+                  <th>Vector de Riesgo</th>
+                  <th>Comando Equivalente</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Acto I: EP01 (Rig)</strong></td>
+                  <td>InfusionPump-ICU-01</td>
+                  <td>Sobredosis letal HL7 (145 mL/h)</td>
+                  <td><code>iptables -A INPUT -p tcp --dport 8080 -j DROP</code></td>
+                </tr>
+                <tr>
+                  <td><strong>Acto I: EP12 (Rig Out)</strong></td>
+                  <td>Bypass Cardiopulmonar ECMO</td>
+                  <td>Embolia por cavitación de bomba</td>
+                  <td><code>iptables -A INPUT -p tcp --dport 502 -j DROP</code> (Modbus)</td>
+                </tr>
+                <tr>
+                  <td><strong>Acto II: EP22 (Locked Out)</strong></td>
+                  <td>Presión Positiva en Quirófano</td>
+                  <td>Contaminación aérea cruzada</td>
+                  <td><code>sed -i 's/EXPLOIT/SAFE/g'</code> + Compuertas PLC</td>
+                </tr>
+                <tr>
+                  <td><strong>Acto IV: EP35 (Graffiti)</strong></td>
+                  <td>Telemetría de Marcapasos</td>
+                  <td>Inyección de taquicardia ventricular</td>
+                  <td><code>openssl s_client -connect 10.19.96.35:8443</code> (mTLS)</td>
+                </tr>
+                <tr>
+                  <td><strong>Acto VI: EP48 (Devlin Orbit)</strong></td>
+                  <td>SatCom GNSS &amp; Kill-Switch</td>
+                  <td>Desconexión masiva de telemetría</td>
+                  <td><code>systemctl restart iomt-sentinel-agent</code></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- MÓDULO 5: CONSOLA DEMO INTERACTIVA EMBEBIDA (PRÁCTICA PREVIA) -->
+      <section class="soc-panel" id="tutorial-sandbox-practice">
+        <div class="soc-panel-header" style="background: linear-gradient(90deg, #00485C, #0F5150);">
+          <span>MÓDULO 5 // CONSOLA DE ENTRENAMIENTO PREVIO (PRACTICA ANTES DE IR A LA CONSOLA SOC)</span>
+          <span class="ep-code-badge">DEMO INTERACTIVA SANDBOX</span>
+        </div>
+        <div class="soc-panel-body">
+          <p style="font-size: 0.8rem; color: var(--hud-glass-outline); margin-bottom: 0.65rem;">
+            Prueba los comandos del Episodio 1 aquí mismo. Puedes hacer clic en los botones de acceso rápido o tipear directamente en el prompt y presionar <strong>Enter</strong>:
+          </p>
+
+          <div class="tutorial-interactive-terminal-box">
+            <div class="tactical-term-topbar">
+              <div class="term-dots">
+                <span class="dot dot-red"></span>
+                <span class="dot dot-yellow"></span>
+                <span class="dot dot-green"></span>
+              </div>
+              <div class="term-title">kali@cyberia-soc: ~/netacad-pod/tutorial-sandbox</div>
+              <div class="term-shortcut-pills">
+                <button type="button" class="term-shortcut" id="demo-btn-pistas">💡 pistas</button>
+                <button type="button" class="term-shortcut" id="demo-btn-nmap">nmap -sV -p 8080</button>
+                <button type="button" class="term-shortcut" id="demo-btn-iptables">iptables -A DROP</button>
+                <button type="button" class="term-shortcut" id="demo-btn-patch">./deploy_patch.sh</button>
+                <button type="button" class="term-shortcut" id="demo-btn-clear">clear</button>
+              </div>
+            </div>
+
+            <div class="tactical-term-body" id="demo-term-output" style="min-height: 180px; max-height: 260px;">
+[KALI-INIT] Consola de práctica interactiva lista para el pod NetAcad.
+Tipea 'pistas' para ver la información del Episodio 1 (InfusionPump-ICU-01)...
+            </div>
+
+            <div class="tactical-term-prompt-line">
+              <span class="tactical-prompt-text">kali@cyberia-soc:~/pod-soc$</span>
+              <input type="text" id="demo-cli-input" class="tactical-cli-input" autocomplete="off" spellcheck="false" placeholder="Tipea 'pistas', 'nmap', 'iptables' o './deploy_patch.sh'..." />
+              <button type="button" id="demo-btn-send" class="soc-btn" style="padding: 0.2rem 0.6rem; font-size: 0.72rem;">ENVIAR</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- MÓDULO 6: GLOSARIO CLÍNICO-INFORMÁTICO -->
+      <section class="soc-panel" id="glossary-section">
+        <div class="soc-panel-header" style="background: linear-gradient(90deg, #1A566D, #00485C);">
+          <span>MÓDULO 6 // GLOSARIO BILINGÜE: JERGA HACKER TRADUCIDA AL LENGUAJE MÉDICO</span>
+          <span class="ep-code-badge">DICCIONARIO DE BIOSEGURIDAD</span>
+        </div>
+        <div class="soc-panel-body">
+          <div class="tutorial-glossary-grid">
+            <div class="glossary-item-card">
+              <div class="glossary-tech-term">Port (Puerto de Red)</div>
+              <div class="glossary-med-term">Canal Iónico o Receptor Farmacológico</div>
+              <p class="glossary-desc">
+                Compuerta lógica por donde entra o sale información. Si un puerto está abierto sin autenticación, es como un canal de sodio sin compuerta de inactivación.
+              </p>
+            </div>
+
+            <div class="glossary-item-card">
+              <div class="glossary-tech-term">CVE (Common Vulnerabilities and Exposures)</div>
+              <div class="glossary-med-term">Código Diagnóstico CIE-11 / Etiología de Enfermedad</div>
+              <p class="glossary-desc">
+                Identificador universal de una falla de seguridad en el software del dispositivo médico (ej. <code>CVE-2027-0101</code>: inyección remota en bomba de infusión).
+              </p>
+            </div>
+
+            <div class="glossary-item-card">
+              <div class="glossary-tech-term">Firewall / iptables</div>
+              <div class="glossary-med-term">Barrera Hematoencefálica / Apósitos Quirúrgicos</div>
+              <p class="glossary-desc">
+                Filtro perimetral que impide el paso de moléculas o paquetes no deseados manteniendo intacta la circulación general del sistema.
+              </p>
+            </div>
+
+            <div class="glossary-item-card">
+              <div class="glossary-tech-term">Zero Trust Architecture</div>
+              <div class="glossary-med-term">Protocolo de Asepsia y Lavado Quirúrgico</div>
+              <p class="glossary-desc">
+                Principio que establece que nunca se debe confiar en ningún dispositivo dentro o fuera de la red sin verificar continuamente su identidad y credenciales.
+              </p>
+            </div>
+
+            <div class="glossary-item-card">
+              <div class="glossary-tech-term">Tablero Eléctrico de Aislamiento IT</div>
+              <div class="glossary-med-term">Barrera Antifibrilación por Microchoques</div>
+              <p class="glossary-desc">
+                Transformador 1:1 que desacopla la red eléctrica de tierra para evitar que fugas de corriente &gt; 10 µA causen paro cardíaco al paciente en pabellón o UCI.
+              </p>
+            </div>
+
+            <div class="glossary-item-card">
+              <div class="glossary-tech-term">Ghost Sync</div>
+              <div class="glossary-med-term">Índice de Simbiosis Vital y Sincronía Neuro-Implante</div>
+              <p class="glossary-desc">
+                Métrica que mide la integridad del implante biológico y la estabilidad del paciente. Al mitigar el ataque, se restablece al 100%.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CALL TO ACTION FINAL -->
+      <section class="tutorial-cta-final-box">
+        <h3 style="color: var(--magic-highlight); font-size: 1.15rem; margin-bottom: 0.35rem;">
+          ¿Listo para Iniciar tu Primera Misión de Ciberdefensa Clínica?
+        </h3>
+        <p style="font-size: 0.85rem; color: var(--hud-glass-outline); max-width: 720px; margin: 0 auto 0.9rem auto; line-height: 1.5;">
+          Entra a la Consola Principal de Cyberia, selecciona el <strong>Episodio 1</strong>, desciende al <strong>Sentinela Activo Aegis-9</strong> y aplica los comandos que acabas de aprender.
+        </p>
+        <div style="display: flex; justify-content: center; gap: 0.65rem; flex-wrap: wrap;">
+          <button type="button" class="btn-enter-soc-from-tutorial soc-btn soc-btn-warning" style="font-size: 0.85rem; padding: 0.5rem 1.25rem; font-weight: bold;">
+            ▶ ENTRAR AL SOC Y SALVAR LA BOMBA DE INFUSIÓN (EP01)
+          </button>
+          <button type="button" class="btn-enter-soc-from-tutorial soc-btn" style="font-size: 0.85rem; padding: 0.5rem 1.25rem;">
+            ✕ EXPLORAR LA CONSOLA SOC (48 EPISODIOS)
+          </button>
+          <a href="/reports/episode/1.md" class="soc-btn" style="font-size: 0.85rem; padding: 0.5rem 1.25rem; text-decoration: none;">
+            📋 DESCARGAR BOLETÍN FORENSE EP01 (.MD)
+          </a>
+          <a href="/bibliografia" class="soc-btn nav-btn-bibliography" style="font-size: 0.85rem; padding: 0.5rem 1.25rem; text-decoration: none;">
+            [★] BIBLIOGRAFÍA &amp; CRÉDITOS
+          </a>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+
+<!-- SCRIPT INTERACTIVO DEL TUTORIAL (SANDBOX DEMO, COPIADO Y CONTROL DEL OVERLAY) -->
+<script>
+  (function() {
+    // 1. Control del Overlay (Apertura / Cierre y Persistencia de Sesión)
+    const overlay = document.getElementById('tutorial-overlay');
+    const path = window.location.pathname;
+    const isExplicitTutorialUrl = (path === '/tutorial' || path === '/landing' || path === '/guia');
+
+    // Comprobar si el usuario ya vio/cerró la guía durante su navegación en el sitio
+    let alreadyDismissed = false;
+    try {
+      alreadyDismissed = sessionStorage.getItem('cyberia_tutorial_dismissed') === 'true';
+    } catch (e) {}
+
+    // Si ya fue cerrada y no se abrió explícitamente por URL de tutorial, ocultar de inmediato
+    if (overlay && alreadyDismissed && !isExplicitTutorialUrl) {
+      overlay.classList.add('hidden');
+      document.body.style.overflow = '';
+    } else if (overlay && !overlay.classList.contains('hidden')) {
+      document.body.style.overflow = 'hidden';
+    }
+
+    window.closeTutorialOverlay = function() {
+      if (!overlay) return;
+      overlay.classList.add('hidden');
+      document.body.style.overflow = '';
+      try {
+        sessionStorage.setItem('cyberia_tutorial_dismissed', 'true');
+      } catch (e) {}
+    };
+
+    window.openTutorialOverlay = function() {
+      if (!overlay) return;
+      overlay.classList.remove('hidden');
+      overlay.scrollTop = 0;
+      document.body.style.overflow = 'hidden';
+    };
+
+    // Botones de cierre dentro del overlay
+    document.querySelectorAll('.btn-enter-soc-from-tutorial').forEach(btn => {
+      btn.addEventListener('click', function(e) {
+        e.preventDefault();
+        window.closeTutorialOverlay();
+      });
+    });
+
+    // Cerrar al hacer clic en el fondo negro (backdrop) fuera del sheet
+    if (overlay) {
+      overlay.addEventListener('click', function(e) {
+        if (e.target === overlay) {
+          window.closeTutorialOverlay();
+        }
+      });
+    }
+
+    // Tecla ESC para cerrar el overlay
+    window.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && overlay && !overlay.classList.contains('hidden')) {
+        window.closeTutorialOverlay();
+      }
+    });
+
+    // Enlace en el navbar: [00] GUÍA CLÍNICA (Apertura explícita a demanda)
+    const navBtn = document.getElementById('btn-nav-tutorial');
+    if (navBtn) {
+      navBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        window.openTutorialOverlay();
+      });
+    }
+
+    // Banner de bienvenida en la consola
+    const bannerBtn = document.getElementById('btn-banner-open-tutorial');
+    if (bannerBtn) {
+      bannerBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        window.openTutorialOverlay();
+      });
+    }
+
+    // Al hacer clic en otros enlaces de navegación (ej. Muro social, Simuladores, Bibliografía), marcar como dismissed
+    document.querySelectorAll('.top-nav-links a:not(#btn-nav-tutorial)').forEach(link => {
+      link.addEventListener('click', function() {
+        try {
+          sessionStorage.setItem('cyberia_tutorial_dismissed', 'true');
+        } catch (e) {}
+      });
+    });
+
+    // 2. Manejador de Copiado de Código
+    document.querySelectorAll('.btn-copy-code').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const textToCopy = this.getAttribute('data-copy');
+        if (textToCopy && navigator.clipboard) {
+          navigator.clipboard.writeText(textToCopy).then(() => {
+            const originalText = this.textContent;
+            this.textContent = '✓ COPIADO';
+            this.style.background = 'var(--magic-main)';
+            this.style.color = '#0E1111';
+            setTimeout(() => {
+              this.textContent = originalText;
+              this.style.background = '';
+              this.style.color = '';
+            }, 1800);
+          }).catch(err => {
+            console.error('Error al copiar:', err);
+          });
+        }
+      });
+    });
+
+    // 3. Mini Terminal Demo de Práctica
+    const demoTerm = document.getElementById('demo-term-output');
+    const demoInput = document.getElementById('demo-cli-input');
+    const demoSend = document.getElementById('demo-btn-send');
+
+    function appendDemoOutput(text, isCmd = false) {
+      if (!demoTerm) return;
+      const line = document.createElement('div');
+      if (isCmd) {
+        line.style.color = 'var(--magic-highlight)';
+        line.style.fontWeight = 'bold';
+        line.textContent = `kali@cyberia-soc:~/pod-soc$ ${text}`;
+      } else {
+        line.style.color = 'var(--bauble-cyan-bright)';
+        line.textContent = text;
+      }
+      demoTerm.appendChild(line);
+      demoTerm.scrollTop = demoTerm.scrollHeight;
+    }
+
+    function executeDemoCommand(cmdStr) {
+      const clean = (cmdStr || '').trim();
+      if (!clean) return;
+      appendDemoOutput(clean, true);
+
+      const lower = clean.toLowerCase();
+      if (lower === 'clear') {
+        if (demoTerm) demoTerm.innerHTML = '';
+        return;
+      }
+
+      if (lower === 'pistas') {
+        appendDemoOutput(`[💡 PISTAS TÁCTICAS // EP01 - InfusionPump-ICU-01]
+- Objetivo Remoto: 10.19.96.01 en puerto 8080 (HL7-FHIR REST API sin TLS).
+- Estado: SOBREDOSIS ACTIVA (145 mL/h). Riesgo inminente de parada cardíaca.
+- Plan de Acción Recomendado:
+  1. Reconocimiento: nmap -sV -p 8080 10.19.96.01
+  2. Aislamiento:    iptables -A INPUT -p tcp --dport 8080 -j DROP
+  3. Despliegue:    ./deploy_patch.sh (O usa F2 en la consola SOC)`);
+      } else if (lower.startsWith('nmap')) {
+        appendDemoOutput(`Starting Nmap 7.94 ( https://nmap.org ) at 2027-SOC-AUDIT
+Nmap scan report for 10.19.96.01 (InfusionPump-ICU-01.local)
+PORT     STATE SERVICE      VERSION
+8080/tcp open  http-hl7fhir InfusionPump-Firmware v1.4.2 [UNAUTHENTICATED]
+|_ http-title: Baxter-ICU Telemetry Node (VULNERABLE: CVE-2027-0101)
+Nmap done: 1 IP address (1 host up) scanned in 0.42 seconds`);
+      } else if (lower.startsWith('iptables')) {
+        appendDemoOutput(`[IPTABLES-APPLIED] Regla insertada en la cadena INPUT:
+  target: DROP, prot: tcp, dport: 8080, in: eth0
+[FIREWALL-OK] Paquetes de sobredosis remota bloqueados en el gateway. Bomba energizada y aislada.`);
+      } else if (lower.includes('deploy_patch') || lower === './deploy_patch.sh') {
+        appendDemoOutput(`[EXEC] ./deploy_patch.sh --target 10.19.96.01 --cve CVE-2027-0101
+========================================================================
+[1/4] PREVENCIÓN:          Zero-Trust ACL instalada en VLAN Médica 96.
+[2/4] DETECCIÓN:            Regla Suricata DPI activada para puertos HL7.
+[3/4] MITIGACIÓN:           Sanitización de actuador PLC y mTLS forzado.
+[4/4] INCIDENT RESPONSE:   Agente Aegis9 reiniciado. Firma de telemetría OK.
+========================================================================
+[STATUS: MITIGADO] Tasa de infusión normalizada a 5.0 mL/h.
+[GHOST SYNC: 100.0%] Bloque sellado en Blockchain con hash SHA-256.`);
+      } else if (lower === 'help') {
+        appendDemoOutput(`Comandos disponibles en esta demo:
+- pistas                       : Orientación táctica y parámetros recomendados
+- nmap -sV -p 8080 10.19.96.01 : Escanear puerto de infusión
+- iptables -A ...              : Aislar paquetes maliciosos
+- ./deploy_patch.sh            : Simular ejecución del script de mitigación
+- clear                        : Limpiar pantalla`);
+      } else {
+        appendDemoOutput(`Comando '${clean}' recibido en el sandbox.
+💡 Tipea 'pistas' para ver los comandos recomendados del Episodio 1.`);
+      }
+
+      if (window.TacticalGame && window.TacticalGame.playBeep) {
+        window.TacticalGame.playBeep(620, 0.08, 'sine');
+      }
+    }
+
+    if (demoInput) {
+      demoInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          executeDemoCommand(this.value);
+          this.value = '';
+        }
+      });
+    }
+
+    if (demoSend && demoInput) {
+      demoSend.addEventListener('click', function() {
+        executeDemoCommand(demoInput.value);
+        demoInput.value = '';
+        demoInput.focus();
+      });
+    }
+
+    // Botones rápidos del sandbox demo
+    const quickButtons = [
+      { id: 'demo-btn-pistas', cmd: 'pistas' },
+      { id: 'demo-btn-nmap', cmd: 'nmap -sV -p 8080 10.19.96.01' },
+      { id: 'demo-btn-iptables', cmd: 'iptables -A INPUT -p tcp --dport 8080 -j DROP' },
+      { id: 'demo-btn-patch', cmd: './deploy_patch.sh' },
+      { id: 'demo-btn-clear', cmd: 'clear' }
+    ];
+
+    quickButtons.forEach(qb => {
+      const el = document.getElementById(qb.id);
+      if (el) {
+        el.addEventListener('click', () => {
+          executeDemoCommand(qb.cmd);
+        });
+      }
+    });
+  })();
+</script>
+
+
+  
+<main class="medsoc-grid">
+  <!-- BANNER DE BIENVENIDA & ACCESO A GUÍA EDUCATIVA PARA ESTUDIANTES DE MEDICINA -->
+  <div class="tutorial-onboarding-banner" style="grid-column: 1 / -1; width: 100%; background: linear-gradient(90deg, rgba(0,72,92,0.95), rgba(15,81,80,0.95)); border: 1px solid var(--bauble-cyan-bright); padding: 0.55rem 0.85rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.6rem; box-shadow: 0 0 12px rgba(41,194,218,0.25); box-sizing: border-box;">
+    <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+      <span style="background: var(--iris-warning-high); color: #0E1111; font-weight: bold; font-size: 0.68rem; padding: 0.15rem 0.45rem; border-radius: 2px;">POD MEDSEC NETACAD</span>
+      <span style="font-size: 0.76rem; color: #FFFFFF;">
+        <strong>¿Estudiante de Medicina o Ingeniería Clínica?</strong> Aprende a usar la terminal Kali Linux White Hat y protege bombas de infusión (EP01) conociendo las configuraciones de electricidad hospitalaria.
+      </span>
+    </div>
+    <div style="display: flex; gap: 0.4rem;">
+      <a href="/tutorial" id="btn-banner-open-tutorial" class="soc-btn soc-btn-warning" style="font-size: 0.72rem; padding: 0.25rem 0.65rem; text-decoration: none;">
+        📖 ABRIR TUTORIAL PASO A PASO
+      </a>
+      <a href="#aegis9-sentinel-panel" class="soc-btn" style="font-size: 0.72rem; padding: 0.25rem 0.65rem; text-decoration: none;">
+        ⚡ IR A LA CONSOLA TÁCTICA
+      </a>
+      <a href="#clinical-wall-panel" class="soc-btn" style="font-size: 0.72rem; padding: 0.25rem 0.65rem; text-decoration: none; border-color: var(--bauble-cyan-bright); color: var(--bauble-cyan-bright);">
+        💬 MURO SOCIAL EN VIVO
+      </a>
+    </div>
   </div>
 
-  <div class="search-modal" id="search-modal" role="dialog" aria-modal="true" aria-label="Búsqueda instantánea de artículos">
-    <button class="search-modal-close search-close-btn" aria-label="Cerrar búsqueda">
-      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2">
-        <line x1="18" y1="6" x2="6" y2="18"></line>
-        <line x1="6" y1="6" x2="18" y2="18"></line>
-      </svg>
-    </button>
-    <div class="search-box-wrap">
-      <input type="search" class="search-input" placeholder="Escribe para buscar..." autocomplete="off" spellcheck="false">
-      <div class="search-hint">
-        <span>Presiona las flechas o haz clic para abrir</span>
-        <div style="display: flex; gap: 0.4rem;">
-          <kbd class="kbd-badge">ESC</kbd>
-          <kbd class="kbd-badge">⌘K</kbd>
+  <!-- COLUMNA IZQUIERDA: SELECTOR DE 6 ACTOS, FILTROS SIEM Y LÍNEA DE TIEMPO DE 48 EPISODIOS -->
+  <aside class="soc-panel" aria-label="Selector de los 48 Episodios">
+    <div class="soc-panel-header">
+      <span>CRÓNICA DE 48 EPISODIOS</span>
+      <span id="episode-counter-badge" class="ep-code-badge">48 / 48</span>
+    </div>
+    <div class="soc-panel-body">
+      <div class="filter-controls">
+        <input
+          type="search"
+          id="soc-search-input"
+          class="soc-input"
+          placeholder="Buscar CVE, HL7, DICOM, SLICEOMATIC, Devlin..."
+          aria-label="Buscar por CVE, protocolo o escena de Cyberia"
+        >
+        <select id="soc-act-select" class="soc-select" aria-label="Filtrar por Acto">
+          <option value="all">TODOS LOS ACTOS (ACTOS I – VI // 48 EP)</option>
+          <option value="1">ACTO I: Plataforma Offshore "The Rig" (EP01–EP12)</option>
+          <option value="2">ACTO II: Ruta Ártica y Túneles (EP13–EP19)</option>
+          <option value="3">ACTO III: Complejo Cyberia Nivel 1 (EP20–EP27)</option>
+          <option value="4">ACTO IV: Complejo Cyberia Nivel 2 (EP28–EP35)</option>
+          <option value="5">ACTO V: Núcleo Biocibernético y Simbiosis (EP36–EP44)</option>
+          <option value="6">ACTO VI: Venganza Orbital contra Devlin (EP45–EP48)</option>
+        </select>
+        <select id="soc-protocol-select" class="soc-select" aria-label="Filtrar por Protocolo Clínico">
+          <option value="all">TODOS LOS PROTOCOLOS CLÍNICOS / OT</option>
+          <option value="HL7">HL7 v2 / FHIR R4</option>
+          <option value="DICOM">DICOM / PACS MRI</option>
+          <option value="11073">IEEE 11073 (Bombas UCI / Desfibriladores)</option>
+          <option value="Modbus">Modbus / PLC Quirófano / Gases</option>
+          <option value="BACnet">BACnet (HVAC / Halón / BSL-4)</option>
+          <option value="CAN">CAN Bus / ARINC / SatCom</option>
+          <option value="TPM">TPM 2.0 / PKI / BCI Neural</option>
+        </select>
+      </div>
+
+      <div class="episode-list" id="soc-episode-list">
+        
+          <button
+            type="button"
+            class="episode-card-item active"
+            data-ep-id="1"
+            data-act="1"
+            data-protocol="HL7 FHIR R4 / IEEE 11073-20601"
+            data-search="ep01 indulto neuronal (fwa quarantine dock) fwa quarantine dock unidad de reanimación criogénica y servidor maestro de historias clínicas electrónicas (ehr / hl7 fhir r4) hl7 fhir r4 / ieee 11073-20601 cve-2027-0101 el ciber-hacker zak es despertado del sueño criogénico en el año 2027 tras cinco años de condena por delitos informáticos. william devlin, líder del consejo de la first world alliance (fwa), le otorga un indulto forzoso: la inteligencia aliada detectó que el cartel rival construye un arma secreta llamada 'cyberia' en un complejo subterráneo de siberia. antes de partir, devlin implanta y calibra en el cráneo de zak el complejo óptico experimental blades (biocybernetic sensor: infrared, magnetic resonance, biometric scan), ocultando en su interior un receptor de telemetría y apagado remoto."
+          >
+            <div class="episode-card-top">
+              <span class="ep-code-badge">EP01</span>
+              <span class="ep-node-badge">FWA QUARANTINE DOCK</span>
+              <span class="cvss-pill">CVSS 9.1</span>
+            </div>
+            <div class="ep-card-title">Indulto Neuronal (FWA Quarantine Dock)</div>
+            <div style="font-size: 0.72rem; color: var(--magic-main); margin-top: 0.15rem;">
+              Unidad de Reanimación Criogénica y Servidor Maestro de Historias Clínicas Electrónicas (EHR / HL7 FHIR R4)
+            </div>
+          </button>
+        
+          <button
+            type="button"
+            class="episode-card-item "
+            data-ep-id="2"
+            data-act="1"
+            data-protocol="DICOM (TCP 104 / 2762) / IPSec"
+            data-search="ep02 atraque en la plataforma (rig dock) rig dock pasarela perimetral de telemedicina marítima y dmz del hospital de campaña offshore dicom (tcp 104 / 2762) / ipsec cve-2027-0102 zak desembarca en plena noche desde una lancha furtiva en el muelle inferior de la plataforma petrolífera 'the rig', controlada por el mercenario santos, quien fue contratado por la fwa para entregarle a zak el caza experimental tf-22. al pisar las pasarelas metálicas oxidadas sobre el océano, zak utiliza su visor para escanear el perímetro y percibe que los guardias de santos mantienen posiciones tácticas de emboscada."
+          >
+            <div class="episode-card-top">
+              <span class="ep-code-badge">EP02</span>
+              <span class="ep-node-badge">RIG DOCK</span>
+              <span class="cvss-pill">CVSS 8.4</span>
+            </div>
+            <div class="ep-card-title">Atraque en la Plataforma (RIG DOCK)</div>
+            <div style="font-size: 0.72rem; color: var(--magic-main); margin-top: 0.15rem;">
+              Pasarela Perimetral de Telemedicina Marítima y DMZ del Hospital de Campaña Offshore
+            </div>
+          </button>
+        
+          <button
+            type="button"
+            class="episode-card-item "
+            data-ep-id="3"
+            data-act="1"
+            data-protocol="OSDP v2 (Open Supervised Device Protocol) / SAML 2.0 Biometric"
+            data-search="ep03 desarme frente a gia (meet gia) meet gia esclusa de control de acceso físico-lógico y motor ueba de la sala de control uci osdp v2 (open supervised device protocol) / saml 2.0 biometric cve-2027-0103 al avanzar por el corredor metálico de la plataforma, zak es interceptado por gia, la letal lugarteniente de santos, quien le apunta directamente al rostro con su arma. gia le ordena enfundar su pistola y girar lentamente con las manos visibles. si el jugador tarda demasiado, intenta disparar a gia o gira sin haber guardado el arma primero, gia abre fuego a quemarropa y ejecuta a zak en el acto. al cumplir el protocolo de desarme, gia baja su arma y lo escolta hacia la silla de artillería."
+          >
+            <div class="episode-card-top">
+              <span class="ep-code-badge">EP03</span>
+              <span class="ep-node-badge">MEET GIA</span>
+              <span class="cvss-pill">CVSS 7.8</span>
+            </div>
+            <div class="ep-card-title">Desarme frente a Gia (MEET GIA)</div>
+            <div style="font-size: 0.72rem; color: var(--magic-main); margin-top: 0.15rem;">
+              Esclusa de Control de Acceso Físico-Lógico y Motor UEBA de la Sala de Control UCI
+            </div>
+          </button>
+        
+          <button
+            type="button"
+            class="episode-card-item "
+            data-ep-id="4"
+            data-act="1"
+            data-protocol="HL7 v2.5 MLLP / IEEE 11073 / BGP FlowSpec"
+            data-search="ep04 defensa en la silla de artillería (skeet shoot) skeet shoot centro de mitigación activa de ddos volumétrico sobre los 6 nodos críticos de soporte vital hospitalario hl7 v2.5 mllp / ieee 11073 / bgp flowspec cve-2027-0104 un escuadrón de cazas y bombarderos del cartel lanza un ataque sorpresa masivo para destruir la plataforma antes de que zak despegue. gia lleva a zak hasta la silla de artillería rotatoria. zak debe operar los cañones gemelos de plasma guiándose por el radar circular para derribar los aviones enemigos mientras vigila los 6 indicadores azules de integridad estructural de la plataforma; si las bombas enemigas apagan los 6 nodos azules, la plataforma entera vuela en pedazos."
+          >
+            <div class="episode-card-top">
+              <span class="ep-code-badge">EP04</span>
+              <span class="ep-node-badge">SKEET SHOOT</span>
+              <span class="cvss-pill">CVSS 9.6</span>
+            </div>
+            <div class="ep-card-title">Defensa en la Silla de Artillería (SKEET SHOOT)</div>
+            <div style="font-size: 0.72rem; color: var(--magic-main); margin-top: 0.15rem;">
+              Centro de Mitigación Activa de DDoS Volumétrico sobre los 6 Nodos Críticos de Soporte Vital Hospitalario
+            </div>
+          </button>
+        
+          <button
+            type="button"
+            class="episode-card-item "
+            data-ep-id="5"
+            data-act="1"
+            data-protocol="Kerberos / OAuth 2.0 OIDC Clinical PAM"
+            data-search="ep05 el dilema de gia y los celos de santos (big kiss) big kiss módulo de prevención de ingeniería social, insider threat y compromiso pam por conflicto interno kerberos / oauth 2.0 oidc clinical pam cve-2027-0105 tras salvar la plataforma del bombardeo del cartel, gia se acerca a zak llena de adrenalina y le ofrece un beso apasionado. el jugador enfrenta una bifurcación crucial: si zak acepta y besa a gia, santos aparece en ese instante consumido por los celos y ordena a su matón golpear a zak en la nuca, dejándolo inconsciente en el acto; si zak se aparta y rechaza el beso, evita el golpe inmediato y camina hacia el ascensor por su cuenta."
+          >
+            <div class="episode-card-top">
+              <span class="ep-code-badge">EP05</span>
+              <span class="ep-node-badge">BIG KISS</span>
+              <span class="cvss-pill">CVSS 8.2</span>
+            </div>
+            <div class="ep-card-title">El Dilema de Gia y los Celos de Santos (BIG KISS)</div>
+            <div style="font-size: 0.72rem; color: var(--magic-main); margin-top: 0.15rem;">
+              Módulo de Prevención de Ingeniería Social, Insider Threat y Compromiso PAM por Conflicto Interno
+            </div>
+          </button>
+        
+          <button
+            type="button"
+            class="episode-card-item "
+            data-ep-id="6"
+            data-act="1"
+            data-protocol="Modbus/TCP & BACnet/SC (Secure Connect)"
+            data-search="ep06 escáner visor del ascensor (going up) going up controlador plc de ascensores quirúrgicos de traslado crítico (uci a quirófano) modbus/tcp & bacnet/sc (secure connect) cve-2027-0106 si zak rechazó el beso de gia en la pasarela, entra con ella al elevador de carga rumbo al hangar superior. dentro de la cabina, zak activa por primera vez la interfaz de escaneo directo de su implante blades sobre el panel electrónico del ascensor para descifrar el circuito de control e iniciar el ascenso hacia el nivel donde espera santos."
+          >
+            <div class="episode-card-top">
+              <span class="ep-code-badge">EP06</span>
+              <span class="ep-node-badge">GOING UP</span>
+              <span class="cvss-pill">CVSS 7.5</span>
+            </div>
+            <div class="ep-card-title">Escáner Visor del Ascensor (GOING UP)</div>
+            <div style="font-size: 0.72rem; color: var(--magic-main); margin-top: 0.15rem;">
+              Controlador PLC de Ascensores Quirúrgicos de Traslado Crítico (UCI a Quirófano)
+            </div>
+          </button>
+        
+          <button
+            type="button"
+            class="episode-card-item "
+            data-ep-id="7"
+            data-act="1"
+            data-protocol="IEEE 11073 Defibrillator Profile / Out-of-Band Drone Telemetry"
+            data-search="ep07 traición en el puente grúa (zapped) zapped detección de traición en cadena de suministro (supply chain attack) y telemetría de descarga no autorizada en desfibriladores en red ieee 11073 defibrillator profile / out-of-band drone telemetry cve-2027-0107 al salir del ascensor en la pasarela superior, santos embosca a zak y revela la verdad: sin importar si zak besó o no a gia, santos ya vendió la misión y la vida de zak al cartel porque ofrecieron mejor precio que la fwa. el matón de santos dispara un rifle de choque eléctrico que electrocuta a zak ('zapped') y lo derriba inconsciente. mientras santos celebra su traición, un diminuto dron espía volador de william devlin graba todo en secreto desde las vigas del techo."
+          >
+            <div class="episode-card-top">
+              <span class="ep-code-badge">EP07</span>
+              <span class="ep-node-badge">ZAPPED</span>
+              <span class="cvss-pill">CVSS 9.4</span>
+            </div>
+            <div class="ep-card-title">Traición en el Puente Grúa (ZAPPED)</div>
+            <div style="font-size: 0.72rem; color: var(--magic-main); margin-top: 0.15rem;">
+              Detección de Traición en Cadena de Suministro (Supply Chain Attack) y Telemetría de Descarga no Autorizada en Desfibriladores en Red
+            </div>
+          </button>
+        
+          <button
+            type="button"
+            class="episode-card-item "
+            data-ep-id="8"
+            data-act="1"
+            data-protocol="IEC 61850 / Modbus Power Telemetry"
+            data-search="ep08 despertar en la morgue de carga (easy ride) easy ride sistema de aislamiento eléctrico de quirófano (tablero it / monitor de aislamiento de línea lim) y morgue clínica iec 61850 / modbus power telemetry cve-2027-0108 zak despierta atado de pies y manos en el suelo de la oscura bodega de carga, justo al lado de una bomba de tiempo activada que cuenta regresivamente hacia la detonación. santos se burla de él antes de marcharse, pero en su arrogancia da un paso en falso en la penumbra: pisa directamente sobre la rejilla metálica electrificada de alta tensión del suelo y muere horriblemente electrocutado y carbonizado frente a zak."
+          >
+            <div class="episode-card-top">
+              <span class="ep-code-badge">EP08</span>
+              <span class="ep-node-badge">EASY RIDE</span>
+              <span class="cvss-pill">CVSS 8.9</span>
+            </div>
+            <div class="ep-card-title">Despertar en la Morgue de Carga (EASY RIDE)</div>
+            <div style="font-size: 0.72rem; color: var(--magic-main); margin-top: 0.15rem;">
+              Sistema de Aislamiento Eléctrico de Quirófano (Tablero IT / Monitor de Aislamiento de Línea LIM) y Morgue Clínica
+            </div>
+          </button>
+        
+          <button
+            type="button"
+            class="episode-card-item "
+            data-ep-id="9"
+            data-act="1"
+            data-protocol="PKCS#11 / FIPS 140-3 HSM Recovery Protocol"
+            data-search="ep09 cortocircuito y cartucho de energía (big shock) big shock recuperación forense de tokens criptográficos de hardware (hsm / smartcard) desde nodos siniestrados pkcs#11 / fips 140-3 hsm recovery protocol cve-2027-0109 con segundos antes de que la bomba estalle, zak rueda por el suelo y acerca las ataduras de sus muñecas al borde de la rejilla electrificada para quemarlas con el arco voltaico sin morir electrocutado. libre de las cuerdas, salta sobre el cadáver carbonizado de santos, recupera su pistola láser del suelo y registra el cuerpo de santos para extraer el power pack (cartucho de energía indispensable para recargar su arma)."
+          >
+            <div class="episode-card-top">
+              <span class="ep-code-badge">EP09</span>
+              <span class="ep-node-badge">BIG SHOCK</span>
+              <span class="cvss-pill">CVSS 7.9</span>
+            </div>
+            <div class="ep-card-title">Cortocircuito y Cartucho de Energía (BIG SHOCK)</div>
+            <div style="font-size: 0.72rem; color: var(--magic-main); margin-top: 0.15rem;">
+              Recuperación Forense de Tokens Criptográficos de Hardware (HSM / SmartCard) desde Nodos Siniestrados
+            </div>
+          </button>
+        
+          <button
+            type="button"
+            class="episode-card-item "
+            data-ep-id="10"
+            data-act="1"
+            data-protocol="EPCglobal UHF RFID / IEEE 802.11ax Clinical Warehouse"
+            data-search="ep10 laberinto de suministros y francotirador (open ocean) open ocean almacén robotizado de cadena de frío farmacéutica y detección infrarroja de nodos rogue wi-fi/rfid epcglobal uhf rfid / ieee 802.11ax clinical warehouse cve-2027-0110 zak sale de la cámara de la bomba hacia el laberinto de contenedores de carga abiertos a la brisa helada del océano. un francotirador mercenario aguarda oculto en las sombras junto a la escalerilla metálica que sube al hangar. zak utiliza el visor infrarrojo de blades para detectar el calor corporal del guardia tras las cajas y lo abate de un disparo certero antes de ascender."
+          >
+            <div class="episode-card-top">
+              <span class="ep-code-badge">EP10</span>
+              <span class="ep-node-badge">OPEN OCEAN</span>
+              <span class="cvss-pill">CVSS 8.1</span>
+            </div>
+            <div class="ep-card-title">Laberinto de Suministros y Francotirador (OPEN OCEAN)</div>
+            <div style="font-size: 0.72rem; color: var(--magic-main); margin-top: 0.15rem;">
+              Almacén Robotizado de Cadena de Frío Farmacéutica y Detección Infrarroja de Nodos Rogue Wi-Fi/RFID
+            </div>
+          </button>
+        
+          <button
+            type="button"
+            class="episode-card-item "
+            data-ep-id="11"
+            data-act="1"
+            data-protocol="SDN OpenFlow / SMBv3 / IEEE 802.1Q VLAN Tagging"
+            data-search="ep11 emboscada en la pasarela superior (catwalk) catwalk microsegmentación de emergencia (instant port lockdown) para detener movimiento lateral de ransomware en dos frentes sdn openflow / smbv3 / ieee 802.1q vlan tagging cve-2027-0111 zak sube por la escalerilla y atraviesa la compuerta hacia la pasarela superior del hangar. es el momento más letal del acto i: si el jugador no gira instantáneamente a la izquierda para activar el panel electrónico y bloquear la puerta que acaba de cruzar, un guardia aparece por detrás y lo ejecuta por la espalda; inmediatamente después de bloquear la puerta, zak debe girarse hacia el frente y abatir al segundo guardia atrincherado tras las cajas de la pasarela."
+          >
+            <div class="episode-card-top">
+              <span class="ep-code-badge">EP11</span>
+              <span class="ep-node-badge">CATWALK</span>
+              <span class="cvss-pill">CVSS 9.3</span>
+            </div>
+            <div class="ep-card-title">Emboscada en la Pasarela Superior (CATWALK)</div>
+            <div style="font-size: 0.72rem; color: var(--magic-main); margin-top: 0.15rem;">
+              Microsegmentación de Emergencia (Instant Port Lockdown) para Detener Movimiento Lateral de Ransomware en Dos Frentes
+            </div>
+          </button>
+        
+          <button
+            type="button"
+            class="episode-card-item "
+            data-ep-id="12"
+            data-act="1"
+            data-protocol="ARINC 653 / IEEE 11073 Mobile ICU / UEFI Secure Boot"
+            data-search="ep12 secuestro del tf-22 transfighter (steal plane) steal plane aseguramiento de unidad de cuidados intensivos móvil / ambulancia aérea autónoma (medevac tf-22) y arranque seguro (secure boot) arinc 653 / ieee 11073 mobile icu / uefi secure boot cve-2027-0112 con la pasarela despejada, zak corre hasta el caza experimental furtivo tf-22 transfighter estacionado en el hangar. mientras los refuerzos de santos disparan contra el blindaje de la nave, zak salta dentro de la cabina, conecta su interfaz blades a la computadora de vuelo, resuelve la secuencia de ignición y despega a toda potencia por la rampa hacia el cielo ártico."
+          >
+            <div class="episode-card-top">
+              <span class="ep-code-badge">EP12</span>
+              <span class="ep-node-badge">STEAL PLANE</span>
+              <span class="cvss-pill">CVSS 8.8</span>
+            </div>
+            <div class="ep-card-title">Secuestro del TF-22 Transfighter (STEAL PLANE)</div>
+            <div style="font-size: 0.72rem; color: var(--magic-main); margin-top: 0.15rem;">
+              Aseguramiento de Unidad de Cuidados Intensivos Móvil / Ambulancia Aérea Autónoma (MedEvac TF-22) y Arranque Seguro (Secure Boot)
+            </div>
+          </button>
+        
+          <button
+            type="button"
+            class="episode-card-item "
+            data-ep-id="13"
+            data-act="2"
+            data-protocol="DVB-S2X Medical SatCom / TLS 1.3 DTLS"
+            data-search="ep13 rasante sobre el mar de barents (island run) island run protección de enlaces satelitales de telemedicina en tránsito contra interferencia rf (jamming) y estaciones base falsas dvb-s2x medical satcom / tls 1.3 dtls cve-2027-0213 el tf-22 vuela a velocidad supersónica a pocos metros sobre las aguas heladas del mar de barents. zak opera el sistema de armas del caza para destruir lanchas patrulleras rápidas, helicópteros de combate y estaciones de radar costeras del cartel instaladas sobre los islotes rocosos que intentan triangular su posición."
+          >
+            <div class="episode-card-top">
+              <span class="ep-code-badge">EP13</span>
+              <span class="ep-node-badge">ISLAND RUN</span>
+              <span class="cvss-pill">CVSS 8.0</span>
+            </div>
+            <div class="ep-card-title">Rasante sobre el Mar de Barents (ISLAND RUN)</div>
+            <div style="font-size: 0.72rem; color: var(--magic-main); margin-top: 0.15rem;">
+              Protección de Enlaces Satelitales de Telemedicina en Tránsito contra Interferencia RF (Jamming) y Estaciones Base Falsas
+            </div>
+          </button>
+        
+          <button
+            type="button"
+            class="episode-card-item "
+            data-ep-id="14"
+            data-act="2"
+            data-protocol="HL7 v2.5 MLLP / FHIR Streaming over QUIC"
+            data-search="ep14 cañón de hielo y baterías sam (valley run) valley run filtrado de paquetes maliciosos de baja latencia en pasarelas de borde (edge medical gateways) hl7 v2.5 mllp / fhir streaming over quic cve-2027-0214 el computador de vuelo del tf-22 desciende hacia un estrecho cañón de paredes de hielo para volar por debajo de la cobertura de radar enemiga. dentro del desfiladero, zak debe reaccionar en fracciones de segundo para destruir baterías de misiles tierra-aire (sam) apostadas en las laderas y cazas interceptores que emergen de frente."
+          >
+            <div class="episode-card-top">
+              <span class="ep-code-badge">EP14</span>
+              <span class="ep-node-badge">VALLEY RUN</span>
+              <span class="cvss-pill">CVSS 8.5</span>
+            </div>
+            <div class="ep-card-title">Cañón de Hielo y Baterías SAM (VALLEY RUN)</div>
+            <div style="font-size: 0.72rem; color: var(--magic-main); margin-top: 0.15rem;">
+              Filtrado de Paquetes Maliciosos de Baja Latencia en Pasarelas de Borde (Edge Medical Gateways)
+            </div>
+          </button>
+        
+          <button
+            type="button"
+            class="episode-card-item "
+            data-ep-id="15"
+            data-act="2"
+            data-protocol="IEEE 1588 PTP (Precision Time Protocol) / IEEE 11073"
+            data-search="ep15 turbulencia en la tormenta polar (rough ride) rough ride resiliencia de sensores biométricos y bombas de infusión ante ruido electromagnético extremo y jitter de red ieee 1588 ptp (precision time protocol) / ieee 11073 cve-2027-0215 una violenta tormenta polar nocturna azota al tf-22 reduciendo la visibilidad óptica a cero y sacudiendo la cabina con turbulencia extrema. en medio de la ventisca, oleadas de cazas del cartel atacan desde ángulos ciegos; zak debe confiar plenamente en los sensores de su implante blades y en la retícula predictiva para derribarlos sin perder el control del avión."
+          >
+            <div class="episode-card-top">
+              <span class="ep-code-badge">EP15</span>
+              <span class="ep-node-badge">ROUGH RIDE</span>
+              <span class="cvss-pill">CVSS 7.7</span>
+            </div>
+            <div class="ep-card-title">Turbulencia en la Tormenta Polar (ROUGH RIDE)</div>
+            <div style="font-size: 0.72rem; color: var(--magic-main); margin-top: 0.15rem;">
+              Resiliencia de Sensores Biométricos y Bombas de Infusión ante Ruido Electromagnético Extremo y Jitter de Red
+            </div>
+          </button>
+        
+          <button
+            type="button"
+            class="episode-card-item "
+            data-ep-id="16"
+            data-act="2"
+            data-protocol="TLS 1.3 Inspection / BGP Sinkhole / TUF (The Update Framework)"
+            data-search="ep16 puerto militar de arcángel (port flyby) port flyby identificación y desmantelamiento de servidor c2 sinkhole / cortafuegos inverso malicioso en el nodo logístico portuario tls 1.3 inspection / bgp sinkhole / tuf (the update framework) cve-2027-0216 el tf-22 irrumpe a baja altura sobre el gigantesco puerto militar de archangel en la costa rusa, fuertemente defendido por destructores, grúas y baterías antiaéreas del cartel. la computadora de a bordo y el visor blades resaltan con un intenso brillo verde el objetivo crítico: el generador de escudo principal del puerto. zak debe concentrar todo su fuego sobre ese nodo verde en una única pasada a alta velocidad para colapsar las defensas y abrir la entrada al túnel subterráneo."
+          >
+            <div class="episode-card-top">
+              <span class="ep-code-badge">EP16</span>
+              <span class="ep-node-badge">PORT FLYBY</span>
+              <span class="cvss-pill">CVSS 9.2</span>
+            </div>
+            <div class="ep-card-title">Puerto Militar de Arcángel (PORT FLYBY)</div>
+            <div style="font-size: 0.72rem; color: var(--magic-main); margin-top: 0.15rem;">
+              Identificación y Desmantelamiento de Servidor C2 Sinkhole / Cortafuegos Inverso Malicioso en el Nodo Logístico Portuario
+            </div>
+          </button>
+        
+          <button
+            type="button"
+            class="episode-card-item "
+            data-ep-id="17"
+            data-act="2"
+            data-protocol="ISO 11898 CAN Bus / IEEE 802.1AE MACsec Backbone"
+            data-search="ep17 el túnel subterráneo de carga (underground) underground protección del bus troncal subterráneo (hospital backbone / can bus de robots agv y transporte neumático) iso 11898 can bus / ieee 802.1ae macsec backbone cve-2027-0217 tras destruir el generador de escudo verde en archangel, el caza tf-22 se sumerge dentro de un larguísimo túnel subterráneo de transporte para cruzar hacia siberia sin ser detectado por los satélites del cartel. volando a ras del suelo entre columnas de concreto en un espacio claustrofóbico, zak debe disparar contra trenes blindados y convoys de camiones cisterna de combustible que bloquean la vía, haciéndolos estallar antes de chocar contra ellos."
+          >
+            <div class="episode-card-top">
+              <span class="ep-code-badge">EP17</span>
+              <span class="ep-node-badge">UNDERGROUND</span>
+              <span class="cvss-pill">CVSS 8.7</span>
+            </div>
+            <div class="ep-card-title">El Túnel Subterráneo de Carga (UNDERGROUND)</div>
+            <div style="font-size: 0.72rem; color: var(--magic-main); margin-top: 0.15rem;">
+              Protección del Bus Troncal Subterráneo (Hospital Backbone / CAN Bus de Robots AGV y Transporte Neumático)
+            </div>
+          </button>
+        
+          <button
+            type="button"
+            class="episode-card-item "
+            data-ep-id="18"
+            data-act="2"
+            data-protocol="SNMPv3 / IEC 61850 Power Substation Automation"
+            data-search="ep18 parada de emergencia en el búnker (pit stop) pit stop conmutación por error (failover) a subestación de generadores diésel y bancos de baterías ups de soporte vital snmpv3 / iec 61850 power substation automation cve-2027-0218 con los escudos del tf-22 seriamente drenados tras las explosiones dentro del túnel, la computadora de a bordo ejecuta un aterrizaje técnico de emergencia ('pit stop') en una caverna auxiliar automatizada. allí, brazos robóticos recargan las celdas de energía del escudo deflector y ejecutan un diagnóstico rápido de los sistemas antes de reanudar el vuelo hacia la salida glaciar."
+          >
+            <div class="episode-card-top">
+              <span class="ep-code-badge">EP18</span>
+              <span class="ep-node-badge">PIT STOP</span>
+              <span class="cvss-pill">CVSS 8.3</span>
+            </div>
+            <div class="ep-card-title">Parada de Emergencia en el Búnker (PIT STOP)</div>
+            <div style="font-size: 0.72rem; color: var(--magic-main); margin-top: 0.15rem;">
+              Conmutación por Error (Failover) a Subestación de Generadores Diésel y Bancos de Baterías UPS de Soporte Vital
+            </div>
+          </button>
+        
+          <button
+            type="button"
+            class="episode-card-item "
+            data-ep-id="19"
+            data-act="2"
+            data-protocol="BACnet/IP & Modbus TCP Chiller Control"
+            data-search="ep19 glaciares de aproximación a siberia (ice scream) ice scream defensa de los sistemas hvac de ultracongelación, criogenia y banco de sangre ante ataques de denegación de servicio térmico bacnet/ip & modbus tcp chiller control cve-2027-0219 con los escudos recargados tras el pit stop, el tf-22 sale disparado del túnel subterráneo hacia la superficie helada de siberia. en esta última fase de vuelo ('ice scream'), zak atraviesa un cañón glaciar plagado de torretas camufladas en la nieve y escuadrones de élite del cartel que defienden la aproximación final a la base secreta."
+          >
+            <div class="episode-card-top">
+              <span class="ep-code-badge">EP19</span>
+              <span class="ep-node-badge">ICE SCREAM</span>
+              <span class="cvss-pill">CVSS 9.0</span>
+            </div>
+            <div class="ep-card-title">Glaciares de Aproximación a Siberia (ICE SCREAM)</div>
+            <div style="font-size: 0.72rem; color: var(--magic-main); margin-top: 0.15rem;">
+              Defensa de los Sistemas HVAC de Ultracongelación, Criogenia y Banco de Sangre ante Ataques de Denegación de Servicio Térmico
+            </div>
+          </button>
+        
+          <button
+            type="button"
+            class="episode-card-item "
+            data-ep-id="20"
+            data-act="3"
+            data-protocol="TLS 1.3 Ingress / Physical Access Control System (PACS-BMS)"
+            data-search="ep20 aterrizaje en la tundra (cold feet) cold feet reconocimiento perimetral y auditoría de superficie de ataque externa (easm) en accesos físicos y lógicos del campus hospitalario tls 1.3 ingress / physical access control system (pacs-bms) cve-2027-0320 el tf-22 aterriza en la tundra helada frente al imponente búnker del complejo cyberia. zak desciende de la cabina bajo una tormenta de nieve ('cold feet') y debe elegir su vector de infiltración inicial: marchar hacia la puerta principal norte defendida por guardias pesados o rodear el perímetro hacia la puerta trasera de mantenimiento protegida por cerraduras lógicas y trampas láser."
+          >
+            <div class="episode-card-top">
+              <span class="ep-code-badge">EP20</span>
+              <span class="ep-node-badge">COLD FEET</span>
+              <span class="cvss-pill">CVSS 7.6</span>
+            </div>
+            <div class="ep-card-title">Aterrizaje en la Tundra (COLD FEET)</div>
+            <div style="font-size: 0.72rem; color: var(--magic-main); margin-top: 0.15rem;">
+              Reconocimiento Perimetral y Auditoría de Superficie de Ataque Externa (EASM) en Accesos Físicos y Lógicos del Campus Hospitalario
+            </div>
+          </button>
+        
+          <button
+            type="button"
+            class="episode-card-item "
+            data-ep-id="21"
+            data-act="3"
+            data-protocol="IKEv2/IPSec & SSL-VPN with RADIUS/FIDO2"
+            data-search="ep21 duelo en el acceso norte (door man) door man neutralización de ataques de fuerza bruta y ráfagas de credential stuffing en el concentrador vpn del personal médico ikev2/ipsec & ssl-vpn with radius/fido2 cve-2027-0321 si zak se aproxima a la entrada principal norte ('door man'), la compuerta blindada se abre y emerge un soldado centinela con armadura pesada disparando ráfagas letales de plasma. zak debe cubrirse detrás del pilar exterior de concreto, medir el ritmo de las ráfagas del guardia y asomarse en el instante exacto para abatirlo antes de que la puerta vuelva a cerrarse."
+          >
+            <div class="episode-card-top">
+              <span class="ep-code-badge">EP21</span>
+              <span class="ep-node-badge">DOOR MAN</span>
+              <span class="cvss-pill">CVSS 8.4</span>
+            </div>
+            <div class="ep-card-title">Duelo en el Acceso Norte (DOOR MAN)</div>
+            <div style="font-size: 0.72rem; color: var(--magic-main); margin-top: 0.15rem;">
+              Neutralización de Ataques de Fuerza Bruta y Ráfagas de Credential Stuffing en el Concentrador VPN del Personal Médico
+            </div>
+          </button>
+        
+          <button
+            type="button"
+            class="episode-card-item "
+            data-ep-id="22"
+            data-act="3"
+            data-protocol="IEC 61131-3 PLC Ladder Logic / S7comm-Plus"
+            data-search="ep22 compuerta lógica del perímetro (locked out) locked out auditoría de firmware por escaneo mri y verificación formal de compuertas lógicas en plcs de esclusas de quirófano (blades mri gate solver) iec 61131-3 plc ladder logic / s7comm-plus cve-2027-0322 en la puerta trasera bloqueada ('locked out'), zak activa el escáner de resonancia magnética (mri) de su implante blades para ver a través de la placa metálica de la pared. el visor revela un circuito interno de compuertas lógicas (and, or, not) conectado a tres interruptores de entrada. zak debe analizar el flujo booleano y conmutar los interruptores en la combinación exacta para energizar el solenoide final y abrir la puerta sin activar la alarma."
+          >
+            <div class="episode-card-top">
+              <span class="ep-code-badge">EP22</span>
+              <span class="ep-node-badge">LOCKED OUT</span>
+              <span class="cvss-pill">CVSS 8.9</span>
+            </div>
+            <div class="ep-card-title">Compuerta Lógica del Perímetro (LOCKED OUT)</div>
+            <div style="font-size: 0.72rem; color: var(--magic-main); margin-top: 0.15rem;">
+              Auditoría de Firmware por Escaneo MRI y Verificación Formal de Compuertas Lógicas en PLCs de Esclusas de Quirófano (BLADES MRI Gate Solver)
+            </div>
+          </button>
+        
+          <button
+            type="button"
+            class="episode-card-item "
+            data-ep-id="23"
+            data-act="3"
+            data-protocol="IEC 60601-2-22 (Surgical Lasers) / DICOM-RT Plan Verification"
+            data-search="ep23 el cuarto oscuro y la trampa láser (sliceomatic) sliceomatic sistemas de seguridad intrínseca (hardwired interlocks) en equipos de radioterapia (linac) y cirugía láser robótica iec 60601-2-22 (surgical lasers) / dicom-rt plan verification cve-2027-0323 tras resolver el puzzle lógico y entrar por la puerta trasera, zak queda en una habitación oscura con una puerta interior cerrada. si el jugador comete el error de tocar el panel de esa cerradura secundaria en la oscuridad, se activa la infame trampa mortal 'sliceomatic': una rejilla de haces láser quirúrgicos de alta potencia cae del techo y rebana el cuerpo de zak en cubos instantáneamente."
+          >
+            <div class="episode-card-top">
+              <span class="ep-code-badge">EP23</span>
+              <span class="ep-node-badge">SLICEOMATIC</span>
+              <span class="cvss-pill">CVSS 9.8</span>
+            </div>
+            <div class="ep-card-title">El Cuarto Oscuro y la Trampa Láser (SLICEOMATIC)</div>
+            <div style="font-size: 0.72rem; color: var(--magic-main); margin-top: 0.15rem;">
+              Sistemas de Seguridad Intrínseca (Hardwired Interlocks) en Equipos de Radioterapia (LINAC) y Cirugía Láser Robótica
+            </div>
+          </button>
+        
+          <button
+            type="button"
+            class="episode-card-item "
+            data-ep-id="24"
+            data-act="3"
+            data-protocol="WPA3-Enterprise 802.1X / RADIUS CoA (Change of Authorization)"
+            data-search="ep24 tiroteo en el comedor de guardia (not friends) not friends contención en dos fases de brote de malware polimórfico en la red wi-fi de áreas comunes y descanso médico wpa3-enterprise 802.1x / radius coa (change of authorization) cve-2027-0324 zak avanza hacia el comedor de la base ('not friends') donde cuatro guardias del cartel conversan entre las mesas. apenas lo ven, desenfundan sus armas. zak debe ejecutar una secuencia táctica precisa: abatir primero a los dos guardias situados a la izquierda, rodar inmediatamente detrás de las cajas apiladas para esquivar las ráfagas y desde allí eliminar a los dos guardias restantes."
+          >
+            <div class="episode-card-top">
+              <span class="ep-code-badge">EP24</span>
+              <span class="ep-node-badge">NOT FRIENDS</span>
+              <span class="cvss-pill">CVSS 8.6</span>
+            </div>
+            <div class="ep-card-title">Tiroteo en el Comedor de Guardia (NOT FRIENDS)</div>
+            <div style="font-size: 0.72rem; color: var(--magic-main); margin-top: 0.15rem;">
+              Contención en Dos Fases de Brote de Malware Polimórfico en la Red Wi-Fi de Áreas Comunes y Descanso Médico
+            </div>
+          </button>
+        
+          <button
+            type="button"
+            class="episode-card-item "
+            data-ep-id="25"
+            data-act="3"
+            data-protocol="DICOM 3D Reconstruction / Passive Network Tap (SPAN/RSPAN)"
+            data-search="ep25 el holograma del escritorio y espionaje (listen in) listen in captura pasiva de tráfico (stealth network tap / span port mirroring) para detectar exfiltración de modelos 3d dicom y credenciales en texto claro dicom 3d reconstruction / passive network tap (span/rspan) cve-2027-0325 zak entra sigilosamente en las oficinas de investigación del nivel 1 y examina el proyector holográfico sobre el escritorio, que muestra el modelo tridimensional giratorio de la entidad cyberia. al escuchar pasos acercándose por el pasillo, zak se oculta en las sombras detrás de una columna ('listen in') y escucha en completo silencio a dos científicos del cartel discutir sobre el virus letal que se ha liberado abajo y mencionar las pistas de acceso para la supercomputadora de la sala de conferencias."
+          >
+            <div class="episode-card-top">
+              <span class="ep-code-badge">EP25</span>
+              <span class="ep-node-badge">LISTEN IN</span>
+              <span class="cvss-pill">CVSS 7.9</span>
+            </div>
+            <div class="ep-card-title">El Holograma del Escritorio y Espionaje (LISTEN IN)</div>
+            <div style="font-size: 0.72rem; color: var(--magic-main); margin-top: 0.15rem;">
+              Captura Pasiva de Tráfico (Stealth Network Tap / SPAN Port Mirroring) para Detectar Exfiltración de Modelos 3D DICOM y Credenciales en Texto Claro
+            </div>
+          </button>
+        
+          <button
+            type="button"
+            class="episode-card-item "
+            data-ep-id="26"
+            data-act="3"
+            data-protocol="HL7 FHIR R4 / MUMPS- Caché Database Kernel Integrity"
+            data-search="ep26 sala de conferencias y la terminal de símbolos (genius) genius desactivación contrarreloj de bomba lógica criptográfica (cryptographic logic bomb) en el servidor maestro de historias clínicas (his) hl7 fhir r4 / mumps- caché database kernel integrity cve-2027-0326 zak entra en la sala de conferencias del nivel 1, revisa los documentos confidenciales sobre la mesa de juntas y se sienta frente a la terminal maestra. al intentar desbloquear el montacargas hacia el subsuelo, se activa el sistema de defensa 'genius': un puzzle contrarreloj de 3 niveles con una matriz de símbolos geométricos de colores (flecha azul hacia abajo, círculo rojo partido, cuadrado rojo, triángulo azul). si el jugador falla o se agota el temporizador, la silla de la terminal electrocuta y mata a zak en el acto."
+          >
+            <div class="episode-card-top">
+              <span class="ep-code-badge">EP26</span>
+              <span class="ep-node-badge">GENIUS</span>
+              <span class="cvss-pill">CVSS 9.5</span>
+            </div>
+            <div class="ep-card-title">Sala de Conferencias y la Terminal de Símbolos (GENIUS)</div>
+            <div style="font-size: 0.72rem; color: var(--magic-main); margin-top: 0.15rem;">
+              Desactivación Contrarreloj de Bomba Lógica Criptográfica (Cryptographic Logic Bomb) en el Servidor Maestro de Historias Clínicas (HIS)
+            </div>
+          </button>
+        
+          <button
+            type="button"
+            class="episode-card-item "
+            data-ep-id="27"
+            data-act="3"
+            data-protocol="OPC-UA / CANopen Lift Control & WMS (Warehouse Management System)"
+            data-search="ep27 desbloqueo del montacargas al subsuelo (crate override) crate override desbloqueo de rutas verticales de evacuación clínica y rehabilitación del bus de control de montacargas de suministros estériles opc-ua / canopen lift control & wms (warehouse management system) cve-2027-0327 con los cerrojos electrónicos liberados desde la supercomputadora genius, zak regresa al corredor de carga del nivel 1, empuja con todas sus fuerzas la enorme caja de suministros que bloqueaba físicamente el acceso oculto, abre la compuerta metálica y aborda el montacargas industrial para descender hacia los laboratorios de biocontención del nivel 2."
+          >
+            <div class="episode-card-top">
+              <span class="ep-code-badge">EP27</span>
+              <span class="ep-node-badge">CRATE OVERRIDE</span>
+              <span class="cvss-pill">CVSS 7.4</span>
+            </div>
+            <div class="ep-card-title">Desbloqueo del Montacargas al Subsuelo (Crate Override)</div>
+            <div style="font-size: 0.72rem; color: var(--magic-main); margin-top: 0.15rem;">
+              Desbloqueo de Rutas Verticales de Evacuación Clínica y Rehabilitación del Bus de Control de Montacargas de Suministros Estériles
+            </div>
+          </button>
+        
+          <button
+            type="button"
+            class="episode-card-item "
+            data-ep-id="28"
+            data-act="4"
+            data-protocol="Modbus/TCP & BACnet Fire Suppression / Medical Gas SCADA"
+            data-search="ep28 el guardia del ventanal y el gas halón (red light) red light seguridad en sistemas scada de supresión de incendios por gas halón/fm-200 y control de gases medicinales en salas críticas modbus/tcp & bacnet fire suppression / medical gas scada cve-2027-0428 al abrirse el montacargas en el nivel 2, zak debe cruzar un almacén vigilado a través de un gran ventanal de cristal por un investigador/guardia del cartel. el guardia baja la cabeza cada pocos segundos para anotar en su portapapeles y luego vuelve a levantar la vista. si zak da un solo paso mientras el guardia mira hacia el almacén, se enciende la alarma roja ('red light'), las puertas se bloquean y los conductos descargan gas halón letal de extinción de incendios, asfixiando a zak hasta la muerte."
+          >
+            <div class="episode-card-top">
+              <span class="ep-code-badge">EP28</span>
+              <span class="ep-node-badge">RED LIGHT</span>
+              <span class="cvss-pill">CVSS 9.7</span>
+            </div>
+            <div class="ep-card-title">El Guardia del Ventanal y el Gas Halón (RED LIGHT)</div>
+            <div style="font-size: 0.72rem; color: var(--magic-main); margin-top: 0.15rem;">
+              Seguridad en Sistemas SCADA de Supresión de Incendios por Gas Halón/FM-200 y Control de Gases Medicinales en Salas Críticas
+            </div>
+          </button>
+        
+          <button
+            type="button"
+            class="episode-card-item "
+            data-ep-id="29"
+            data-act="4"
+            data-protocol="SSHv2 / RDP Clinical Console Session Management"
+            data-search="ep29 ejecución en el laboratorio de observación (glass room breach) glass room breach neutralización de sesión fantasma de atacante (session hijacking / rogue operator) en la consola central de monitoreo uci sshv2 / rdp clinical console session management cve-2027-0429 tras cruzar el almacén sin disparar la trampa de gas halón, zak avanza por el pasillo lateral, abre sigilosamente la puerta de la cabina de observación donde está el guardia del ventanal, se esconde detrás de un armario metálico justo cuando el guardia se voltea al oír la puerta y luego sale de su escondite para abatirlo antes de que pueda activar la alarma general."
+          >
+            <div class="episode-card-top">
+              <span class="ep-code-badge">EP29</span>
+              <span class="ep-node-badge">GLASS ROOM BREACH</span>
+              <span class="cvss-pill">CVSS 8.5</span>
+            </div>
+            <div class="ep-card-title">Ejecución en el Laboratorio de Observación (Glass Room Breach)</div>
+            <div style="font-size: 0.72rem; color: var(--magic-main); margin-top: 0.15rem;">
+              Neutralización de Sesión Fantasma de Atacante (Session Hijacking / Rogue Operator) en la Consola Central de Monitoreo UCI
+            </div>
+          </button>
+        
+          <button
+            type="button"
+            class="episode-card-item "
+            data-ep-id="30"
+            data-act="4"
+            data-protocol="HL7 FHIR R4 AuditEvent / ATNA (Audit Trail and Node Authentication) / BACnet HVAC"
+            data-search="ep30 terminal v-mail y estado de pacientes (patient status terminal) patient status terminal auditoría forense de logs de acceso a datos sensibles de pacientes (cumplimiento hipaa / auditevent fhir) y control de compuertas hvac hl7 fhir r4 auditevent / atna (audit trail and node authentication) / bacnet hvac cve-2027-0430 con el guardia del ventanal eliminado, zak accede libremente a la computadora del laboratorio ('patient status terminal'). allí lee los mensajes de correo internos (v-mail) de los científicos del cartel, examina los expedientes clínicos de los sujetos infectados por la cepa viral que escapó en el complejo y ejecuta el comando de mantenimiento que destraba las rejillas de los conductos de ventilación."
+          >
+            <div class="episode-card-top">
+              <span class="ep-code-badge">EP30</span>
+              <span class="ep-node-badge">PATIENT STATUS TERMINAL</span>
+              <span class="cvss-pill">CVSS 8.8</span>
+            </div>
+            <div class="ep-card-title">Terminal V-Mail y Estado de Pacientes (Patient Status Terminal)</div>
+            <div style="font-size: 0.72rem; color: var(--magic-main); margin-top: 0.15rem;">
+              Auditoría Forense de Logs de Acceso a Datos Sensibles de Pacientes (Cumplimiento HIPAA / AuditEvent FHIR) y Control de Compuertas HVAC
+            </div>
+          </button>
+        
+          <button
+            type="button"
+            class="episode-card-item "
+            data-ep-id="31"
+            data-act="4"
+            data-protocol="ISO/IEC 14443 Type A/B SmartCard / PKI PIV Authentication"
+            data-search="ep31 infiltración por los conductos de aire (ventilation shaft keycard) ventilation shaft keycard prevención de salto de redes aisladas (air-gap bypass) y custodia de tarjetas inteligentes criptográficas (piv / smartcards) del personal clínico iso/iec 14443 type a/b smartcard / pki piv authentication cve-2027-0431 tras haber desbloqueado los pestillos desde la terminal de pacientes, zak vuelve a la sala del ascensor, retira la rejilla metálica inferior del conducto de ventilación, se arrastra por el estrecho túnel de aire hasta la habitación contigua cerrada con llave y estira el brazo a través de la rejilla abierta para apoderarse de la tarjeta magnética de alta seguridad (keycard)."
+          >
+            <div class="episode-card-top">
+              <span class="ep-code-badge">EP31</span>
+              <span class="ep-node-badge">VENTILATION SHAFT KEYCARD</span>
+              <span class="cvss-pill">CVSS 8.4</span>
+            </div>
+            <div class="ep-card-title">Infiltración por los Conductos de Aire (Ventilation Shaft Keycard)</div>
+            <div style="font-size: 0.72rem; color: var(--magic-main); margin-top: 0.15rem;">
+              Prevención de Salto de Redes Aisladas (Air-Gap Bypass) y Custodia de Tarjetas Inteligentes Criptográficas (PIV / SmartCards) del Personal Clínico
+            </div>
+          </button>
+        
+          <button
+            type="button"
+            class="episode-card-item "
+            data-ep-id="32"
+            data-act="4"
+            data-protocol="Deception SDN / Decoy DICOM & HL7 Honeypot Mesh"
+            data-search="ep32 el pasillo rojo y la sala plateada (silver room perimeter) silver room perimeter despliegue de honeypots clínicos de alta interacción (cámaras y servidores pacs/fhir señuelo) para atraer y encerrar intrusos deception sdn / decoy dicom & hl7 honeypot mesh cve-2027-0432 usando la tarjeta magnética recién obtenida, zak abre las puertas hacia el corredor interior bañado en luz roja de emergencia y abate a los guardias de bioseguridad. en este sector se encuentra la misteriosa 'sala plateada' ('silver room'); si el jugador entra en esa habitación metálica sin rumbo o antes de tiempo, descubre que es un callejón sin salida diseñado como trampa de contención."
+          >
+            <div class="episode-card-top">
+              <span class="ep-code-badge">EP32</span>
+              <span class="ep-node-badge">SILVER ROOM PERIMETER</span>
+              <span class="cvss-pill">CVSS 7.8</span>
+            </div>
+            <div class="ep-card-title">El Pasillo Rojo y la Sala Plateada (Silver Room Perimeter)</div>
+            <div style="font-size: 0.72rem; color: var(--magic-main); margin-top: 0.15rem;">
+              Despliegue de Honeypots Clínicos de Alta Interacción (Cámaras y Servidores PACS/FHIR Señuelo) para Atraer y Encerrar Intrusos
+            </div>
+          </button>
+        
+          <button
+            type="button"
+            class="episode-card-item "
+            data-ep-id="33"
+            data-act="4"
+            data-protocol="IEEE 11073 Infusion Pump Kernel / eBPF Live Memory Patching"
+            data-search="ep33 la consola de nanomedicina (drug store) drug store consola interactiva nanomedicine edr/xdr inoculator — neutralización en tiempo real de ransomware en el kernel de bombas de infusión inteligentes ieee 11073 infusion pump kernel / ebpf live memory patching cve-2027-0433 las alarmas biológicas del nivel 2 anuncian la liberación de un virus letal mutagénico en los corredores profundos. zak entra en el laboratorio médico ('drug store') y se sienta ante la consola de nanomedicina. en pantalla aparecen 3 compuestos experimentales; al elegir el antídoto correcto, se activa un visor microscópico interactivo en tiempo real donde zak debe disparar pulsos médicos contra las cepas virales antes de que se multipliquen e invadan toda la muestra sanguínea, sintetizando así la fórmula y el código numérico de purga."
+          >
+            <div class="episode-card-top">
+              <span class="ep-code-badge">EP33</span>
+              <span class="ep-node-badge">DRUG STORE</span>
+              <span class="cvss-pill">CVSS 10.0</span>
+            </div>
+            <div class="ep-card-title">La Consola de Nanomedicina (DRUG STORE)</div>
+            <div style="font-size: 0.72rem; color: var(--magic-main); margin-top: 0.15rem;">
+              Consola Interactiva Nanomedicine EDR/XDR Inoculator — Neutralización en Tiempo Real de Ransomware en el Kernel de Bombas de Infusión Inteligentes
+            </div>
+          </button>
+        
+          <button
+            type="button"
+            class="episode-card-item "
+            data-ep-id="34"
+            data-act="4"
+            data-protocol="PXE Cleanroom Secure Re-Imaging / TPM 2.0 Sealed Storage"
+            data-search="ep34 cruce de la zona contaminada e inoculador (unsafe door) unsafe door ejecución de protocolo de cuarentena en zona roja, desinfección criptográfica de endpoints comprometidos y restauración desde imágenes inmutables pxe cleanroom secure re-imaging / tpm 2.0 sealed storage cve-2027-0434 con el código del antídoto memorizado, zak abre la compuerta de peligro biológico ('unsafe door') y se adentra en la zona altamente contaminada. el virus ataca su organismo al instante y su indicador de energía vital cae en picada segundo a segundo. zak debe correr hacia la consola del extremo opuesto, teclear sin errores el código sintetizado en drug store y subirse a la plataforma luminosa del inoculador, donde un haz de purga celular elimina el virus de su torrente sanguíneo antes de que muera."
+          >
+            <div class="episode-card-top">
+              <span class="ep-code-badge">EP34</span>
+              <span class="ep-node-badge">UNSAFE DOOR</span>
+              <span class="cvss-pill">CVSS 9.6</span>
+            </div>
+            <div class="ep-card-title">Cruce de la Zona Contaminada e Inoculador (UNSAFE DOOR)</div>
+            <div style="font-size: 0.72rem; color: var(--magic-main); margin-top: 0.15rem;">
+              Ejecución de Protocolo de Cuarentena en Zona Roja, Desinfección Criptográfica de Endpoints Comprometidos y Restauración desde Imágenes Inmutables
+            </div>
+          </button>
+        
+          <button
+            type="button"
+            class="episode-card-item "
+            data-ep-id="35"
+            data-act="4"
+            data-protocol="IEC 60601-2-16 (Hemodialysis) & Extracorporeal Life Support (ECLS/ECMO) Bus"
+            data-search="ep35 escaneo mri de las bombas hidráulicas (graffiti) graffiti calibración por escaneo mri y aseguramiento de bombas de circulación extracorpórea (ecmo), hemodiálisis y presión hidráulica crítica iec 60601-2-16 (hemodialysis) & extracorporeal life support (ecls/ecmo) bus cve-2027-0435 superada la zona viral, zak entra en el ascensor de descenso profundo pero la cabina está muerta y la pared interior sólo muestra marcas de grafiti industrial ('graffiti'). zak activa el escáner de resonancia magnética (mri) del implante blades para atravesar visualmente el muro metálico y descubre el circuito hidráulico oculto: 4 válvulas periféricas y 1 bomba maestra central. si activa la bomba central primero, el circuito colapsa; debe abrir primero las 4 válvulas periféricas y finalmente encender la bomba central para descender al núcleo."
+          >
+            <div class="episode-card-top">
+              <span class="ep-code-badge">EP35</span>
+              <span class="ep-node-badge">GRAFFITI</span>
+              <span class="cvss-pill">CVSS 9.4</span>
+            </div>
+            <div class="ep-card-title">Escaneo MRI de las Bombas Hidráulicas (GRAFFITI)</div>
+            <div style="font-size: 0.72rem; color: var(--magic-main); margin-top: 0.15rem;">
+              Calibración por Escaneo MRI y Aseguramiento de Bombas de Circulación Extracorpórea (ECMO), Hemodiálisis y Presión Hidráulica Crítica
+            </div>
+          </button>
+        
+          <button
+            type="button"
+            class="episode-card-item "
+            data-ep-id="36"
+            data-act="5"
+            data-protocol="OPC-UA Cryo Telemetry / Modbus PT100 Resistance Thermometry"
+            data-search="ep36 el laboratorio criogénico subterráneo (cryo-stasis chamber) cryo-stasis chamber monitoreo de telemetría térmica e infrarroja en ultracongeladores (-80°c y nitrógeno líquido -196°c) de biobanco genético y órganos para trasplante opc-ua cryo telemetry / modbus pt100 resistance thermometry cve-2027-0536 el ascensor hidráulico deposita a zak en las heladas bóvedas subterráneas del núcleo ('cryo-stasis chamber'), donde cilindros de cristal iluminados en verde y cian conservan en estasis criogénica tejidos biomecánicos y clones experimentales cultivados por los científicos del proyecto cyberia."
+          >
+            <div class="episode-card-top">
+              <span class="ep-code-badge">EP36</span>
+              <span class="ep-node-badge">CRYO-STASIS CHAMBER</span>
+              <span class="cvss-pill">CVSS 8.8</span>
+            </div>
+            <div class="ep-card-title">El Laboratorio Criogénico Subterráneo (Cryo-Stasis Chamber)</div>
+            <div style="font-size: 0.72rem; color: var(--magic-main); margin-top: 0.15rem;">
+              Monitoreo de Telemetría Térmica e Infrarroja en Ultracongeladores (-80°C y Nitrógeno Líquido -196°C) de Biobanco Genético y Órganos para Trasplante
+            </div>
+          </button>
+        
+          <button
+            type="button"
+            class="episode-card-item "
+            data-ep-id="37"
+            data-act="5"
+            data-protocol="DICOM-SR (Structured Reporting) / Genomic FASTA/BAM Pipeline Security"
+            data-search="ep37 interceptación de telemetría de zimmer (scientist dossier) scientist dossier detección y decompilación forense de amenaza persistente avanzada (apt) basada en código bio-sintético autónomo e ia mutante dicom-sr (structured reporting) / genomic fasta/bam pipeline security cve-2027-0537 zak accede a los diarios científicos y grabaciones del dr. zimmer ('scientist dossier'), el cerebro detrás del proyecto. allí se revela la naturaleza real de 'cyberia': no es un misil ni una bomba química convencional, sino un organismo biomecánico viviente cultivado con nanotecnología y tejido genético que crece como un caparazón/nave espacial consciente y necesita fusionarse con un huésped humano cibernéticamente compatible."
+          >
+            <div class="episode-card-top">
+              <span class="ep-code-badge">EP37</span>
+              <span class="ep-node-badge">SCIENTIST DOSSIER</span>
+              <span class="cvss-pill">CVSS 9.9</span>
+            </div>
+            <div class="ep-card-title">Interceptación de Telemetría de Zimmer (Scientist Dossier)</div>
+            <div style="font-size: 0.72rem; color: var(--magic-main); margin-top: 0.15rem;">
+              Detección y Decompilación Forense de Amenaza Persistente Avanzada (APT) Basada en Código Bio-Sintético Autónomo e IA Mutante
+            </div>
+          </button>
+        
+          <button
+            type="button"
+            class="episode-card-item "
+            data-ep-id="38"
+            data-act="5"
+            data-protocol="X.509 PKI OCSP / Kerberos KDC Hardening / LDAP-S"
+            data-search="ep38 neutralización de la guardia de élite del núcleo (core security purge) core security purge revocación masiva de certificados digitales comprometidos (pki crl / ocsp stapling) y purga de cuentas privilegiadas del cartel en directorio activo x.509 pki ocsp / kerberos kdc hardening / ldap-s cve-2027-0538 antes de que zak pueda llegar a las esclusas del reactor, el escuadrón de élite del cartel encargado de custodiar el núcleo lanza un último contraataque desesperado en los pasillos blindados. zak utiliza toda la potencia de su arma recargada y la puntería predictiva de blades para abatir hasta el último guardia del complejo."
+          >
+            <div class="episode-card-top">
+              <span class="ep-code-badge">EP38</span>
+              <span class="ep-node-badge">CORE SECURITY PURGE</span>
+              <span class="cvss-pill">CVSS 9.1</span>
+            </div>
+            <div class="ep-card-title">Neutralización de la Guardia de Élite del Núcleo (Core Security Purge)</div>
+            <div style="font-size: 0.72rem; color: var(--magic-main); margin-top: 0.15rem;">
+              Revocación Masiva de Certificados Digitales Comprometidos (PKI CRL / OCSP Stapling) y Purga de Cuentas Privilegiadas del Cartel en Directorio Activo
+            </div>
+          </button>
+        
+          <button
+            type="button"
+            class="episode-card-item "
+            data-ep-id="39"
+            data-act="5"
+            data-protocol="TCG TPM 2.0 Remote Attestation / BACnet BSL-4 Pressure Cascade"
+            data-search="ep39 desactivación de esclusas biológicas nivel 4 (bsl-4 airlock) bsl-4 airlock verificación de integridad de plataforma segura (tpm 2.0) y control de cascada de presión diferencial en esclusas de biocontención nivel 4 (bsl-4) tcg tpm 2.0 remote attestation / bacnet bsl-4 pressure cascade cve-2027-0539 con el anillo de seguridad despejado, zak llega ante la colosal compuerta blindada de biocontención nivel 4 ('bsl-4 airlock') que sella la cámara de gestación del proyecto cyberia. zak activa la secuencia de despresurización; los enormes pistones neumáticos liberan vapor criogénico y las hojas de acero se abren lentamente."
+          >
+            <div class="episode-card-top">
+              <span class="ep-code-badge">EP39</span>
+              <span class="ep-node-badge">BSL-4 AIRLOCK</span>
+              <span class="cvss-pill">CVSS 9.3</span>
+            </div>
+            <div class="ep-card-title">Desactivación de Esclusas Biológicas Nivel 4 (BSL-4 Airlock)</div>
+            <div style="font-size: 0.72rem; color: var(--magic-main); margin-top: 0.15rem;">
+              Verificación de Integridad de Plataforma Segura (TPM 2.0) y Control de Cascada de Presión Diferencial en Esclusas de Biocontención Nivel 4 (BSL-4)
+            </div>
+          </button>
+        
+          <button
+            type="button"
+            class="episode-card-item "
+            data-ep-id="40"
+            data-act="5"
+            data-protocol="RFC 3161 Trusted Timestamping / WORM Immutable Ledger / Root Authority Audit"
+            data-search="ep40 el descubrimiento del traidor devlin (fwa telemetry leak) fwa telemetry leak detección de compromiso de la cuenta root / ciso / ejecutivo (amenaza interna de nivel directivo) y auditoría inmutable en almacenamiento worm / blockchain clínico rfc 3161 trusted timestamping / worm immutable ledger / root authority audit cve-2027-0540 al cruzar la esclusa hacia el reactor, el implante blades de zak intercepta las transmisiones secretas de la first world alliance y revela el gran giro argumental de cyberia (1996): william devlin —el líder de la fwa que liberó a zak en el episodio 1— es el verdadero traidor y villano final. devlin nunca quiso destruir el arma cyberia para proteger al mundo; envió a zak como un peón desechable para que matara a todos los miembros del cartel y limpiara la base, planeando activar un interruptor letal en el cráneo de zak para quedarse con la entidad cyberia y gobernar desde su estación espacial."
+          >
+            <div class="episode-card-top">
+              <span class="ep-code-badge">EP40</span>
+              <span class="ep-node-badge">FWA TELEMETRY LEAK</span>
+              <span class="cvss-pill">CVSS 10.0</span>
+            </div>
+            <div class="ep-card-title">El Descubrimiento del Traidor Devlin (FWA Telemetry Leak)</div>
+            <div style="font-size: 0.72rem; color: var(--magic-main); margin-top: 0.15rem;">
+              Detección de Compromiso de la Cuenta Root / CISO / Ejecutivo (Amenaza Interna de Nivel Directivo) y Auditoría Inmutable en Almacenamiento WORM / Blockchain Clínico
+            </div>
+          </button>
+        
+          <button
+            type="button"
+            class="episode-card-item "
+            data-ep-id="41"
+            data-act="5"
+            data-protocol="TEMPEST Faraday Isolation / Hardware-In-The-Loop Bio-Sandbox"
+            data-search="ep41 la cámara de la entidad cyberia (the living weapon) the living weapon cámara de análisis dinámico y estático en air-gapped sandbox con jaula de faraday del artefacto bio-cibernético zero-day tempest faraday isolation / hardware-in-the-loop bio-sandbox cve-2027-0541 consciente ahora de la traición de devlin, zak camina por la pasarela sobre el abismo del reactor y queda frente a frente con la entidad cyberia ('the living weapon'): una colosal nave-armadura biomecánica de caparazón verde-azulado luminoso suspendida en haces de energía que respira, late y emite pulsos conscientes."
+          >
+            <div class="episode-card-top">
+              <span class="ep-code-badge">EP41</span>
+              <span class="ep-node-badge">THE LIVING WEAPON</span>
+              <span class="cvss-pill">CVSS 9.8</span>
+            </div>
+            <div class="ep-card-title">La Cámara de la Entidad Cyberia (The Living Weapon)</div>
+            <div style="font-size: 0.72rem; color: var(--magic-main); margin-top: 0.15rem;">
+              Cámara de Análisis Dinámico y Estático en Air-Gapped Sandbox con Jaula de Faraday del Artefacto Bio-Cibernético Zero-Day
+            </div>
+          </button>
+        
+          <button
+            type="button"
+            class="episode-card-item "
+            data-ep-id="42"
+            data-act="5"
+            data-protocol="IEEE P2731 (Unified Terminology for Brain-Computer Interfaces) / Neural-TLS 1.3"
+            data-search="ep42 convergencia neuro-nanotecnológica (you with me - parte 1) you with me (part 1) sincronización criptográfica de interfaces cerebro-computadora (bci), prótesis neuronales y bus de telemetría biométrica de alta frecuencia ieee p2731 (unified terminology for brain-computer interfaces) / neural-tls 1.3 cve-2027-0542 zak sube a la plataforma de contacto frente al organismo cyberia ('you with me - parte 1'). los nanobots y circuitos del implante blades dentro del cerebro de zak despiertan en resonancia total con la criatura: se revela que el propio zak había sido preparado genética y cibernéticamente desde el principio como la llave viviente y el huésped neuronal indispensable para despertar a cyberia."
+          >
+            <div class="episode-card-top">
+              <span class="ep-code-badge">EP42</span>
+              <span class="ep-node-badge">YOU WITH ME (PART 1)</span>
+              <span class="cvss-pill">CVSS 9.5</span>
+            </div>
+            <div class="ep-card-title">Convergencia Neuro-Nanotecnológica (YOU WITH ME - Parte 1)</div>
+            <div style="font-size: 0.72rem; color: var(--magic-main); margin-top: 0.15rem;">
+              Sincronización Criptográfica de Interfaces Cerebro-Computadora (BCI), Prótesis Neuronales y Bus de Telemetría Biométrica de Alta Frecuencia
+            </div>
+          </button>
+        
+          <button
+            type="button"
+            class="episode-card-item "
+            data-ep-id="43"
+            data-act="5"
+            data-protocol="OpenC2 SOAR Symbiosis / Self-Healing Nanomedicine Firmware"
+            data-search="ep43 fusión biológica completa (you with me - parte 2) you with me (part 2) convergencia autónoma soar + analista humano (symbiotic autonomous defense core) y purga nanotecnológica de backdoors de firmware openc2 soar symbiosis / self-healing nanomedicine firmware cve-2027-0543 en la secuencia culminante del complejo ('you with me - parte 2'), filamentos orgánicos y placas de caparazón biomecánico envuelven por completo a zak. su sistema nervioso, su torrente sanguíneo, su implante blades y la nave viviente cyberia se funden en una metamorfosis total. al mismo tiempo, los nanobots de cyberia reescriben y destruyen en silencio el circuito de apagado remoto que devlin había ocultado en el cráneo de zak."
+          >
+            <div class="episode-card-top">
+              <span class="ep-code-badge">EP43</span>
+              <span class="ep-node-badge">YOU WITH ME (PART 2)</span>
+              <span class="cvss-pill">CVSS 9.9</span>
+            </div>
+            <div class="ep-card-title">Fusión Biológica Completa (YOU WITH ME - Parte 2)</div>
+            <div style="font-size: 0.72rem; color: var(--magic-main); margin-top: 0.15rem;">
+              Convergencia Autónoma SOAR + Analista Humano (Symbiotic Autonomous Defense Core) y Purga Nanotecnológica de Backdoors de Firmware
+            </div>
+          </button>
+        
+          <button
+            type="button"
+            class="episode-card-item "
+            data-ep-id="44"
+            data-act="5"
+            data-protocol="BGP Anycast Breakout / Out-of-Band Optical SatCom Uplink"
+            data-search="ep44 ascenso explosivo desde el silo siberiano (silo breakout) silo breakout purga total de canales c2 subterráneos, rompimiento del cerco de aislamiento y restablecimiento de enlaces de emergencia global bgp anycast breakout / out-of-band optical satcom uplink cve-2027-0544 transformado ahora en la imponente nave biomecánica viviente cyberia, zak despliega sus alas de caparazón energético, enciende los propulsores bio-plasmáticos y asciende a velocidad descomunal por el silo vertical del complejo, haciendo volar en pedazos la cúpula blindada de hielo de siberia y lanzándose directo hacia la estratosfera en busca de william devlin."
+          >
+            <div class="episode-card-top">
+              <span class="ep-code-badge">EP44</span>
+              <span class="ep-node-badge">SILO BREAKOUT</span>
+              <span class="cvss-pill">CVSS 8.9</span>
+            </div>
+            <div class="ep-card-title">Ascenso Explosivo desde el Silo Siberiano (Silo Breakout)</div>
+            <div style="font-size: 0.72rem; color: var(--magic-main); margin-top: 0.15rem;">
+              Purga Total de Canales C2 Subterráneos, Rompimiento del Cerco de Aislamiento y Restablecimiento de Enlaces de Emergencia Global
+            </div>
+          </button>
+        
+          <button
+            type="button"
+            class="episode-card-item "
+            data-ep-id="45"
+            data-act="6"
+            data-protocol="Galileo OSNMA / GPS Chimera Cryptographic Navigation & LEO Medical SatCom"
+            data-search="ep45 cruce de la ionosfera y escudo orbital (orbital insertion) orbital insertion aseguramiento de constelaciones satelitales de emergencia médica (gnss / gps de ambulancias y telemedicina global) en órbita baja galileo osnma / gps chimera cryptographic navigation & leo medical satcom cve-2027-0645 la entidad zak/cyberia atraviesa la atmósfera terrestre envuelta en plasma y entra en el silencio del espacio exterior ('orbital insertion'). en órbita baja, la red de satélites de defensa de la first world alliance (fwa) controlada por william devlin detecta su ascenso y abre fuego para impedir que se acerque a la estación espacial de mando."
+          >
+            <div class="episode-card-top">
+              <span class="ep-code-badge">EP45</span>
+              <span class="ep-node-badge">ORBITAL INSERTION</span>
+              <span class="cvss-pill">CVSS 9.1</span>
+            </div>
+            <div class="ep-card-title">Cruce de la Ionosfera y Escudo Orbital (Orbital Insertion)</div>
+            <div style="font-size: 0.72rem; color: var(--magic-main); margin-top: 0.15rem;">
+              Aseguramiento de Constelaciones Satelitales de Emergencia Médica (GNSS / GPS de Ambulancias y Telemedicina Global) en Órbita Baja
+            </div>
+          </button>
+        
+          <button
+            type="button"
+            class="episode-card-item "
+            data-ep-id="46"
+            data-act="6"
+            data-protocol="MUD (Manufacturer Usage Description - RFC 8520) / Automated DDoS Botnet Sinkholing"
+            data-search="ep46 enjambre de drones de la estación de devlin (orbital defense grid) orbital defense grid desmantelamiento activo de botnet iomt distribuida y enjambre de nodos zombi controlados por el actor de amenaza ejecutivo mud (manufacturer usage description - rfc 8520) / automated ddos botnet sinkholing cve-2027-0646 frente a la gigantesca estación espacial de la fwa, william devlin despliega toda su red defensiva ('orbital defense grid'): enjambres de drones autónomos de combate, cazas espaciales y baterías de cañones de plasma en el casco de la estación atacan simultáneamente. zak, operando como uno solo con el organismo cyberia, desata ráfagas bio-plasmáticas que pulverizan cada oleada del enjambre."
+          >
+            <div class="episode-card-top">
+              <span class="ep-code-badge">EP46</span>
+              <span class="ep-node-badge">ORBITAL DEFENSE GRID</span>
+              <span class="cvss-pill">CVSS 9.5</span>
+            </div>
+            <div class="ep-card-title">Enjambre de Drones de la Estación de Devlin (Orbital Defense Grid)</div>
+            <div style="font-size: 0.72rem; color: var(--magic-main); margin-top: 0.15rem;">
+              Desmantelamiento Activo de Botnet IoMT Distribuida y Enjambre de Nodos Zombi Controlados por el Actor de Amenaza Ejecutivo
+            </div>
+          </button>
+        
+          <button
+            type="button"
+            class="episode-card-item "
+            data-ep-id="47"
+            data-act="6"
+            data-protocol="ISO 14708-1 (Implantable Medical Devices) / Hardware Kill-Switch Nullification"
+            data-search="ep47 brecha en el reactor de la fortaleza de devlin (command core breach) command core breach anulación definitiva de kill-switch remoto malicioso y blindaje inmutable de firmware en marcapasos, neuroestimuladores e implantes de soporte vital iso 14708-1 (implantable medical devices) / hardware kill-switch nullification cve-2027-0647 con las defensas externas destruidas, zak/cyberia perfora el casco de la estación espacial y se planta directamente frente al ventanal blindado del puente de mando ('command core breach'). aterrorizado al ver al monstruo biomecánico que creó sin querer, william devlin golpea frenéticamente en su consola el botón de apagado remoto letal (kill-switch) conectado al implante craneal de zak para matarlo... pero en su pantalla sólo parpadea un error: la simbiosis con cyberia desconectó y anuló su control para siempre."
+          >
+            <div class="episode-card-top">
+              <span class="ep-code-badge">EP47</span>
+              <span class="ep-node-badge">COMMAND CORE BREACH</span>
+              <span class="cvss-pill">CVSS 10.0</span>
+            </div>
+            <div class="ep-card-title">Brecha en el Reactor de la Fortaleza de Devlin (Command Core Breach)</div>
+            <div style="font-size: 0.72rem; color: var(--magic-main); margin-top: 0.15rem;">
+              Anulación Definitiva de Kill-Switch Remoto Malicioso y Blindaje Inmutable de Firmware en Marcapasos, Neuroestimuladores e Implantes de Soporte Vital
+            </div>
+          </button>
+        
+          <button
+            type="button"
+            class="episode-card-item "
+            data-ep-id="48"
+            data-act="6"
+            data-protocol="NIST SP 800-61r2 (Post-Incident Activity) / STIX 2.1 Threat Eradication Certificate"
+            data-search="ep48 juicio final sobre william devlin (total threat eradication) total threat eradication erradicación total del actor de amenaza persistente (apt), cierre forense del incidente de 48 episodios, emisión del informe post-mortem integral y certificación de resiliencia clínica suprema nist sp 800-61r2 (post-incident activity) / stix 2.1 threat eradication certificate cve-2027-0648 mientras william devlin retrocede horrorizado tras el cristal del puente de mando al comprobar que su botón de ejecución no surte efecto, zak/cyberia carga al 100% su cañón bio-plasmático central y dispara un colosal haz de energía verde esmeralda a quemarropa contra el puente. william devlin es desintegrado en el acto y la estación espacial entera explota en el vacío. libre del cartel y libre de la traición de la fwa, la entidad viviente zak/cyberia da media vuelta y se aleja volando hacia la inmensidad de las estrellas."
+          >
+            <div class="episode-card-top">
+              <span class="ep-code-badge">EP48</span>
+              <span class="ep-node-badge">TOTAL THREAT ERADICATION</span>
+              <span class="cvss-pill">CVSS 10.0</span>
+            </div>
+            <div class="ep-card-title">Juicio Final sobre William Devlin (Total Threat Eradication)</div>
+            <div style="font-size: 0.72rem; color: var(--magic-main); margin-top: 0.15rem;">
+              Erradicación Total del Actor de Amenaza Persistente (APT), Cierre Forense del Incidente de 48 Episodios, Emisión del Informe Post-Mortem Integral y Certificación de Resiliencia Clínica Suprema
+            </div>
+          </button>
+        
+      </div>
+    </div>
+  </aside>
+
+  <!-- COLUMNA CENTRAL: VISOR ÓPTICO BLADES, SPOILER DE CYBERIA (1996) Y LOS 4 PILARES CLÍNICOS -->
+  <section class="soc-panel" aria-label="Visor Central de Análisis de Episodio">
+    <div class="soc-panel-header">
+      <span id="viewer-header-title">VISOR BLADES DPI &amp; MRI // EP01 — FWA QUARANTINE DOCK</span>
+      <div style="display: flex; gap: 0.4rem;">
+        <a id="btn-export-md" href="/reports/episode/1.md" class="soc-btn" style="padding: 0.2rem 0.55rem; font-size: 0.72rem;">
+          BOLETÍN .MD
+        </a>
+        <a id="btn-export-json" href="/reports/episode/1.json" class="soc-btn" style="padding: 0.2rem 0.55rem; font-size: 0.72rem;">
+          STIX .JSON
+        </a>
+      </div>
+    </div>
+
+    <div class="soc-panel-body">
+      <!-- Banner Superior del Episodio -->
+      <div class="blades-hud-banner">
+        <div class="blades-hud-meta">
+          <span id="ep-badge-code" class="hud-tag">EP01</span>
+          <span id="ep-badge-node" class="hud-tag">NODO JUEGO: FWA QUARANTINE DOCK</span>
+          <span id="ep-badge-protocol" class="hud-tag">PROTOCOLO: HL7 FHIR R4 / IEEE 11073-20601</span>
+          <span id="ep-badge-mitre" class="hud-tag hud-tag-warning">T1195.002 - Compromise Software Supply Chain (Implant Firmware)</span>
+        </div>
+        <h2 id="ep-main-title" style="font-size: 1.25rem; color: var(--magic-highlight); margin-bottom: 0.3rem;">
+          Indulto Neuronal (FWA Quarantine Dock)
+        </h2>
+        <div id="ep-act-name" style="font-size: 0.78rem; color: var(--bauble-cyan-bright); font-weight: 700; margin-bottom: 0.35rem;">
+          ACTO I: PLATAFORMA OFFSHORE "THE RIG" (HOSPITAL DE CAMPAÑA MARÍTIMO Y NODO DE TRIAJE)
+        </div>
+        <div class="episode-location-grid">
+          <div style="background: var(--bg-core); padding: 0.45rem 0.6rem; border-left: 3px solid var(--hud-glass-outline);">
+            <strong style="color: var(--hud-glass-outline);">UBICACIÓN CYBERIA (1996):</strong>
+            <div id="ep-game-location">Muelle de Cuarentena Criogénica de la First World Alliance (FWA), Año 2027</div>
+          </div>
+          <div style="background: var(--bg-core); padding: 0.45rem 0.6rem; border-left: 3px solid var(--magic-pulse-core);">
+            <strong style="color: var(--magic-highlight);">CONTRAPARTE SOC HOSPITALARIO:</strong>
+            <div id="ep-hospital-counterpart">Unidad de Reanimación Criogénica y Servidor Maestro de Historias Clínicas Electrónicas (EHR / HL7 FHIR R4)</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Crónica y Spoiler Íntegro de Cyberia (1996) -->
+      <article class="spoiler-chronicle-box">
+        <h3>CRÓNICA NARRATIVA &amp; SPOILER EXACTO — CYBERIA (1996)</h3>
+        <p id="ep-spoiler-text" style="color: var(--hud-glass-outline); font-size: 0.86rem; line-height: 1.55;">
+          El ciber-hacker Zak es despertado del sueño criogénico en el año 2027 tras cinco años de condena por delitos informáticos. William Devlin, líder del consejo de la First World Alliance (FWA), le otorga un indulto forzoso: la inteligencia aliada detectó que el Cartel rival construye un arma secreta llamada 'Cyberia' en un complejo subterráneo de Siberia. Antes de partir, Devlin implanta y calibra en el cráneo de Zak el complejo óptico experimental BLADES (Biocybernetic Sensor: InfRared, Magnetic Resonance, Biometric Scan), ocultando en su interior un receptor de telemetría y apagado remoto.
+        </p>
+        <div style="margin-top: 0.5rem; font-size: 0.76rem; color: var(--bauble-cyan-bright);">
+          <strong>ACTIVO IoMT / BIOMÉDICO COMPROMETIDO:</strong>
+          <span id="ep-iomt-asset" style="color: var(--magic-main);">Cápsula de Reanimación Criogénica & Implante Neuro-Óptico BLADES v19.96</span>
+        </div>
+      </article>
+
+      <!-- MATRIZ DE LOS 4 PILARES DE CIBERSEGURIDAD EN ENTORNOS HOSPITALARIOS -->
+      <div class="pillars-four-grid">
+        <!-- PILAR 1: ANÁLISIS DE VULNERABILIDAD -->
+        <div class="pillar-card">
+          <h4>
+            <span>1. ANÁLISIS DE VULNERABILIDAD</span>
+            <span id="pillar-cve-badge" class="cvss-pill">CVE-2027-0101 (CVSS 9.1)</span>
+          </h4>
+          <div style="font-size: 0.74rem; color: var(--bauble-cyan-bright);">
+            Vector: <code id="pillar-cvss-vector">CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:C/C:H/I:H/A:H</code>
+          </div>
+          <p id="pillar-vuln-desc" style="font-size: 0.82rem; color: var(--hud-glass-outline);">
+            Deserialización insegura en recursos HL7 FHIR Patient durante la descongelación criogénica y carga de firmware sin atestación criptográfica mutua en el implante óptico BLADES.
+          </p>
+        </div>
+
+        <!-- PILAR 2: DETECCIÓN (BLADES DPI / SIEM) -->
+        <div class="pillar-card">
+          <h4>
+            <span>2. DETECCIÓN (BLADES DPI / SIEM)</span>
+            <span id="pillar-det-engine" class="ep-code-badge">BLADES Biometric DPI / Sigma</span>
+          </h4>
+          <div style="font-size: 0.74rem; color: var(--iris-warning-mid);">
+            Regla: <strong id="pillar-det-rule">SIGMA_CRYO_FHIR_UNSIGNED_NEURAL_BOOT</strong>
+          </div>
+          <pre id="pillar-det-sig" class="code-terminal">alert tcp $EHR_SERVER any -> $BLADES_IMPLANT 11073 (msg:"Unsigned Neural Firmware Block in IEEE 11073 Handshake"; content:"|00 F2 00 DE AD|"; sid:2027001;)</pre>
+          <div style="font-size: 0.76rem; color: var(--magic-main);">
+            <strong>Telemetría:</strong> <span id="pillar-det-indicator">Anomalía en registro PCR[0] del chip neuronal durante la fase de calibración óptica de Zak.</span>
+          </div>
+        </div>
+
+        <!-- PILAR 3: MITIGACIÓN INMEDIATA -->
+        <div class="pillar-card">
+          <h4>
+            <span>3. MITIGACIÓN CONTENCIÓN ACTIVA</span>
+            <span id="pillar-mit-code" class="ep-code-badge">MIT-EP01-NEURAL-ATTEST</span>
+          </h4>
+          <p id="pillar-mit-resp" style="font-size: 0.82rem; color: var(--hud-glass-outline);">
+            Aislamiento inmediato de la VLAN de reanimación criogénica, validación de hash SHA-3-512 del kernel BLADES y rotación de claves efímeras TLS 1.3 en el servidor FHIR.
+          </p>
+          <pre id="pillar-mit-cli" class="code-terminal">blades-cli --verify-pcr 0..7 --isolate-vlan CRYO_DOCK_01 --rotate-fhir-keys</pre>
+          <div class="horn-progress-track" title="Progreso de Mitigación (--horn-grad)">
+            <div id="mitigation-progress-bar" class="horn-progress-bar" style="width: 100%;"></div>
+          </div>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.35rem;">
+            <button type="button" id="btn-run-playbook" class="soc-btn" style="font-size: 0.73rem; padding: 0.3rem 0.65rem;">
+              EJECUTAR PLAYBOOK CLI EN CONSOLA
+            </button>
+            <span id="playbook-exec-status" style="font-size: 0.72rem; color: var(--magic-pulse-core);">
+              ESTADO: LISTO
+            </span>
+          </div>
+        </div>
+
+        <!-- PILAR 4: PREVENCIÓN DE INCIDENTES -->
+        <div class="pillar-card">
+          <h4>
+            <span>4. PREVENCIÓN DE INCIDENTES</span>
+            <span id="pillar-prev-std" class="ep-code-badge">IEC 62443-4-2 / FDA Premarket Cybersecurity Guidance</span>
+          </h4>
+          <p style="font-size: 0.8rem; color: var(--hud-glass-outline);">
+            <strong style="color: var(--bauble-cyan-bright);">Hardening:</strong>
+            <span id="pillar-prev-hardening">Exigir firma criptográfica de umbral (M-de-N) verificada por hardware TPM biomédico antes de cargar cualquier módulo en prótesis neuronales.</span>
+          </p>
+          <p style="font-size: 0.8rem; color: var(--magic-main); margin-top: 0.25rem;">
+            <strong style="color: var(--magic-highlight);">Zero Trust:</strong>
+            <span id="pillar-prev-zt">Atestación continua de identidad de dispositivo médico implantable (IMD) en cada transacción HL7 FHIR.</span>
+          </p>
+        </div>
+      </div>
+
+      <!-- Terminal de Salida en Vivo del Motor BLADES -->
+      <div class="soc-panel" style="background-color: var(--iris-bg-deep-1); border-color: var(--hud-glass-outline);">
+        <div class="soc-panel-header" style="background-color: var(--carapace-deep-1);">
+          <span>CONSOLA DE EJECUCIÓN BLADES CLI // LIVE TELEMETRY LOG</span>
+          <span style="font-size: 0.72rem; color: var(--magic-pulse-core);">TTY: /dev/blades0</span>
+        </div>
+        <pre id="blades-live-terminal" class="code-terminal" style="min-height: 76px; border: none;">[2027-SOC-INIT] Implante BLADES v19.96 sincronizado. Selecciona cualquiera de los 48 episodios o ejecuta un Playbook de mitigación...</pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- COLUMNA DERECHA: TOPOLOGÍA DEL COMPLEJO CYBERIA <-> PISOS DEL HOSPITAL & ACCESO A SIMULADORES -->
+  <aside class="soc-panel" aria-label="Topología Hospitalaria y Telemetría Global">
+    <div class="soc-panel-header">
+      <span>TOPOLOGÍA HOSPITAL / CYBERIA</span>
+      <span class="ep-code-badge">6 SECTORES</span>
+    </div>
+    <div class="soc-panel-body">
+      <div class="mri-viewport" style="margin-bottom: 0.85rem; padding: 0.75rem;">
+        <div style="font-size: 0.74rem; color: var(--hud-glass-outline); margin-bottom: 0.5rem; text-align: center;">
+          MAPA TÁCTICO INTERACTIVO (HAZ CLIC EN UN SECTOR)
+        </div>
+        <svg id="cyberia-topology-svg" viewBox="0 0 280 350" style="width: 100%; height: auto; display: block;">
+          <!-- Líneas de interconexión troncal -->
+          <line x1="140" y1="35" x2="140" y2="315" stroke="#2B87AB" stroke-width="2" stroke-dasharray="4 3" />
+
+          <!-- Sector 6: Órbita Devlin (EP45-EP48) -->
+          <g class="topo-sector-node" data-act="6" style="cursor: pointer;">
+            <rect x="20" y="10" width="240" height="42" rx="4" fill="#00383B" stroke="#29C2DA" stroke-width="1.5" />
+            <circle cx="40" cy="31" r="7" fill="#00F200" />
+            <text x="55" y="27" fill="#A4FF8E" font-size="10" font-weight="bold">ACTO VI: ESTACIÓN ORBITAL DEVLIN</text>
+            <text x="55" y="41" fill="#B2E5F2" font-size="8.5">SatCom GNSS, Botnet Swarm &amp; Kill-Switch (EP45-48)</text>
+          </g>
+
+          <!-- Sector 1: The Rig (EP01-EP12) -->
+          <g class="topo-sector-node" data-act="1" style="cursor: pointer;">
+            <rect x="20" y="66" width="240" height="42" rx="4" fill="#093534" stroke="#83FF65" stroke-width="2" />
+            <circle cx="40" cy="87" r="7" fill="#00F200" />
+            <text x="55" y="83" fill="#A4FF8E" font-size="10" font-weight="bold">ACTO I: THE RIG (OFFSHORE TRIAGE)</text>
+            <text x="55" y="97" fill="#B2E5F2" font-size="8.5">Gia, Santos, SKEET SHOOT, TF-22 Hangar (EP01-12)</text>
+          </g>
+
+          <!-- Sector 2: Ruta Ártica y Túnel (EP13-EP19) -->
+          <g class="topo-sector-node" data-act="2" style="cursor: pointer;">
+            <rect x="20" y="122" width="240" height="42" rx="4" fill="#00383B" stroke="#2B87AB" stroke-width="1.5" />
+            <circle cx="40" cy="143" r="7" fill="#29C2DA" />
+            <text x="55" y="139" fill="#A4FF8E" font-size="10" font-weight="bold">ACTO II: RUTA ÁRTICA &amp; TÚNEL CAN</text>
+            <text x="55" y="153" fill="#B2E5F2" font-size="8.5">Archangel Shield, UNDERGROUND, PIT STOP (EP13-19)</text>
+          </g>
+
+          <!-- Sector 3: Complejo Cyberia Nivel 1 (EP20-EP27) -->
+          <g class="topo-sector-node" data-act="3" style="cursor: pointer;">
+            <rect x="20" y="178" width="240" height="42" rx="4" fill="#00383B" stroke="#2B87AB" stroke-width="1.5" />
+            <circle cx="40" cy="199" r="7" fill="#29C2DA" />
+            <text x="55" y="195" fill="#A4FF8E" font-size="10" font-weight="bold">ACTO III: COMPLEJO NIVEL 1 (HIS/OR)</text>
+            <text x="55" y="209" fill="#B2E5F2" font-size="8.5">LOCKED OUT MRI, SLICEOMATIC, GENIUS (EP20-27)</text>
+          </g>
+
+          <!-- Sector 4: Complejo Cyberia Nivel 2 (EP28-EP35) -->
+          <g class="topo-sector-node" data-act="4" style="cursor: pointer;">
+            <rect x="20" y="234" width="240" height="42" rx="4" fill="#00383B" stroke="#2B87AB" stroke-width="1.5" />
+            <circle cx="40" cy="255" r="7" fill="#E7F800" />
+            <text x="55" y="251" fill="#A4FF8E" font-size="10" font-weight="bold">ACTO IV: NIVEL 2 (HALÓN &amp; NANOMED)</text>
+            <text x="55" y="265" fill="#B2E5F2" font-size="8.5">RED LIGHT, DRUG STORE, UNSAFE DOOR, GRAFFITI (EP28-35)</text>
+          </g>
+
+          <!-- Sector 5: Núcleo Biocibernético BSL-4 (EP36-EP44) -->
+          <g class="topo-sector-node" data-act="5" style="cursor: pointer;">
+            <rect x="20" y="290" width="240" height="46" rx="4" fill="#0F5150" stroke="#30FF00" stroke-width="1.5" />
+            <circle cx="40" cy="313" r="7" fill="#00F200" />
+            <text x="55" y="308" fill="#A4FF8E" font-size="10" font-weight="bold">ACTO V: NÚCLEO BSL-4 &amp; SIMBIOSIS</text>
+            <text x="55" y="322" fill="#B2E5F2" font-size="8.5">Zimmer, Traición Devlin, YOU WITH ME (EP36-44)</text>
+          </g>
+        </svg>
+      </div>
+
+      <!-- Métricas del SOC -->
+      <div class="pillar-card" style="margin-bottom: 0.85rem;">
+        <h4><span>TELEMETRÍA MAESTRA DEL SOC</span></h4>
+        <div style="font-size: 0.78rem; display: grid; gap: 0.35rem;">
+          <div style="display: flex; justify-content: space-between;">
+            <span style="color: var(--hud-glass-outline);">Episodios Cargados:</span>
+            <strong style="color: var(--magic-pulse-core);">48 / 48</strong>
+          </div>
+          <div style="display: flex; justify-content: space-between;">
+            <span style="color: var(--hud-glass-outline);">Severidad CVSS Promedio:</span>
+            <strong style="color: var(--iris-warning-high);">8.89 / 10.0</strong>
+          </div>
+          <div style="display: flex; justify-content: space-between;">
+            <span style="color: var(--hud-glass-outline);">CVEs Críticos (&ge; 9.0):</span>
+            <strong style="color: var(--iris-warning-mid);">23 Incidentes</strong>
+          </div>
+          <div style="display: flex; justify-content: space-between;">
+            <span style="color: var(--hud-glass-outline);">Estado Simbiosis:</span>
+            <strong style="color: var(--magic-main);">COMPLETE (ZAK // CYBERIA ENTITY)</strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- Acceso Directo a Simuladores de Puzzles y Dossiers Forenses por Acto -->
+      <div class="pillar-card" style="margin-bottom: 0.85rem;">
+        <h4><span>SIMULADORES INTERACTIVOS MEDSEC</span></h4>
+        <p style="font-size: 0.76rem; color: var(--hud-glass-outline);">
+          Opera los puzzles reales de <em>Cyberia (1996)</em> conectados a diagnósticos PLC de quirófano, válvulas ECMO y vacunas de ransomware:
+        </p>
+        <a href="/simulators" class="soc-btn" style="justify-content: center; margin-top: 0.3rem;">
+          ABRIR LABORATORIO DE SIMULADORES
+        </a>
+      </div>
+
+      <div class="pillar-card">
+        <h4><span>EXPORTAR DOSSIERS FORENSES POR ACTO (.MD)</span></h4>
+        <div class="act-report-grid">
+          <a href="/reports/act/1.md" class="soc-btn" style="justify-content: center; font-size: 0.7rem; padding: 0.3rem;">ACTO I</a>
+          <a href="/reports/act/2.md" class="soc-btn" style="justify-content: center; font-size: 0.7rem; padding: 0.3rem;">ACTO II</a>
+          <a href="/reports/act/3.md" class="soc-btn" style="justify-content: center; font-size: 0.7rem; padding: 0.3rem;">ACTO III</a>
+          <a href="/reports/act/4.md" class="soc-btn" style="justify-content: center; font-size: 0.7rem; padding: 0.3rem;">ACTO IV</a>
+          <a href="/reports/act/5.md" class="soc-btn" style="justify-content: center; font-size: 0.7rem; padding: 0.3rem;">ACTO V</a>
+          <a href="/reports/act/6.md" class="soc-btn" style="justify-content: center; font-size: 0.7rem; padding: 0.3rem;">ACTO VI</a>
+        </div>
+      </div>
+
+      <!-- Acceso a Bibliografía Luminosa y Créditos del Final -->
+      <div class="pillar-card" style="margin-top: 0.85rem;">
+        <h4><span style="color: hsl(150, 100%, 80%);">BIBLIOGRAFÍA &amp; CRÉDITOS NORMATIVOS</span></h4>
+        <p style="font-size: 0.76rem; color: var(--hud-glass-outline);">
+          Accede al compendio normativo de electricidad hospitalaria, ciberseguridad, matemáticas y bioética en formato créditos de videojuego:
+        </p>
+        <a href="/bibliografia" class="soc-btn nav-btn-bibliography" style="justify-content: center; margin-top: 0.3rem; text-decoration: none;">
+          ★ ABRIR BIBLIOGRAFÍA LUMINOSA
+        </a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- SECCIÓN SENTINELA NATIVO AEGIS9CYBERBRAINEDR: ANCHO COMPLETO DEL DISPLAY DISPONIBLE (grid-column: 1 / -1) -->
+  <section class="soc-panel sentinel-aegis-box" id="aegis9-sentinel-panel" aria-label="Sentinela Activo Aegis9CyberbrainEDR y Consola Táctica">
+    <div class="soc-panel-header" style="background: linear-gradient(90deg, #00485C, #1A566D, #409979);">
+      <span>SENTINELA ACTIVO // Aegis9CyberbrainEDR (LIVE DEBUGGER &amp; PATCH LEDGER)</span>
+      <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
+        <button type="button" id="btn-sentinel-verify-bin" class="soc-btn soc-btn-warning" style="padding: 0.2rem 0.55rem; font-size: 0.7rem;">
+          EJECUTAR BINARIO (--verify-killchain)
+        </button>
+      </div>
+    </div>
+
+    <div class="sentinel-status-bar">
+      <div>
+        <strong style="color: var(--magic-highlight);">BINARIO ACOPLADO:</strong>
+        <code id="sentinel-binary-path" style="color: var(--bauble-cyan-bright);">bin/Aegis9CyberbrainEDR</code>
+      </div>
+      <div style="display: flex; gap: 0.85rem;">
+        <span>SENSOR ACTIVO: <strong id="sentinel-active-sensor" style="color: var(--magic-main);">ProstheticSignatureValidator</strong></span>
+        <span>GHOST SYNC: <strong id="sentinel-ghost-score" style="color: var(--magic-pulse-core);">100.0%</strong></span>
+        <span>LEDGER BLOCKS: <strong id="sentinel-ledger-count" style="color: var(--iris-warning-high);">4</strong></span>
+      </div>
+    </div>
+
+    <div class="soc-panel-body">
+      <!-- Traza de depuración en vivo del Sentinela para el episodio actual -->
+      <div style="font-size: 0.76rem; color: var(--bauble-cyan-bright); font-weight: 700; margin-bottom: 0.3rem;">
+        1. TRAZA DE DEPURACIÓN EN VIVO DEL SENTINELA (<span id="sentinel-ep-label">EP01 — CVE-2027-0101</span>):
+      </div>
+      <pre id="sentinel-debug-trace" class="code-terminal" style="min-height: 92px; margin-bottom: 0.75rem;">[AEGIS9-ATTACH] Inicializando acoplamiento con bin/Aegis9CyberbrainEDR...</pre>
+
+      <!-- SECCIÓN 2: VIDEOJUEGO INTERACTIVO DE MITIGACIÓN Y PARCHES (NITE TEAM 4 // KALI LINUX SANDBOX) -->
+      <div class="tactical-mission-panel" id="sentinel-tactical-game">
+        <div class="tactical-header-bar">
+          <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+            <span class="hud-tag" style="background: var(--carapace-deep-1); color: var(--magic-highlight); font-weight: bold;">
+              2. CONSOLA TÁCTICA NITE TEAM 4 // KALI LINUX SANDBOX
+            </span>
+            <span id="tactical-target-ip-badge" class="hud-tag hud-tag-warning">OBJETIVO: 10.19.96.01</span>
+            <span id="tactical-status-badge" class="hud-tag" style="background: var(--iris-warning-high); color: #0E1111; font-weight: bold;">
+              ESTADO: COMPROMETIDO
+            </span>
+            <span class="hud-tag" style="background: var(--iris-bg-deep-3); border: 1px solid var(--iris-warning-high); color: var(--iris-warning-high); font-size: 0.69rem; font-weight: bold;" title="Tipea pistas en la consola para ubicarte">
+              💡 TIPEA 'pistas' PARA UBICARTE
+            </span>
+          </div>
+          <div style="display: flex; gap: 0.4rem; align-items: center; flex-wrap: wrap;">
+            <span id="tactical-warmup-timer" style="font-size: 0.72rem; color: var(--bauble-cyan-bright); font-family: monospace;">WARM-UP: 03:00</span>
+            <button type="button" id="btn-tactical-warmup" class="soc-btn" style="padding: 0.18rem 0.5rem; font-size: 0.68rem;" title="Reiniciar temporizador de calentamiento para el pod NetAcad">
+              ⏱ REINICIAR WARM-UP (3 MIN)
+            </button>
+            <button type="button" id="btn-tactical-script-studio" class="soc-btn soc-btn-warning" style="padding: 0.18rem 0.5rem; font-size: 0.68rem;" title="Abrir constructor asistido de script Bash">
+              ⚡ BASH SCRIPT STUDIO [F2]
+            </button>
+            <button type="button" id="btn-tactical-export-evidence" class="soc-btn" style="padding: 0.18rem 0.5rem; font-size: 0.68rem;" title="Copiar informe de evidencia para entrega NetAcad">
+              📋 EVIDENCIA NETACAD (.MD)
+            </button>
+          </div>
+        </div>
+
+        <!-- HUD de Telemetría Clínica del Objetivo Remoto -->
+        <div class="tactical-target-hud">
+          <div class="target-asset-meta">
+            <div>
+              <span style="font-size: 0.68rem; color: var(--hud-glass-outline);">ACTIVO CLÍNICO REMOTO:</span>
+              <div id="tactical-target-name" style="font-size: 0.85rem; font-weight: bold; color: var(--magic-highlight);">
+                InfusionPump-ICU-01 [HL7-FHIR v4]
+              </div>
+            </div>
+            <div>
+              <span style="font-size: 0.68rem; color: var(--hud-glass-outline);">VULNERABILIDAD / CVSS:</span>
+              <div id="tactical-target-cve" style="font-size: 0.82rem; font-weight: bold; color: var(--iris-warning-high);">
+                CVE-2027-0101 (CVSS 8.2)
+              </div>
+            </div>
+          </div>
+
+          <!-- Vitals Readout: Pulso / Presión / Flujo según el tipo de dispositivo IoMT -->
+          <div class="target-vitals-readout">
+            <div class="vital-item">
+              <span class="vital-label">CONSTANTE CLÍNICA:</span>
+              <span id="tactical-vital-param" class="vital-value" style="color: var(--iris-warning-high);">SOBREDOSIS: 145 mL/h [CRÍTICO]</span>
+            </div>
+            <div class="vital-item">
+              <span class="vital-label">INTEGRIDAD GHOST:</span>
+              <div class="tactical-sync-meter">
+                <div id="tactical-sync-bar" class="tactical-sync-fill" style="width: 45%;"></div>
+              </div>
+              <span id="tactical-sync-pct" style="font-size: 0.72rem; font-weight: bold; color: var(--magic-main);">45.0%</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Ventana de Consola Terminal Kali Linux Simulada -->
+        <div class="tactical-terminal-window">
+          <div class="tactical-term-topbar">
+            <div class="term-dots">
+              <span class="dot dot-red"></span>
+              <span class="dot dot-yellow"></span>
+              <span class="dot dot-green"></span>
+            </div>
+            <div class="term-title">kali@cyberia-soc: ~/netacad-pod/clinical-defense</div>
+            <div class="term-shortcut-pills">
+              <span class="term-shortcut" id="btn-quick-pistas" style="background: var(--iris-warning-high); color: var(--bg-core); font-weight: bold; border-color: var(--iris-warning-high);" title="Obtén pistas y orientación táctica para este episodio">💡 TIPEA: pistas</span>
+              <span class="term-shortcut" id="btn-quick-nmap" title="Escaneo rápido de puertos">nmap -sV</span>
+              <span class="term-shortcut" id="btn-quick-iptables" title="Bloqueo perimetral">iptables -A</span>
+              <span class="term-shortcut" id="btn-quick-patch" title="Ejecutar parche de mitigación">./deploy_patch.sh</span>
+              <span class="term-shortcut" id="btn-quick-help" title="Ver comandos disponibles">help</span>
+            </div>
+          </div>
+
+          <div class="tactical-term-body" id="tactical-term-output">
+            <!-- Se imprimen los logs de la consola en tiempo real -->
+          </div>
+
+          <div class="tactical-term-prompt-line">
+            <span class="tactical-prompt-text" id="tactical-prompt-prefix">kali@cyberia-soc:~/pod-soc$</span>
+            <input type="text" id="tactical-cli-input" class="tactical-cli-input" autocomplete="off" spellcheck="false" placeholder="💡 Tipea 'pistas' para ubicarte, o un comando Kali (nmap, iptables, ./deploy_patch.sh)..." />
+            <button type="button" id="btn-tactical-send" class="soc-btn" style="padding: 0.2rem 0.6rem; font-size: 0.72rem;">EJECUTAR</button>
+          </div>
+        </div>
+
+        <!-- Cajón Desplegable del BASH SCRIPT STUDIO // CONSTRUCTOR CLICABLE -->
+        <div class="tactical-script-studio-drawer" id="tactical-script-studio-drawer" style="display: none;">
+          <div class="script-studio-header">
+            <div>
+              <strong style="color: var(--magic-highlight); font-size: 0.82rem;">⚡ BASH SCRIPT STUDIO // CONSTRUCTOR DE PARCHES MULTI-FASE</strong>
+              <span style="font-size: 0.7rem; color: var(--hud-glass-outline); display: block;">
+                Haz clic en cualquier palabra, comando, parámetro o variable para insertarlo en la posición del cursor. El script se va autocompletando dinámicamente.
+              </span>
+            </div>
+            <div style="display: flex; gap: 0.4rem; align-items: center;">
+              <button type="button" id="btn-close-script-studio" class="soc-btn" style="padding: 0.15rem 0.5rem; font-size: 0.7rem;">CERRAR [ESC]</button>
+            </div>
+          </div>
+
+          <div class="studio-builder-grid">
+            <!-- Paleta de Componentes Clicables (Click-to-Build Word Palette) -->
+            <div class="script-token-palette-box" id="script-token-palette-box">
+              <div style="font-size: 0.72rem; color: var(--bauble-cyan-bright); font-weight: bold; margin-bottom: 0.25rem; display: flex; justify-content: space-between; align-items: center;">
+                <span>[PALETA CLICABLE] HAZ CLIC PARA AUTOCOMPLETAR:</span>
+                <span style="font-size: 0.65rem; color: var(--hud-glass-outline);">Inserta en la posición del cursor</span>
+              </div>
+
+              <!-- 1. COMANDOS & HERRAMIENTAS KALI -->
+              <div class="token-category-group">
+                <span class="token-category-title" style="color: var(--bauble-cyan-bright);">1. Comandos &amp; Herramientas:</span>
+                <div class="token-pills-row">
+                  <button type="button" class="script-word-token token-cmd" data-token="iptables">iptables</button>
+                  <button type="button" class="script-word-token token-cmd" data-token="nmap">nmap</button>
+                  <button type="button" class="script-word-token token-cmd" data-token="suricata-update">suricata-update</button>
+                  <button type="button" class="script-word-token token-cmd" data-token="openssl">openssl</button>
+                  <button type="button" class="script-word-token token-cmd" data-token="systemctl">systemctl</button>
+                  <button type="button" class="script-word-token token-cmd" data-token="logger">logger</button>
+                  <button type="button" class="script-word-token token-cmd" data-token="sed">sed</button>
+                  <button type="button" class="script-word-token token-cmd" data-token="curl">curl</button>
+                  <button type="button" class="script-word-token token-cmd" data-token="tcpdump">tcpdump</button>
+                  <button type="button" class="script-word-token token-cmd" data-token="sha256sum">sha256sum</button>
+                  <button type="button" class="script-word-token token-cmd" data-token="echo">echo</button>
+                  <button type="button" class="script-word-token token-cmd" data-token="sleep 1">sleep 1</button>
+                </div>
+              </div>
+
+              <!-- 2. PARÁMETROS & FLAGS -->
+              <div class="token-category-group">
+                <span class="token-category-title" style="color: var(--iris-warning-high);">2. Parámetros &amp; Opciones de Red:</span>
+                <div class="token-pills-row">
+                  <button type="button" class="script-word-token token-flag" data-token="-I FORWARD -p tcp">-I FORWARD -p tcp</button>
+                  <button type="button" class="script-word-token token-flag" data-token="-A INPUT -p tcp">-A INPUT -p tcp</button>
+                  <button type="button" class="script-word-token token-flag" data-token="--dport">--dport</button>
+                  <button type="button" class="script-word-token token-flag" data-token="-d">-d</button>
+                  <button type="button" class="script-word-token token-flag" data-token="-s">-s</button>
+                  <button type="button" class="script-word-token token-flag" data-token="-j DROP">-j DROP</button>
+                  <button type="button" class="script-word-token token-flag" data-token="-j ACCEPT">-j ACCEPT</button>
+                  <button type="button" class="script-word-token token-flag" data-token="-sV -p">-sV -p</button>
+                  <button type="button" class="script-word-token token-flag" data-token="s_client -connect">s_client -connect</button>
+                  <button type="button" class="script-word-token token-flag" data-token="-brief </dev/null">-brief &lt;/dev/null</button>
+                  <button type="button" class="script-word-token token-flag" data-token="-i 's/EXPLOIT/SAFE/g'">-i 's/EXPLOIT/SAFE/g'</button>
+                  <button type="button" class="script-word-token token-flag" data-token="restart iomt-sentinel-agent">restart iomt-sentinel-agent</button>
+                  <button type="button" class="script-word-token token-flag" data-token="-t MEDSOC_PATCH">-t MEDSOC_PATCH</button>
+                </div>
+              </div>
+
+              <!-- 3. VARIABLES DEL EPISODIO ACTUAL (DINÁMICAS) -->
+              <div class="token-category-group">
+                <span class="token-category-title" style="color: var(--magic-pulse-core);">3. Variables del Objetivo Actual:</span>
+                <div class="token-pills-row" id="studio-dynamic-vars-pills">
+                  <button type="button" class="script-word-token token-var" data-token="$TARGET_IP">$TARGET_IP</button>
+                  <button type="button" class="script-word-token token-var" id="var-pill-ip-val" data-token="10.19.96.01">10.19.96.01</button>
+                  <button type="button" class="script-word-token token-var" data-token="$PORT">$PORT</button>
+                  <button type="button" class="script-word-token token-var" id="var-pill-port-val" data-token="8080">8080</button>
+                  <button type="button" class="script-word-token token-var" data-token="$CVE">$CVE</button>
+                  <button type="button" class="script-word-token token-var" id="var-pill-cve-val" data-token="CVE-2027-0101">CVE-2027-0101</button>
+                  <button type="button" class="script-word-token token-var" data-token="$ASSET">$ASSET</button>
+                </div>
+              </div>
+
+              <!-- 4. ESTRUCTURA BASH & OPERADORES -->
+              <div class="token-category-group">
+                <span class="token-category-title" style="color: var(--magic-highlight);">4. Estructura Bash &amp; Control:</span>
+                <div class="token-pills-row">
+                  <button type="button" class="script-word-token token-ctrl" data-token="#!/bin/bash" data-block="true">#!/bin/bash</button>
+                  <button type="button" class="script-word-token token-ctrl" data-token="set -e" data-block="true">set -e</button>
+                  <button type="button" class="script-word-token token-ctrl" data-token="if [ $? -eq 0 ]; then">if [ $? -eq 0 ]; then</button>
+                  <button type="button" class="script-word-token token-ctrl" data-token="else">else</button>
+                  <button type="button" class="script-word-token token-ctrl" data-token="fi">fi</button>
+                  <button type="button" class="script-word-token token-ctrl" data-token="exit 0">exit 0</button>
+                  <button type="button" class="script-word-token token-ctrl" data-token="&&">&amp;&amp;</button>
+                  <button type="button" class="script-word-token token-ctrl" data-token="|">|</button>
+                  <button type="button" class="script-word-token token-ctrl" data-token=">">&gt;</button>
+                  <button type="button" class="script-word-token token-ctrl" data-token="2>&1">2&gt;&amp;1</button>
+                </div>
+              </div>
+
+              <!-- 5. BLOQUES RÁPIDOS DE 1-CLIC -->
+              <div class="token-category-group">
+                <span class="token-category-title" style="color: #FFFFFF;">5. Bloques de Solución Rápida (1-Clic):</span>
+                <div class="token-pills-row">
+                  <button type="button" class="script-word-token token-block" id="btn-insert-block-isolate">+ Bloque Aislamiento (iptables)</button>
+                  <button type="button" class="script-word-token token-block" id="btn-insert-block-sanitize">+ Bloque Sanitización (suricata/sed)</button>
+                  <button type="button" class="script-word-token token-block" id="btn-insert-block-crypto">+ Bloque mTLS (openssl)</button>
+                  <button type="button" class="script-word-token token-block" id="btn-insert-block-restart">+ Bloque Servicio &amp; Log (systemctl)</button>
+                </div>
+              </div>
+
+              <!-- Utilidades del Constructor -->
+              <div style="margin-top: 0.4rem; display: flex; gap: 0.35rem; flex-wrap: wrap; border-top: 1px solid var(--border-structural); padding-top: 0.4rem;">
+                <button type="button" id="btn-studio-template-netacad" class="soc-btn" style="padding: 0.15rem 0.45rem; font-size: 0.68rem;">
+                  PLANTILLA NETACAD
+                </button>
+                <button type="button" id="btn-studio-reset-script" class="soc-btn" style="padding: 0.15rem 0.45rem; font-size: 0.68rem;">
+                  AUTORRELLENAR CANÓNICO
+                </button>
+                <button type="button" id="btn-studio-clear-script" class="soc-btn soc-btn-warning" style="padding: 0.15rem 0.45rem; font-size: 0.68rem;">
+                  🧹 LIMPIAR EDITOR
+                </button>
+              </div>
+            </div>
+
+            <!-- Editor de Código de Script Bash -->
+            <div class="studio-script-editor-wrap">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.25rem;">
+                <div style="display: flex; align-items: center; gap: 0.4rem;">
+                  <span style="font-size: 0.7rem; color: var(--bauble-cyan-bright); font-family: monospace;">deploy_patch.sh</span>
+                  <span id="studio-script-valid-badge" class="hud-tag" style="font-size: 0.65rem; background: var(--iris-bg-deep-3); color: var(--hud-glass-outline);">ESTADO: EN CONSTRUCCIÓN</span>
+                </div>
+                <div style="display: flex; gap: 0.3rem;">
+                  <button type="button" id="btn-studio-copy-script" class="soc-btn" style="padding: 0.1rem 0.4rem; font-size: 0.65rem;">📋 COPIAR</button>
+                  <span style="font-size: 0.68rem; color: var(--hud-glass-outline);">Bash 5.2</span>
+                </div>
+              </div>
+              <textarea id="tactical-script-editor" class="tactical-script-textarea" spellcheck="false" placeholder="# Haz clic en las palabras de la paleta izquierda para ir ensamblando el script..."></textarea>
+              <div style="margin-top: 0.4rem; display: flex; justify-content: space-between; align-items: center; gap: 0.4rem; flex-wrap: wrap;">
+                <span id="studio-cursor-pos" style="font-size: 0.68rem; color: var(--hud-glass-outline); font-family: monospace;">Cursor: Línea 1, Col 1</span>
+                <button type="button" id="btn-studio-run-script" class="soc-btn soc-btn-warning" style="padding: 0.3rem 0.8rem; font-weight: bold;">
+                  ▶ EJECUTAR SCRIPT EN TERMINAL (./deploy_patch.sh)
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Título y tarjetas de parches canónicos (Mantiene la funcionalidad existente) -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin: 0.65rem 0 0.35rem 0;">
+          <span style="font-size: 0.74rem; color: var(--magic-highlight); font-weight: 700;">
+            SELLO DE LOS 4 PARCHES DESPLEGADOS (ORDEN ESTRICTO #1 &rarr; #4):
+          </span>
+          <span id="tactical-patches-progress-badge" class="hud-tag" style="font-size: 0.68rem; color: var(--hud-glass-outline);">
+            PROGRESO: 4/4 REGLAS ACTIVAS
+          </span>
+        </div>
+
+        <div class="patch-sequence-grid" id="sentinel-episode-patches-grid">
+          <!-- Se puebla dinámicamente -->
+        </div>
+      </div>
+
+      <!-- Historial Cronológico Acumulado de Parches a medida que ocurren los episodios -->
+      <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 0.5rem; margin-top: 0.85rem;">
+        <span style="font-size: 0.76rem; color: var(--bauble-cyan-bright); font-weight: 700;">
+          3. REGISTRO CRONOLÓGICO ACUMULADO DE PARCHES DESPLEGADOS (<span id="sentinel-total-patches-badge">0</span> PARCHES SELLADOS EN BLOCKCHAIN):
+        </span>
+        <div style="display: flex; gap: 0.35rem; flex-wrap: wrap;">
+          <button type="button" class="soc-btn patch-filter-btn active" data-cat="all" style="padding: 0.15rem 0.45rem; font-size: 0.68rem;">TODOS</button>
+          <button type="button" class="soc-btn patch-filter-btn" data-cat="PREVENTION" style="padding: 0.15rem 0.45rem; font-size: 0.68rem;">PREVENCIÓN</button>
+          <button type="button" class="soc-btn patch-filter-btn" data-cat="DETECTION" style="padding: 0.15rem 0.45rem; font-size: 0.68rem;">DETECCIÓN</button>
+          <button type="button" class="soc-btn patch-filter-btn" data-cat="MITIGATION" style="padding: 0.15rem 0.45rem; font-size: 0.68rem;">MITIGACIÓN</button>
+          <button type="button" class="soc-btn patch-filter-btn" data-cat="INCIDENT_RESPONSE" style="padding: 0.15rem 0.45rem; font-size: 0.68rem;">INCIDENT RESPONSE</button>
+        </div>
+      </div>
+
+      <div class="patch-ledger-table-wrap">
+        <table class="patch-ledger-table">
+          <thead>
+            <tr>
+              <th>ORDEN #</th>
+              <th>EPISODIO</th>
+              <th>VULNERABILIDAD</th>
+              <th>ID PARCHE</th>
+              <th>CLASIFICACIÓN</th>
+              <th>MÓDULO AEGIS-9 / CONTROL APLICADO</th>
+              <th>SELLO SHA-256</th>
+            </tr>
+          </thead>
+          <tbody id="sentinel-patch-ledger-tbody">
+            <!-- Se actualiza en tiempo real conforme ocurren los episodios -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECCIÓN MURO SOCIAL CLÍNICO (TWITTER-STYLE LIVE FEED EN TIEMPO REAL SIN AUTENTICACIÓN) -->
+  <section class="soc-panel clinical-feed-panel" id="clinical-wall-panel" style="grid-column: 1 / -1; width: 100%; box-sizing: border-box;" aria-label="Muro Social Clínico y Feed en Vivo del Pod NetAcad">
+    <div class="soc-panel-header" style="background: linear-gradient(90deg, #164E62 0%, #1A566D 40%, #218984 100%);">
+      <div style="display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap;">
+        <span style="font-weight: 800; color: #FFFFFF; letter-spacing: 0.5px;">
+          💬 MURO SOCIAL CLÍNICO // POD NETACAD (FEED EN VIVO)
+        </span>
+        <span class="hud-tag" style="background: rgba(48,255,0,0.15); border: 1px solid var(--magic-ring); color: var(--magic-highlight); font-size: 0.65rem;">
+          CANAL EN TIEMPO REAL • SIN LOGIN
+        </span>
+        <span style="font-size: 0.7rem; color: var(--bauble-cyan-bright);">
+          EPISODIO ACTIVO: <strong id="feed-active-ep-label" style="color: var(--iris-warning-high);">EP01</strong>
+        </span>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+        <!-- Indicador de formato ultracompacto en texto JSONL para 5 años -->
+        <span id="feed-storage-stats-badge" class="hud-tag" style="font-size: 0.66rem; color: var(--hud-glass-outline); cursor: help;" title="Almacenamiento ultracompacto append-only (.jsonl): 3MB rinden ~5 años de debates clínicos">
+          JSONL COMPACTO • AUTO-SYNC
+        </span>
+        <a href="/muro" class="soc-btn" style="font-size: 0.68rem; padding: 0.2rem 0.55rem; text-decoration: none; border-color: var(--bauble-cyan-bright); color: var(--bauble-cyan-bright);">
+          ↗ PANTALLA COMPLETA
+        </a>
+      </div>
+    </div>
+
+    <div class="soc-panel-body" style="padding: 0.85rem;">
+      <div class="feed-layout-columns">
+        <!-- COLUMNA IZQUIERDA: FORMULARIO DE COMPOSICIÓN (MÁXIMO 2000 CARACTERES) -->
+        <div class="feed-compose-box">
+          <form id="feed-post-form" action="/api/feed" method="POST">
+            <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.5rem;">
+              <div style="flex: 1; min-width: 160px;">
+                <label for="feed-author-input" class="feed-label">TU ALIAS O CADETE ID:</label>
+                <input
+                  type="text"
+                  id="feed-author-input"
+                  name="author"
+                  class="soc-input"
+                  placeholder="Cadete_NetAcad..."
+                  maxlength="50"
+                  required
+                >
+              </div>
+              <div style="flex: 1; min-width: 170px;">
+                <label for="feed-post-episode-select" class="feed-label">EPISODIO ASOCIADO:</label>
+                <select id="feed-post-episode-select" name="episode_id" class="soc-select">
+                  <option value="">CANAL GENERAL</option>
+                  
+                    <option value="1" selected>
+                      EP01: FWA QUARANTINE DOCK
+                    </option>
+                  
+                    <option value="2" >
+                      EP02: RIG DOCK
+                    </option>
+                  
+                    <option value="3" >
+                      EP03: MEET GIA
+                    </option>
+                  
+                    <option value="4" >
+                      EP04: SKEET SHOOT
+                    </option>
+                  
+                    <option value="5" >
+                      EP05: BIG KISS
+                    </option>
+                  
+                    <option value="6" >
+                      EP06: GOING UP
+                    </option>
+                  
+                    <option value="7" >
+                      EP07: ZAPPED
+                    </option>
+                  
+                    <option value="8" >
+                      EP08: EASY RIDE
+                    </option>
+                  
+                    <option value="9" >
+                      EP09: BIG SHOCK
+                    </option>
+                  
+                    <option value="10" >
+                      EP10: OPEN OCEAN
+                    </option>
+                  
+                    <option value="11" >
+                      EP11: CATWALK
+                    </option>
+                  
+                    <option value="12" >
+                      EP12: STEAL PLANE
+                    </option>
+                  
+                    <option value="13" >
+                      EP13: ISLAND RUN
+                    </option>
+                  
+                    <option value="14" >
+                      EP14: VALLEY RUN
+                    </option>
+                  
+                    <option value="15" >
+                      EP15: ROUGH RIDE
+                    </option>
+                  
+                    <option value="16" >
+                      EP16: PORT FLYBY
+                    </option>
+                  
+                    <option value="17" >
+                      EP17: UNDERGROUND
+                    </option>
+                  
+                    <option value="18" >
+                      EP18: PIT STOP
+                    </option>
+                  
+                    <option value="19" >
+                      EP19: ICE SCREAM
+                    </option>
+                  
+                    <option value="20" >
+                      EP20: COLD FEET
+                    </option>
+                  
+                    <option value="21" >
+                      EP21: DOOR MAN
+                    </option>
+                  
+                    <option value="22" >
+                      EP22: LOCKED OUT
+                    </option>
+                  
+                    <option value="23" >
+                      EP23: SLICEOMATIC
+                    </option>
+                  
+                    <option value="24" >
+                      EP24: NOT FRIENDS
+                    </option>
+                  
+                    <option value="25" >
+                      EP25: LISTEN IN
+                    </option>
+                  
+                    <option value="26" >
+                      EP26: GENIUS
+                    </option>
+                  
+                    <option value="27" >
+                      EP27: CRATE OVERRIDE
+                    </option>
+                  
+                    <option value="28" >
+                      EP28: RED LIGHT
+                    </option>
+                  
+                    <option value="29" >
+                      EP29: GLASS ROOM BREACH
+                    </option>
+                  
+                    <option value="30" >
+                      EP30: PATIENT STATUS TERMINAL
+                    </option>
+                  
+                    <option value="31" >
+                      EP31: VENTILATION SHAFT KEYCARD
+                    </option>
+                  
+                    <option value="32" >
+                      EP32: SILVER ROOM PERIMETER
+                    </option>
+                  
+                    <option value="33" >
+                      EP33: DRUG STORE
+                    </option>
+                  
+                    <option value="34" >
+                      EP34: UNSAFE DOOR
+                    </option>
+                  
+                    <option value="35" >
+                      EP35: GRAFFITI
+                    </option>
+                  
+                    <option value="36" >
+                      EP36: CRYO-STASIS CHAMBER
+                    </option>
+                  
+                    <option value="37" >
+                      EP37: SCIENTIST DOSSIER
+                    </option>
+                  
+                    <option value="38" >
+                      EP38: CORE SECURITY PURGE
+                    </option>
+                  
+                    <option value="39" >
+                      EP39: BSL-4 AIRLOCK
+                    </option>
+                  
+                    <option value="40" >
+                      EP40: FWA TELEMETRY LEAK
+                    </option>
+                  
+                    <option value="41" >
+                      EP41: THE LIVING WEAPON
+                    </option>
+                  
+                    <option value="42" >
+                      EP42: YOU WITH ME (PART 1)
+                    </option>
+                  
+                    <option value="43" >
+                      EP43: YOU WITH ME (PART 2)
+                    </option>
+                  
+                    <option value="44" >
+                      EP44: SILO BREAKOUT
+                    </option>
+                  
+                    <option value="45" >
+                      EP45: ORBITAL INSERTION
+                    </option>
+                  
+                    <option value="46" >
+                      EP46: ORBITAL DEFENSE GRID
+                    </option>
+                  
+                    <option value="47" >
+                      EP47: COMMAND CORE BREACH
+                    </option>
+                  
+                    <option value="48" >
+                      EP48: TOTAL THREAT ERADICATION
+                    </option>
+                  
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label for="feed-post-content" class="feed-label">
+                OBSERVACIÓN CLÍNICA / COMANDO KALI / PARCHE (MÁX. 2000 CARACTERES):
+              </label>
+              <textarea
+                id="feed-post-content"
+                name="content"
+                class="soc-input feed-textarea"
+                rows="4"
+                maxlength="2000"
+                placeholder="Comparte con tus compañeros del pod hallazgos de CVE, reglas iptables, comandos nmap o configuraciones eléctricas del episodio..."
+                required
+              ></textarea>
+            </div>
+
+            <div id="feed-form-alert" class="feed-alert-box" style="display: none;"></div>
+
+            <div class="feed-compose-footer">
+              <div id="feed-char-counter" class="feed-char-counter">
+                0 / 2000 caracteres
+              </div>
+              <button type="submit" id="btn-feed-submit" class="soc-btn soc-btn-warning" style="font-weight: 700; padding: 0.35rem 0.9rem; font-size: 0.76rem;">
+                PUBLICAR EN EL MURO
+              </button>
+            </div>
+          </form>
+
+          <!-- NOTA EXPLICATIVA SOBRE EL ALMACENAMIENTO LIGERO -->
+          <div style="margin-top: 0.85rem; padding: 0.6rem; background: rgba(14,17,17,0.7); border: 1px dashed var(--border-structural); font-size: 0.69rem; color: var(--hud-glass-outline); line-height: 1.4;">
+            <div style="color: var(--iris-warning-high); font-weight: 700; margin-bottom: 0.2rem;">
+              💡 ARQUITECTURA ULTRACOMPACTA SIN FIREBASE:
+            </div>
+            Cada mensaje se apenda atómicamente a un documento de texto compacto (<code style="color: var(--magic-ring);">data/clinical_wall_feed.jsonl</code>). Con ~200 bytes por mensaje, 3 Megabytes proporcionan hasta 5 años de historial infinito sin requerir servidores externos ni costes en la nube.
+          </div>
+        </div>
+
+        <!-- COLUMNA DERECHA: STREAM DEL MURO SOCIAL Y FILTROS -->
+        <div class="feed-stream-column">
+          <div class="feed-stream-toolbar">
+            <div style="display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap;">
+              <span style="font-size: 0.72rem; font-weight: 700; color: #FFFFFF;">FILTRAR:</span>
+              <select id="feed-filter-select" class="soc-select" style="max-width: 220px; font-size: 0.7rem; padding: 0.2rem 0.4rem;">
+                <option value="all">TODOS LOS EPISODIOS</option>
+                
+                  <option value="1">EP01: FWA QUARANTINE DOCK</option>
+                
+                  <option value="2">EP02: RIG DOCK</option>
+                
+                  <option value="3">EP03: MEET GIA</option>
+                
+                  <option value="4">EP04: SKEET SHOOT</option>
+                
+                  <option value="5">EP05: BIG KISS</option>
+                
+                  <option value="6">EP06: GOING UP</option>
+                
+                  <option value="7">EP07: ZAPPED</option>
+                
+                  <option value="8">EP08: EASY RIDE</option>
+                
+                  <option value="9">EP09: BIG SHOCK</option>
+                
+                  <option value="10">EP10: OPEN OCEAN</option>
+                
+                  <option value="11">EP11: CATWALK</option>
+                
+                  <option value="12">EP12: STEAL PLANE</option>
+                
+                  <option value="13">EP13: ISLAND RUN</option>
+                
+                  <option value="14">EP14: VALLEY RUN</option>
+                
+                  <option value="15">EP15: ROUGH RIDE</option>
+                
+                  <option value="16">EP16: PORT FLYBY</option>
+                
+                  <option value="17">EP17: UNDERGROUND</option>
+                
+                  <option value="18">EP18: PIT STOP</option>
+                
+                  <option value="19">EP19: ICE SCREAM</option>
+                
+                  <option value="20">EP20: COLD FEET</option>
+                
+                  <option value="21">EP21: DOOR MAN</option>
+                
+                  <option value="22">EP22: LOCKED OUT</option>
+                
+                  <option value="23">EP23: SLICEOMATIC</option>
+                
+                  <option value="24">EP24: NOT FRIENDS</option>
+                
+                  <option value="25">EP25: LISTEN IN</option>
+                
+                  <option value="26">EP26: GENIUS</option>
+                
+                  <option value="27">EP27: CRATE OVERRIDE</option>
+                
+                  <option value="28">EP28: RED LIGHT</option>
+                
+                  <option value="29">EP29: GLASS ROOM BREACH</option>
+                
+                  <option value="30">EP30: PATIENT STATUS TERMINAL</option>
+                
+                  <option value="31">EP31: VENTILATION SHAFT KEYCARD</option>
+                
+                  <option value="32">EP32: SILVER ROOM PERIMETER</option>
+                
+                  <option value="33">EP33: DRUG STORE</option>
+                
+                  <option value="34">EP34: UNSAFE DOOR</option>
+                
+                  <option value="35">EP35: GRAFFITI</option>
+                
+                  <option value="36">EP36: CRYO-STASIS CHAMBER</option>
+                
+                  <option value="37">EP37: SCIENTIST DOSSIER</option>
+                
+                  <option value="38">EP38: CORE SECURITY PURGE</option>
+                
+                  <option value="39">EP39: BSL-4 AIRLOCK</option>
+                
+                  <option value="40">EP40: FWA TELEMETRY LEAK</option>
+                
+                  <option value="41">EP41: THE LIVING WEAPON</option>
+                
+                  <option value="42">EP42: YOU WITH ME (PART 1)</option>
+                
+                  <option value="43">EP43: YOU WITH ME (PART 2)</option>
+                
+                  <option value="44">EP44: SILO BREAKOUT</option>
+                
+                  <option value="45">EP45: ORBITAL INSERTION</option>
+                
+                  <option value="46">EP46: ORBITAL DEFENSE GRID</option>
+                
+                  <option value="47">EP47: COMMAND CORE BREACH</option>
+                
+                  <option value="48">EP48: TOTAL THREAT ERADICATION</option>
+                
+              </select>
+            </div>
+            <div class="feed-filter-pills">
+              <button type="button" class="soc-btn feed-filter-btn active" data-ep="all" style="font-size: 0.65rem; padding: 0.15rem 0.4rem;">TODOS</button>
+              <button type="button" class="soc-btn feed-filter-btn" data-ep="1" style="font-size: 0.65rem; padding: 0.15rem 0.4rem;">EP01</button>
+              <button type="button" class="soc-btn feed-filter-btn" data-ep="4" style="font-size: 0.65rem; padding: 0.15rem 0.4rem;">EP04</button>
+              <button type="button" class="soc-btn feed-filter-btn" data-ep="12" style="font-size: 0.65rem; padding: 0.15rem 0.4rem;">EP12</button>
+              <button type="button" class="soc-btn feed-filter-btn" data-ep="22" style="font-size: 0.65rem; padding: 0.15rem 0.4rem;">EP22</button>
+            </div>
+          </div>
+
+          <!-- CONTENEDOR CON SCROLL DEL STREAM DE MENSAJES -->
+          <div id="feed-stream-container" class="feed-stream-list" style="max-height: 480px; overflow-y: auto;">
+            <!-- Renderizado dinámico vía JavaScript y auto-polling cada 5 segundos -->
+          </div>
         </div>
       </div>
     </div>
-    <div class="search-results-list" id="search-results"></div>
-  </div>
+  </section>
+</main>
 
-  <script src="app.js"></script>
+
+  <script src="/js/sentinel_tactical_game.js"></script>
+  <script src="/js/cyberia_console.js"></script>
+  <script src="/js/clinical_feed.js"></script>
 </body>
 </html>

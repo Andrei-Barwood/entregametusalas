@@ -1,0 +1,74 @@
+{
+  "type": "bundle",
+  "id": "bundle--cyberia-medsoc-ep46-2027",
+  "spec_version": "2.1",
+  "console": "CYBERIA-MED // SOC Console v19.96",
+  "palette_standard": "Ultimate Queen Chrysalis (#523)",
+  "objects": [
+    {
+      "type": "vulnerability",
+      "id": "vulnerability--ep46-cve-2027-0646",
+      "name": "CVE-2027-0646",
+      "description": "Movilización de un enjambre distribuido de miles de drones y nodos zombi esclavizados para formar un escudo volumétrico alrededor del núcleo de mando de Devlin.",
+      "x_cvss_score": 9.5,
+      "x_cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:N/I:H/A:H",
+      "x_clinical_protocol": "MUD (Manufacturer Usage Description - RFC 8520) / Automated DDoS Botnet Sinkholing",
+      "x_iomt_asset": "Matriz de Defensa contra Botnets de Dispositivos Periféricos Comprometidos"
+    },
+    {
+      "type": "indicator",
+      "id": "indicator--ep46-blades-dpi",
+      "name": "SIGMA_ORBITAL_SWARM_BOTNET_WAVE_DETECTED",
+      "pattern_type": "yara-sigma-hybrid",
+      "pattern": "swarm.active_drones > 250 AND c2_origin == 'DEVLIN_STATION_CORE' AND attack_pattern == 'OMNIDIRECTIONAL'",
+      "description": "Múltiples objetivos hostiles iluminados en amarillo/verde (#E7F800 / #83FF65) convergiendo sobre el visor orbital."
+    },
+    {
+      "type": "course-of-action",
+      "id": "course-of-action--ep46-mitigation",
+      "name": "MIT-EP46-SWARM-ANNIHILATE",
+      "description": "Ejecución de barrido bio-plasmático multihilo que neutraliza las oleadas de drones zombi y destruye las torretas de retransmisión perimetral de la estación.",
+      "x_cli_playbook": "cyberia-weapons --fire-bioplasma-array --sweep-botnet-swarm ORBITAL_GRID_46",
+      "x_prevention_standard": "IETF RFC 8520 (MUD Profiles for IoT/IoMT) & IEC 62443-4-2",
+      "x_zero_trust_control": "Aislamiento instantáneo en red de cualquier nodo que exhiba coordinación de enjambre."
+    }
+  ],
+  "episode_metadata": {
+    "id": 46,
+    "code": "EP46",
+    "act_number": 6,
+    "act": "ACTO VI: VENGANZA ORBITAL CONTRA DEVLIN (ERRADICACIÓN DE AMENAZA PERSISTENTE)",
+    "title": "Enjambre de Drones de la Estación de Devlin (Orbital Defense Grid)",
+    "game_node_code": "ORBITAL DEFENSE GRID",
+    "game_location": "Perímetro exterior de la fortaleza espacial orbital de William Devlin",
+    "cyberia_spoiler": "Frente a la gigantesca estación espacial de la FWA, William Devlin despliega toda su red defensiva ('Orbital Defense Grid'): enjambres de drones autónomos de combate, cazas espaciales y baterías de cañones de plasma en el casco de la estación atacan simultáneamente. Zak, operando como uno solo con el organismo Cyberia, desata ráfagas bio-plasmáticas que pulverizan cada oleada del enjambre.",
+    "hospital_counterpart": "Desmantelamiento Activo de Botnet IoMT Distribuida y Enjambre de Nodos Zombi Controlados por el Actor de Amenaza Ejecutivo",
+    "clinical_protocol": "MUD (Manufacturer Usage Description - RFC 8520) / Automated DDoS Botnet Sinkholing",
+    "iomt_asset": "Matriz de Defensa contra Botnets de Dispositivos Periféricos Comprometidos",
+    "mitre_technique": "T1583.005 - Acquire Infrastructure: Botnet Swarm Defense Eradication",
+    "pillars": {
+      "vulnerability": {
+        "cve": "CVE-2027-0646",
+        "cvss": 9.5,
+        "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:N/I:H/A:H",
+        "description": "Movilización de un enjambre distribuido de miles de drones y nodos zombi esclavizados para formar un escudo volumétrico alrededor del núcleo de mando de Devlin."
+      },
+      "detection": {
+        "engine": "CYBERIA 360-Degree Bio-Radar Matrix",
+        "rule_name": "SIGMA_ORBITAL_SWARM_BOTNET_WAVE_DETECTED",
+        "signature": "swarm.active_drones > 250 AND c2_origin == 'DEVLIN_STATION_CORE' AND attack_pattern == 'OMNIDIRECTIONAL'",
+        "telemetry_indicator": "Múltiples objetivos hostiles iluminados en amarillo/verde (#E7F800 / #83FF65) convergiendo sobre el visor orbital."
+      },
+      "mitigation": {
+        "action_code": "MIT-EP46-SWARM-ANNIHILATE",
+        "immediate_response": "Ejecución de barrido bio-plasmático multihilo que neutraliza las oleadas de drones zombi y destruye las torretas de retransmisión perimetral de la estación.",
+        "cli_command": "cyberia-weapons --fire-bioplasma-array --sweep-botnet-swarm ORBITAL_GRID_46"
+      },
+      "prevention": {
+        "standard": "IETF RFC 8520 (MUD Profiles for IoT/IoMT) & IEC 62443-4-2",
+        "hardening_policy": "Imponer perfiles MUD estrictos en cada dispositivo conectado para que jamás pueda participar en enjambres o comunicarse con destinos no clínicos.",
+        "zero_trust_control": "Aislamiento instantáneo en red de cualquier nodo que exhiba coordinación de enjambre."
+      }
+    }
+  }
+}

@@ -1,0 +1,74 @@
+{
+  "type": "bundle",
+  "id": "bundle--cyberia-medsoc-ep22-2027",
+  "spec_version": "2.1",
+  "console": "CYBERIA-MED // SOC Console v19.96",
+  "palette_standard": "Ultimate Queen Chrysalis (#523)",
+  "objects": [
+    {
+      "type": "vulnerability",
+      "id": "vulnerability--ep22-cve-2027-0322",
+      "name": "CVE-2027-0322",
+      "description": "Inversión maliciosa de compuertas booleanas (AND/OR/NOT) en la lógica del PLC de la esclusa quirúrgica que bloquea al personal legítimo o despresuriza el quirófano.",
+      "x_cvss_score": 8.9,
+      "x_cvss_vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H",
+      "x_clinical_protocol": "IEC 61131-3 PLC Ladder Logic / S7comm-Plus",
+      "x_iomt_asset": "Controlador Lógico Programable (PLC) de Esclusa de Presión Positiva de Quirófano"
+    },
+    {
+      "type": "indicator",
+      "id": "indicator--ep22-blades-dpi",
+      "name": "YARA_PLC_LOCKED_OUT_BOOLEAN_TAMPER",
+      "pattern_type": "yara-sigma-hybrid",
+      "pattern": "plc.solenoid_out != ((input_a AND (NOT input_b)) AND (input_b OR input_c))",
+      "description": "El visor MRI (#00383B / #00F200) muestra las pistas de cobre desenergizadas en el solenoide de la esclusa."
+    },
+    {
+      "type": "course-of-action",
+      "id": "course-of-action--ep22-mitigation",
+      "name": "MIT-EP22-MRI-GATE-SOLVE",
+      "description": "Resolución interactiva en el simulador MRI conmutando los registros de entrada a (A=1, B=0, C=1) para energizar la salida booleana y desbloquear la compuerta.",
+      "x_cli_playbook": "blades-mri --scan-plc LOCKED_OUT_01 --set-inputs A=1,B=0,C=1 --verify-solenoid",
+      "x_prevention_standard": "IEC 61508 SIL-3 / IEC 62443-4-2",
+      "x_zero_trust_control": "Atestación criptográfica del árbol lógico booleano en cada ciclo de escaneo del controlador."
+    }
+  ],
+  "episode_metadata": {
+    "id": 22,
+    "code": "EP22",
+    "act_number": 3,
+    "act": "ACTO III: COMPLEJO CYBERIA - NIVEL 1 (PERÍMETRO CLÍNICO, QUIRÓFANOS LÁSER Y ADMISIONES)",
+    "title": "Compuerta Lógica del Perímetro (LOCKED OUT)",
+    "game_node_code": "LOCKED OUT",
+    "game_location": "Puerta trasera de mantenimiento con cerradura lógica electrónica en el Nivel 1",
+    "cyberia_spoiler": "En la puerta trasera bloqueada ('LOCKED OUT'), Zak activa el escáner de Resonancia Magnética (MRI) de su implante BLADES para ver a través de la placa metálica de la pared. El visor revela un circuito interno de compuertas lógicas (AND, OR, NOT) conectado a tres interruptores de entrada. Zak debe analizar el flujo booleano y conmutar los interruptores en la combinación exacta para energizar el solenoide final y abrir la puerta sin activar la alarma.",
+    "hospital_counterpart": "Auditoría de Firmware por Escaneo MRI y Verificación Formal de Compuertas Lógicas en PLCs de Esclusas de Quirófano (BLADES MRI Gate Solver)",
+    "clinical_protocol": "IEC 61131-3 PLC Ladder Logic / S7comm-Plus",
+    "iomt_asset": "Controlador Lógico Programable (PLC) de Esclusa de Presión Positiva de Quirófano",
+    "mitre_technique": "T0839 / T0833 - Modify Control Logic & Module Firmware in Surgical Airlock PLC",
+    "pillars": {
+      "vulnerability": {
+        "cve": "CVE-2027-0322",
+        "cvss": 8.9,
+        "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H",
+        "description": "Inversión maliciosa de compuertas booleanas (AND/OR/NOT) en la lógica del PLC de la esclusa quirúrgica que bloquea al personal legítimo o despresuriza el quirófano."
+      },
+      "detection": {
+        "engine": "BLADES MRI Logic Gate Debugger",
+        "rule_name": "YARA_PLC_LOCKED_OUT_BOOLEAN_TAMPER",
+        "signature": "plc.solenoid_out != ((input_a AND (NOT input_b)) AND (input_b OR input_c))",
+        "telemetry_indicator": "El visor MRI (#00383B / #00F200) muestra las pistas de cobre desenergizadas en el solenoide de la esclusa."
+      },
+      "mitigation": {
+        "action_code": "MIT-EP22-MRI-GATE-SOLVE",
+        "immediate_response": "Resolución interactiva en el simulador MRI conmutando los registros de entrada a (A=1, B=0, C=1) para energizar la salida booleana y desbloquear la compuerta.",
+        "cli_command": "blades-mri --scan-plc LOCKED_OUT_01 --set-inputs A=1,B=0,C=1 --verify-solenoid"
+      },
+      "prevention": {
+        "standard": "IEC 61508 SIL-3 / IEC 62443-4-2",
+        "hardening_policy": "Verificación formal matemática de la tabla de verdad del PLC antes de cada cirugía y llave física en posición RUN-ONLY.",
+        "zero_trust_control": "Atestación criptográfica del árbol lógico booleano en cada ciclo de escaneo del controlador."
+      }
+    }
+  }
+}

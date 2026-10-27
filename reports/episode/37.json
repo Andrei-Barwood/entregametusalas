@@ -1,0 +1,74 @@
+{
+  "type": "bundle",
+  "id": "bundle--cyberia-medsoc-ep37-2027",
+  "spec_version": "2.1",
+  "console": "CYBERIA-MED // SOC Console v19.96",
+  "palette_standard": "Ultimate Queen Chrysalis (#523)",
+  "objects": [
+    {
+      "type": "vulnerability",
+      "id": "vulnerability--ep37-cve-2027-0537",
+      "name": "CVE-2027-0537",
+      "description": "Síntesis de un artefacto bio-cibernético autónomo (Proyecto Cyberia del Dr. Zimmer) capaz de reescribir su propia estructura binaria y acoplarse directamente a interfaces neuronales.",
+      "x_cvss_score": 9.9,
+      "x_cvss_vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H",
+      "x_clinical_protocol": "DICOM-SR (Structured Reporting) / Genomic FASTA/BAM Pipeline Security",
+      "x_iomt_asset": "Secuenciadores Genómicos de Alto Rendimiento y Clúster de Entrenamiento de IA Biomédica"
+    },
+    {
+      "type": "indicator",
+      "id": "indicator--ep37-blades-dpi",
+      "name": "YARA_ZIMMER_LIVING_WEAPON_GENOMIC_BLUEPRINT",
+      "pattern_type": "yara-sigma-hybrid",
+      "pattern": "rule Zimmer_Cyberia_Entity { strings: $dna = \"NANOTECH_SYMBIONT_HOST_REQUIRED\" $blades = \"BLADES_RESONANCE_KEY\" condition: $dna and $blades }",
+      "description": "Descubrimiento en el dossier del Dr. Zimmer de que la firma genética del huésped requerido coincide con el perfil de Zak."
+    },
+    {
+      "type": "course-of-action",
+      "id": "course-of-action--ep37-mitigation",
+      "name": "MIT-EP37-DOSSIER-INGEST",
+      "description": "Asimilación completa de los planos del Dr. Zimmer en la memoria neuronal de BLADES y reclasificación del incidente de 'Arma Destructiva' a 'Entidad Simbiótica Autónoma'.",
+      "x_cli_playbook": "blades-core --ingest-dossier DR_ZIMMER_37 --reclassify-artifact LIVING_SYMBIONT",
+      "x_prevention_standard": "WHO Laboratory Biosafety Manual 4th Ed. / NIST AI Risk Management Framework (AI RMF)",
+      "x_zero_trust_control": "Gobernanza estricta sobre la síntesis de código y estructuras bio-nanotecnológicas."
+    }
+  ],
+  "episode_metadata": {
+    "id": 37,
+    "code": "EP37",
+    "act_number": 5,
+    "act": "ACTO V: EL NÚCLEO BIOCIBERNÉTICO Y LA REVELACIÓN DEL PROYECTO CYBERIA (SIMBIOSIS Y PURGA)",
+    "title": "Interceptación de Telemetría de Zimmer (Scientist Dossier)",
+    "game_node_code": "SCIENTIST DOSSIER",
+    "game_location": "Consola maestra de investigación del Dr. Zimmer en el laboratorio del núcleo",
+    "cyberia_spoiler": "Zak accede a los diarios científicos y grabaciones del Dr. Zimmer ('Scientist Dossier'), el cerebro detrás del proyecto. Allí se revela la naturaleza real de 'Cyberia': no es un misil ni una bomba química convencional, sino un organismo biomecánico viviente cultivado con nanotecnología y tejido genético que crece como un caparazón/nave espacial consciente y necesita fusionarse con un huésped humano cibernéticamente compatible.",
+    "hospital_counterpart": "Detección y Decompilación Forense de Amenaza Persistente Avanzada (APT) Basada en Código Bio-Sintético Autónomo e IA Mutante",
+    "clinical_protocol": "DICOM-SR (Structured Reporting) / Genomic FASTA/BAM Pipeline Security",
+    "iomt_asset": "Secuenciadores Genómicos de Alto Rendimiento y Clúster de Entrenamiento de IA Biomédica",
+    "mitre_technique": "T1027 / AML.T0043 - Autonomous Self-Mutating Bio-Digital Artifact",
+    "pillars": {
+      "vulnerability": {
+        "cve": "CVE-2027-0537",
+        "cvss": 9.9,
+        "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H",
+        "description": "Síntesis de un artefacto bio-cibernético autónomo (Proyecto Cyberia del Dr. Zimmer) capaz de reescribir su propia estructura binaria y acoplarse directamente a interfaces neuronales."
+      },
+      "detection": {
+        "engine": "BLADES Genomic-Binary Decompiler",
+        "rule_name": "YARA_ZIMMER_LIVING_WEAPON_GENOMIC_BLUEPRINT",
+        "signature": "rule Zimmer_Cyberia_Entity { strings: $dna = \"NANOTECH_SYMBIONT_HOST_REQUIRED\" $blades = \"BLADES_RESONANCE_KEY\" condition: $dna and $blades }",
+        "telemetry_indicator": "Descubrimiento en el dossier del Dr. Zimmer de que la firma genética del huésped requerido coincide con el perfil de Zak."
+      },
+      "mitigation": {
+        "action_code": "MIT-EP37-DOSSIER-INGEST",
+        "immediate_response": "Asimilación completa de los planos del Dr. Zimmer en la memoria neuronal de BLADES y reclasificación del incidente de 'Arma Destructiva' a 'Entidad Simbiótica Autónoma'.",
+        "cli_command": "blades-core --ingest-dossier DR_ZIMMER_37 --reclassify-artifact LIVING_SYMBIONT"
+      },
+      "prevention": {
+        "standard": "WHO Laboratory Biosafety Manual 4th Ed. / NIST AI Risk Management Framework (AI RMF)",
+        "hardening_policy": "Auditoría criptográfica de pipelines bioinformáticos (FASTA/BAM) y aislamiento total de modelos de IA autoevolutivos.",
+        "zero_trust_control": "Gobernanza estricta sobre la síntesis de código y estructuras bio-nanotecnológicas."
+      }
+    }
+  }
+}

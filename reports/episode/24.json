@@ -1,0 +1,74 @@
+{
+  "type": "bundle",
+  "id": "bundle--cyberia-medsoc-ep24-2027",
+  "spec_version": "2.1",
+  "console": "CYBERIA-MED // SOC Console v19.96",
+  "palette_standard": "Ultimate Queen Chrysalis (#523)",
+  "objects": [
+    {
+      "type": "vulnerability",
+      "id": "vulnerability--ep24-cve-2027-0324",
+      "name": "CVE-2027-0324",
+      "description": "Cuatro nodos infectados en la red Wi-Fi del comedor intentan saltar simultáneamente hacia la VLAN clínica mediante explotación del plano de control inalámbrico.",
+      "x_cvss_score": 8.6,
+      "x_cvss_vector": "CVSS:3.1/AV:A/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H",
+      "x_clinical_protocol": "WPA3-Enterprise 802.1X / RADIUS CoA (Change of Authorization)",
+      "x_iomt_asset": "Controlador Inalámbrico WLC de Áreas Comunes y Dispositivos Móviles Clínicos"
+    },
+    {
+      "type": "indicator",
+      "id": "indicator--ep24-blades-dpi",
+      "name": "SIGMA_NOT_FRIENDS_QUAD_BEACON_AMBUSH",
+      "pattern_type": "yara-sigma-hybrid",
+      "pattern": "wlan.ssid == 'CYBERIA_STAFF_LOUNGE' AND concurrent_hostile_nodes == 4 AND lateral_scan == TRUE",
+      "description": "Cuatro firmas hostiles activas detectadas en formación cruzada dentro del segmento NOT FRIENDS."
+    },
+    {
+      "type": "course-of-action",
+      "id": "course-of-action--ep24-mitigation",
+      "name": "MIT-EP24-TWO-STAGE-CONTAIN",
+      "description": "Emisión de paquetes RADIUS CoA de cuarentena inmediata contra el primer par de nodos, activación de escudo ACL tras cobertura y erradicación del segundo par.",
+      "x_cli_playbook": "medsoc-wlc --quarantine-pair LEFT_NODES_01_02 --shield-acl --purge-pair RIGHT_NODES_03_04",
+      "x_prevention_standard": "NIST SP 800-153 (Guidelines for Securing Wireless Local Area Networks)",
+      "x_zero_trust_control": "Postura de endpoint verificada cada 60 segundos antes de permitir cualquier paquete fuera de la VLAN de invitados."
+    }
+  ],
+  "episode_metadata": {
+    "id": 24,
+    "code": "EP24",
+    "act_number": 3,
+    "act": "ACTO III: COMPLEJO CYBERIA - NIVEL 1 (PERÍMETRO CLÍNICO, QUIRÓFANOS LÁSER Y ADMISIONES)",
+    "title": "Tiroteo en el Comedor de Guardia (NOT FRIENDS)",
+    "game_node_code": "NOT FRIENDS",
+    "game_location": "Comedor y sala de descanso de guardias en el Nivel 1 del Complejo Cyberia",
+    "cyberia_spoiler": "Zak avanza hacia el comedor de la base ('NOT FRIENDS') donde cuatro guardias del Cartel conversan entre las mesas. Apenas lo ven, desenfundan sus armas. Zak debe ejecutar una secuencia táctica precisa: abatir primero a los dos guardias situados a la izquierda, rodar inmediatamente detrás de las cajas apiladas para esquivar las ráfagas y desde allí eliminar a los dos guardias restantes.",
+    "hospital_counterpart": "Contención en Dos Fases de Brote de Malware Polimórfico en la Red Wi-Fi de Áreas Comunes y Descanso Médico",
+    "clinical_protocol": "WPA3-Enterprise 802.1X / RADIUS CoA (Change of Authorization)",
+    "iomt_asset": "Controlador Inalámbrico WLC de Áreas Comunes y Dispositivos Móviles Clínicos",
+    "mitre_technique": "T1210 - Exploitation of Remote Services (Wireless Worm Propagation in Breakroom)",
+    "pillars": {
+      "vulnerability": {
+        "cve": "CVE-2027-0324",
+        "cvss": 8.6,
+        "vector": "CVSS:3.1/AV:A/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H",
+        "description": "Cuatro nodos infectados en la red Wi-Fi del comedor intentan saltar simultáneamente hacia la VLAN clínica mediante explotación del plano de control inalámbrico."
+      },
+      "detection": {
+        "engine": "BLADES Wireless IDS & Threat Correlator",
+        "rule_name": "SIGMA_NOT_FRIENDS_QUAD_BEACON_AMBUSH",
+        "signature": "wlan.ssid == 'CYBERIA_STAFF_LOUNGE' AND concurrent_hostile_nodes == 4 AND lateral_scan == TRUE",
+        "telemetry_indicator": "Cuatro firmas hostiles activas detectadas en formación cruzada dentro del segmento NOT FRIENDS."
+      },
+      "mitigation": {
+        "action_code": "MIT-EP24-TWO-STAGE-CONTAIN",
+        "immediate_response": "Emisión de paquetes RADIUS CoA de cuarentena inmediata contra el primer par de nodos, activación de escudo ACL tras cobertura y erradicación del segundo par.",
+        "cli_command": "medsoc-wlc --quarantine-pair LEFT_NODES_01_02 --shield-acl --purge-pair RIGHT_NODES_03_04"
+      },
+      "prevention": {
+        "standard": "NIST SP 800-153 (Guidelines for Securing Wireless Local Area Networks)",
+        "hardening_policy": "Aislamiento de clientes inalámbricos (Peer-to-Peer Blocking) y separación física total entre el Wi-Fi de cafetería/descanso y la red de dispositivos médicos.",
+        "zero_trust_control": "Postura de endpoint verificada cada 60 segundos antes de permitir cualquier paquete fuera de la VLAN de invitados."
+      }
+    }
+  }
+}

@@ -1,0 +1,74 @@
+{
+  "type": "bundle",
+  "id": "bundle--cyberia-medsoc-ep32-2027",
+  "spec_version": "2.1",
+  "console": "CYBERIA-MED // SOC Console v19.96",
+  "palette_standard": "Ultimate Queen Chrysalis (#523)",
+  "objects": [
+    {
+      "type": "vulnerability",
+      "id": "vulnerability--ep32-cve-2027-0432",
+      "name": "CVE-2027-0432",
+      "description": "Segmento de red señuelo de alta fidelidad (la Sala Plateada) que emula activos biomédicos jugosos pero encierra en una jaula lógica sin salida cualquier proceso que ingrese en él.",
+      "x_cvss_score": 7.8,
+      "x_cvss_vector": "CVSS:3.1/AV:A/AC:L/PR:L/UI:N/S:C/C:H/I:L/A:H",
+      "x_clinical_protocol": "Deception SDN / Decoy DICOM & HL7 Honeypot Mesh",
+      "x_iomt_asset": "Clúster Honeypot Clínico 'Silver Room' (Emulador de Servidores PACS y Bombas de Infusión Señuelo)"
+    },
+    {
+      "type": "indicator",
+      "id": "indicator--ep32-blades-dpi",
+      "name": "SIGMA_SILVER_ROOM_HONEYPOT_TRAP_TRIGGER",
+      "pattern_type": "yara-sigma-hybrid",
+      "pattern": "dest_subnet == '10.22.99.0/24_SILVER_ROOM' AND synthetic_patient_watermark == 'DECOY_CYBERIA_32'",
+      "description": "El visor BLADES marca la Sala Plateada como nodo señuelo sin salida y desvía hacia allí los hilos hostiles de los guardias del corredor rojo."
+    },
+    {
+      "type": "course-of-action",
+      "id": "course-of-action--ep32-mitigation",
+      "name": "MIT-EP32-HONEYPOT-DIVERT",
+      "description": "Evasión de la subred trampa por parte del operador Zak y redirección mediante SDN de los atacantes del corredor rojo hacia el interior de la Sala Plateada para su aislamiento total.",
+      "x_cli_playbook": "medsoc-deception --bypass-decoy SILVER_ROOM_99 --sinkhole-hostiles RED_CORRIDOR_GUARDS",
+      "x_prevention_standard": "NIST SP 800-53 SC-26 (Decoys / Honeypots) & IEC 62443",
+      "x_zero_trust_control": "Aislamiento instantáneo de cualquier credencial o IP que interactúe con un nodo señuelo."
+    }
+  ],
+  "episode_metadata": {
+    "id": 32,
+    "code": "EP32",
+    "act_number": 4,
+    "act": "ACTO IV: COMPLEJO CYBERIA - NIVEL 2 (LABORATORIOS DE BIOCONTENCIÓN, GAS HALÓN Y NANOMEDICINA)",
+    "title": "El Pasillo Rojo y la Sala Plateada (Silver Room Perimeter)",
+    "game_node_code": "SILVER ROOM PERIMETER",
+    "game_location": "Corredor de bioseguridad iluminado en rojo y cámara plateada trampa del Nivel 2",
+    "cyberia_spoiler": "Usando la tarjeta magnética recién obtenida, Zak abre las puertas hacia el corredor interior bañado en luz roja de emergencia y abate a los guardias de bioseguridad. En este sector se encuentra la misteriosa 'Sala Plateada' ('Silver Room'); si el jugador entra en esa habitación metálica sin rumbo o antes de tiempo, descubre que es un callejón sin salida diseñado como trampa de contención.",
+    "hospital_counterpart": "Despliegue de Honeypots Clínicos de Alta Interacción (Cámaras y Servidores PACS/FHIR Señuelo) para Atraer y Encerrar Intrusos",
+    "clinical_protocol": "Deception SDN / Decoy DICOM & HL7 Honeypot Mesh",
+    "iomt_asset": "Clúster Honeypot Clínico 'Silver Room' (Emulador de Servidores PACS y Bombas de Infusión Señuelo)",
+    "mitre_technique": "T1595 / DEF-DECEPTION - High-Interaction Clinical Honeypot Containment",
+    "pillars": {
+      "vulnerability": {
+        "cve": "CVE-2027-0432",
+        "cvss": 7.8,
+        "vector": "CVSS:3.1/AV:A/AC:L/PR:L/UI:N/S:C/C:H/I:L/A:H",
+        "description": "Segmento de red señuelo de alta fidelidad (la Sala Plateada) que emula activos biomédicos jugosos pero encierra en una jaula lógica sin salida cualquier proceso que ingrese en él."
+      },
+      "detection": {
+        "engine": "BLADES Deception Topology Mapper",
+        "rule_name": "SIGMA_SILVER_ROOM_HONEYPOT_TRAP_TRIGGER",
+        "signature": "dest_subnet == '10.22.99.0/24_SILVER_ROOM' AND synthetic_patient_watermark == 'DECOY_CYBERIA_32'",
+        "telemetry_indicator": "El visor BLADES marca la Sala Plateada como nodo señuelo sin salida y desvía hacia allí los hilos hostiles de los guardias del corredor rojo."
+      },
+      "mitigation": {
+        "action_code": "MIT-EP32-HONEYPOT-DIVERT",
+        "immediate_response": "Evasión de la subred trampa por parte del operador Zak y redirección mediante SDN de los atacantes del corredor rojo hacia el interior de la Sala Plateada para su aislamiento total.",
+        "cli_command": "medsoc-deception --bypass-decoy SILVER_ROOM_99 --sinkhole-hostiles RED_CORRIDOR_GUARDS"
+      },
+      "prevention": {
+        "standard": "NIST SP 800-53 SC-26 (Decoys / Honeypots) & IEC 62443",
+        "hardening_policy": "Desplegar gemelos digitales señuelo (Clinical Honeypots) con datos sintéticos marcados en cada piso hospitalario para detectar intrusiones antes de que toquen pacientes reales.",
+        "zero_trust_control": "Aislamiento instantáneo de cualquier credencial o IP que interactúe con un nodo señuelo."
+      }
+    }
+  }
+}

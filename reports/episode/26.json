@@ -1,0 +1,74 @@
+{
+  "type": "bundle",
+  "id": "bundle--cyberia-medsoc-ep26-2027",
+  "spec_version": "2.1",
+  "console": "CYBERIA-MED // SOC Console v19.96",
+  "palette_standard": "Ultimate Queen Chrysalis (#523)",
+  "objects": [
+    {
+      "type": "vulnerability",
+      "id": "vulnerability--ep26-cve-2027-0326",
+      "name": "CVE-2027-0326",
+      "description": "Bomba lógica de 3 niveles acoplada al kernel de la base de datos HIS que exige resolver una matriz de transición de estados simbólicos antes de ejecutar el borrado masivo y descarga eléctrica en consola.",
+      "x_cvss_score": 9.5,
+      "x_cvss_vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H",
+      "x_clinical_protocol": "HL7 FHIR R4 / MUMPS- Caché Database Kernel Integrity",
+      "x_iomt_asset": "Supercomputadora Central de Historias Clínicas (HIS) y Control de Esclusas de Piso"
+    },
+    {
+      "type": "indicator",
+      "id": "indicator--ep26-blades-dpi",
+      "name": "SIGMA_HIS_GENIUS_LOGIC_BOMB_COUNTDOWN",
+      "pattern_type": "yara-sigma-hybrid",
+      "pattern": "his_terminal.challenge == 'GENIUS_3LVL_MATRIX' AND watchdog_remaining_sec < 30 AND chair_capacitor == 'ARMED'",
+      "description": "Temporizador regresivo crítico en la consola GENIUS; 4 vectores simbólicos requeridos para inhibir el pulso letal."
+    },
+    {
+      "type": "course-of-action",
+      "id": "course-of-action--ep26-mitigation",
+      "name": "MIT-EP26-GENIUS-DEFUSE",
+      "description": "Resolución asistida por el motor simbólico BLADES inyectando la secuencia exacta (BLUE_ARROW_DOWN -> RED_BROKEN_CIRCLE -> RED_SQUARE -> BLUE_TRIANGLE) en los 3 niveles para desarmar la bomba y liberar el montacargas.",
+      "x_cli_playbook": "blades-genius --solve-levels 1..3 --sequence ARROW_B,CIRCLE_R,SQUARE_R,TRI_B --unlock-freight-lift",
+      "x_prevention_standard": "ISO/IEC 27799 / NIST SP 800-53 SI-7 (Software, Firmware, and Information Integrity)",
+      "x_zero_trust_control": "Aprobación criptográfica multiparte sin desafíos destructivos en consolas clínicas."
+    }
+  ],
+  "episode_metadata": {
+    "id": 26,
+    "code": "EP26",
+    "act_number": 3,
+    "act": "ACTO III: COMPLEJO CYBERIA - NIVEL 1 (PERÍMETRO CLÍNICO, QUIRÓFANOS LÁSER Y ADMISIONES)",
+    "title": "Sala de Conferencias y la Terminal de Símbolos (GENIUS)",
+    "game_node_code": "GENIUS",
+    "game_location": "Sala de juntas ejecutiva del Nivel 1, supercomputadora central",
+    "cyberia_spoiler": "Zak entra en la sala de conferencias del Nivel 1, revisa los documentos confidenciales sobre la mesa de juntas y se sienta frente a la terminal maestra. Al intentar desbloquear el montacargas hacia el subsuelo, se activa el sistema de defensa 'GENIUS': un puzzle contrarreloj de 3 niveles con una matriz de símbolos geométricos de colores (flecha azul hacia abajo, círculo rojo partido, cuadrado rojo, triángulo azul). Si el jugador falla o se agota el temporizador, la silla de la terminal electrocuta y mata a Zak en el acto.",
+    "hospital_counterpart": "Desactivación Contrarreloj de Bomba Lógica Criptográfica (Cryptographic Logic Bomb) en el Servidor Maestro de Historias Clínicas (HIS)",
+    "clinical_protocol": "HL7 FHIR R4 / MUMPS- Caché Database Kernel Integrity",
+    "iomt_asset": "Supercomputadora Central de Historias Clínicas (HIS) y Control de Esclusas de Piso",
+    "mitre_technique": "T1485 / T0816 - Data Destruction & Logic Bomb with Fatal Watchdog Timer",
+    "pillars": {
+      "vulnerability": {
+        "cve": "CVE-2027-0326",
+        "cvss": 9.5,
+        "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H",
+        "description": "Bomba lógica de 3 niveles acoplada al kernel de la base de datos HIS que exige resolver una matriz de transición de estados simbólicos antes de ejecutar el borrado masivo y descarga eléctrica en consola."
+      },
+      "detection": {
+        "engine": "BLADES Symbolic Execution & FSM Solver",
+        "rule_name": "SIGMA_HIS_GENIUS_LOGIC_BOMB_COUNTDOWN",
+        "signature": "his_terminal.challenge == 'GENIUS_3LVL_MATRIX' AND watchdog_remaining_sec < 30 AND chair_capacitor == 'ARMED'",
+        "telemetry_indicator": "Temporizador regresivo crítico en la consola GENIUS; 4 vectores simbólicos requeridos para inhibir el pulso letal."
+      },
+      "mitigation": {
+        "action_code": "MIT-EP26-GENIUS-DEFUSE",
+        "immediate_response": "Resolución asistida por el motor simbólico BLADES inyectando la secuencia exacta (BLUE_ARROW_DOWN -> RED_BROKEN_CIRCLE -> RED_SQUARE -> BLUE_TRIANGLE) en los 3 niveles para desarmar la bomba y liberar el montacargas.",
+        "cli_command": "blades-genius --solve-levels 1..3 --sequence ARROW_B,CIRCLE_R,SQUARE_R,TRI_B --unlock-freight-lift"
+      },
+      "prevention": {
+        "standard": "ISO/IEC 27799 / NIST SP 800-53 SI-7 (Software, Firmware, and Information Integrity)",
+        "hardening_policy": "Monitoreo de integridad de memoria y código en tiempo real (FIM) sobre el motor de base de datos del HIS con aislamiento galvánico en terminales de operador.",
+        "zero_trust_control": "Aprobación criptográfica multiparte sin desafíos destructivos en consolas clínicas."
+      }
+    }
+  }
+}

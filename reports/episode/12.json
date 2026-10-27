@@ -1,0 +1,74 @@
+{
+  "type": "bundle",
+  "id": "bundle--cyberia-medsoc-ep12-2027",
+  "spec_version": "2.1",
+  "console": "CYBERIA-MED // SOC Console v19.96",
+  "palette_standard": "Ultimate Queen Chrysalis (#523)",
+  "objects": [
+    {
+      "type": "vulnerability",
+      "id": "vulnerability--ep12-cve-2027-0112",
+      "name": "CVE-2027-0112",
+      "description": "Intento de bloqueo del cargador de arranque (Bootloader Lockout) y saturación del bus aviónico de soporte vital durante la secuencia de despegue de emergencia.",
+      "x_cvss_score": 8.8,
+      "x_cvss_vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H",
+      "x_clinical_protocol": "ARINC 653 / IEEE 11073 Mobile ICU / UEFI Secure Boot",
+      "x_iomt_asset": "Unidad Aeromédica Autónoma de Soporte Vital Avanzado (MedEvac TF-22)"
+    },
+    {
+      "type": "indicator",
+      "id": "indicator--ep12-blades-dpi",
+      "name": "SIGMA_TF22_MEDEVAC_IGNITION_TAMPER",
+      "pattern_type": "yara-sigma-hybrid",
+      "pattern": "arinc429.label == 0270 AND boot_stage == 'IGNITION_PREFLIGHT' AND external_hull_fire == TRUE",
+      "description": "Verificación de firma criptográfica del kernel de vuelo y telemetría UCI móvil bajo ataque activo en el hangar."
+    },
+    {
+      "type": "course-of-action",
+      "id": "course-of-action--ep12-mitigation",
+      "name": "MIT-EP12-SECURE-IGNITION",
+      "description": "Inyección de llave de arranque maestro desde el implante BLADES, desacoplamiento físico/lógico de la red del hangar comprometido y despegue autónomo.",
+      "x_cli_playbook": "blades-avionics --inject-ignition-key TF22_ROOT --disconnect-hangar-lan --launch",
+      "x_prevention_standard": "DO-326A (Airworthiness Security) / IEC 60601-1-12 (EMS Medical Equipment)",
+      "x_zero_trust_control": "Cadena de confianza medida por hardware (Measured Boot) desde la ROM hasta la consola clínica."
+    }
+  ],
+  "episode_metadata": {
+    "id": 12,
+    "code": "EP12",
+    "act_number": 1,
+    "act": "ACTO I: PLATAFORMA OFFSHORE \"THE RIG\" (HOSPITAL DE CAMPAÑA MARÍTIMO Y NODO DE TRIAJE)",
+    "title": "Secuestro del TF-22 Transfighter (STEAL PLANE)",
+    "game_node_code": "STEAL PLANE",
+    "game_location": "Hangar principal de la plataforma The Rig, cabina del caza furtivo TF-22",
+    "cyberia_spoiler": "Con la pasarela despejada, Zak corre hasta el caza experimental furtivo TF-22 Transfighter estacionado en el hangar. Mientras los refuerzos de Santos disparan contra el blindaje de la nave, Zak salta dentro de la cabina, conecta su interfaz BLADES a la computadora de vuelo, resuelve la secuencia de ignición y despega a toda potencia por la rampa hacia el cielo ártico.",
+    "hospital_counterpart": "Aseguramiento de Unidad de Cuidados Intensivos Móvil / Ambulancia Aérea Autónoma (MedEvac TF-22) y Arranque Seguro (Secure Boot)",
+    "clinical_protocol": "ARINC 653 / IEEE 11073 Mobile ICU / UEFI Secure Boot",
+    "iomt_asset": "Unidad Aeromédica Autónoma de Soporte Vital Avanzado (MedEvac TF-22)",
+    "mitre_technique": "T1542.003 - Pre-OS Boot: Bootkit Prevention on Autonomous MedEvac",
+    "pillars": {
+      "vulnerability": {
+        "cve": "CVE-2027-0112",
+        "cvss": 8.8,
+        "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H",
+        "description": "Intento de bloqueo del cargador de arranque (Bootloader Lockout) y saturación del bus aviónico de soporte vital durante la secuencia de despegue de emergencia."
+      },
+      "detection": {
+        "engine": "BLADES Avionics & Secure Boot Verifier",
+        "rule_name": "SIGMA_TF22_MEDEVAC_IGNITION_TAMPER",
+        "signature": "arinc429.label == 0270 AND boot_stage == 'IGNITION_PREFLIGHT' AND external_hull_fire == TRUE",
+        "telemetry_indicator": "Verificación de firma criptográfica del kernel de vuelo y telemetría UCI móvil bajo ataque activo en el hangar."
+      },
+      "mitigation": {
+        "action_code": "MIT-EP12-SECURE-IGNITION",
+        "immediate_response": "Inyección de llave de arranque maestro desde el implante BLADES, desacoplamiento físico/lógico de la red del hangar comprometido y despegue autónomo.",
+        "cli_command": "blades-avionics --inject-ignition-key TF22_ROOT --disconnect-hangar-lan --launch"
+      },
+      "prevention": {
+        "standard": "DO-326A (Airworthiness Security) / IEC 60601-1-12 (EMS Medical Equipment)",
+        "hardening_policy": "Particionamiento estricto de tiempo y espacio (ARINC 653) separando la navegación autónoma de los ventiladores y monitores UCI de cabina.",
+        "zero_trust_control": "Cadena de confianza medida por hardware (Measured Boot) desde la ROM hasta la consola clínica."
+      }
+    }
+  }
+}

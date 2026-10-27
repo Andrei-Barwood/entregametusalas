@@ -1,0 +1,74 @@
+{
+  "type": "bundle",
+  "id": "bundle--cyberia-medsoc-ep31-2027",
+  "spec_version": "2.1",
+  "console": "CYBERIA-MED // SOC Console v19.96",
+  "palette_standard": "Ultimate Queen Chrysalis (#523)",
+  "objects": [
+    {
+      "type": "vulnerability",
+      "id": "vulnerability--ep31-cve-2027-0431",
+      "name": "CVE-2027-0431",
+      "description": "Puente físico secundario no blindado (conducto HVAC compartido entre zona pública de ascensor y sala segura) que permite eludir la puerta blindada y capturar una SmartCard privilegiada desatendida.",
+      "x_cvss_score": 8.4,
+      "x_cvss_vector": "CVSS:3.1/AV:P/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:L",
+      "x_clinical_protocol": "ISO/IEC 14443 Type A/B SmartCard / PKI PIV Authentication",
+      "x_iomt_asset": "Tarjetas Criptográficas de Acceso a Biocontención y Sensores Volumétricos de Ductos HVAC"
+    },
+    {
+      "type": "indicator",
+      "id": "indicator--ep31-blades-dpi",
+      "name": "SIGMA_HVAC_DUCT_AIRGAP_BYPASS_KEYCARD_CLAIM",
+      "pattern_type": "yara-sigma-hybrid",
+      "pattern": "hvac_duct.pressure_drop_pa > 18.0 AND smartcard.uid == '0x4F99A2C1_LEVEL2_MASTER' AND door_state == 'CLOSED'",
+      "description": "Perturbación de flujo laminar en el ducto de aire y lectura inductiva de la tarjeta maestra por el guante de Zak."
+    },
+    {
+      "type": "course-of-action",
+      "id": "course-of-action--ep31-mitigation",
+      "name": "MIT-EP31-SMARTCARD-BIND",
+      "description": "Clonación autorizada del certificado X.509 de la tarjeta magnética en el enclave seguro del implante BLADES para franquear el sector rojo.",
+      "x_cli_playbook": "blades-pki --import-smartcard 0x4F99A2C1 --bind-enclave ZAK_BLADES --seal-duct-grate",
+      "x_prevention_standard": "FIPS 201-3 (Personal Identity Verification - PIV) / CDC BMBL 6th Ed.",
+      "x_zero_trust_control": "Las tarjetas inteligentes sin presencia biométrica verificada del titular carecen de privilegios de apertura."
+    }
+  ],
+  "episode_metadata": {
+    "id": 31,
+    "code": "EP31",
+    "act_number": 4,
+    "act": "ACTO IV: COMPLEJO CYBERIA - NIVEL 2 (LABORATORIOS DE BIOCONTENCIÓN, GAS HALÓN Y NANOMEDICINA)",
+    "title": "Infiltración por los Conductos de Aire (Ventilation Shaft Keycard)",
+    "game_node_code": "VENTILATION SHAFT KEYCARD",
+    "game_location": "Conductos de ventilación entre la sala del ascensor y el despacho cerrado del Nivel 2",
+    "cyberia_spoiler": "Tras haber desbloqueado los pestillos desde la terminal de pacientes, Zak vuelve a la sala del ascensor, retira la rejilla metálica inferior del conducto de ventilación, se arrastra por el estrecho túnel de aire hasta la habitación contigua cerrada con llave y estira el brazo a través de la rejilla abierta para apoderarse de la tarjeta magnética de alta seguridad (Keycard).",
+    "hospital_counterpart": "Prevención de Salto de Redes Aisladas (Air-Gap Bypass) y Custodia de Tarjetas Inteligentes Criptográficas (PIV / SmartCards) del Personal Clínico",
+    "clinical_protocol": "ISO/IEC 14443 Type A/B SmartCard / PKI PIV Authentication",
+    "iomt_asset": "Tarjetas Criptográficas de Acceso a Biocontención y Sensores Volumétricos de Ductos HVAC",
+    "mitre_technique": "T0886 / T1091 - Air-Gap Bypass via Secondary Physical/Environmental Conduit",
+    "pillars": {
+      "vulnerability": {
+        "cve": "CVE-2027-0431",
+        "cvss": 8.4,
+        "vector": "CVSS:3.1/AV:P/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:L",
+        "description": "Puente físico secundario no blindado (conducto HVAC compartido entre zona pública de ascensor y sala segura) que permite eludir la puerta blindada y capturar una SmartCard privilegiada desatendida."
+      },
+      "detection": {
+        "engine": "BLADES Laminar Flow & RFID Proximity Sensor",
+        "rule_name": "SIGMA_HVAC_DUCT_AIRGAP_BYPASS_KEYCARD_CLAIM",
+        "signature": "hvac_duct.pressure_drop_pa > 18.0 AND smartcard.uid == '0x4F99A2C1_LEVEL2_MASTER' AND door_state == 'CLOSED'",
+        "telemetry_indicator": "Perturbación de flujo laminar en el ducto de aire y lectura inductiva de la tarjeta maestra por el guante de Zak."
+      },
+      "mitigation": {
+        "action_code": "MIT-EP31-SMARTCARD-BIND",
+        "immediate_response": "Clonación autorizada del certificado X.509 de la tarjeta magnética en el enclave seguro del implante BLADES para franquear el sector rojo.",
+        "cli_command": "blades-pki --import-smartcard 0x4F99A2C1 --bind-enclave ZAK_BLADES --seal-duct-grate"
+      },
+      "prevention": {
+        "standard": "FIPS 201-3 (Personal Identity Verification - PIV) / CDC BMBL 6th Ed.",
+        "hardening_policy": "Instalar barrotes láser y mallas de fibra óptica anti-intrusión dentro de todo conducto HVAC que cruce perímetros de seguridad y exigir PIN biométrico junto con la tarjeta.",
+        "zero_trust_control": "Las tarjetas inteligentes sin presencia biométrica verificada del titular carecen de privilegios de apertura."
+      }
+    }
+  }
+}

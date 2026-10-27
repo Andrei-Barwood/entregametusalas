@@ -1,0 +1,74 @@
+{
+  "type": "bundle",
+  "id": "bundle--cyberia-medsoc-ep06-2027",
+  "spec_version": "2.1",
+  "console": "CYBERIA-MED // SOC Console v19.96",
+  "palette_standard": "Ultimate Queen Chrysalis (#523)",
+  "objects": [
+    {
+      "type": "vulnerability",
+      "id": "vulnerability--ep06-cve-2027-0106",
+      "name": "CVE-2027-0106",
+      "description": "Comandos Modbus Función 0x05 (Write Single Coil) sin autenticación en el bus del elevador quirúrgico que permiten redirigir o detener el traslado de pacientes UCI.",
+      "x_cvss_score": 7.5,
+      "x_cvss_vector": "CVSS:3.1/AV:A/AC:L/PR:N/UI:N/S:U/C:L/I:H/A:H",
+      "x_clinical_protocol": "Modbus/TCP & BACnet/SC (Secure Connect)",
+      "x_iomt_asset": "PLC de Elevador de Pacientes Críticos & Lector Óptico BLADES"
+    },
+    {
+      "type": "indicator",
+      "id": "indicator--ep06-blades-dpi",
+      "name": "SIGMA_MODBUS_ELEVATOR_COIL_OVERRIDE",
+      "pattern_type": "yara-sigma-hybrid",
+      "pattern": "modbus.func_code == 5 AND modbus.coil_addr == 0x0010 AND blades.biometric_signature == NULL",
+      "description": "Escaneo óptico del panel GOING UP detecta bobinas lógicas expuestas sin firma criptográfica."
+    },
+    {
+      "type": "course-of-action",
+      "id": "course-of-action--ep06-mitigation",
+      "name": "MIT-EP06-BACNET-SC",
+      "description": "Inyección de comando de ascenso firmado criptográficamente por el visor BLADES y bloqueo de escrituras Modbus no autenticadas en el PLC del elevador.",
+      "x_cli_playbook": "blades-bms --sign-coil-write 0x0010 --upgrade-channel bacnet-sc-tls",
+      "x_prevention_standard": "ASHRAE BACnet/SC & IEC 62443-3-2",
+      "x_zero_trust_control": "Validación biométrica en cabina para traslados prioritarios de quirófano."
+    }
+  ],
+  "episode_metadata": {
+    "id": 6,
+    "code": "EP06",
+    "act_number": 1,
+    "act": "ACTO I: PLATAFORMA OFFSHORE \"THE RIG\" (HOSPITAL DE CAMPAÑA MARÍTIMO Y NODO DE TRIAJE)",
+    "title": "Escáner Visor del Ascensor (GOING UP)",
+    "game_node_code": "GOING UP",
+    "game_location": "Elevador industrial hacia el puente grúa del hangar en The Rig",
+    "cyberia_spoiler": "Si Zak rechazó el beso de Gia en la pasarela, entra con ella al elevador de carga rumbo al hangar superior. Dentro de la cabina, Zak activa por primera vez la interfaz de escaneo directo de su implante BLADES sobre el panel electrónico del ascensor para descifrar el circuito de control e iniciar el ascenso hacia el nivel donde espera Santos.",
+    "hospital_counterpart": "Controlador PLC de Ascensores Quirúrgicos de Traslado Crítico (UCI a Quirófano)",
+    "clinical_protocol": "Modbus/TCP & BACnet/SC (Secure Connect)",
+    "iomt_asset": "PLC de Elevador de Pacientes Críticos & Lector Óptico BLADES",
+    "mitre_technique": "T0855 - Unauthorized Command Message (ICS/BMS Elevator Control)",
+    "pillars": {
+      "vulnerability": {
+        "cve": "CVE-2027-0106",
+        "cvss": 7.5,
+        "vector": "CVSS:3.1/AV:A/AC:L/PR:N/UI:N/S:U/C:L/I:H/A:H",
+        "description": "Comandos Modbus Función 0x05 (Write Single Coil) sin autenticación en el bus del elevador quirúrgico que permiten redirigir o detener el traslado de pacientes UCI."
+      },
+      "detection": {
+        "engine": "BLADES Optical & Modbus DPI",
+        "rule_name": "SIGMA_MODBUS_ELEVATOR_COIL_OVERRIDE",
+        "signature": "modbus.func_code == 5 AND modbus.coil_addr == 0x0010 AND blades.biometric_signature == NULL",
+        "telemetry_indicator": "Escaneo óptico del panel GOING UP detecta bobinas lógicas expuestas sin firma criptográfica."
+      },
+      "mitigation": {
+        "action_code": "MIT-EP06-BACNET-SC",
+        "immediate_response": "Inyección de comando de ascenso firmado criptográficamente por el visor BLADES y bloqueo de escrituras Modbus no autenticadas en el PLC del elevador.",
+        "cli_command": "blades-bms --sign-coil-write 0x0010 --upgrade-channel bacnet-sc-tls"
+      },
+      "prevention": {
+        "standard": "ASHRAE BACnet/SC & IEC 62443-3-2",
+        "hardening_policy": "Aislar los controladores de ascensores de emergencia médica en una VLAN OT dedicada con listas de control de acceso por dirección MAC y función Modbus.",
+        "zero_trust_control": "Validación biométrica en cabina para traslados prioritarios de quirófano."
+      }
+    }
+  }
+}

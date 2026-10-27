@@ -1,0 +1,74 @@
+{
+  "type": "bundle",
+  "id": "bundle--cyberia-medsoc-ep30-2027",
+  "spec_version": "2.1",
+  "console": "CYBERIA-MED // SOC Console v19.96",
+  "palette_standard": "Ultimate Queen Chrysalis (#523)",
+  "objects": [
+    {
+      "type": "vulnerability",
+      "id": "vulnerability--ep30-cve-2027-0430",
+      "name": "CVE-2027-0430",
+      "description": "Convergencia insegura IT/OT en una misma terminal que almacena registros clínicos de pacientes infectados (PHI), correos internos V-Mail y controles directos de las rejillas de ventilación biocontenida.",
+      "x_cvss_score": 8.8,
+      "x_cvss_vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:L",
+      "x_clinical_protocol": "HL7 FHIR R4 AuditEvent / ATNA (Audit Trail and Node Authentication) / BACnet HVAC",
+      "x_iomt_asset": "Terminal de Historias Clínicas de Infectología, Servidor V-Mail y Actuadores de Rejillas HVAC"
+    },
+    {
+      "type": "indicator",
+      "id": "indicator--ep30-blades-dpi",
+      "name": "SIGMA_FHIR_PATIENT_STATUS_AND_HVAC_GRATE_UNLOCK",
+      "pattern_type": "yara-sigma-hybrid",
+      "pattern": "fhir.resource == 'Patient_Bioweapon_Status' AND vmail.read == TRUE AND hvac.vent_latch == 'UNLOCKED'",
+      "description": "Extracción forense de 14 registros clínicos de infección viral y activación del solenoide de la rejilla de ventilación."
+    },
+    {
+      "type": "course-of-action",
+      "id": "course-of-action--ep30-mitigation",
+      "name": "MIT-EP30-ATNA-EXPORT",
+      "description": "Volcado forense con sello criptográfico de los buzones V-Mail y fichas clínicas para evidencia HIPAA, habilitando el paso controlado por el ducto de aire.",
+      "x_cli_playbook": "blades-forensics --export-vmail --dump-fhir-patients LEVEL2 --unlock-hvac-grate SHAFT_31",
+      "x_prevention_standard": "HIPAA §164.312(b) (Audit Controls) / IHE ATNA Profile",
+      "x_zero_trust_control": "Registro inmutable en servidor syslog remoto (ATNA TLS) de cada visualización de datos de pacientes."
+    }
+  ],
+  "episode_metadata": {
+    "id": 30,
+    "code": "EP30",
+    "act_number": 4,
+    "act": "ACTO IV: COMPLEJO CYBERIA - NIVEL 2 (LABORATORIOS DE BIOCONTENCIÓN, GAS HALÓN Y NANOMEDICINA)",
+    "title": "Terminal V-Mail y Estado de Pacientes (Patient Status Terminal)",
+    "game_node_code": "PATIENT STATUS TERMINAL",
+    "game_location": "Laboratorio de registros médicos y terminal V-Mail contigua a la cabina del Nivel 2",
+    "cyberia_spoiler": "Con el guardia del ventanal eliminado, Zak accede libremente a la computadora del laboratorio ('Patient Status Terminal'). Allí lee los mensajes de correo internos (V-Mail) de los científicos del Cartel, examina los expedientes clínicos de los sujetos infectados por la cepa viral que escapó en el complejo y ejecuta el comando de mantenimiento que destraba las rejillas de los conductos de ventilación.",
+    "hospital_counterpart": "Auditoría Forense de Logs de Acceso a Datos Sensibles de Pacientes (Cumplimiento HIPAA / AuditEvent FHIR) y Control de Compuertas HVAC",
+    "clinical_protocol": "HL7 FHIR R4 AuditEvent / ATNA (Audit Trail and Node Authentication) / BACnet HVAC",
+    "iomt_asset": "Terminal de Historias Clínicas de Infectología, Servidor V-Mail y Actuadores de Rejillas HVAC",
+    "mitre_technique": "T1213 / T1005 - Data from Information Repositories (Clinical EHR & V-Mail Forensics)",
+    "pillars": {
+      "vulnerability": {
+        "cve": "CVE-2027-0430",
+        "cvss": 8.8,
+        "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:L",
+        "description": "Convergencia insegura IT/OT en una misma terminal que almacena registros clínicos de pacientes infectados (PHI), correos internos V-Mail y controles directos de las rejillas de ventilación biocontenida."
+      },
+      "detection": {
+        "engine": "BLADES ATNA Forensic Log Collector",
+        "rule_name": "SIGMA_FHIR_PATIENT_STATUS_AND_HVAC_GRATE_UNLOCK",
+        "signature": "fhir.resource == 'Patient_Bioweapon_Status' AND vmail.read == TRUE AND hvac.vent_latch == 'UNLOCKED'",
+        "telemetry_indicator": "Extracción forense de 14 registros clínicos de infección viral y activación del solenoide de la rejilla de ventilación."
+      },
+      "mitigation": {
+        "action_code": "MIT-EP30-ATNA-EXPORT",
+        "immediate_response": "Volcado forense con sello criptográfico de los buzones V-Mail y fichas clínicas para evidencia HIPAA, habilitando el paso controlado por el ducto de aire.",
+        "cli_command": "blades-forensics --export-vmail --dump-fhir-patients LEVEL2 --unlock-hvac-grate SHAFT_31"
+      },
+      "prevention": {
+        "standard": "HIPAA §164.312(b) (Audit Controls) / IHE ATNA Profile",
+        "hardening_policy": "Aislar estrictamente las terminales de consulta de Historias Clínicas Electrónicas (IT) de cualquier controlador de ventilación y rejillas físicas de laboratorio (OT).",
+        "zero_trust_control": "Registro inmutable en servidor syslog remoto (ATNA TLS) de cada visualización de datos de pacientes."
+      }
+    }
+  }
+}

@@ -1,0 +1,74 @@
+{
+  "type": "bundle",
+  "id": "bundle--cyberia-medsoc-ep29-2027",
+  "spec_version": "2.1",
+  "console": "CYBERIA-MED // SOC Console v19.96",
+  "palette_standard": "Ultimate Queen Chrysalis (#523)",
+  "objects": [
+    {
+      "type": "vulnerability",
+      "id": "vulnerability--ep29-cve-2027-0429",
+      "name": "CVE-2027-0429",
+      "description": "Proceso vigilante hostil con privilegios de operador de planta ejecutándose en la estación de la cabina acristalada con acceso directo al disparador de emergencia química.",
+      "x_cvss_score": 8.5,
+      "x_cvss_vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H",
+      "x_clinical_protocol": "SSHv2 / RDP Clinical Console Session Management",
+      "x_iomt_asset": "Estación Central de Monitoreo de Enfermería UCI y Panel de Alarma Química"
+    },
+    {
+      "type": "indicator",
+      "id": "indicator--ep29-blades-dpi",
+      "name": "SIGMA_GLASS_ROOM_ROGUE_WATCHER_PROCESS",
+      "pattern_type": "yara-sigma-hybrid",
+      "pattern": "proc.name == 'halon_watcher_d' AND tty == 'pts/2_glass_room' AND privilege_level == 'SCADA_OPERATOR'",
+      "description": "Detección del proceso observador hostil girando su foco de inspección hacia el puerto de entrada lateral."
+    },
+    {
+      "type": "course-of-action",
+      "id": "course-of-action--ep29-mitigation",
+      "name": "MIT-EP29-KILL-WATCHER",
+      "description": "Ocultación de firma en tabla de procesos seguida de terminación instantánea (SIGKILL -9) del demonio vigilante antes de que emita el trap de bloqueo.",
+      "x_cli_playbook": "blades-edr --cloak-pid --kill-rogue-session GLASS_ROOM_OP_29 --revoke-scada-token",
+      "x_prevention_standard": "IEC 62443-3-3 SR 2.1 (Authorization Enforcement)",
+      "x_zero_trust_control": "Revocación instantánea de sesiones de consola ante anomalías de proximidad."
+    }
+  ],
+  "episode_metadata": {
+    "id": 29,
+    "code": "EP29",
+    "act_number": 4,
+    "act": "ACTO IV: COMPLEJO CYBERIA - NIVEL 2 (LABORATORIOS DE BIOCONTENCIÓN, GAS HALÓN Y NANOMEDICINA)",
+    "title": "Ejecución en el Laboratorio de Observación (Glass Room Breach)",
+    "game_node_code": "GLASS ROOM BREACH",
+    "game_location": "Cabina de observación acristalada del Nivel 2",
+    "cyberia_spoiler": "Tras cruzar el almacén sin disparar la trampa de gas Halón, Zak avanza por el pasillo lateral, abre sigilosamente la puerta de la cabina de observación donde está el guardia del ventanal, se esconde detrás de un armario metálico justo cuando el guardia se voltea al oír la puerta y luego sale de su escondite para abatirlo antes de que pueda activar la alarma general.",
+    "hospital_counterpart": "Neutralización de Sesión Fantasma de Atacante (Session Hijacking / Rogue Operator) en la Consola Central de Monitoreo UCI",
+    "clinical_protocol": "SSHv2 / RDP Clinical Console Session Management",
+    "iomt_asset": "Estación Central de Monitoreo de Enfermería UCI y Panel de Alarma Química",
+    "mitre_technique": "T1563 - Remote Service Session Hijacking (Neutralizing Rogue Watcher Daemon)",
+    "pillars": {
+      "vulnerability": {
+        "cve": "CVE-2027-0429",
+        "cvss": 8.5,
+        "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H",
+        "description": "Proceso vigilante hostil con privilegios de operador de planta ejecutándose en la estación de la cabina acristalada con acceso directo al disparador de emergencia química."
+      },
+      "detection": {
+        "engine": "BLADES Process Tree & Presence Sensor",
+        "rule_name": "SIGMA_GLASS_ROOM_ROGUE_WATCHER_PROCESS",
+        "signature": "proc.name == 'halon_watcher_d' AND tty == 'pts/2_glass_room' AND privilege_level == 'SCADA_OPERATOR'",
+        "telemetry_indicator": "Detección del proceso observador hostil girando su foco de inspección hacia el puerto de entrada lateral."
+      },
+      "mitigation": {
+        "action_code": "MIT-EP29-KILL-WATCHER",
+        "immediate_response": "Ocultación de firma en tabla de procesos seguida de terminación instantánea (SIGKILL -9) del demonio vigilante antes de que emita el trap de bloqueo.",
+        "cli_command": "blades-edr --cloak-pid --kill-rogue-session GLASS_ROOM_OP_29 --revoke-scada-token"
+      },
+      "prevention": {
+        "standard": "IEC 62443-3-3 SR 2.1 (Authorization Enforcement)",
+        "hardening_policy": "Desacoplar las estaciones de visualización clínica respecto a los controles de disparo de sistemas químicos y exigir confirmación biométrica dual.",
+        "zero_trust_control": "Revocación instantánea de sesiones de consola ante anomalías de proximidad."
+      }
+    }
+  }
+}

@@ -1,13 +1,8 @@
-# wrangler files
-.wrangler
-.dev.vars*
-!.dev.vars.example
-.env*
-!.env.example
-
-# Swift build
-.build/
-.swiftpm/
-
-# OS files
+.bundle/
+vendor/bundle/
+coverage/
+log/
+tmp/
+dist/
+.wrangler/
 .DS_Store

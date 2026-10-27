@@ -1,0 +1,74 @@
+{
+  "type": "bundle",
+  "id": "bundle--cyberia-medsoc-ep09-2027",
+  "spec_version": "2.1",
+  "console": "CYBERIA-MED // SOC Console v19.96",
+  "palette_standard": "Ultimate Queen Chrysalis (#523)",
+  "objects": [
+    {
+      "type": "vulnerability",
+      "id": "vulnerability--ep09-cve-2027-0109",
+      "name": "CVE-2027-0109",
+      "description": "Persistencia de llaves maestras de autorización en el cartucho criptográfico de hardware (Power Pack) del operador caído tras un evento de sobretensión letal.",
+      "x_cvss_score": 7.9,
+      "x_cvss_vector": "CVSS:3.1/AV:P/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:L",
+      "x_clinical_protocol": "PKCS#11 / FIPS 140-3 HSM Recovery Protocol",
+      "x_iomt_asset": "Módulo de Seguridad de Hardware (PowerPack-HSM) & Terminal de Emergencia"
+    },
+    {
+      "type": "indicator",
+      "id": "indicator--ep09-blades-dpi",
+      "name": "SIGMA_HSM_TOKEN_EXTRACTION_POST_FAULT",
+      "pattern_type": "yara-sigma-hybrid",
+      "pattern": "pkcs11.event == 'TOKEN_EXTRACTED' AND source_node == 'SANTOS_ADMIN_CORPSE' AND voltage_spike == TRUE",
+      "description": "Detección de acoplamiento del cartucho Power Pack en el bus de energía de Zak y desarme del temporizador explosivo."
+    },
+    {
+      "type": "course-of-action",
+      "id": "course-of-action--ep09-mitigation",
+      "name": "MIT-EP09-HSM-REBIND",
+      "description": "Revinculación criptográfica de emergencia del token Power Pack al implante BLADES de Zak y desactivación definitiva de la bomba lógica del almacén.",
+      "x_cli_playbook": "blades-hsm --claim-token POWERPACK_SANTOS --rebind-host ZAK_BLADES --disarm-bomb",
+      "x_prevention_standard": "FIPS 140-3 Level 4 / ISO 27799",
+      "x_zero_trust_control": "Vinculación biométrica continua entre el portador y el token criptográfico de hardware."
+    }
+  ],
+  "episode_metadata": {
+    "id": 9,
+    "code": "EP09",
+    "act_number": 1,
+    "act": "ACTO I: PLATAFORMA OFFSHORE \"THE RIG\" (HOSPITAL DE CAMPAÑA MARÍTIMO Y NODO DE TRIAJE)",
+    "title": "Cortocircuito y Cartucho de Energía (BIG SHOCK)",
+    "game_node_code": "BIG SHOCK",
+    "game_location": "Suelo electrificado junto al cadáver de Santos en la bodega de The Rig",
+    "cyberia_spoiler": "Con segundos antes de que la bomba estalle, Zak rueda por el suelo y acerca las ataduras de sus muñecas al borde de la rejilla electrificada para quemarlas con el arco voltaico sin morir electrocutado. Libre de las cuerdas, salta sobre el cadáver carbonizado de Santos, recupera su pistola láser del suelo y registra el cuerpo de Santos para extraer el Power Pack (cartucho de energía indispensable para recargar su arma).",
+    "hospital_counterpart": "Recuperación Forense de Tokens Criptográficos de Hardware (HSM / SmartCard) desde Nodos Siniestrados",
+    "clinical_protocol": "PKCS#11 / FIPS 140-3 HSM Recovery Protocol",
+    "iomt_asset": "Módulo de Seguridad de Hardware (PowerPack-HSM) & Terminal de Emergencia",
+    "mitre_technique": "T1552.004 - Unsecured Credentials: Private Keys / Hardware Token Recovery",
+    "pillars": {
+      "vulnerability": {
+        "cve": "CVE-2027-0109",
+        "cvss": 7.9,
+        "vector": "CVSS:3.1/AV:P/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:L",
+        "description": "Persistencia de llaves maestras de autorización en el cartucho criptográfico de hardware (Power Pack) del operador caído tras un evento de sobretensión letal."
+      },
+      "detection": {
+        "engine": "BLADES Magnetic Resonance & PKCS#11 Monitor",
+        "rule_name": "SIGMA_HSM_TOKEN_EXTRACTION_POST_FAULT",
+        "signature": "pkcs11.event == 'TOKEN_EXTRACTED' AND source_node == 'SANTOS_ADMIN_CORPSE' AND voltage_spike == TRUE",
+        "telemetry_indicator": "Detección de acoplamiento del cartucho Power Pack en el bus de energía de Zak y desarme del temporizador explosivo."
+      },
+      "mitigation": {
+        "action_code": "MIT-EP09-HSM-REBIND",
+        "immediate_response": "Revinculación criptográfica de emergencia del token Power Pack al implante BLADES de Zak y desactivación definitiva de la bomba lógica del almacén.",
+        "cli_command": "blades-hsm --claim-token POWERPACK_SANTOS --rebind-host ZAK_BLADES --disarm-bomb"
+      },
+      "prevention": {
+        "standard": "FIPS 140-3 Level 4 / ISO 27799",
+        "hardening_policy": "Configurar módulos criptográficos portátiles con borrado automático (Zeroization) ante pérdida de pulso biométrico del custodio asignado.",
+        "zero_trust_control": "Vinculación biométrica continua entre el portador y el token criptográfico de hardware."
+      }
+    }
+  }
+}

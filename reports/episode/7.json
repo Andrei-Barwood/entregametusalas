@@ -1,0 +1,74 @@
+{
+  "type": "bundle",
+  "id": "bundle--cyberia-medsoc-ep07-2027",
+  "spec_version": "2.1",
+  "console": "CYBERIA-MED // SOC Console v19.96",
+  "palette_standard": "Ultimate Queen Chrysalis (#523)",
+  "objects": [
+    {
+      "type": "vulnerability",
+      "id": "vulnerability--ep07-cve-2027-0107",
+      "name": "CVE-2027-0107",
+      "description": "Backdoor en el túnel VPN del proveedor externo (Santos Logistics) que permite exfiltrar telemetría al Cartel y disparar descargas eléctricas remotas en equipos de cardiología.",
+      "x_cvss_score": 9.4,
+      "x_cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H",
+      "x_clinical_protocol": "IEEE 11073 Defibrillator Profile / Out-of-Band Drone Telemetry",
+      "x_iomt_asset": "Desfibriladores Externos Automatizados en Red & Pasarela de Proveedor Externo"
+    },
+    {
+      "type": "indicator",
+      "id": "indicator--ep07-blades-dpi",
+      "name": "YARA_SUPPLY_CHAIN_CARTEL_EXFIL_AND_ZAP",
+      "pattern_type": "yara-sigma-hybrid",
+      "pattern": "rule Santos_Betrayal_Zap { strings: $c2 = \"CARTEL_BID_ACCEPTED\" $zap = { FF EE 00 99 03 E8 } condition: $c2 and $zap }",
+      "description": "El dron de auditoría fuera de banda captura el apretón de manos TLS con el Cartel y el pico de descarga de 360 Julios."
+    },
+    {
+      "type": "course-of-action",
+      "id": "course-of-action--ep07-mitigation",
+      "name": "MIT-EP07-VENDOR-SEVER",
+      "description": "Corte instantáneo de todas las sesiones BGP/VPN del socio externo comprometido y activación de amortiguador galvánico en el implante BLADES para sobrevivir a la electrocución.",
+      "x_cli_playbook": "medsoc-core --sever-partner SANTOS_RIG_VPN --clamp-voltage-surge 360J --archive-drone-pcap",
+      "x_prevention_standard": "NIST SP 800-161 (Cyber Supply Chain Risk Management)",
+      "x_zero_trust_control": "Monitoreo pasivo fuera de banda (Stealth Drone Tap) sobre toda actividad de proveedores terceros."
+    }
+  ],
+  "episode_metadata": {
+    "id": 7,
+    "code": "EP07",
+    "act_number": 1,
+    "act": "ACTO I: PLATAFORMA OFFSHORE \"THE RIG\" (HOSPITAL DE CAMPAÑA MARÍTIMO Y NODO DE TRIAJE)",
+    "title": "Traición en el Puente Grúa (ZAPPED)",
+    "game_node_code": "ZAPPED",
+    "game_location": "Pasarela elevada sobre el hangar principal de The Rig",
+    "cyberia_spoiler": "Al salir del ascensor en la pasarela superior, Santos embosca a Zak y revela la verdad: sin importar si Zak besó o no a Gia, Santos ya vendió la misión y la vida de Zak al Cartel porque ofrecieron mejor precio que la FWA. El matón de Santos dispara un rifle de choque eléctrico que electrocuta a Zak ('ZAPPED') y lo derriba inconsciente. Mientras Santos celebra su traición, un diminuto dron espía volador de William Devlin graba todo en secreto desde las vigas del techo.",
+    "hospital_counterpart": "Detección de Traición en Cadena de Suministro (Supply Chain Attack) y Telemetría de Descarga no Autorizada en Desfibriladores en Red",
+    "clinical_protocol": "IEEE 11073 Defibrillator Profile / Out-of-Band Drone Telemetry",
+    "iomt_asset": "Desfibriladores Externos Automatizados en Red & Pasarela de Proveedor Externo",
+    "mitre_technique": "T1199 - Trusted Relationship (Third-Party Vendor Betrayal) & T0831 - Manipulation of Control",
+    "pillars": {
+      "vulnerability": {
+        "cve": "CVE-2027-0107",
+        "cvss": 9.4,
+        "vector": "CVSS:3.1/AV:N/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:H",
+        "description": "Backdoor en el túnel VPN del proveedor externo (Santos Logistics) que permite exfiltrar telemetría al Cartel y disparar descargas eléctricas remotas en equipos de cardiología."
+      },
+      "detection": {
+        "engine": "FWA Stealth Drone Out-of-Band Tap",
+        "rule_name": "YARA_SUPPLY_CHAIN_CARTEL_EXFIL_AND_ZAP",
+        "signature": "rule Santos_Betrayal_Zap { strings: $c2 = \"CARTEL_BID_ACCEPTED\" $zap = { FF EE 00 99 03 E8 } condition: $c2 and $zap }",
+        "telemetry_indicator": "El dron de auditoría fuera de banda captura el apretón de manos TLS con el Cartel y el pico de descarga de 360 Julios."
+      },
+      "mitigation": {
+        "action_code": "MIT-EP07-VENDOR-SEVER",
+        "immediate_response": "Corte instantáneo de todas las sesiones BGP/VPN del socio externo comprometido y activación de amortiguador galvánico en el implante BLADES para sobrevivir a la electrocución.",
+        "cli_command": "medsoc-core --sever-partner SANTOS_RIG_VPN --clamp-voltage-surge 360J --archive-drone-pcap"
+      },
+      "prevention": {
+        "standard": "NIST SP 800-161 (Cyber Supply Chain Risk Management)",
+        "hardening_policy": "Separar por hardware los circuitos de carga/descarga de desfibriladores respecto al módulo Wi-Fi de telemetría de mantenimiento.",
+        "zero_trust_control": "Monitoreo pasivo fuera de banda (Stealth Drone Tap) sobre toda actividad de proveedores terceros."
+      }
+    }
+  }
+}

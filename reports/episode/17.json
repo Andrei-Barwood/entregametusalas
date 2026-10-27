@@ -1,0 +1,74 @@
+{
+  "type": "bundle",
+  "id": "bundle--cyberia-medsoc-ep17-2027",
+  "spec_version": "2.1",
+  "console": "CYBERIA-MED // SOC Console v19.96",
+  "palette_standard": "Ultimate Queen Chrysalis (#523)",
+  "objects": [
+    {
+      "type": "vulnerability",
+      "id": "vulnerability--ep17-cve-2027-0217",
+      "name": "CVE-2027-0217",
+      "description": "Inyección de tramas CAN con identificador dominante (0x000) que actúan como camiones cisterna bloqueando el bus de navegación de los robots de suministros quirúrgicos y colapsando el túnel de datos.",
+      "x_cvss_score": 8.7,
+      "x_cvss_vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:C/C:N/I:H/A:H",
+      "x_clinical_protocol": "ISO 11898 CAN Bus / IEEE 802.1AE MACsec Backbone",
+      "x_iomt_asset": "Flota de Robots Autónomos de Quirófano (AGVs) y Red de Tubos Neumáticos de Laboratorio"
+    },
+    {
+      "type": "indicator",
+      "id": "indicator--ep17-blades-dpi",
+      "name": "SIGMA_CANBUS_UNDERGROUND_CONVOY_SATURATION",
+      "pattern_type": "yara-sigma-hybrid",
+      "pattern": "can.arbitration_id == 0x000 AND bus_load_percent > 92 AND collision_error_frames > 100/sec",
+      "description": "Obstrucción crítica del conducto troncal detectada en el segmento UNDERGROUND por convoy de paquetes hostiles."
+    },
+    {
+      "type": "course-of-action",
+      "id": "course-of-action--ep17-mitigation",
+      "name": "MIT-EP17-TUNNEL-CLEAR",
+      "description": "Purga activa de tramas parásitas mediante transceptores guardianes en el bus CAN y aislamiento físico de los controladores AGV sabotados.",
+      "x_cli_playbook": "blades-canbus --purge-id 0x000 --isolate-rogue-agv CONVOY_01..08 --enable-macsec",
+      "x_prevention_standard": "ISO 21434 / IEC 62443-3-3",
+      "x_zero_trust_control": "Validación por hardware de velocidad y prioridad de cada trama en el backbone subterráneo."
+    }
+  ],
+  "episode_metadata": {
+    "id": 17,
+    "code": "EP17",
+    "act_number": 2,
+    "act": "ACTO II: RUTA DE EVACUACIÓN ÁRTICA Y TÚNELES DE SUMINISTRO (TELEMETRÍA EN TRÁNSITO)",
+    "title": "El Túnel Subterráneo de Carga (UNDERGROUND)",
+    "game_node_code": "UNDERGROUND",
+    "game_location": "Túnel ferroviario y carretero subterráneo bajo los Montes Urales rumbo a Siberia",
+    "cyberia_spoiler": "Tras destruir el generador de escudo verde en Archangel, el caza TF-22 se sumerge dentro de un larguísimo túnel subterráneo de transporte para cruzar hacia Siberia sin ser detectado por los satélites del Cartel. Volando a ras del suelo entre columnas de concreto en un espacio claustrofóbico, Zak debe disparar contra trenes blindados y convoys de camiones cisterna de combustible que bloquean la vía, haciéndolos estallar antes de chocar contra ellos.",
+    "hospital_counterpart": "Protección del Bus Troncal Subterráneo (Hospital Backbone / CAN Bus de Robots AGV y Transporte Neumático)",
+    "clinical_protocol": "ISO 11898 CAN Bus / IEEE 802.1AE MACsec Backbone",
+    "iomt_asset": "Flota de Robots Autónomos de Quirófano (AGVs) y Red de Tubos Neumáticos de Laboratorio",
+    "mitre_technique": "T0814 - Denial of Service on Fieldbus / CAN Bus Dominant Frame Flood",
+    "pillars": {
+      "vulnerability": {
+        "cve": "CVE-2027-0217",
+        "cvss": 8.7,
+        "vector": "CVSS:3.1/AV:L/AC:L/PR:N/UI:N/S:C/C:N/I:H/A:H",
+        "description": "Inyección de tramas CAN con identificador dominante (0x000) que actúan como camiones cisterna bloqueando el bus de navegación de los robots de suministros quirúrgicos y colapsando el túnel de datos."
+      },
+      "detection": {
+        "engine": "BLADES Subterranean Bus Analyzer",
+        "rule_name": "SIGMA_CANBUS_UNDERGROUND_CONVOY_SATURATION",
+        "signature": "can.arbitration_id == 0x000 AND bus_load_percent > 92 AND collision_error_frames > 100/sec",
+        "telemetry_indicator": "Obstrucción crítica del conducto troncal detectada en el segmento UNDERGROUND por convoy de paquetes hostiles."
+      },
+      "mitigation": {
+        "action_code": "MIT-EP17-TUNNEL-CLEAR",
+        "immediate_response": "Purga activa de tramas parásitas mediante transceptores guardianes en el bus CAN y aislamiento físico de los controladores AGV sabotados.",
+        "cli_command": "blades-canbus --purge-id 0x000 --isolate-rogue-agv CONVOY_01..08 --enable-macsec"
+      },
+      "prevention": {
+        "standard": "ISO 21434 / IEC 62443-3-3",
+        "hardening_policy": "Implementar autenticación criptográfica de mensajes (SecOC) en buses CAN de robótica hospitalaria y enlaces troncales de fibra con cifrado MACsec.",
+        "zero_trust_control": "Validación por hardware de velocidad y prioridad de cada trama en el backbone subterráneo."
+      }
+    }
+  }
+}

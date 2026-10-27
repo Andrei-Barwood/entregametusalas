@@ -1,0 +1,74 @@
+{
+  "type": "bundle",
+  "id": "bundle--cyberia-medsoc-ep42-2027",
+  "spec_version": "2.1",
+  "console": "CYBERIA-MED // SOC Console v19.96",
+  "palette_standard": "Ultimate Queen Chrysalis (#523)",
+  "objects": [
+    {
+      "type": "vulnerability",
+      "id": "vulnerability--ep42-cve-2027-0542",
+      "name": "CVE-2027-0542",
+      "description": "Exposición del bus sináptico de alta velocidad durante el acoplamiento entre la corteza cerebral del operador y el exoesqueleto autónomo Cyberia.",
+      "x_cvss_score": 9.5,
+      "x_cvss_vector": "CVSS:3.1/AV:P/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H",
+      "x_clinical_protocol": "IEEE P2731 (Unified Terminology for Brain-Computer Interfaces) / Neural-TLS 1.3",
+      "x_iomt_asset": "Interfaz Cerebro-Computadora (BCI) BLADES & Matriz Nanotecnológica de Enlace Sináptico"
+    },
+    {
+      "type": "indicator",
+      "id": "indicator--ep42-blades-dpi",
+      "name": "SIGMA_BCI_YOU_WITH_ME_SYNAPTIC_CONVERGENCE",
+      "pattern_type": "yara-sigma-hybrid",
+      "pattern": "bci.eeg_coherence == 1.00 AND nanobot_swarm.state == 'RECOGNIZED_TRUE_HOST_ZAK'",
+      "description": "Coherencia neuronal al 100%: la entidad Cyberia reconoce a Zak como su único operador legítimo y rechaza las llaves de Devlin."
+    },
+    {
+      "type": "course-of-action",
+      "id": "course-of-action--ep42-mitigation",
+      "name": "MIT-EP42-BCI-HANDSHAKE",
+      "description": "Sellado del enlace sináptico mediante firma biométrica continua de ondas cerebrales (EEG/ECG), bloqueando cualquier interferencia externa de la FWA o del Cartel.",
+      "x_cli_playbook": "blades-bci --establish-synaptic-link ZAK_CORTEX --lock-nanobot-swarm CYBERIA_CORE",
+      "x_prevention_standard": "IEEE P2731 BCI Security Standard & ISO 14708-3 (Implantable Neurostimulators)",
+      "x_zero_trust_control": "Vinculación biológica intransferible entre el sistema nervioso del huésped y el núcleo cibernético."
+    }
+  ],
+  "episode_metadata": {
+    "id": 42,
+    "code": "EP42",
+    "act_number": 5,
+    "act": "ACTO V: EL NÚCLEO BIOCIBERNÉTICO Y LA REVELACIÓN DEL PROYECTO CYBERIA (SIMBIOSIS Y PURGA)",
+    "title": "Convergencia Neuro-Nanotecnológica (YOU WITH ME - Parte 1)",
+    "game_node_code": "YOU WITH ME (PART 1)",
+    "game_location": "Plataforma de enlace neuronal frente al corazón de la entidad Cyberia",
+    "cyberia_spoiler": "Zak sube a la plataforma de contacto frente al organismo Cyberia ('YOU WITH ME - Parte 1'). Los nanobots y circuitos del implante BLADES dentro del cerebro de Zak despiertan en resonancia total con la criatura: se revela que el propio Zak había sido preparado genética y cibernéticamente desde el principio como la llave viviente y el huésped neuronal indispensable para despertar a Cyberia.",
+    "hospital_counterpart": "Sincronización Criptográfica de Interfaces Cerebro-Computadora (BCI), Prótesis Neuronales y Bus de Telemetría Biométrica de Alta Frecuencia",
+    "clinical_protocol": "IEEE P2731 (Unified Terminology for Brain-Computer Interfaces) / Neural-TLS 1.3",
+    "iomt_asset": "Interfaz Cerebro-Computadora (BCI) BLADES & Matriz Nanotecnológica de Enlace Sináptico",
+    "mitre_technique": "T0889 / DEF-NEURAL-SYNC - Cryptographic Brain-Computer Interface Handshake",
+    "pillars": {
+      "vulnerability": {
+        "cve": "CVE-2027-0542",
+        "cvss": 9.5,
+        "vector": "CVSS:3.1/AV:P/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H",
+        "description": "Exposición del bus sináptico de alta velocidad durante el acoplamiento entre la corteza cerebral del operador y el exoesqueleto autónomo Cyberia."
+      },
+      "detection": {
+        "engine": "BLADES EEG P300 & Nanobot Phase-Locked Loop",
+        "rule_name": "SIGMA_BCI_YOU_WITH_ME_SYNAPTIC_CONVERGENCE",
+        "signature": "bci.eeg_coherence == 1.00 AND nanobot_swarm.state == 'RECOGNIZED_TRUE_HOST_ZAK'",
+        "telemetry_indicator": "Coherencia neuronal al 100%: la entidad Cyberia reconoce a Zak como su único operador legítimo y rechaza las llaves de Devlin."
+      },
+      "mitigation": {
+        "action_code": "MIT-EP42-BCI-HANDSHAKE",
+        "immediate_response": "Sellado del enlace sináptico mediante firma biométrica continua de ondas cerebrales (EEG/ECG), bloqueando cualquier interferencia externa de la FWA o del Cartel.",
+        "cli_command": "blades-bci --establish-synaptic-link ZAK_CORTEX --lock-nanobot-swarm CYBERIA_CORE"
+      },
+      "prevention": {
+        "standard": "IEEE P2731 BCI Security Standard & ISO 14708-3 (Implantable Neurostimulators)",
+        "hardening_policy": "Cifrado homomórfico de señales neuronales y validación de potencial evocado único del paciente antes de autorizar actuación motora o sistémica.",
+        "zero_trust_control": "Vinculación biológica intransferible entre el sistema nervioso del huésped y el núcleo cibernético."
+      }
+    }
+  }
+}

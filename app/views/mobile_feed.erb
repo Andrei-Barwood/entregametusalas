@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#0E1111">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>CYBERIA-MED // MURO SOCIAL MÓVIL (NETACAD POD)</title>
+  <link rel="stylesheet" href="/css/chrysalis_medsoc.css">
+</head>
+<body class="mobile-body">
+  <div class="blades-crt-overlay" aria-hidden="true"></div>
+
+  <!-- CABECERA MÓVIL COMPACTA -->
+  <header class="mobile-feed-header">
+    <div class="mobile-header-row">
+      <div class="mobile-brand">
+        <div class="blades-emblem" style="width: 26px; height: 26px; font-size: 0.85rem;" title="BLADES Biocybernetic Sensor">B</div>
+        <div>
+          <div class="mobile-brand-title">CYBERIA // MURO MÓVIL</div>
+          <div class="mobile-brand-sub">NETACAD MED-SEC POD • FEED EN VIVO</div>
+        </div>
+      </div>
+      <div style="display: flex; align-items: center; gap: 0.35rem;">
+        <span class="hud-tag" style="background: rgba(48,255,0,0.15); border: 1px solid var(--magic-ring); color: var(--magic-highlight); font-size: 0.62rem; padding: 0.15rem 0.35rem;">
+          🟢 P2P
+        </span>
+        <button type="button" id="btn-mobile-refresh" class="soc-btn" style="padding: 0.2rem 0.45rem; font-size: 0.75rem;" title="Refrescar feed">
+          ↻
+        </button>
+      </div>
+    </div>
+
+    <!-- CINTA DE ALMACENAMIENTO LIGERO .JSONL -->
+    <div class="mobile-stats-ribbon">
+      <span id="feed-storage-stats-badge" style="color: var(--bauble-cyan-bright);">
+        📄 <%= @stats[:kb] %> KB / 3,000 KB (JSONL • <%= @stats[:total_posts] %> posts)
+      </span>
+      <span style="color: var(--hud-glass-outline);">• 5 años de debates</span>
+    </div>
+  </header>
+
+  <main class="mobile-feed-main">
+    <!-- CAJA DE TEXTO MÓVIL (SOLO TIPIAR Y PUBLICAR EN EL FEED) -->
+    <section class="mobile-compose-card" aria-label="Publicar comentario en el feed">
+      <form id="feed-post-form" action="/mobile" method="POST">
+        <div class="mobile-input-grid">
+          <div>
+            <label for="feed-author-input" class="feed-label" style="font-size: 0.62rem;">TU ALIAS / DISTINTIVO:</label>
+            <input
+              type="text"
+              id="feed-author-input"
+              name="author"
+              class="soc-input mobile-text-input"
+              placeholder="Ej: Cadete_UCI..."
+              maxlength="50"
+              required
+            >
+          </div>
+          <div>
+            <label for="feed-post-episode-select" class="feed-label" style="font-size: 0.62rem;">EPISODIO:</label>
+            <select id="feed-post-episode-select" name="episode_id" class="soc-select mobile-select">
+              <option value="">CANAL GENERAL</option>
+              <% @episodes.each do |ep| %>
+                <option value="<%= ep['id'] %>">
+                  <%= ep['code'] %>: <%= ep['game_node_code'] %>
+                </option>
+              <% end %>
+            </select>
+          </div>
+        </div>
+
+        <div style="margin-top: 0.5rem;">
+          <label for="feed-post-content" class="feed-label" style="font-size: 0.62rem;">
+            MENSAJE O COMANDO KALI (MÁXIMO 2,000 CARACTERES):
+          </label>
+          <textarea
+            id="feed-post-content"
+            name="content"
+            class="soc-input feed-textarea mobile-textarea"
+            rows="3"
+            maxlength="2000"
+            placeholder="Escribe tu observación técnica, comando de terminal de Kali Linux, signos vitales o dudas de parches..."
+            required
+          ></textarea>
+        </div>
+
+        <div id="feed-form-alert" class="feed-alert-box" style="display: none;"></div>
+
+        <div class="mobile-compose-footer">
+          <div id="feed-char-counter" class="feed-char-counter" style="font-size: 0.68rem;">
+            0 / 2000 caracteres
+          </div>
+          <button type="submit" id="btn-feed-submit" class="soc-btn soc-btn-warning mobile-submit-btn">
+            PUBLICAR EN EL MURO
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <!-- BARRA DE FILTROS MÓVIL -->
+    <div class="mobile-filter-toolbar">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.4rem;">
+        <span style="font-size: 0.68rem; font-weight: 700; color: #FFFFFF;">FEED EN VIVO</span>
+        <span id="feed-active-count-badge" class="hud-tag" style="color: var(--magic-pulse-core); font-size: 0.62rem;">
+          <%= @posts.size %> MENSAJES
+        </span>
+      </div>
+      <div class="feed-filter-pills mobile-pills-scroll">
+        <button type="button" class="soc-btn feed-filter-btn active" data-ep="all">TODOS</button>
+        <button type="button" class="soc-btn feed-filter-btn" data-ep="1">EP01</button>
+        <button type="button" class="soc-btn feed-filter-btn" data-ep="4">EP04</button>
+        <button type="button" class="soc-btn feed-filter-btn" data-ep="12">EP12</button>
+        <button type="button" class="soc-btn feed-filter-btn" data-ep="22">EP22</button>
+        <button type="button" class="soc-btn feed-filter-btn" data-ep="35">EP35</button>
+      </div>
+    </div>
+
+    <!-- FLUJO DINÁMICO DE PUBLICACIONES DEL MURO (STREAM) -->
+    <section class="mobile-stream-section" aria-label="Comentarios en tiempo real">
+      <div id="feed-stream-container" class="feed-stream-list">
+        <% @posts.each do |p| %>
+          <article class="feed-post-card mobile-post-card" data-post-id="<%= p.id %>" data-episode-id="<%= p.episode_id %>">
+            <div class="feed-post-avatar mobile-avatar" style="background-color: <%= p.avatar_color %>;">
+              <%= (p.author || 'C')[0].upcase %>
+            </div>
+            <div class="feed-post-main">
+              <div class="feed-post-header">
+                <span class="feed-post-author"><%= p.author %></span>
+                <span class="feed-post-pill <%= p.episode_id ? 'feed-post-ep-pill' : 'feed-post-gen-pill' %>">
+                  <%= p.episode_id ? format('EP%02d', p.episode_id) : 'GENERAL' %>
+                </span>
+                <time class="feed-post-time" datetime="<%= p.created_at %>">hace poco</time>
+              </div>
+              <div class="feed-post-body">
+                <%= p.content.gsub("\n", "<br>") %>
+              </div>
+              <div class="feed-post-actions mobile-post-actions" aria-label="Reacciones">
+                <button type="button" class="feed-react-btn feed-react-like" data-post-id="<%= p.id %>" data-reaction="like" title="Pulgar arriba">
+                  <span class="react-emoji" aria-hidden="true">👍</span>
+                  <span class="react-count" id="react-like-<%= p.id %>"><%= p.likes %></span>
+                </button>
+                <button type="button" class="feed-react-btn feed-react-dislike" data-post-id="<%= p.id %>" data-reaction="dislike" title="Pulgar abajo">
+                  <span class="react-emoji" aria-hidden="true">👎</span>
+                  <span class="react-count" id="react-dislike-<%= p.id %>"><%= p.dislikes %></span>
+                </button>
+                <button type="button" class="feed-react-btn feed-react-love" data-post-id="<%= p.id %>" data-reaction="love" title="Amor Clínico">
+                  <span class="react-emoji" aria-hidden="true">💝</span>
+                  <span class="react-count" id="react-love-<%= p.id %>"><%= p.loves %></span>
+                </button>
+              </div>
+            </div>
+          </article>
+        <% end %>
+      </div>
+    </section>
+
+    <!-- PIE MÓVIL Y ACCESO ALTERNATIVO A ESCRITORIO -->
+    <footer class="mobile-feed-footer">
+      <div style="font-size: 0.65rem; color: #888888; margin-bottom: 0.5rem;">
+        Cyberia MedSOC v19.96 • Modo Móvil Exclusivo • Sin Login • Archivo: <code>data/clinical_wall_feed.jsonl</code>
+      </div>
+      <div>
+        <a href="/?desktop=1" class="soc-btn" style="font-size: 0.68rem; padding: 0.35rem 0.8rem; text-decoration: none;">
+          💻 Cambiar a versión de escritorio (Completa)
+        </a>
+      </div>
+    </footer>
+  </main>
+
+  <script src="/js/clinical_feed.js"></script>
+  <script>
+    // Conectar botón de refresco móvil
+    document.addEventListener('DOMContentLoaded', function() {
+      var refreshBtn = document.getElementById('btn-mobile-refresh');
+      if (refreshBtn && window.CyberiaClinicalFeed) {
+        refreshBtn.addEventListener('click', function() {
+          refreshBtn.textContent = '…';
+          window.CyberiaClinicalFeed.fetchPosts(false);
+          setTimeout(function() {
+            refreshBtn.textContent = '↻';
+          }, 600);
+        });
+      }
+    });
+  </script>
+</body>
+</html>

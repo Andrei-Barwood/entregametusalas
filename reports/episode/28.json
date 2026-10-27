@@ -1,0 +1,74 @@
+{
+  "type": "bundle",
+  "id": "bundle--cyberia-medsoc-ep28-2027",
+  "spec_version": "2.1",
+  "console": "CYBERIA-MED // SOC Console v19.96",
+  "palette_standard": "Ultimate Queen Chrysalis (#523)",
+  "objects": [
+    {
+      "type": "vulnerability",
+      "id": "vulnerability--ep28-cve-2027-0428",
+      "name": "CVE-2027-0428",
+      "description": "Ausencia de retardo mecánico de evacuación y bypass de sensores de presencia humana en el controlador SCADA de extinción por gas Halón, permitiendo asfixiar al personal dentro de la sala sellada.",
+      "x_cvss_score": 9.7,
+      "x_cvss_vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:C/C:N/I:H/A:H",
+      "x_clinical_protocol": "Modbus/TCP & BACnet Fire Suppression / Medical Gas SCADA",
+      "x_iomt_asset": "Banco de Cilindros de Gas Halón/FM-200, Electroválvulas de Descarga y Sensores de Oxígeno Ambiental"
+    },
+    {
+      "type": "indicator",
+      "id": "indicator--ep28-blades-dpi",
+      "name": "SIGMA_SCADA_RED_LIGHT_HALON_ASPHYXIATION_TRAP",
+      "pattern_type": "yara-sigma-hybrid",
+      "pattern": "halon_solenoid.armed == TRUE AND observer_window.polling_state == 'LOOKING_UP' AND room_o2_percent < 19.5",
+      "description": "Ciclo de observación del guardia medido en 3.2 s; válvula de descarga Halón lista para inundar la cámara ante cualquier movimiento fuera de ventana."
+    },
+    {
+      "type": "course-of-action",
+      "id": "course-of-action--ep28-mitigation",
+      "name": "MIT-EP28-HALON-INHIBIT",
+      "description": "Sincronización estroboscópica del tránsito de paquetes/movimiento con los ciclos ciegos del observador e inyección de bloqueo lógico en la electroválvula maestra de Halón.",
+      "x_cli_playbook": "blades-scada --sync-blind-window 3200ms --lock-solenoid HALON_VALVE_LVL2 --maintain-o2 21%",
+      "x_prevention_standard": "NFPA 2001 (Clean Agent Fire Extinguishing Systems) & HTM 02-01 (Medical Gas Pipeline Systems)",
+      "x_zero_trust_control": "Aislamiento físico del bucle de seguridad de gases respecto a consolas de vigilancia manual."
+    }
+  ],
+  "episode_metadata": {
+    "id": 28,
+    "code": "EP28",
+    "act_number": 4,
+    "act": "ACTO IV: COMPLEJO CYBERIA - NIVEL 2 (LABORATORIOS DE BIOCONTENCIÓN, GAS HALÓN Y NANOMEDICINA)",
+    "title": "El Guardia del Ventanal y el Gas Halón (RED LIGHT)",
+    "game_node_code": "RED LIGHT",
+    "game_location": "Almacén de entrada del Nivel 2 vigilado desde el ventanal de observación",
+    "cyberia_spoiler": "Al abrirse el montacargas en el Nivel 2, Zak debe cruzar un almacén vigilado a través de un gran ventanal de cristal por un investigador/guardia del Cartel. El guardia baja la cabeza cada pocos segundos para anotar en su portapapeles y luego vuelve a levantar la vista. Si Zak da un solo paso mientras el guardia mira hacia el almacén, se enciende la alarma roja ('RED LIGHT'), las puertas se bloquean y los conductos descargan gas Halón letal de extinción de incendios, asfixiando a Zak hasta la muerte.",
+    "hospital_counterpart": "Seguridad en Sistemas SCADA de Supresión de Incendios por Gas Halón/FM-200 y Control de Gases Medicinales en Salas Críticas",
+    "clinical_protocol": "Modbus/TCP & BACnet Fire Suppression / Medical Gas SCADA",
+    "iomt_asset": "Banco de Cilindros de Gas Halón/FM-200, Electroválvulas de Descarga y Sensores de Oxígeno Ambiental",
+    "mitre_technique": "T0831 / T0879 - Manipulation of Control: Lethal Halon Gas Discharge in Occupied Room",
+    "pillars": {
+      "vulnerability": {
+        "cve": "CVE-2027-0428",
+        "cvss": 9.7,
+        "vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:C/C:N/I:H/A:H",
+        "description": "Ausencia de retardo mecánico de evacuación y bypass de sensores de presencia humana en el controlador SCADA de extinción por gas Halón, permitiendo asfixiar al personal dentro de la sala sellada."
+      },
+      "detection": {
+        "engine": "BLADES Polling-Cycle Timing & Gas Valve Monitor",
+        "rule_name": "SIGMA_SCADA_RED_LIGHT_HALON_ASPHYXIATION_TRAP",
+        "signature": "halon_solenoid.armed == TRUE AND observer_window.polling_state == 'LOOKING_UP' AND room_o2_percent < 19.5",
+        "telemetry_indicator": "Ciclo de observación del guardia medido en 3.2 s; válvula de descarga Halón lista para inundar la cámara ante cualquier movimiento fuera de ventana."
+      },
+      "mitigation": {
+        "action_code": "MIT-EP28-HALON-INHIBIT",
+        "immediate_response": "Sincronización estroboscópica del tránsito de paquetes/movimiento con los ciclos ciegos del observador e inyección de bloqueo lógico en la electroválvula maestra de Halón.",
+        "cli_command": "blades-scada --sync-blind-window 3200ms --lock-solenoid HALON_VALVE_LVL2 --maintain-o2 21%"
+      },
+      "prevention": {
+        "standard": "NFPA 2001 (Clean Agent Fire Extinguishing Systems) & HTM 02-01 (Medical Gas Pipeline Systems)",
+        "hardening_policy": "Incluir obligatoriamente válvulas mecánicas de bloqueo manual (Mechanical Lockout) y sensores duales de ocupación infrarroja/radar que impidan físicamente la descarga letal con personas dentro.",
+        "zero_trust_control": "Aislamiento físico del bucle de seguridad de gases respecto a consolas de vigilancia manual."
+      }
+    }
+  }
+}

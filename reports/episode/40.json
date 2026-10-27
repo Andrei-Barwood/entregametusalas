@@ -1,0 +1,74 @@
+{
+  "type": "bundle",
+  "id": "bundle--cyberia-medsoc-ep40-2027",
+  "spec_version": "2.1",
+  "console": "CYBERIA-MED // SOC Console v19.96",
+  "palette_standard": "Ultimate Queen Chrysalis (#523)",
+  "objects": [
+    {
+      "type": "vulnerability",
+      "id": "vulnerability--ep40-cve-2027-0540",
+      "name": "CVE-2027-0540",
+      "description": "Corrupción en la cúspide de la jerarquía de confianza (Root Authority Betrayal): el propio director ejecutivo (William Devlin) utilizó al auditor de seguridad para eliminar a su competencia criminal y preparó una orden firmada de terminación letal contra el operador.",
+      "x_cvss_score": 10.0,
+      "x_cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:C/C:H/I:H/A:H",
+      "x_clinical_protocol": "RFC 3161 Trusted Timestamping / WORM Immutable Ledger / Root Authority Audit",
+      "x_iomt_asset": "Consola Ejecutiva del CISO / Raíz de Confianza de la Alianza (FWA Root CA) e Implante de Zak"
+    },
+    {
+      "type": "indicator",
+      "id": "indicator--ep40-blades-dpi",
+      "name": "YARA_DEVLIN_EXECUTIVE_BETRAYAL_TELEMETRY_LEAK",
+      "pattern_type": "yara-sigma-hybrid",
+      "pattern": "rule Devlin_Root_Treason { strings: $cmd = \"CLAIM_CYBERIA_FOR_DEVLIN\" $kill = \"ARM_ZAK_CRANIAL_KILLSWITCH\" condition: $cmd and $kill }",
+      "description": "ALERTA MÁXIMA (#E7F800 -> #00F200): Trama orbital interceptada firmada con la llave privada raíz de William Devlin ordenando la ejecución de Zak."
+    },
+    {
+      "type": "course-of-action",
+      "id": "course-of-action--ep40-mitigation",
+      "name": "MIT-EP40-WORM-EVIDENCE-LOCK",
+      "description": "Sellado criptográfico de la evidencia de traición de Devlin en memoria WORM inmutable, corte del canal de obediencia hacia la FWA e inicio de protocolo de supervivencia autónoma.",
+      "x_cli_playbook": "blades-sovereign --seal-worm-evidence DEVLIN_TREASON_40 --sever-fwa-root --prepare-symbiosis",
+      "x_prevention_standard": "Criptografía de Umbral (Shamir Secret Sharing M-of-N) & ISO/IEC 27001 Governance",
+      "x_zero_trust_control": "Desconfianza cero absoluta incluso hacia la autoridad emisora original (Verify Even Root)."
+    }
+  ],
+  "episode_metadata": {
+    "id": 40,
+    "code": "EP40",
+    "act_number": 5,
+    "act": "ACTO V: EL NÚCLEO BIOCIBERNÉTICO Y LA REVELACIÓN DEL PROYECTO CYBERIA (SIMBIOSIS Y PURGA)",
+    "title": "El Descubrimiento del Traidor Devlin (FWA Telemetry Leak)",
+    "game_node_code": "FWA TELEMETRY LEAK",
+    "game_location": "Puente de comunicaciones del núcleo subterráneo de Cyberia",
+    "cyberia_spoiler": "Al cruzar la esclusa hacia el reactor, el implante BLADES de Zak intercepta las transmisiones secretas de la First World Alliance y revela el gran giro argumental de Cyberia (1996): William Devlin —el líder de la FWA que liberó a Zak en el Episodio 1— es el verdadero traidor y villano final. Devlin nunca quiso destruir el arma Cyberia para proteger al mundo; envió a Zak como un peón desechable para que matara a todos los miembros del Cartel y limpiara la base, planeando activar un interruptor letal en el cráneo de Zak para quedarse con la entidad Cyberia y gobernar desde su estación espacial.",
+    "hospital_counterpart": "Detección de Compromiso de la Cuenta Root / CISO / Ejecutivo (Amenaza Interna de Nivel Directivo) y Auditoría Inmutable en Almacenamiento WORM / Blockchain Clínico",
+    "clinical_protocol": "RFC 3161 Trusted Timestamping / WORM Immutable Ledger / Root Authority Audit",
+    "iomt_asset": "Consola Ejecutiva del CISO / Raíz de Confianza de la Alianza (FWA Root CA) e Implante de Zak",
+    "mitre_technique": "T1078.002 / T1489 - Executive Root Betrayal & Pre-Planted Operator Kill-Switch",
+    "pillars": {
+      "vulnerability": {
+        "cve": "CVE-2027-0540",
+        "cvss": 10.0,
+        "vector": "CVSS:3.1/AV:N/AC:L/PR:H/UI:N/S:C/C:H/I:H/A:H",
+        "description": "Corrupción en la cúspide de la jerarquía de confianza (Root Authority Betrayal): el propio director ejecutivo (William Devlin) utilizó al auditor de seguridad para eliminar a su competencia criminal y preparó una orden firmada de terminación letal contra el operador."
+      },
+      "detection": {
+        "engine": "BLADES Deep Telemetry Decryption & Insider Root Detector",
+        "rule_name": "YARA_DEVLIN_EXECUTIVE_BETRAYAL_TELEMETRY_LEAK",
+        "signature": "rule Devlin_Root_Treason { strings: $cmd = \"CLAIM_CYBERIA_FOR_DEVLIN\" $kill = \"ARM_ZAK_CRANIAL_KILLSWITCH\" condition: $cmd and $kill }",
+        "telemetry_indicator": "ALERTA MÁXIMA (#E7F800 -> #00F200): Trama orbital interceptada firmada con la llave privada raíz de William Devlin ordenando la ejecución de Zak."
+      },
+      "mitigation": {
+        "action_code": "MIT-EP40-WORM-EVIDENCE-LOCK",
+        "immediate_response": "Sellado criptográfico de la evidencia de traición de Devlin en memoria WORM inmutable, corte del canal de obediencia hacia la FWA e inicio de protocolo de supervivencia autónoma.",
+        "cli_command": "blades-sovereign --seal-worm-evidence DEVLIN_TREASON_40 --sever-fwa-root --prepare-symbiosis"
+      },
+      "prevention": {
+        "standard": "Criptografía de Umbral (Shamir Secret Sharing M-of-N) & ISO/IEC 27001 Governance",
+        "hardening_policy": "Ningún director ejecutivo, CISO o administrador raíz puede poseer control unilateral sobre sistemas críticos ni emitir comandos destructivos sin quórum criptográfico multi-institucional.",
+        "zero_trust_control": "Desconfianza cero absoluta incluso hacia la autoridad emisora original (Verify Even Root)."
+      }
+    }
+  }
+}

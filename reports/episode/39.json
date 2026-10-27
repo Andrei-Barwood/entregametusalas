@@ -1,0 +1,74 @@
+{
+  "type": "bundle",
+  "id": "bundle--cyberia-medsoc-ep39-2027",
+  "spec_version": "2.1",
+  "console": "CYBERIA-MED // SOC Console v19.96",
+  "palette_standard": "Ultimate Queen Chrysalis (#523)",
+  "objects": [
+    {
+      "type": "vulnerability",
+      "id": "vulnerability--ep39-cve-2027-0539",
+      "name": "CVE-2027-0539",
+      "description": "Riesgo de inversión del gradiente de presión negativa (-50 Pa a +10 Pa) durante la apertura de la esclusa maestra BSL-4 si la secuencia neumática se ejecuta sin atestación TPM.",
+      "x_cvss_score": 9.3,
+      "x_cvss_vector": "CVSS:3.1/AV:L/AC:L/PR:H/UI:N/S:C/C:H/I:H/A:H",
+      "x_clinical_protocol": "TCG TPM 2.0 Remote Attestation / BACnet BSL-4 Pressure Cascade",
+      "x_iomt_asset": "Esclusa Neumática de Máxima Biocontención BSL-4 y Filtros HEPA en Serie"
+    },
+    {
+      "type": "indicator",
+      "id": "indicator--ep39-blades-dpi",
+      "name": "SIGMA_BSL4_AIRLOCK_PRESSURE_CASCADE_CHECK",
+      "pattern_type": "yara-sigma-hybrid",
+      "pattern": "airlock.level == 'BSL-4' AND pressure_gradient_pa == -55.0 AND tpm2.pcr_quote == 'VALID_ZAK_HOST'",
+      "description": "Atestación criptográfica exitosa y purga HEPA completada en la esclusa maestra del núcleo."
+    },
+    {
+      "type": "course-of-action",
+      "id": "course-of-action--ep39-mitigation",
+      "name": "MIT-EP39-BSL4-UNSEAL",
+      "description": "Apertura neumática sincronizada manteniendo el sello de cortina de aire negativo y validando la firma del chip TPM 2.0 de la cámara central.",
+      "x_cli_playbook": "blades-bsl4 --verify-tpm-quote --maintain-negative-pa 55 --unseal-reactor-vault",
+      "x_prevention_standard": "ISO 14644-4 (Cleanrooms and Associated Controlled Environments) & CDC/NIH BMBL BSL-4",
+      "x_zero_trust_control": "Atestación criptográfica de hardware (TPM 2.0) antes de cada transición de esclusa."
+    }
+  ],
+  "episode_metadata": {
+    "id": 39,
+    "code": "EP39",
+    "act_number": 5,
+    "act": "ACTO V: EL NÚCLEO BIOCIBERNÉTICO Y LA REVELACIÓN DEL PROYECTO CYBERIA (SIMBIOSIS Y PURGA)",
+    "title": "Desactivación de Esclusas Biológicas Nivel 4 (BSL-4 Airlock)",
+    "game_node_code": "BSL-4 AIRLOCK",
+    "game_location": "Compuerta neumática gigante de biocontención Nivel 4 frente al reactor Cyberia",
+    "cyberia_spoiler": "Con el anillo de seguridad despejado, Zak llega ante la colosal compuerta blindada de biocontención Nivel 4 ('BSL-4 Airlock') que sella la cámara de gestación del proyecto Cyberia. Zak activa la secuencia de despresurización; los enormes pistones neumáticos liberan vapor criogénico y las hojas de acero se abren lentamente.",
+    "hospital_counterpart": "Verificación de Integridad de Plataforma Segura (TPM 2.0) y Control de Cascada de Presión Diferencial en Esclusas de Biocontención Nivel 4 (BSL-4)",
+    "clinical_protocol": "TCG TPM 2.0 Remote Attestation / BACnet BSL-4 Pressure Cascade",
+    "iomt_asset": "Esclusa Neumática de Máxima Biocontención BSL-4 y Filtros HEPA en Serie",
+    "mitre_technique": "T0839 - Manipulation of Airlock Pressure Cascade & Hardware Attestation",
+    "pillars": {
+      "vulnerability": {
+        "cve": "CVE-2027-0539",
+        "cvss": 9.3,
+        "vector": "CVSS:3.1/AV:L/AC:L/PR:H/UI:N/S:C/C:H/I:H/A:H",
+        "description": "Riesgo de inversión del gradiente de presión negativa (-50 Pa a +10 Pa) durante la apertura de la esclusa maestra BSL-4 si la secuencia neumática se ejecuta sin atestación TPM."
+      },
+      "detection": {
+        "engine": "BLADES TPM 2.0 Quote & Differential Manometer",
+        "rule_name": "SIGMA_BSL4_AIRLOCK_PRESSURE_CASCADE_CHECK",
+        "signature": "airlock.level == 'BSL-4' AND pressure_gradient_pa == -55.0 AND tpm2.pcr_quote == 'VALID_ZAK_HOST'",
+        "telemetry_indicator": "Atestación criptográfica exitosa y purga HEPA completada en la esclusa maestra del núcleo."
+      },
+      "mitigation": {
+        "action_code": "MIT-EP39-BSL4-UNSEAL",
+        "immediate_response": "Apertura neumática sincronizada manteniendo el sello de cortina de aire negativo y validando la firma del chip TPM 2.0 de la cámara central.",
+        "cli_command": "blades-bsl4 --verify-tpm-quote --maintain-negative-pa 55 --unseal-reactor-vault"
+      },
+      "prevention": {
+        "standard": "ISO 14644-4 (Cleanrooms and Associated Controlled Environments) & CDC/NIH BMBL BSL-4",
+        "hardening_policy": "Enclavamientos neumáticos físicos que impiden abrir la compuerta interior si el diferencial de presión negativa no está estabilizado.",
+        "zero_trust_control": "Atestación criptográfica de hardware (TPM 2.0) antes de cada transición de esclusa."
+      }
+    }
+  }
+}

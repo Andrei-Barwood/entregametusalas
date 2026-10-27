@@ -1,0 +1,74 @@
+{
+  "type": "bundle",
+  "id": "bundle--cyberia-medsoc-ep13-2027",
+  "spec_version": "2.1",
+  "console": "CYBERIA-MED // SOC Console v19.96",
+  "palette_standard": "Ultimate Queen Chrysalis (#523)",
+  "objects": [
+    {
+      "type": "vulnerability",
+      "id": "vulnerability--ep13-cve-2027-0213",
+      "name": "CVE-2027-0213",
+      "description": "Susceptibilidad del canal descendente de telemedicina satelital a ataques de interferencia de radiofrecuencia (Jamming) y suplantación de balizas desde los islotes costeros.",
+      "x_cvss_score": 8.0,
+      "x_cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:H/A:H",
+      "x_clinical_protocol": "DVB-S2X Medical SatCom / TLS 1.3 DTLS",
+      "x_iomt_asset": "Transpondedor Satelital Banda Ku de Telemetría UCI en Vuelo"
+    },
+    {
+      "type": "indicator",
+      "id": "indicator--ep13-blades-dpi",
+      "name": "SIGMA_SATCOM_BARENTS_RF_JAMMING_DETECTED",
+      "pattern_type": "yara-sigma-hybrid",
+      "pattern": "satcom.snr_db < 4.5 AND coastal_radar_lock == TRUE AND dtls_retransmits > 15%",
+      "description": "Degradación brusca de SNR en el flujo de signos vitales en tránsito por barrido de radares hostiles en ISLAND RUN."
+    },
+    {
+      "type": "course-of-action",
+      "id": "course-of-action--ep13-mitigation",
+      "name": "MIT-EP13-FHSS-HOP",
+      "description": "Activación de salto de frecuencia por espectro ensanchado (FHSS) sincronizado con el satélite médico y supresión activa de los nodos emisores de interferencia.",
+      "x_cli_playbook": "tf22-satcom --enable-fhss-hop --null-steer-jammer ISLAND_RADAR_01..06",
+      "x_prevention_standard": "ETSI EN 303 645 / NIST SP 800-53 SC-40 (Wireless Link Protection)",
+      "x_zero_trust_control": "Autenticación mutua de tramas satelitales mediante DTLS 1.3 con rotación de claves por ráfaga."
+    }
+  ],
+  "episode_metadata": {
+    "id": 13,
+    "code": "EP13",
+    "act_number": 2,
+    "act": "ACTO II: RUTA DE EVACUACIÓN ÁRTICA Y TÚNELES DE SUMINISTRO (TELEMETRÍA EN TRÁNSITO)",
+    "title": "Rasante sobre el Mar de Barents (ISLAND RUN)",
+    "game_node_code": "ISLAND RUN",
+    "game_location": "Espacio aéreo a baja cota sobre el Mar de Barents e islas costeras",
+    "cyberia_spoiler": "El TF-22 vuela a velocidad supersónica a pocos metros sobre las aguas heladas del Mar de Barents. Zak opera el sistema de armas del caza para destruir lanchas patrulleras rápidas, helicópteros de combate y estaciones de radar costeras del Cartel instaladas sobre los islotes rocosos que intentan triangular su posición.",
+    "hospital_counterpart": "Protección de Enlaces Satelitales de Telemedicina en Tránsito contra Interferencia RF (Jamming) y Estaciones Base Falsas",
+    "clinical_protocol": "DVB-S2X Medical SatCom / TLS 1.3 DTLS",
+    "iomt_asset": "Transpondedor Satelital Banda Ku de Telemetría UCI en Vuelo",
+    "mitre_technique": "T0885 / T1498 - RF Jamming & Rogue Coastal Base Station Spoofing",
+    "pillars": {
+      "vulnerability": {
+        "cve": "CVE-2027-0213",
+        "cvss": 8.0,
+        "vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:L/I:H/A:H",
+        "description": "Susceptibilidad del canal descendente de telemedicina satelital a ataques de interferencia de radiofrecuencia (Jamming) y suplantación de balizas desde los islotes costeros."
+      },
+      "detection": {
+        "engine": "BLADES Spectrum & SatCom Analyzer",
+        "rule_name": "SIGMA_SATCOM_BARENTS_RF_JAMMING_DETECTED",
+        "signature": "satcom.snr_db < 4.5 AND coastal_radar_lock == TRUE AND dtls_retransmits > 15%",
+        "telemetry_indicator": "Degradación brusca de SNR en el flujo de signos vitales en tránsito por barrido de radares hostiles en ISLAND RUN."
+      },
+      "mitigation": {
+        "action_code": "MIT-EP13-FHSS-HOP",
+        "immediate_response": "Activación de salto de frecuencia por espectro ensanchado (FHSS) sincronizado con el satélite médico y supresión activa de los nodos emisores de interferencia.",
+        "cli_command": "tf22-satcom --enable-fhss-hop --null-steer-jammer ISLAND_RADAR_01..06"
+      },
+      "prevention": {
+        "standard": "ETSI EN 303 645 / NIST SP 800-53 SC-40 (Wireless Link Protection)",
+        "hardening_policy": "Antenas de arreglo en fase con conformación de haz adaptativa ( Null-Steering) e integridad criptográfica resistente a pérdida de paquetes.",
+        "zero_trust_control": "Autenticación mutua de tramas satelitales mediante DTLS 1.3 con rotación de claves por ráfaga."
+      }
+    }
+  }
+}
