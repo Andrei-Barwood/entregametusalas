@@ -402,13 +402,13 @@ async function serveAsset(assetPath, env, request) {
       assetUrl.pathname = '/' + assetPath.replace(/^\//, '');
       const assetReq = new Request(assetUrl.toString(), request);
       const res = await env.ASSETS.fetch(assetReq);
-      if (res.status === 200) return res;
+      if (res.status >= 200 && res.status < 400) return res;
     } catch (e) {}
   }
 
   // Fallback si corre fuera de Cloudflare Assets
-  return new Response('Asset: ' + assetPath, {
-    status: 200,
-    headers: { 'Content-Type': assetPath.endsWith('.html') ? 'text/html; charset=utf-8' : 'text/plain' }
+  return new Response('Asset not found: ' + assetPath, {
+    status: 404,
+    headers: { 'Content-Type': 'text/plain; charset=utf-8' }
   });
 }

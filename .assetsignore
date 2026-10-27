@@ -1,0 +1,16 @@
+_worker.js
+worker.js
+wrangler.jsonc
+.git
+.gitignore
+.assetsignore
+app/
+bin/
+spec/
+Gemfile
+Gemfile.lock
+Rakefile
+export_static_site.rb
+instalador.zsh
+servidor.zsh
+servidor_movil.zsh
