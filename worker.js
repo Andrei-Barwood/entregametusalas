@@ -98,6 +98,9 @@ function jsonResponse(data, status = 200, headers = {}) {
     status,
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
+      'Cache-Control': 'no-cache, no-store, must-revalidate',
+      'Pragma': 'no-cache',
+      'Expires': '0',
       'X-Cyberia-SOC-Version': '19.96-BLADES-CLOUDFLARE',
       'X-Medical-Protocol-Engine': 'HL7-FHIR-DICOM-IEEE11073-ACTIVE',
       'Access-Control-Allow-Origin': '*',
@@ -442,7 +445,21 @@ async function serveAsset(assetPath, env, request) {
       assetUrl.pathname = '/' + assetPath.replace(/^\//, '');
       const assetReq = new Request(assetUrl.toString(), request);
       const res = await env.ASSETS.fetch(assetReq);
-      if (res.status >= 200 && res.status < 400) return res;
+      if (res.status >= 200 && res.status < 400) {
+        // En páginas HTML y scripts de feed, evitar que el navegador almacene en caché versiones desactualizadas
+        if (assetPath.endsWith('.html') || assetPath.includes('clinical_feed')) {
+          const newHeaders = new Headers(res.headers);
+          newHeaders.set('Cache-Control', 'no-cache, no-store, must-revalidate');
+          newHeaders.set('Pragma', 'no-cache');
+          newHeaders.set('Expires', '0');
+          return new Response(res.body, {
+            status: res.status,
+            statusText: res.statusText,
+            headers: newHeaders
+          });
+        }
+        return res;
+      }
     } catch (e) {}
   }
 

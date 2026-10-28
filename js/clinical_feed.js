@@ -134,6 +134,7 @@
   }
 
   function renderPostCard(post) {
+    var isMobile = document.body && document.body.classList.contains('mobile-body');
     var epLabel = 'GENERAL';
     if (post.episode_id) {
       var num = parseInt(post.episode_id, 10);
@@ -149,9 +150,13 @@
     safeContent = safeContent.replace(/`([^`]+)`/g, '<code class="feed-inline-code">$1</code>');
     safeContent = safeContent.replace(/\n/g, '<br>');
 
+    var cardClasses = 'feed-post-card' + (isMobile ? ' mobile-post-card' : '');
+    var avatarClasses = 'feed-post-avatar' + (isMobile ? ' mobile-avatar' : '');
+    var actionsClasses = 'feed-post-actions' + (isMobile ? ' mobile-post-actions' : '');
+
     return [
-      '<article class="feed-post-card" data-post-id="' + escapeHtml(post.id) + '" data-episode-id="' + (post.episode_id || '') + '">',
-      '  <div class="feed-post-avatar" style="background-color: ' + escapeHtml(avatarBg) + ';">' + avatarInitial + '</div>',
+      '<article class="' + cardClasses + '" data-post-id="' + escapeHtml(post.id) + '" data-episode-id="' + (post.episode_id || '') + '">',
+      '  <div class="' + avatarClasses + '" style="background-color: ' + escapeHtml(avatarBg) + ';">' + avatarInitial + '</div>',
       '  <div class="feed-post-main">',
       '    <div class="feed-post-header">',
       '      <span class="feed-post-author">' + escapeHtml(post.author) + '</span>',
@@ -161,7 +166,7 @@
       '      <time class="feed-post-time" datetime="' + escapeHtml(post.created_at) + '">' + formattedTime + '</time>',
       '    </div>',
       '    <div class="feed-post-body">' + safeContent + '</div>',
-      '    <div class="feed-post-actions" aria-label="Reacciones al comentario">',
+      '    <div class="' + actionsClasses + '" aria-label="Reacciones al comentario">',
       '      <button type="button" class="feed-react-btn feed-react-like" data-post-id="' + escapeHtml(post.id) + '" data-reaction="like" title="Pulgar arriba (Me gusta)">',
       '        <span class="react-emoji" aria-hidden="true">👍</span>',
       '        <span class="react-count" id="react-like-' + escapeHtml(post.id) + '">' + (post.likes || 0) + '</span>',
