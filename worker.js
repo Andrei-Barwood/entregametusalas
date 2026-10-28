@@ -9,7 +9,7 @@
  */
 
 // Semillas iniciales del Muro Social Clínico (NetAcad Pod)
-let feedPosts = [
+const SEED_FEED_POSTS = [
   {
     id: 'post_seed_ep12_01',
     episode_id: 12,
@@ -55,6 +55,38 @@ let feedPosts = [
     created_at: new Date(Date.now() - 7200000).toISOString()
   }
 ];
+
+let feedPosts = [...SEED_FEED_POSTS];
+const FEED_KV_KEY = 'clinical_wall_posts_v1';
+
+async function loadFeedPosts(env) {
+  if (env && env.FEED_KV) {
+    try {
+      const data = await env.FEED_KV.get(FEED_KV_KEY, { type: 'json' });
+      if (Array.isArray(data) && data.length > 0) {
+        feedPosts = data;
+        return feedPosts;
+      } else {
+        // Inicializar KV con las semillas si está vacío
+        await env.FEED_KV.put(FEED_KV_KEY, JSON.stringify(feedPosts));
+      }
+    } catch (e) {
+      console.warn('Error reading from FEED_KV:', e);
+    }
+  }
+  return feedPosts;
+}
+
+async function saveFeedPosts(env, posts) {
+  feedPosts = posts;
+  if (env && env.FEED_KV) {
+    try {
+      await env.FEED_KV.put(FEED_KV_KEY, JSON.stringify(posts));
+    } catch (e) {
+      console.error('Error writing to FEED_KV:', e);
+    }
+  }
+}
 
 function isMobileDevice(userAgent) {
   if (!userAgent) return false;
@@ -121,6 +153,8 @@ export default {
     // 1. API FEED (GET, POST, REACCIONES 👍 👎 💝)
     // -------------------------------------------------------------
     if (url.pathname === '/api/feed' || url.pathname === '/api/feed/') {
+      await loadFeedPosts(env);
+
       if (method === 'GET') {
         const epFilter = url.searchParams.get('episode_id');
         let filtered = [...feedPosts];
@@ -180,6 +214,7 @@ export default {
           };
 
           feedPosts.unshift(newPost);
+          await saveFeedPosts(env, feedPosts);
 
           return jsonResponse({
             status: 'created',
@@ -196,6 +231,7 @@ export default {
     // Reacciones a posts: /api/feed/:id/react
     const reactMatch = url.pathname.match(/^\/api\/feed\/([^\/]+)\/react$/);
     if (reactMatch && method === 'POST') {
+      await loadFeedPosts(env);
       const postId = reactMatch[1];
       try {
         let payload = {};
@@ -225,6 +261,8 @@ export default {
         if (type === 'dislike') post.dislikes = (post.dislikes || 0) + 1;
         if (type === 'love') post.loves = (post.loves || 0) + 1;
 
+        await saveFeedPosts(env, feedPosts);
+
         return jsonResponse({
           status: 'ok',
           id: post.id,
@@ -244,6 +282,7 @@ export default {
     // -------------------------------------------------------------
     if ((url.pathname === '/mobile' || url.pathname === '/muro') && method === 'POST') {
       try {
+        await loadFeedPosts(env);
         const formData = await request.formData();
         const rawContent = (formData.get('content') || '').toString().trim();
         const author = (formData.get('author') || 'Cadete_NetAcad').toString().trim() || 'Cadete_NetAcad';
@@ -262,6 +301,7 @@ export default {
             loves: 0,
             created_at: new Date().toISOString()
           });
+          await saveFeedPosts(env, feedPosts);
         }
       } catch (e) {}
 

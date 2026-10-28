@@ -59,6 +59,55 @@
     } catch (e) {}
   }
 
+  // Respaldo de comentarios locales creados por el usuario
+  function getLocalUserPosts() {
+    try {
+      var raw = localStorage.getItem('cyberia_medsec_user_posts');
+      return raw ? JSON.parse(raw) : [];
+    } catch (e) {
+      return [];
+    }
+  }
+
+  function saveLocalUserPost(post) {
+    try {
+      var posts = getLocalUserPosts();
+      posts.unshift(post);
+      // Mantener máximo 50 comentarios en caché local
+      if (posts.length > 50) posts = posts.slice(0, 50);
+      localStorage.setItem('cyberia_medsec_user_posts', JSON.stringify(posts));
+    } catch (e) {}
+  }
+
+  function mergeLocalAndRemotePosts(remotePosts) {
+    var localPosts = getLocalUserPosts();
+    if (!localPosts || localPosts.length === 0) return remotePosts;
+
+    var remoteIds = {};
+    for (var i = 0; i < remotePosts.length; i++) {
+      remoteIds[remotePosts[i].id] = true;
+    }
+
+    // Agregar aquellos comentarios del usuario que no estén en la respuesta del servidor todavía
+    var merged = [].concat(remotePosts);
+    for (var j = 0; j < localPosts.length; j++) {
+      var lp = localPosts[j];
+      if (!remoteIds[lp.id]) {
+        merged.unshift(lp);
+        remoteIds[lp.id] = true;
+      }
+    }
+
+    // Ordenar por created_at descendente
+    merged.sort(function (a, b) {
+      var da = new Date(a.created_at || 0).getTime();
+      var db = new Date(b.created_at || 0).getTime();
+      return db - da;
+    });
+
+    return merged;
+  }
+
   function updateCharCounter() {
     var textarea = document.getElementById('feed-post-content');
     var counter = document.getElementById('feed-char-counter');
@@ -160,12 +209,20 @@
         if (data.status === 'ok') {
           updateStorageStatsBadge(data.storage_stats);
 
-          var counterBadge = document.getElementById('feed-active-count-badge');
-          if (counterBadge) {
-            counterBadge.textContent = data.posts.length + ' MENSAJES';
+          var allPosts = mergeLocalAndRemotePosts(data.posts || []);
+          if (currentFilterEpisode && currentFilterEpisode !== 'all') {
+            var targetEp = parseInt(currentFilterEpisode, 10);
+            allPosts = allPosts.filter(function (p) {
+              return parseInt(p.episode_id, 10) === targetEp;
+            });
           }
 
-          if (data.posts.length === 0) {
+          var counterBadge = document.getElementById('feed-active-count-badge');
+          if (counterBadge) {
+            counterBadge.textContent = allPosts.length + ' MENSAJES';
+          }
+
+          if (allPosts.length === 0) {
             container.innerHTML = [
               '<div class="feed-empty-state">',
               '  <div style="font-size: 1.8rem; margin-bottom: 0.5rem;">📡</div>',
@@ -176,7 +233,7 @@
             return;
           }
 
-          var html = data.posts.map(renderPostCard).join('\n');
+          var html = allPosts.map(renderPostCard).join('\n');
           container.innerHTML = html;
 
           if (preserveScroll) {
@@ -295,6 +352,9 @@
         }
 
         if (result.ok && result.data.status === 'created') {
+          if (result.data.post) {
+            saveLocalUserPost(result.data.post);
+          }
           contentTextarea.value = '';
           updateCharCounter();
           fetchPosts(false);

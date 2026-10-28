@@ -9,6 +9,12 @@
   "assets": {
     "directory": "."
   },
+  "kv_namespaces": [
+    {
+      "binding": "FEED_KV",
+      "id": "FEED_KV_ID_PLACEHOLDER"
+    }
+  ],
   "compatibility_flags": [
     "nodejs_compat"
   ]
