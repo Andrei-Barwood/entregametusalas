@@ -88,7 +88,10 @@ async function saveFeedPosts(env, posts) {
   }
 }
 
-function isMobileDevice(userAgent) {
+function isMobileDevice(userAgent, request) {
+  if (request && request.headers.get('Sec-CH-UA-Mobile') === '?1') {
+    return true;
+  }
   if (!userAgent) return false;
   return /Mobile|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Android/i.test(userAgent);
 }
@@ -150,7 +153,7 @@ export default {
     // Preferencias de escritorio / móvil por parámetro o cookie
     const hasForceDesktop = url.searchParams.get('desktop') === '1' || cookieHeader.includes('force_desktop=1');
     const hasForceMobile = url.searchParams.get('mobile') === '1' || cookieHeader.includes('force_mobile=1') || (env && env.CYBERIA_FORCE_MOBILE === '1');
-    const mobileUser = (isMobileDevice(userAgent) || hasForceMobile) && !hasForceDesktop;
+    const mobileUser = (isMobileDevice(userAgent, request) || hasForceMobile) && !hasForceDesktop;
 
     // -------------------------------------------------------------
     // 1. API FEED (GET, POST, REACCIONES 👍 👎 💝)
@@ -314,7 +317,7 @@ export default {
     // -------------------------------------------------------------
     // 3. ENRUTAMIENTO INTELIGENTE: MÓVIL VS ESCRITORIO
     // -------------------------------------------------------------
-    // Raíz /: Si es móvil sin ?desktop=1, sirve mobile.html (o redirige a /mobile)
+    // Raíz /: Si es móvil sin ?desktop=1, redirigir con 302 a /mobile para evitar flasheos o colisiones con desktop
     if (url.pathname === '/' || url.pathname === '') {
       if (url.searchParams.get('desktop') === '1') {
         // Establece cookie para recordar preferencia
@@ -325,7 +328,7 @@ export default {
       }
 
       if (mobileUser) {
-        return await serveAsset('mobile.html', env, request);
+        return Response.redirect(new URL('/mobile', request.url).toString(), 302);
       } else {
         return await serveAsset('index.html', env, request);
       }

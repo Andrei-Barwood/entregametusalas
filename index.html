@@ -4,6 +4,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CYBERIA-MED // SOC Console v19.96 — BLADES Neural &amp; IoMT Telemetry</title>
+  <script>
+    (function() {
+      try {
+        var isMob = (window.innerWidth <= 768 || /Mobile|Android|iPhone|iPad|iPod|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
+        var forceDesk = location.search.indexOf('desktop=1') !== -1 || document.cookie.indexOf('force_desktop=1') !== -1;
+        if (isMob && !forceDesk) {
+          location.replace('/mobile');
+        }
+      } catch (e) {}
+    })();
+  </script>
   <link rel="stylesheet" href="/css/chrysalis_medsoc.css">
 </head>
 <body>
@@ -113,7 +124,7 @@
 
   <!-- OVERLAY LANDING PAGE: GUÍA CLÍNICA Y TUTORIAL KALI LINUX (SOBREPUESTA CON TRANSPARENCIA SOBRE NEGRO) -->
   <!-- OVERLAY LANDING PAGE: GUÍA CLÍNICA Y TUTORIAL KALI LINUX (SOBREPUESTA CON TRANSPARENCIA SOBRE NEGRO) -->
-<div id="tutorial-overlay" class="tutorial-overlay-backdrop " role="dialog" aria-modal="true" aria-label="Guía Clínica y Tutorial Kali Linux">
+<div id="tutorial-overlay" class="tutorial-overlay-backdrop hidden" role="dialog" aria-modal="true" aria-label="Guía Clínica y Tutorial Kali Linux">
   <div class="tutorial-overlay-sheet">
     <!-- BARRA SUPERIOR DE CONTROL DEL OVERLAY -->
     <div class="tutorial-overlay-topbar">
@@ -702,12 +713,15 @@ Tipea 'pistas' para ver la información del Episodio 1 (InfusionPump-ICU-01)...
       alreadyDismissed = sessionStorage.getItem('cyberia_tutorial_dismissed') === 'true';
     } catch (e) {}
 
-    // Si ya fue cerrada y no se abrió explícitamente por URL de tutorial, ocultar de inmediato
-    if (overlay && alreadyDismissed && !isExplicitTutorialUrl) {
+    // Si es URL explícita de tutorial o es la primera visita del usuario en escritorio, mostrar
+    if (isExplicitTutorialUrl || (!alreadyDismissed && window.innerWidth > 768)) {
+      if (overlay) {
+        overlay.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+      }
+    } else if (overlay) {
       overlay.classList.add('hidden');
       document.body.style.overflow = '';
-    } else if (overlay && !overlay.classList.contains('hidden')) {
-      document.body.style.overflow = 'hidden';
     }
 
     window.closeTutorialOverlay = function() {

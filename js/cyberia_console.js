@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (window.innerWidth <= 768 && !window.location.search.includes('desktop=1')) {
     const hasForceDesktop = document.cookie.indexOf('force_desktop=1') !== -1;
     if (!hasForceDesktop && window.location.pathname === '/') {
-      window.location.href = '/mobile';
+      window.location.replace('/mobile');
       return;
     }
   }
@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (window.innerWidth <= 768 && !window.location.search.includes('desktop=1')) {
       const hasForceDesktop = document.cookie.indexOf('force_desktop=1') !== -1;
       if (!hasForceDesktop && window.location.pathname === '/') {
-        window.location.href = '/mobile';
+        window.location.replace('/mobile');
       }
     }
   });
