@@ -44,7 +44,7 @@ entregametusalas/
 │   └── chrysalis_medsoc.css     # Tokens de diseño Queen Chrysalis #523, CRT scanlines, ECG
 │
 ├── js/
-│   ├── clinical_feed.js         # Lógica cliente del feed (polling, submit, merge, filtros, notificaciones web/in-app/audio)
+│   ├── clinical_feed.js         # Lógica cliente del feed (polling, submit, merge, filtros, notificaciones web/in-app/audio, previsualización multimedia rica)
 │   ├── cyberia_console.js       # Control de consola SOC, ECG Canvas y redirecciones
 │   ├── sentinel_tactical_game.js# Minijuego táctico y lógica EDR Aegis9
 │   └── simulators_hud.js        # Lógica interactiva de los simuladores
@@ -112,6 +112,10 @@ flowchart TD
 | **02** | Comentarios móviles no se actualizaban; aparecían 5 posts quemados antiguos. | `mobile.html` y `muro.html` conservaban más de 300 líneas de HTML estático residual de comentarios hardcodeados que eclipsaban el stream JS. | Se vació `#feed-stream-container` en los HTML estáticos para delegar el 100% del renderizado a `clinical_feed.js`. | `5e4e05c` |
 | **03** | "Flashazo" abrupto de landing page al ingresar a la versión móvil. | 1. `#tutorial-overlay` en `index.html` no tenía la clase `.hidden` por defecto.<br>2. La redirección responsive se hacía tarde en `DOMContentLoaded`. | 1. Script síncrono ultrarrápido en `<head>` de `index.html`.<br>2. Se forzó `.hidden` inicial en el overlay.<br>3. Redirección HTTP 302 directa desde el Worker. | `06a1a18` |
 | **04** | Falta de sincronización entre móvil y escritorio (comentarios huérfanos). | Falta de almacenamiento compartido; los comentarios se guardaban en la memoria volátil de nodos serverless aislados y en `localStorage` individual. | Se enlazó el Namespace KV de producción `97975823af2a4471a8ec7fd5274a1edc` como `FEED_KV` en `wrangler.jsonc`. | `65203b0` |
+| **05** | Ausencia de notificaciones al recibir nuevos comentarios en tiempo real. | El feed no notificaba al usuario si la pestaña estaba en segundo plano o si no estaba mirando el stream. | Se implementó sistema de notificaciones triple: Web Notifications API del navegador, chime acústico con Web Audio API (`AudioContext`), y toasts flotantes HUD. | `44c0ca9` |
+| **06** | Enlaces publicados en el feed se mostraban como texto plano aburrido. | Falta de parseo de URLs ricas y bloqueo CORS / DataDome al solicitar metadatos oEmbed desde el cliente. | Previsualizaciones interactivas (fachada de YouTube con video inline, reproductor SoundCloud con waveforms, pods de Spotify, miniaturas de imagen y tarjetas web con favicon) respaldadas por endpoint proxy `/api/oembed` en Sinatra y Cloudflare Worker. | `Pendiente` |
+| **07** | Reproducción de audio en SoundCloud se corta a los 2 segundos y el reproductor vuelve al estado inicial. | En `fetchPosts()`, el auto-polling ejecutado cada 5s destruía y recreaba todo el DOM del stream mediante `container.innerHTML = html`, desmontando el iframe activo y reinicializando el reproductor. | Se reemplazó el re-renderizado destructivo por un reconciliador DOM inteligente (`updateFeedDOM`) que conserva intactos los elementos existentes y sus iframes/audio en ejecución, actualizando en el sitio solo contadores y marcas de tiempo. | `Pendiente` |
+| **08** | Reproducción de audio finaliza sin bucle continuo. | El widget iframe de SoundCloud no cuenta con parámetro nativo de URL `loop=true`. | Se implementó soporte de bucle infinito (Loop ∞) doble: mediante la API oficial `SC.Widget.Events.FINISH` (`seekTo(0)` + `play()`) y fallback de eventos `postMessage` cruzados, con badges visuales Cyberia en HUD. | `Pendiente` |
 
 ---
 

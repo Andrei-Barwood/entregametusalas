@@ -671,6 +671,56 @@ RSpec.describe 'CYBERIA-MED // SOC Console v19.96 — Complete Verification Suit
       expect(js_code).to include('Notification.requestPermission')
       expect(js_code).to include('feed-toast-card')
     end
+
+    it 'incluye funcionalidad de previsualización rica de enlaces multimedia (YouTube, SoundCloud, Spotify, imágenes y web)' do
+      # Comprobar estilos CSS para enlaces y previsualizaciones multimedia
+      get '/css/chrysalis_medsoc.css'
+      expect(last_response.status).to eq(200)
+      css = last_response.body
+      expect(css).to include('feed-content-link')
+      expect(css).to include('feed-media-preview')
+      expect(css).to include('feed-youtube-preview')
+      expect(css).to include('feed-youtube-facade')
+      expect(css).to include('feed-soundcloud-preview')
+      expect(css).to include('feed-soundcloud-facade')
+      expect(css).to include('feed-soundcloud-loop-indicator')
+      expect(css).to include('feed-soundcloud-artwork')
+      expect(css).to include('feed-soundcloud-play-btn')
+      expect(css).to include('feed-spotify-preview')
+      expect(css).to include('feed-image-preview')
+      expect(css).to include('feed-link-card')
+
+      # Comprobar funciones en el cliente JavaScript
+      get '/js/clinical_feed.js'
+      expect(last_response.status).to eq(200)
+      js_code = last_response.body.force_encoding('UTF-8')
+      expect(js_code).to include('formatContentWithPreviews')
+      expect(js_code).to include('parseYouTubeId')
+      expect(js_code).to include('isSoundCloudUrl')
+      expect(js_code).to include('parseSoundCloudSlug')
+      expect(js_code).to include('playOrToggleSoundCloud')
+      expect(js_code).to include('enhanceSoundCloudCards')
+      expect(js_code).to include('parseSpotifyEmbed')
+      expect(js_code).to include('isImageUrl')
+      expect(js_code).to include('buildPreviewCard')
+      expect(js_code).to include('playYouTubeFacade')
+      expect(js_code).to include('updateFeedDOM')
+      expect(js_code).not_to include('container.innerHTML = html;')
+      expect(js_code).to include('attachSoundCloudInfiniteLoop')
+      expect(js_code).to include('SC.Widget.Events.FINISH')
+      expect(js_code).to include('feed-soundcloud-loop-indicator')
+      expect(js_code).to include('img.youtube.com/vi/')
+      expect(js_code).to include('w.soundcloud.com/player')
+      expect(js_code).to include('feed-youtube-facade')
+      expect(js_code).to include('feed-soundcloud-facade')
+
+      # Comprobar proxy API oEmbed en el servidor
+      get '/api/oembed', url: 'https://soundcloud.com/forss/flickermood'
+      expect(last_response.status).to eq(200)
+      oembed_json = JSON.parse(last_response.body)
+      expect(oembed_json['title']).to include('Flickermood')
+      expect(oembed_json['thumbnail_url']).to include('sndcdn.com')
+    end
   end
 
   describe '11. Versión Móvil Exclusiva (Feed Móvil Ligero, Restricción de Consola de Escritorio y Sincronización P2P)' do

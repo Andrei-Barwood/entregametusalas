@@ -283,6 +283,23 @@ export default {
       }
     }
 
+    // oEmbed Proxy para SoundCloud y reproductores
+    if (url.pathname === '/api/oembed' && method === 'GET') {
+      const targetUrl = url.searchParams.get('url');
+      if (!targetUrl) return jsonResponse({ status: 'error', error: 'Missing url parameter' }, 400);
+      try {
+        const u = new URL(targetUrl);
+        if (u.hostname.includes('soundcloud.com')) {
+          const scRes = await fetch(`https://soundcloud.com/oembed?format=json&maxheight=166&url=${encodeURIComponent(targetUrl)}`);
+          if (scRes.ok) {
+            const data = await scRes.json();
+            return jsonResponse(data, 200);
+          }
+        }
+      } catch (e) {}
+      return jsonResponse({ status: 'fallback', url: targetUrl }, 200);
+    }
+
     // -------------------------------------------------------------
     // 2. ENVÍOS FORMULARIO POST /mobile Y POST /muro
     // -------------------------------------------------------------

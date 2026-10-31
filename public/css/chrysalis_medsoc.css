@@ -2562,3 +2562,535 @@ html, body {
   word-break: break-word;
 }
 
+/* ==========================================================================
+   FEED RICH LINK & MEDIA PREVIEWS (YOUTUBE, SOUNDCLOUD, SPOTIFY, IMAGES, WEB)
+   ========================================================================== */
+
+.feed-content-link {
+  color: var(--bauble-cyan-bright, #29C2DA);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  word-break: break-all;
+  font-weight: 600;
+  transition: color 0.18s ease, text-shadow 0.18s ease;
+}
+
+.feed-content-link:hover {
+  color: var(--magic-highlight, #A4FF8E);
+  text-shadow: 0 0 8px rgba(48, 255, 0, 0.6);
+}
+
+.feed-post-previews-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 0.65rem;
+  width: 100%;
+}
+
+.feed-media-preview {
+  background: rgba(8, 22, 28, 0.85);
+  border: 1px solid var(--border-structural, #1A4753);
+  border-left: 3px solid var(--bauble-cyan-bright, #29C2DA);
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.feed-media-preview:hover {
+  border-color: var(--bauble-cyan-bright, #29C2DA);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.65), 0 0 10px rgba(41, 194, 218, 0.2);
+}
+
+.feed-youtube-preview {
+  border-left-color: #FF0000;
+}
+
+.feed-soundcloud-preview {
+  border-left-color: #FF5500;
+}
+
+.feed-spotify-preview {
+  border-left-color: #1DB954;
+}
+
+.feed-image-preview {
+  border-left-color: var(--magic-ring, #30FF00);
+}
+
+.feed-media-badge {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.4rem;
+  font-size: 0.62rem;
+  font-weight: 700;
+  color: var(--hud-glass-outline, #B2E5F2);
+  background: rgba(14, 38, 48, 0.9);
+  padding: 0.3rem 0.65rem;
+  border-bottom: 1px solid rgba(41, 194, 218, 0.2);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.feed-media-badge-left {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.feed-media-badge-tag {
+  font-size: 0.58rem;
+  padding: 0.1rem 0.35rem;
+  border-radius: 2px;
+  background: rgba(48, 255, 0, 0.15);
+  color: var(--magic-highlight, #A4FF8E);
+  border: 1px solid rgba(48, 255, 0, 0.3);
+}
+
+/* YouTube Facade & Player */
+.feed-youtube-facade {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  max-height: 320px;
+  background: #000000;
+  cursor: pointer;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.feed-youtube-thumb {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.88;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+}
+
+.feed-youtube-facade:hover .feed-youtube-thumb {
+  transform: scale(1.03);
+  opacity: 0.98;
+}
+
+.feed-youtube-play-btn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 58px;
+  height: 40px;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.9));
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}
+
+.feed-youtube-facade:hover .feed-youtube-play-btn {
+  transform: translate(-50%, -50%) scale(1.15);
+}
+
+.feed-youtube-overlay-meta {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  background: rgba(0, 0, 0, 0.82);
+  color: var(--magic-highlight, #A4FF8E);
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 0.2rem 0.5rem;
+  border-radius: 3px;
+  border: 1px solid var(--magic-ring, #30FF00);
+  pointer-events: none;
+  backdrop-filter: blur(4px);
+}
+
+.feed-youtube-iframe {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  max-height: 320px;
+  border: none;
+  display: block;
+}
+
+/* SoundCloud Facade & Player */
+.feed-soundcloud-facade {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.65rem 0.85rem;
+  background: rgba(10, 24, 30, 0.75);
+  cursor: pointer;
+  transition: background 0.2s ease;
+  user-select: none;
+}
+
+.feed-soundcloud-facade:hover {
+  background: rgba(33, 133, 149, 0.2);
+}
+
+.feed-soundcloud-artwork-box {
+  position: relative;
+  width: 72px;
+  height: 72px;
+  flex-shrink: 0;
+  border-radius: 4px;
+  overflow: hidden;
+  background: #0E1418;
+  border: 1px solid var(--border-structural, #1A4753);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+}
+
+.feed-soundcloud-artwork {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.25s ease;
+}
+
+.feed-soundcloud-facade:hover .feed-soundcloud-artwork {
+  transform: scale(1.06);
+}
+
+.feed-soundcloud-play-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease;
+}
+
+.feed-soundcloud-facade:hover .feed-soundcloud-play-overlay {
+  background: rgba(0, 0, 0, 0.15);
+}
+
+.feed-soundcloud-play-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #FF5500;
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  box-shadow: 0 0 10px rgba(255, 85, 0, 0.7);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  padding-left: 2px;
+}
+
+.feed-soundcloud-facade:hover .feed-soundcloud-play-btn {
+  transform: scale(1.15);
+  box-shadow: 0 0 14px rgba(255, 85, 0, 0.9);
+}
+
+.feed-soundcloud-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.feed-soundcloud-title {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #FFFFFF;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  letter-spacing: 0.3px;
+}
+
+.feed-soundcloud-artist {
+  font-size: 0.72rem;
+  color: var(--bauble-cyan-bright, #29C2DA);
+  margin-top: 0.15rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.feed-soundcloud-status-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.35rem;
+}
+
+.feed-soundcloud-status-tag {
+  font-size: 0.58rem;
+  font-weight: 700;
+  color: var(--magic-highlight, #A4FF8E);
+  background: rgba(48, 255, 0, 0.12);
+  border: 1px solid rgba(48, 255, 0, 0.3);
+  padding: 0.1rem 0.4rem;
+  border-radius: 2px;
+}
+
+.feed-soundcloud-wave-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 12px;
+}
+
+.feed-soundcloud-wave-bars span {
+  display: block;
+  width: 3px;
+  background: var(--magic-ring, #30FF00);
+  border-radius: 1px;
+}
+
+.feed-soundcloud-wave-bars span:nth-child(1) { height: 4px; }
+.feed-soundcloud-wave-bars span:nth-child(2) { height: 9px; }
+.feed-soundcloud-wave-bars span:nth-child(3) { height: 12px; }
+.feed-soundcloud-wave-bars span:nth-child(4) { height: 7px; }
+.feed-soundcloud-wave-bars span:nth-child(5) { height: 5px; }
+
+.feed-soundcloud-player-container {
+  width: 100%;
+  background: #0E1111;
+  border-top: 1px solid rgba(41, 194, 218, 0.2);
+}
+
+.feed-soundcloud-player-container iframe {
+  width: 100%;
+  height: 166px;
+  border: none;
+  display: block;
+}
+
+.feed-soundcloud-loading {
+  padding: 1.5rem;
+  text-align: center;
+  color: var(--magic-highlight, #A4FF8E);
+  font-size: 0.72rem;
+  font-family: monospace;
+}
+
+.feed-soundcloud-toggle-btn {
+  background: transparent;
+  border: 1px solid rgba(255, 85, 0, 0.5);
+  color: #FFAA77;
+  font-size: 0.62rem;
+  font-weight: 700;
+  padding: 0.15rem 0.45rem;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.feed-soundcloud-loop-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-family: var(--font-hud, monospace);
+  font-size: 0.6rem;
+  letter-spacing: 0.05em;
+  color: var(--magic-ring, #30FF00);
+  background: rgba(48, 255, 0, 0.08);
+  border: 1px solid rgba(48, 255, 0, 0.35);
+  padding: 0.12rem 0.4rem;
+  border-radius: 2px;
+  text-transform: uppercase;
+  text-shadow: 0 0 6px rgba(48, 255, 0, 0.4);
+}
+
+.feed-soundcloud-toggle-btn:hover {
+  background: rgba(255, 85, 0, 0.2);
+  border-color: #FF5500;
+  color: #FFFFFF;
+}
+
+/* Spotify Wrapper */
+.feed-spotify-frame-wrapper {
+  width: 100%;
+  background: #121212;
+}
+
+.feed-spotify-frame-wrapper iframe {
+  width: 100%;
+  height: 152px;
+  border: none;
+  display: block;
+}
+
+/* Embedded Images */
+.feed-image-preview-link {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  max-height: 360px;
+  background: rgba(5, 12, 16, 0.95);
+  text-align: center;
+  text-decoration: none;
+}
+
+.feed-preview-img {
+  max-width: 100%;
+  max-height: 360px;
+  object-fit: contain;
+  vertical-align: middle;
+  transition: transform 0.25s ease;
+}
+
+.feed-image-preview-link:hover .feed-preview-img {
+  transform: scale(1.02);
+}
+
+.feed-image-zoom-tag {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  background: rgba(10, 24, 30, 0.85);
+  border: 1px solid var(--hud-glass-outline, #B2E5F2);
+  color: var(--hud-glass-outline, #B2E5F2);
+  font-size: 0.64rem;
+  font-weight: 600;
+  padding: 0.2rem 0.5rem;
+  border-radius: 3px;
+  pointer-events: none;
+  backdrop-filter: blur(4px);
+}
+
+/* Generic Link Cards */
+.feed-link-card {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.65rem 0.85rem;
+  text-decoration: none;
+  color: inherit;
+  background: rgba(10, 26, 32, 0.65);
+  transition: background 0.18s ease;
+}
+
+.feed-link-card:hover {
+  background: rgba(33, 133, 149, 0.25);
+}
+
+.feed-link-card-favicon {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--border-structural, #1A4753);
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.feed-link-card-favicon img {
+  border-radius: 2px;
+}
+
+.feed-link-card-meta {
+  flex: 1;
+  min-width: 0;
+}
+
+.feed-link-card-domain {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--magic-highlight, #A4FF8E);
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.feed-link-card-proto {
+  font-size: 0.55rem;
+  color: var(--hud-glass-outline, #B2E5F2);
+  background: rgba(255, 255, 255, 0.1);
+  padding: 0.05rem 0.25rem;
+  border-radius: 2px;
+}
+
+.feed-link-card-url {
+  font-size: 0.72rem;
+  color: #B2E5F2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-top: 0.15rem;
+}
+
+.feed-link-card-action {
+  font-size: 0.9rem;
+  color: var(--bauble-cyan-bright, #29C2DA);
+  padding-left: 0.4rem;
+}
+
+/* Preview Footer (external open) */
+.feed-preview-footer {
+  padding: 0.35rem 0.75rem;
+  background: rgba(6, 16, 20, 0.95);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid rgba(41, 194, 218, 0.15);
+  font-size: 0.66rem;
+}
+
+.feed-preview-source-link {
+  color: var(--hud-glass-outline, #B2E5F2);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  transition: color 0.15s ease;
+}
+
+.feed-preview-source-link:hover {
+  color: var(--magic-highlight, #A4FF8E);
+}
+
+.feed-preview-url-domain {
+  color: #777777;
+  font-family: monospace;
+}
+
+/* Indicador dinámico de enlace detectado en compose box */
+.feed-link-detected-hint {
+  font-size: 0.66rem;
+  color: var(--magic-highlight, #A4FF8E);
+  background: rgba(48, 255, 0, 0.08);
+  border: 1px solid rgba(48, 255, 0, 0.25);
+  border-radius: 3px;
+  padding: 0.25rem 0.5rem;
+  margin-top: 0.35rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  animation: fadeInHint 0.2s ease;
+}
+
+@keyframes fadeInHint {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 640px) {
+  .feed-youtube-facade,
+  .feed-youtube-iframe {
+    max-height: 220px;
+  }
+  .feed-image-preview-link,
+  .feed-preview-img {
+    max-height: 260px;
+  }
+  .feed-soundcloud-frame-wrapper,
+  .feed-soundcloud-frame-wrapper iframe {
+    height: 140px;
+    min-height: 140px;
+  }
+}
+
+

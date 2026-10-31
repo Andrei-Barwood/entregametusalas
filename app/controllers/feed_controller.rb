@@ -111,6 +111,34 @@ class ApplicationController < Sinatra::Base
     end
   end
 
+  # Proxy seguro para oEmbed de SoundCloud y reproductores externos
+  get '/api/oembed' do
+    target_url = params[:url].to_s.strip
+    halt 400, json_response({ status: 'error', error: 'Missing url parameter' }, 400) if target_url.empty?
+
+    begin
+      uri = URI(target_url)
+      host = uri.host.to_s.downcase
+
+      if host.include?('soundcloud.com')
+        require 'cgi'
+        require 'net/http'
+        oembed_url = "https://soundcloud.com/oembed?format=json&maxheight=166&url=#{CGI.escape(target_url)}"
+        res = Net::HTTP.get_response(URI(oembed_url))
+        if res.is_a?(Net::HTTPSuccess)
+          content_type :json
+          headers 'Access-Control-Allow-Origin' => '*'
+          status 200
+          return res.body
+        end
+      end
+
+      json_response({ status: 'fallback', url: target_url })
+    rescue StandardError => e
+      json_response({ status: 'error', error: e.message }, 500)
+    end
+  end
+
   # Vistas completas del Muro Social Clínico (Twitter-style global feed)
   get '/muro' do
     @episodes = Episode.all

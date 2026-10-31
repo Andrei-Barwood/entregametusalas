@@ -387,6 +387,567 @@
       counter.style.fontWeight = 'normal';
       if (submitBtn) submitBtn.disabled = len === 0;
     }
+
+    // Indicador dinámico en la caja de redacción cuando se detectan enlaces
+    var linkHint = document.getElementById('feed-link-detected-hint');
+    var detectedUrls = extractUrls(textarea.value);
+    if (detectedUrls.length > 0) {
+      if (!linkHint) {
+        linkHint = document.createElement('div');
+        linkHint.id = 'feed-link-detected-hint';
+        linkHint.className = 'feed-link-detected-hint';
+        if (textarea.parentNode) {
+          textarea.parentNode.appendChild(linkHint);
+        }
+      }
+      var count = detectedUrls.length;
+      linkHint.innerHTML = '🔗 <strong>' + count + ' enlace' + (count > 1 ? 's' : '') + ' detectado' + (count > 1 ? 's' : '') + ':</strong> Previsualización multimedia activa (YouTube, SoundCloud, Spotify, Imágenes o Web).';
+      linkHint.style.display = 'flex';
+    } else if (linkHint) {
+      linkHint.style.display = 'none';
+    }
+  }
+
+  // --- Detección y Previsualización de Enlaces Multimedia ---
+
+  function extractUrls(text) {
+    if (!text) return [];
+    var urlRegex = /(https?:\/\/[^\s<>"'`]+|(?:^|[\s])(?:www\.|soundcloud\.com\/|on\.soundcloud\.com\/|youtube\.com\/|youtu\.be\/)[^\s<>"'`]+)/gi;
+    var matches = text.match(urlRegex) || [];
+    var cleaned = [];
+    var seen = {};
+
+    for (var i = 0; i < matches.length; i++) {
+      var raw = matches[i].trim();
+      // Remover puntuación residual al final de la URL
+      var u = raw.replace(/[.,)\]?!;:]+$/, '');
+      if (!/^https?:\/\//i.test(u)) {
+        u = 'https://' + u;
+      }
+      if (u && !seen[u]) {
+        seen[u] = true;
+        cleaned.push(u);
+      }
+    }
+    return cleaned;
+  }
+
+  function parseYouTubeId(url) {
+    if (!url) return null;
+    try {
+      var u = new URL(url);
+      var host = u.hostname.replace(/^www\./, '').replace(/^m\./, '');
+      if (host === 'youtube.com') {
+        if (u.pathname === '/watch') {
+          return u.searchParams.get('v');
+        }
+        var mShorts = u.pathname.match(/^\/(?:shorts|embed|v)\/([a-zA-Z0-9_-]{11})/);
+        if (mShorts) return mShorts[1];
+      } else if (host === 'youtu.be') {
+        var mPath = u.pathname.match(/^\/([a-zA-Z0-9_-]{11})/);
+        if (mPath) return mPath[1];
+      }
+    } catch (e) {}
+
+    var m = url.match(/(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|shorts\/))([a-zA-Z0-9_-]{11})/i);
+    return m ? m[1] : null;
+  }
+
+  var soundCloudCache = {};
+  var DEFAULT_SOUNDCLOUD_ARTWORK = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200' width='200' height='200'><rect width='200' height='200' fill='%230E1418'/><defs><linearGradient id='scg' x1='0' y1='1' x2='0' y2='0'><stop offset='0%25' stop-color='%23FF5500'/><stop offset='100%25' stop-color='%2329C2DA'/></linearGradient></defs><g fill='url(%23scg)'><rect x='25' y='110' width='10' height='40' rx='3'/><rect x='45' y='80' width='10' height='70' rx='3'/><rect x='65' y='50' width='10' height='100' rx='3'/><rect x='85' y='30' width='10' height='120' rx='3'/><rect x='105' y='45' width='10' height='105' rx='3'/><rect x='125' y='75' width='10' height='75' rx='3'/><rect x='145' y='100' width='10' height='50' rx='3'/><rect x='165' y='120' width='10' height='30' rx='3'/></g><circle cx='100' cy='100' r='88' fill='none' stroke='%2329C2DA' stroke-width='3' stroke-dasharray='6,6'/></svg>";
+
+  function parseSoundCloudSlug(url) {
+    try {
+      var u = new URL(url);
+      var host = u.hostname.toLowerCase().replace(/^www\./, '');
+      if (host === 'on.soundcloud.com') {
+        return { artist: 'SoundCloud Track', title: 'Cargando pista de audio...' };
+      }
+      var parts = u.pathname.split('/').filter(function (p) { return p.length > 0; });
+      if (parts.length >= 2) {
+        var artist = decodeURIComponent(parts[0]).replace(/[-_]/g, ' ').replace(/\b\w/g, function (l) { return l.toUpperCase(); });
+        var track = decodeURIComponent(parts[1]).replace(/[-_]/g, ' ').replace(/\b\w/g, function (l) { return l.toUpperCase(); });
+        return { artist: artist, title: track };
+      } else if (parts.length === 1) {
+        var name = decodeURIComponent(parts[0]).replace(/[-_]/g, ' ').replace(/\b\w/g, function (l) { return l.toUpperCase(); });
+        return { artist: name, title: 'Audio en SoundCloud' };
+      }
+    } catch (e) {}
+    return { artist: 'SoundCloud Artist', title: 'Pista de Audio' };
+  }
+
+  function isSoundCloudUrl(url) {
+    if (!url) return false;
+    try {
+      var u = new URL(url);
+      var host = u.hostname.toLowerCase().replace(/^www\./, '');
+      return host === 'soundcloud.com' || host === 'm.soundcloud.com' || host === 'on.soundcloud.com' || host.endsWith('.soundcloud.com');
+    } catch (e) {
+      return /https?:\/\/(?:[a-zA-Z0-9_-]+\.)?soundcloud\.com\/.+/i.test(url);
+    }
+  }
+
+  function parseSpotifyEmbed(url) {
+    if (!url) return null;
+    try {
+      var u = new URL(url);
+      var host = u.hostname.replace(/^www\./, '');
+      if (host === 'open.spotify.com') {
+        var match = u.pathname.match(/^\/(track|album|playlist|episode)\/([a-zA-Z0-9]+)/);
+        if (match) {
+          return 'https://open.spotify.com/embed/' + match[1] + '/' + match[2] + '?utm_source=generator&theme=0';
+        }
+      }
+    } catch (e) {}
+    return null;
+  }
+
+  function isImageUrl(url) {
+    if (!url) return false;
+    try {
+      var u = new URL(url);
+      var path = u.pathname.toLowerCase();
+      if (/\.(jpe?g|png|gif|webp|svg|bmp)$/i.test(path)) return true;
+      if (u.hostname === 'i.imgur.com' || u.hostname === 'images.unsplash.com' || u.hostname === 'media.giphy.com') {
+        return true;
+      }
+    } catch (e) {
+      if (/\.(jpe?g|png|gif|webp|svg|bmp)(\?.*)?$/i.test(url)) return true;
+    }
+    return false;
+  }
+
+  function buildPreviewCard(url) {
+    var safeUrl = escapeHtml(url);
+
+    // 1. YouTube
+    var ytId = parseYouTubeId(url);
+    if (ytId) {
+      return [
+        '<div class="feed-media-preview feed-youtube-preview">',
+        '  <div class="feed-media-badge">',
+        '    <span class="feed-media-badge-left">▶ YOUTUBE VIDEO STREAM</span>',
+        '    <span class="feed-media-badge-tag">REPRODUCTOR HD</span>',
+        '  </div>',
+        '  <div class="feed-youtube-facade" data-video-id="' + escapeHtml(ytId) + '" title="Click para reproducir video">',
+        '    <img src="https://img.youtube.com/vi/' + escapeHtml(ytId) + '/hqdefault.jpg" alt="Miniatura YouTube" loading="lazy" class="feed-youtube-thumb">',
+        '    <div class="feed-youtube-play-btn" aria-hidden="true">',
+        '      <svg viewBox="0 0 68 48" width="58" height="40"><path d="M66.52,7.74c-0.78-2.93-2.49-5.41-5.42-6.19C55.79,.13,34,0,34,0S12.21,.13,6.9,1.55 C3.97,2.33,2.27,4.81,1.48,7.74C0.06,13.05,0,24,0,24s0.06,10.95,1.48,16.26c0.78,2.93,2.49,5.41,5.42,6.19 C12.21,47.87,34,48,34,48s21.79-0.13,27.1-1.55c2.93-0.78,4.64-3.26,5.42-6.19C67.94,34.95,68,24,68,24S67.94,13.05,66.52,7.74z" fill="#f00"></path><path d="M 45,24 27,14 27,34" fill="#fff"></path></svg>',
+        '    </div>',
+        '    <div class="feed-youtube-overlay-meta">▶ Click para reproducir en vivo</div>',
+        '  </div>',
+        '  <div class="feed-preview-footer">',
+        '    <a href="' + safeUrl + '" target="_blank" rel="noopener noreferrer" class="feed-preview-source-link">',
+        '      <span>↗ Abrir en YouTube</span>',
+        '      <span class="feed-preview-url-domain">youtube.com/watch?v=' + escapeHtml(ytId) + '</span>',
+        '    </a>',
+        '  </div>',
+        '</div>'
+      ].join('\n');
+    }
+
+    // 2. SoundCloud
+    if (isSoundCloudUrl(url)) {
+      var slugInfo = parseSoundCloudSlug(url);
+      var safeSlugTitle = escapeHtml(slugInfo.title);
+      var safeSlugArtist = escapeHtml(slugInfo.artist);
+
+      return [
+        '<div class="feed-media-preview feed-soundcloud-preview" data-soundcloud-url="' + safeUrl + '">',
+        '  <div class="feed-media-badge">',
+        '    <span class="feed-media-badge-left">🎵 SOUNDCLOUD AUDIO STREAM</span>',
+        '    <span class="feed-media-badge-tag">AUDIO • BUCLE ∞</span>',
+        '  </div>',
+        '  <div class="feed-soundcloud-facade" title="Click para reproducir audio en bucle infinito">',
+        '    <div class="feed-soundcloud-artwork-box">',
+        '      <img class="feed-soundcloud-artwork" src="' + DEFAULT_SOUNDCLOUD_ARTWORK + '" alt="' + safeSlugTitle + '" loading="lazy">',
+        '      <div class="feed-soundcloud-play-overlay">',
+        '        <div class="feed-soundcloud-play-btn" aria-label="Reproducir pista en bucle continuo">▶</div>',
+        '      </div>',
+        '    </div>',
+        '    <div class="feed-soundcloud-info">',
+        '      <div class="feed-soundcloud-title" title="' + safeSlugTitle + '">' + safeSlugTitle + '</div>',
+        '      <div class="feed-soundcloud-artist">' + safeSlugArtist + '</div>',
+        '      <div class="feed-soundcloud-status-row">',
+        '        <span class="feed-soundcloud-status-tag">▶ REPRODUCIR (BUCLE ∞)</span>',
+        '        <span class="feed-soundcloud-wave-bars" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></span>',
+        '      </div>',
+        '    </div>',
+        '  </div>',
+        '  <div class="feed-soundcloud-player-container" style="display: none;"></div>',
+        '  <div class="feed-preview-footer">',
+        '    <a href="' + safeUrl + '" target="_blank" rel="noopener noreferrer" class="feed-preview-source-link">',
+        '      <span>↗ Escuchar en SoundCloud</span>',
+        '      <span class="feed-preview-url-domain">soundcloud.com</span>',
+        '    </a>',
+        '    <span class="feed-soundcloud-loop-indicator" title="Reproducción continua en bucle infinito activa">🔁 Bucle ∞</span>',
+        '    <button type="button" class="feed-soundcloud-toggle-btn" title="Alternar reproductor">',
+        '      ▶ Reproducir',
+        '    </button>',
+        '  </div>',
+        '</div>'
+      ].join('\n');
+    }
+
+    // 3. Spotify
+    var spotifyEmbedUrl = parseSpotifyEmbed(url);
+    if (spotifyEmbedUrl) {
+      return [
+        '<div class="feed-media-preview feed-spotify-preview">',
+        '  <div class="feed-media-badge">',
+        '    <span class="feed-media-badge-left">🎧 SPOTIFY AUDIO STREAM</span>',
+        '    <span class="feed-media-badge-tag">EMBED POD</span>',
+        '  </div>',
+        '  <div class="feed-spotify-frame-wrapper">',
+        '    <iframe src="' + escapeHtml(spotifyEmbedUrl) + '" width="100%" height="152" frameborder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>',
+        '  </div>',
+        '  <div class="feed-preview-footer">',
+        '    <a href="' + safeUrl + '" target="_blank" rel="noopener noreferrer" class="feed-preview-source-link">',
+        '      <span>↗ Abrir en Spotify</span>',
+        '      <span class="feed-preview-url-domain">spotify.com</span>',
+        '    </a>',
+        '  </div>',
+        '</div>'
+      ].join('\n');
+    }
+
+    // 4. Direct Images
+    if (isImageUrl(url)) {
+      return [
+        '<div class="feed-media-preview feed-image-preview">',
+        '  <div class="feed-media-badge">',
+        '    <span class="feed-media-badge-left">🖼️ TELEMETRÍA VISUAL // IMAGEN ADJUNTA</span>',
+        '    <span class="feed-media-badge-tag">VISTA PREVIA</span>',
+        '  </div>',
+        '  <a href="' + safeUrl + '" target="_blank" rel="noopener noreferrer" class="feed-image-preview-link" title="Click para abrir imagen en tamaño original">',
+        '    <img src="' + safeUrl + '" alt="Previsualización de imagen adjunta" loading="lazy" class="feed-preview-img" onerror="this.closest(\'.feed-image-preview\').style.display=\'none\';">',
+        '    <span class="feed-image-zoom-tag">🔍 Ver original</span>',
+        '  </a>',
+        '  <div class="feed-preview-footer">',
+        '    <a href="' + safeUrl + '" target="_blank" rel="noopener noreferrer" class="feed-preview-source-link">',
+        '      <span>↗ Abrir enlace de imagen</span>',
+        '      <span class="feed-preview-url-domain">' + escapeHtml(url.length > 50 ? url.slice(0, 47) + '…' : url) + '</span>',
+        '    </a>',
+        '  </div>',
+        '</div>'
+      ].join('\n');
+    }
+
+    // 5. Generic Link Card
+    try {
+      var u = new URL(url);
+      var domain = u.hostname.replace(/^www\./, '');
+      var path = u.pathname + u.search;
+      var cleanPath = path === '/' ? '' : (path.length > 50 ? path.slice(0, 47) + '…' : path);
+      return [
+        '<div class="feed-media-preview feed-generic-link-preview">',
+        '  <a href="' + safeUrl + '" target="_blank" rel="noopener noreferrer" class="feed-link-card">',
+        '    <div class="feed-link-card-favicon">',
+        '      <img src="https://www.google.com/s2/favicons?domain=' + encodeURIComponent(domain) + '&sz=32" alt="" width="18" height="18" loading="lazy" onerror="this.style.display=\'none\';">',
+        '    </div>',
+        '    <div class="feed-link-card-meta">',
+        '      <div class="feed-link-card-domain">' + escapeHtml(domain.toUpperCase()) + ' <span class="feed-link-card-proto">' + escapeHtml(u.protocol.replace(':', '')) + '</span></div>',
+        '      <div class="feed-link-card-url">' + escapeHtml(domain + cleanPath) + '</div>',
+        '    </div>',
+        '    <div class="feed-link-card-action">↗</div>',
+        '  </a>',
+        '</div>'
+      ].join('\n');
+    } catch (e) {
+      return '';
+    }
+  }
+
+  function formatContentWithPreviews(content) {
+    if (!content) return { textHtml: '', previewsHtml: '' };
+
+    // 1. Extraer bloques de código inline `...` para protegerlos
+    var codeBlocks = [];
+    var textWithoutCode = content.replace(/`([^`]+)`/g, function (match, p1) {
+      codeBlocks.push(p1);
+      return '___FEED_CODE_BLOCK_' + (codeBlocks.length - 1) + '___';
+    });
+
+    // 2. Extraer URLs del texto
+    var urls = extractUrls(textWithoutCode);
+    var previews = [];
+    for (var i = 0; i < urls.length && previews.length < 2; i++) {
+      var card = buildPreviewCard(urls[i]);
+      if (card) {
+        previews.push(card);
+      }
+    }
+
+    // 3. Escapar HTML del texto
+    var safeText = escapeHtml(textWithoutCode);
+
+    // 4. Reemplazar URLs en el texto con enlaces clicables bonitos
+    for (var j = 0; j < urls.length; j++) {
+      var fullUrl = urls[j];
+      var safeFullUrl = escapeHtml(fullUrl);
+      var displayLabel = fullUrl.replace(/^https?:\/\/(?:www\.)?/, '');
+      if (displayLabel.length > 50) {
+        displayLabel = displayLabel.slice(0, 47) + '…';
+      }
+      var linkTag = '<a href="' + safeFullUrl + '" target="_blank" rel="noopener noreferrer" class="feed-content-link">' + escapeHtml(displayLabel) + '</a>';
+
+      if (safeText.indexOf(safeFullUrl) >= 0) {
+        safeText = safeText.split(safeFullUrl).join(linkTag);
+      } else {
+        var rawWithoutProto = escapeHtml(fullUrl.replace(/^https?:\/\//i, ''));
+        if (safeText.indexOf(rawWithoutProto) >= 0) {
+          safeText = safeText.split(rawWithoutProto).join(linkTag);
+        }
+      }
+    }
+
+    // 5. Restaurar bloques de código inline
+    safeText = safeText.replace(/___FEED_CODE_BLOCK_(\d+)___/g, function (match, idx) {
+      var code = codeBlocks[parseInt(idx, 10)] || '';
+      return '<code class="feed-inline-code">' + escapeHtml(code) + '</code>';
+    });
+
+    // 6. Convertir saltos de línea a <br>
+    safeText = safeText.replace(/\n/g, '<br>');
+
+    return {
+      textHtml: safeText,
+      previewsHtml: previews.join('\n')
+    };
+  }
+
+  function playYouTubeFacade(btnOrFacade, videoId) {
+    if (!btnOrFacade || !videoId) return;
+    var facade = btnOrFacade.classList.contains('feed-youtube-facade') ? btnOrFacade : btnOrFacade.closest('.feed-youtube-facade');
+    if (!facade) return;
+
+    var iframe = document.createElement('iframe');
+    iframe.className = 'feed-youtube-iframe';
+    // loop=1 y playlist=ID permiten bucle infinito nativo en reproductores de YouTube
+    iframe.src = 'https://www.youtube-nocookie.com/embed/' + encodeURIComponent(videoId) + '?autoplay=1&loop=1&playlist=' + encodeURIComponent(videoId) + '&rel=0';
+    iframe.title = 'Reproductor de video YouTube (Bucle Infinito)';
+    iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+    iframe.allowFullscreen = true;
+
+    facade.parentNode.replaceChild(iframe, facade);
+  }
+
+  // --- Soporte de Bucle Infinito (Loop ∞) para SoundCloud ---
+
+  function ensureSoundCloudApi(callback) {
+    if (typeof window === 'undefined') return;
+    if (window.SC && window.SC.Widget) {
+      if (callback) callback();
+      return;
+    }
+    var existing = document.getElementById('sc-widget-api-script');
+    if (existing) {
+      existing.addEventListener('load', function () {
+        if (callback) callback();
+      });
+      return;
+    }
+    var script = document.createElement('script');
+    script.id = 'sc-widget-api-script';
+    script.src = 'https://w.soundcloud.com/player/api.js';
+    script.async = true;
+    script.onload = function () {
+      if (callback) callback();
+    };
+    if (document.head) {
+      document.head.appendChild(script);
+    } else if (document.body) {
+      document.body.appendChild(script);
+    }
+  }
+
+  function attachSoundCloudInfiniteLoop(iframe) {
+    if (!iframe) return;
+    if (!iframe.id) {
+      iframe.id = 'sc_widget_' + Math.random().toString(36).substr(2, 9);
+    }
+
+    // 1. Integración con API oficial SC.Widget (escucha evento FINISH y repite seekTo(0) + play())
+    ensureSoundCloudApi(function () {
+      try {
+        if (!window.SC || !window.SC.Widget) return;
+        var widget = window.SC.Widget(iframe);
+        if (!widget) return;
+
+        widget.bind(window.SC.Widget.Events.READY, function () {
+          widget.bind(window.SC.Widget.Events.FINISH, function () {
+            try {
+              widget.seekTo(0);
+              widget.play();
+            } catch (err) {
+              console.warn('[SoundCloud Loop] Error reiniciando pista:', err);
+            }
+          });
+        });
+      } catch (e) {
+        console.warn('[SoundCloud Loop] Error vinculando widget:', e);
+      }
+    });
+  }
+
+  // 2. Fallback postMessage global: detecta evento 'finish' emitido por el iframe de SoundCloud
+  if (typeof window !== 'undefined' && !window.__sc_loop_listener_attached__) {
+    window.__sc_loop_listener_attached__ = true;
+    window.addEventListener('message', function (e) {
+      if (!e || !e.data) return;
+      var data = null;
+      if (typeof e.data === 'string') {
+        try {
+          data = JSON.parse(e.data);
+        } catch (_) {}
+      } else if (typeof e.data === 'object') {
+        data = e.data;
+      }
+      if (data && (data.method === 'finish' || data.event === 'finish' || data.name === 'finish')) {
+        var iframes = document.querySelectorAll('.feed-soundcloud-player-container iframe');
+        for (var i = 0; i < iframes.length; i++) {
+          var frame = iframes[i];
+          if (frame && frame.contentWindow) {
+            try {
+              frame.contentWindow.postMessage(JSON.stringify({ method: 'seekTo', value: 0 }), '*');
+              frame.contentWindow.postMessage(JSON.stringify({ method: 'play' }), '*');
+            } catch (_) {}
+          }
+        }
+      }
+    });
+  }
+
+  function playOrToggleSoundCloud(cardEl) {
+    if (!cardEl) return;
+    var playerBox = cardEl.querySelector('.feed-soundcloud-player-container');
+    var facade = cardEl.querySelector('.feed-soundcloud-facade');
+    var toggleBtn = cardEl.querySelector('.feed-soundcloud-toggle-btn');
+    var scUrl = cardEl.getAttribute('data-soundcloud-url');
+    if (!playerBox || !scUrl) return;
+
+    if (playerBox.style.display !== 'none' && playerBox.innerHTML.trim().length > 0) {
+      playerBox.style.display = 'none';
+      if (facade) facade.style.display = 'flex';
+      if (toggleBtn) toggleBtn.textContent = '▶ Reproducir';
+      return;
+    }
+
+    playerBox.style.display = 'block';
+    if (facade) facade.style.display = 'none';
+    if (toggleBtn) toggleBtn.textContent = '✕ Ocultar reproductor';
+
+    var existingFrame = playerBox.querySelector('iframe');
+    if (existingFrame) {
+      attachSoundCloudInfiniteLoop(existingFrame);
+      return;
+    }
+
+    playerBox.innerHTML = '<div class="feed-soundcloud-loading">⚡ Conectando telemetría de SoundCloud (Bucle ∞)...</div>';
+
+    var embedHtml = cardEl.getAttribute('data-embed-html');
+    if (embedHtml) {
+      var activeHtml = embedHtml.replace(/auto_play=false/g, 'auto_play=true');
+      if (activeHtml.indexOf('auto_play=true') === -1) {
+        activeHtml = activeHtml.replace(/src="([^"]+)"/, function (m, src) {
+          var sep = src.indexOf('?') >= 0 ? '&' : '?';
+          return 'src="' + src + sep + 'auto_play=true"';
+        });
+      }
+      if (activeHtml.indexOf('allow="') >= 0) {
+        if (activeHtml.indexOf('autoplay') === -1) {
+          activeHtml = activeHtml.replace('allow="', 'allow="autoplay; ');
+        }
+      } else {
+        activeHtml = activeHtml.replace('<iframe ', '<iframe allow="autoplay; encrypted-media" ');
+      }
+      playerBox.innerHTML = activeHtml;
+    } else {
+      var fallbackSrc = 'https://w.soundcloud.com/player/?url=' + encodeURIComponent(scUrl) + '&color=%2329C2DA&auto_play=true&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false';
+      playerBox.innerHTML = '<iframe width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay; encrypted-media" src="' + fallbackSrc + '"></iframe>';
+    }
+
+    var newFrame = playerBox.querySelector('iframe');
+    if (newFrame) {
+      attachSoundCloudInfiniteLoop(newFrame);
+    }
+  }
+
+  function enhanceSoundCloudCards() {
+    if (typeof document === 'undefined') return;
+    var cards = document.querySelectorAll('.feed-soundcloud-preview:not([data-enhanced="true"])');
+    cards.forEach(function (card) {
+      card.setAttribute('data-enhanced', 'true');
+      var url = card.getAttribute('data-soundcloud-url');
+      if (!url) return;
+
+      var cachedData = soundCloudCache[url];
+      if (!cachedData) {
+        try {
+          var stored = localStorage.getItem('cyberia_sc_' + encodeURIComponent(url));
+          if (stored) cachedData = JSON.parse(stored);
+        } catch (_) {}
+      }
+
+      function applyMetadata(data) {
+        if (!data) return;
+        soundCloudCache[url] = data;
+        try {
+          localStorage.setItem('cyberia_sc_' + encodeURIComponent(url), JSON.stringify(data));
+        } catch (_) {}
+
+        if (data.thumbnail_url) {
+          var artworkImg = card.querySelector('.feed-soundcloud-artwork');
+          if (artworkImg) {
+            artworkImg.src = data.thumbnail_url;
+          }
+        }
+
+        if (data.title) {
+          var titleEl = card.querySelector('.feed-soundcloud-title');
+          if (titleEl) {
+            titleEl.textContent = data.title;
+            titleEl.setAttribute('title', data.title);
+          }
+        }
+        if (data.author_name) {
+          var artistEl = card.querySelector('.feed-soundcloud-artist');
+          if (artistEl) {
+            artistEl.textContent = data.author_name;
+          }
+        }
+
+        if (data.html) {
+          card.setAttribute('data-embed-html', data.html);
+        }
+      }
+
+      if (cachedData) {
+        applyMetadata(cachedData);
+        return;
+      }
+
+      var oembedUrl = 'https://soundcloud.com/oembed?format=json&maxheight=166&url=' + encodeURIComponent(url);
+      fetch(oembedUrl)
+        .then(function (res) {
+          if (!res.ok) throw new Error('HTTP ' + res.status);
+          return res.json();
+        })
+        .then(function (data) {
+          applyMetadata(data);
+        })
+        .catch(function () {
+          fetch('/api/oembed?url=' + encodeURIComponent(url))
+            .then(function (res2) {
+              if (!res2.ok) throw new Error('Proxy HTTP ' + res2.status);
+              return res2.json();
+            })
+            .then(function (data2) {
+              applyMetadata(data2);
+            })
+            .catch(function () {});
+        });
+    });
   }
 
   function renderPostCard(post) {
@@ -400,11 +961,7 @@
     var avatarInitial = (post.author || 'C').charAt(0).toUpperCase();
     var avatarBg = post.avatar_color || '#29C2DA';
     var formattedTime = formatTimeAgo(post.created_at);
-    var safeContent = escapeHtml(post.content);
-
-    // Formato de código inline o saltos de línea
-    safeContent = safeContent.replace(/`([^`]+)`/g, '<code class="feed-inline-code">$1</code>');
-    safeContent = safeContent.replace(/\n/g, '<br>');
+    var parsed = formatContentWithPreviews(post.content);
 
     var cardClasses = 'feed-post-card' + (isMobile ? ' mobile-post-card' : '');
     var avatarClasses = 'feed-post-avatar' + (isMobile ? ' mobile-avatar' : '');
@@ -421,7 +978,10 @@
       '      </span>',
       '      <time class="feed-post-time" datetime="' + escapeHtml(post.created_at) + '">' + formattedTime + '</time>',
       '    </div>',
-      '    <div class="feed-post-body">' + safeContent + '</div>',
+      '    <div class="feed-post-body">',
+      '      <div class="feed-post-text">' + parsed.textHtml + '</div>',
+      parsed.previewsHtml ? '      <div class="feed-post-previews-container">' + parsed.previewsHtml + '</div>' : '',
+      '    </div>',
       '    <div class="' + actionsClasses + '" aria-label="Reacciones al comentario">',
       '      <button type="button" class="feed-react-btn feed-react-like" data-post-id="' + escapeHtml(post.id) + '" data-reaction="like" title="Pulgar arriba (Me gusta)">',
       '        <span class="react-emoji" aria-hidden="true">👍</span>',
@@ -447,6 +1007,104 @@
     if (badge) {
       badge.textContent = stats.kb + ' KB / 3,000 KB (JSONL • ' + stats.total_posts + ' posts)';
       badge.title = stats.lifespan_estimate || 'Formato ultracompacto para 5 años de debates clínicos';
+    }
+  }
+
+  function updateFeedDOM(container, allPosts, preserveScroll, scrollPos) {
+    if (!container) return;
+
+    if (allPosts.length === 0) {
+      container.innerHTML = [
+        '<div class="feed-empty-state">',
+        '  <div style="font-size: 1.8rem; margin-bottom: 0.5rem;">📡</div>',
+        '  <div style="color: var(--hud-glass-outline); font-weight: bold;">Sin comentarios para este episodio aún.</div>',
+        '  <div style="color: #888; font-size: 0.75rem; margin-top: 0.25rem;">Sé el primer cadete de NetAcad en compartir hallazgos sobre parches y telemetría.</div>',
+        '</div>'
+      ].join('\n');
+      return;
+    }
+
+    var existingCards = container.querySelectorAll('.feed-post-card');
+    if (existingCards.length === 0) {
+      container.innerHTML = allPosts.map(renderPostCard).join('\n');
+      enhanceSoundCloudCards();
+      if (preserveScroll) container.scrollTop = scrollPos;
+      return;
+    }
+
+    var existingMap = {};
+    existingCards.forEach(function (card) {
+      var id = card.getAttribute('data-post-id');
+      if (id) {
+        existingMap[id] = card;
+      }
+    });
+
+    var postMap = {};
+    allPosts.forEach(function (p) {
+      if (p && p.id) postMap[p.id] = p;
+    });
+
+    // 1. Eliminar del DOM las tarjetas que ya no existan en allPosts
+    existingCards.forEach(function (card) {
+      var id = card.getAttribute('data-post-id');
+      if (id && !postMap[id]) {
+        if (card.parentNode) {
+          card.parentNode.removeChild(card);
+        }
+      }
+    });
+
+    // 2. Reconciliación no destructiva: insertar o mantener cada tarjeta en orden
+    for (var i = 0; i < allPosts.length; i++) {
+      var post = allPosts[i];
+      if (!post || !post.id) continue;
+
+      var currentChild = container.children[i];
+      var existingCard = existingMap[post.id];
+
+      if (existingCard) {
+        // Actualizar contadores si cambiaron
+        var likeCount = existingCard.querySelector('#react-like-' + post.id);
+        if (likeCount && likeCount.textContent !== String(post.likes || 0)) {
+          likeCount.textContent = post.likes || 0;
+        }
+        var dislikeCount = existingCard.querySelector('#react-dislike-' + post.id);
+        if (dislikeCount && dislikeCount.textContent !== String(post.dislikes || 0)) {
+          dislikeCount.textContent = post.dislikes || 0;
+        }
+        var loveCount = existingCard.querySelector('#react-love-' + post.id);
+        if (loveCount && loveCount.textContent !== String(post.loves || 0)) {
+          loveCount.textContent = post.loves || 0;
+        }
+        var timeEl = existingCard.querySelector('.feed-post-time');
+        if (timeEl && post.created_at) {
+          var formattedTime = formatTimeAgo(post.created_at);
+          if (timeEl.textContent !== formattedTime) {
+            timeEl.textContent = formattedTime;
+          }
+        }
+
+        // Si ya está en la posición exacta, NO moverlo en el DOM (preserva iframes y reproducción de audio/video)
+        if (currentChild !== existingCard) {
+          container.insertBefore(existingCard, currentChild || null);
+        }
+      } else {
+        // Nuevo post que no existía en el feed actual
+        var temp = document.createElement('div');
+        temp.innerHTML = renderPostCard(post);
+        var newCard = temp.firstElementChild;
+        if (newCard) {
+          container.insertBefore(newCard, currentChild || null);
+          existingMap[post.id] = newCard;
+        }
+      }
+    }
+
+    enhanceSoundCloudCards();
+
+    if (preserveScroll) {
+      container.scrollTop = scrollPos;
     }
   }
 
@@ -507,23 +1165,7 @@
             counterBadge.textContent = allPosts.length + ' MENSAJES';
           }
 
-          if (allPosts.length === 0) {
-            container.innerHTML = [
-              '<div class="feed-empty-state">',
-              '  <div style="font-size: 1.8rem; margin-bottom: 0.5rem;">📡</div>',
-              '  <div style="color: var(--hud-glass-outline); font-weight: bold;">Sin comentarios para este episodio aún.</div>',
-              '  <div style="color: #888; font-size: 0.75rem; margin-top: 0.25rem;">Sé el primer cadete de NetAcad en compartir hallazgos sobre parches y telemetría.</div>',
-              '</div>'
-            ].join('\n');
-            return;
-          }
-
-          var html = allPosts.map(renderPostCard).join('\n');
-          container.innerHTML = html;
-
-          if (preserveScroll) {
-            container.scrollTop = scrollPos;
-          }
+          updateFeedDOM(container, allPosts, preserveScroll, scrollPos);
         }
       })
       .catch(function (err) {
@@ -823,8 +1465,34 @@
       }
     });
 
-    // Cargar posts iniciales
+    // Delegación de click para reproductor YouTube en facade interactivo
+    document.addEventListener('click', function (e) {
+      var ytFacade = e.target.closest('.feed-youtube-facade');
+      if (ytFacade) {
+        e.preventDefault();
+        var videoId = ytFacade.getAttribute('data-video-id');
+        if (videoId) {
+          playYouTubeFacade(ytFacade, videoId);
+        }
+      }
+    });
+
+    // Delegación de click para SoundCloud facade y toggle
+    document.addEventListener('click', function (e) {
+      var scFacade = e.target.closest('.feed-soundcloud-facade');
+      var scToggle = e.target.closest('.feed-soundcloud-toggle-btn');
+      if (scFacade || scToggle) {
+        e.preventDefault();
+        var card = (scFacade || scToggle).closest('.feed-soundcloud-preview');
+        if (card) {
+          playOrToggleSoundCloud(card);
+        }
+      }
+    });
+
+    // Cargar posts iniciales y mejorar tarjetas
     fetchPosts(false);
+    enhanceSoundCloudCards();
 
     // Auto-polling en tiempo real cada 5 segundos
     if (pollInterval) clearInterval(pollInterval);
@@ -847,7 +1515,21 @@
     setNotificationsEnabled: setNotificationsEnabled,
     isNotificationsEnabled: isNotificationsEnabled,
     notifyIncomingPosts: notifyIncomingPosts,
-    playNotificationSound: playNotificationSound
+    playNotificationSound: playNotificationSound,
+    extractUrls: extractUrls,
+    parseYouTubeId: parseYouTubeId,
+    isSoundCloudUrl: isSoundCloudUrl,
+    parseSoundCloudSlug: parseSoundCloudSlug,
+    playOrToggleSoundCloud: playOrToggleSoundCloud,
+    enhanceSoundCloudCards: enhanceSoundCloudCards,
+    parseSpotifyEmbed: parseSpotifyEmbed,
+    isImageUrl: isImageUrl,
+    buildPreviewCard: buildPreviewCard,
+    formatContentWithPreviews: formatContentWithPreviews,
+    playYouTubeFacade: playYouTubeFacade,
+    updateFeedDOM: updateFeedDOM,
+    ensureSoundCloudApi: ensureSoundCloudApi,
+    attachSoundCloudInfiniteLoop: attachSoundCloudInfiniteLoop
   };
 
   if (document.readyState === 'loading') {
