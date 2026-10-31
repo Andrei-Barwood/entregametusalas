@@ -1440,10 +1440,14 @@ Nmap done: 1 IP address (1 host up) scanned in 0.42 seconds`);
       </button>
     </div>
 
-    <div style="font-size: 0.72rem; color: var(--hud-glass-outline); display: flex; align-items: center; gap: 0.4rem;">
+    <div style="font-size: 0.72rem; color: var(--hud-glass-outline); display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
       <span id="feed-active-count-badge" class="hud-tag" style="color: var(--magic-pulse-core);">
         5 MENSAJES
       </span>
+      <button type="button" id="btn-feed-notifications" class="soc-btn feed-notif-btn" title="Activar notificaciones de nuevos mensajes" aria-label="Activar notificaciones del feed">
+        <span class="feed-notif-bell">🔔</span>
+        <span class="feed-notif-status">ACTIVAR NOTIFICACIONES</span>
+      </button>
       <span>• REACCIONES: 👍 👎 💝</span>
     </div>
   </section>

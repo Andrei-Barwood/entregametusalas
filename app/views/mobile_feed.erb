@@ -26,6 +26,9 @@
         <span class="hud-tag" style="background: rgba(48,255,0,0.15); border: 1px solid var(--magic-ring); color: var(--magic-highlight); font-size: 0.62rem; padding: 0.15rem 0.35rem;">
           🟢 P2P
         </span>
+        <button type="button" id="btn-feed-notifications-header" class="soc-btn feed-notif-btn" style="padding: 0.2rem 0.45rem; font-size: 0.75rem;" title="Activar notificaciones de nuevos mensajes" aria-label="Activar notificaciones del feed">
+          <span class="feed-notif-bell">🔔</span>
+        </button>
         <button type="button" id="btn-mobile-refresh" class="soc-btn" style="padding: 0.2rem 0.45rem; font-size: 0.75rem;" title="Refrescar feed">
           ↻
         </button>
@@ -101,11 +104,17 @@
 
     <!-- BARRA DE FILTROS MÓVIL -->
     <div class="mobile-filter-toolbar">
-      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.4rem;">
+      <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.4rem; flex-wrap: wrap; gap: 0.4rem;">
         <span style="font-size: 0.68rem; font-weight: 700; color: #FFFFFF;">FEED EN VIVO</span>
-        <span id="feed-active-count-badge" class="hud-tag" style="color: var(--magic-pulse-core); font-size: 0.62rem;">
-          <%= @posts.size %> MENSAJES
-        </span>
+        <div style="display: flex; align-items: center; gap: 0.35rem;">
+          <button type="button" id="btn-feed-notifications" class="soc-btn feed-notif-btn" style="font-size: 0.62rem; padding: 0.15rem 0.45rem;" title="Activar notificaciones de nuevos mensajes" aria-label="Activar notificaciones del feed">
+            <span class="feed-notif-bell">🔔</span>
+            <span class="feed-notif-status">ACTIVAR NOTIFICACIONES</span>
+          </button>
+          <span id="feed-active-count-badge" class="hud-tag" style="color: var(--magic-pulse-core); font-size: 0.62rem;">
+            <%= @posts.size %> MENSAJES
+          </span>
+        </div>
       </div>
       <div class="feed-filter-pills mobile-pills-scroll">
         <button type="button" class="soc-btn feed-filter-btn active" data-ep="all">TODOS</button>

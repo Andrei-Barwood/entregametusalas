@@ -44,7 +44,7 @@ entregametusalas/
 │   └── chrysalis_medsoc.css     # Tokens de diseño Queen Chrysalis #523, CRT scanlines, ECG
 │
 ├── js/
-│   ├── clinical_feed.js         # Lógica cliente del feed (polling, submit, merge, filtros)
+│   ├── clinical_feed.js         # Lógica cliente del feed (polling, submit, merge, filtros, notificaciones web/in-app/audio)
 │   ├── cyberia_console.js       # Control de consola SOC, ECG Canvas y redirecciones
 │   ├── sentinel_tactical_game.js# Minijuego táctico y lógica EDR Aegis9
 │   └── simulators_hud.js        # Lógica interactiva de los simuladores

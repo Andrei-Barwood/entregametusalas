@@ -12,6 +12,262 @@
   var currentFilterEpisode = 'all';
   var pollInterval = null;
   var isSubmitting = false;
+  var audioCtx = null;
+  var notificationsEnabled = false;
+  var knownPostIds = {};
+  var isFirstFetch = true;
+  var myRecentPostIds = {};
+  var originalDocumentTitle = typeof document !== 'undefined' ? document.title : '';
+  var unreadCount = 0;
+
+  function playNotificationSound() {
+    try {
+      var AudioContext = window.AudioContext || window.webkitAudioContext;
+      if (!AudioContext) return;
+      if (!audioCtx) audioCtx = new AudioContext();
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      var now = audioCtx.currentTime;
+      var osc = audioCtx.createOscillator();
+      var gain = audioCtx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(880, now);
+      osc.frequency.exponentialRampToValueAtTime(1320, now + 0.12);
+      gain.gain.setValueAtTime(0.12, now);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.35);
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.start(now);
+      osc.stop(now + 0.35);
+    } catch (_) {}
+  }
+
+  function isNotificationsEnabled() {
+    try {
+      return localStorage.getItem('cyberia_feed_notifications_enabled') === 'true';
+    } catch (e) {
+      return false;
+    }
+  }
+
+  function setNotificationsEnabled(enabled) {
+    notificationsEnabled = !!enabled;
+    try {
+      localStorage.setItem('cyberia_feed_notifications_enabled', notificationsEnabled ? 'true' : 'false');
+    } catch (e) {}
+    updateNotificationButtonsUI();
+  }
+
+  function updateNotificationButtonsUI() {
+    var buttons = document.querySelectorAll('.feed-notif-btn, #btn-feed-notifications, #btn-feed-notifications-header');
+    buttons.forEach(function (btn) {
+      var statusSpan = btn.querySelector('.feed-notif-status');
+      var bellSpan = btn.querySelector('.feed-notif-bell');
+
+      if (notificationsEnabled) {
+        btn.classList.add('notif-active');
+        if (bellSpan) bellSpan.textContent = '🔔';
+        if (statusSpan) {
+          statusSpan.textContent = 'NOTIFICACIONES: ACTIVAS';
+        } else if (!bellSpan) {
+          btn.textContent = '🔔 NOTIFICACIONES: ACTIVAS';
+        }
+        btn.setAttribute('title', 'Notificaciones activadas (Click para desactivar)');
+        btn.setAttribute('aria-pressed', 'true');
+      } else {
+        btn.classList.remove('notif-active');
+        if (bellSpan) bellSpan.textContent = '🔔';
+        if (statusSpan) {
+          statusSpan.textContent = 'ACTIVAR NOTIFICACIONES';
+        } else if (!bellSpan) {
+          btn.textContent = '🔔 ACTIVAR NOTIFICACIONES';
+        }
+        btn.setAttribute('title', 'Activar notificaciones de nuevos mensajes');
+        btn.setAttribute('aria-pressed', 'false');
+      }
+    });
+  }
+
+  function showToastAlert(title, message, postId) {
+    if (typeof document === 'undefined') return;
+    var container = document.getElementById('feed-notification-toast-container');
+    if (!container) {
+      container = document.createElement('div');
+      container.id = 'feed-notification-toast-container';
+      document.body.appendChild(container);
+    }
+
+    var toast = document.createElement('div');
+    toast.className = 'feed-toast-card';
+    if (postId) {
+      toast.setAttribute('data-target-post-id', postId);
+    }
+
+    toast.innerHTML = [
+      '<div class="feed-toast-header">',
+      '  <span class="feed-toast-title">📡 ' + escapeHtml(title) + '</span>',
+      '  <button type="button" class="feed-toast-close" aria-label="Cerrar notificación">&times;</button>',
+      '</div>',
+      '<div class="feed-toast-body">' + escapeHtml(message) + '</div>'
+    ].join('\n');
+
+    var closeBtn = toast.querySelector('.feed-toast-close');
+    var dismissTimeout = null;
+
+    function dismissToast() {
+      if (dismissTimeout) clearTimeout(dismissTimeout);
+      toast.classList.add('feed-toast-hiding');
+      setTimeout(function () {
+        if (toast.parentNode) toast.parentNode.removeChild(toast);
+      }, 300);
+    }
+
+    if (closeBtn) {
+      closeBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        dismissToast();
+      });
+    }
+
+    toast.addEventListener('click', function () {
+      if (postId) {
+        var postEl = document.querySelector('[data-post-id="' + postId + '"]');
+        if (postEl) {
+          postEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          postEl.style.transition = 'box-shadow 0.4s ease, border-color 0.4s ease';
+          postEl.style.borderColor = 'var(--magic-ring, #30FF00)';
+          postEl.style.boxShadow = '0 0 16px var(--magic-ring, #30FF00)';
+          setTimeout(function () {
+            postEl.style.borderColor = '';
+            postEl.style.boxShadow = '';
+          }, 2500);
+        }
+      }
+      dismissToast();
+    });
+
+    container.appendChild(toast);
+    dismissTimeout = setTimeout(dismissToast, 6000);
+  }
+
+  function handlePermission(perm) {
+    if (perm === 'granted') {
+      setNotificationsEnabled(true);
+      playNotificationSound();
+      showToastAlert('NOTIFICACIONES ACTIVADAS', 'Recibirás avisos en tiempo real cuando ingresen nuevos mensajes al feed.');
+      try {
+        new Notification('CYBERIA // SOC NetAcad', {
+          body: '✓ Alertas del muro activadas. Recibirás avisos cuando haya nuevos mensajes.',
+          tag: 'cyberia-notif-test'
+        });
+      } catch (_) {}
+    } else {
+      setNotificationsEnabled(true);
+      playNotificationSound();
+      showToastAlert('NOTIFICACIONES IN-APP ACTIVAS', 'Permiso del sistema no concedido. Se activaron alertas sonoras y visuales en pantalla.');
+    }
+  }
+
+  function toggleNotifications() {
+    if (notificationsEnabled) {
+      setNotificationsEnabled(false);
+      showToastAlert('NOTIFICACIONES DESACTIVADAS', 'Ya no recibirás alertas de nuevos comentarios del feed.');
+      return;
+    }
+
+    // Activar notificaciones
+    if ('Notification' in window) {
+      if (Notification.permission === 'granted') {
+        setNotificationsEnabled(true);
+        playNotificationSound();
+        showToastAlert('NOTIFICACIONES ACTIVADAS', 'Recibirás avisos en tiempo real cuando ingresen nuevos mensajes al feed.');
+        try {
+          new Notification('CYBERIA // SOC NetAcad', {
+            body: '✓ Alertas del muro activadas. Recibirás avisos cuando haya nuevos mensajes.',
+            tag: 'cyberia-notif-test'
+          });
+        } catch (_) {}
+      } else if (Notification.permission === 'denied') {
+        setNotificationsEnabled(true);
+        playNotificationSound();
+        showToastAlert('NOTIFICACIONES IN-APP ACTIVAS', 'Las notificaciones del sistema están bloqueadas en tu navegador. Se activaron alertas sonoras y visuales en pantalla.');
+      } else {
+        var requestPromise;
+        try {
+          requestPromise = Notification.requestPermission();
+        } catch (err) {
+          Notification.requestPermission(function (perm) {
+            handlePermission(perm);
+          });
+          return;
+        }
+
+        if (requestPromise && typeof requestPromise.then === 'function') {
+          requestPromise.then(function (perm) {
+            handlePermission(perm);
+          }).catch(function () {
+            handlePermission('default');
+          });
+        }
+      }
+    } else {
+      setNotificationsEnabled(true);
+      playNotificationSound();
+      showToastAlert('ALERTAS IN-APP ACTIVADAS', 'Tu navegador no soporta Web Notifications nativas; se emitirán avisos visuales y sonoros.');
+    }
+  }
+
+  function notifyIncomingPosts(newPosts) {
+    if (!notificationsEnabled || !newPosts || newPosts.length === 0) return;
+
+    playNotificationSound();
+
+    var firstPost = newPosts[0];
+    var author = firstPost.author || 'Cadete_NetAcad';
+    var epTag = firstPost.episode_id ? ' [EP' + (firstPost.episode_id < 10 ? '0' + firstPost.episode_id : firstPost.episode_id) + ']' : '';
+    var preview = firstPost.content ? (firstPost.content.length > 110 ? firstPost.content.slice(0, 110) + '…' : firstPost.content) : '';
+
+    var toastTitle = newPosts.length === 1
+      ? 'NUEVO MENSAJE DE ' + author.toUpperCase()
+      : newPosts.length + ' NUEVOS MENSAJES EN EL FEED';
+    var toastBody = newPosts.length === 1
+      ? (epTag ? epTag + ' ' : '') + preview
+      : 'Último de ' + author + ': "' + preview + '"';
+
+    showToastAlert(toastTitle, toastBody, firstPost.id);
+
+    // Notificación nativa del navegador
+    if ('Notification' in window && Notification.permission === 'granted') {
+      try {
+        var notifTitle = newPosts.length === 1
+          ? 'CYBERIA // Nuevo mensaje de ' + author + epTag
+          : 'CYBERIA // ' + newPosts.length + ' nuevos mensajes en el feed';
+        var notifBody = newPosts.length === 1
+          ? preview
+          : 'Comentarios recibidos en el muro clínico.';
+
+        var notif = new Notification(notifTitle, {
+          body: notifBody,
+          tag: 'cyberia-feed-incoming-' + firstPost.id
+        });
+        notif.onclick = function () {
+          window.focus();
+          var postEl = document.querySelector('[data-post-id="' + firstPost.id + '"]');
+          if (postEl) {
+            postEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+          this.close();
+        };
+      } catch (_) {}
+    }
+
+    // Insignia en el título de la pestaña si está en segundo plano
+    if (document.hidden) {
+      unreadCount += newPosts.length;
+      document.title = '(' + unreadCount + ') ' + originalDocumentTitle;
+    }
+  }
 
   function escapeHtml(str) {
     if (!str) return '';
@@ -215,6 +471,30 @@
           updateStorageStatsBadge(data.storage_stats);
 
           var allPosts = mergeLocalAndRemotePosts(data.posts || []);
+
+          // Detección de nuevos mensajes para disparar notificaciones
+          if (isFirstFetch) {
+            for (var k = 0; k < allPosts.length; k++) {
+              if (allPosts[k] && allPosts[k].id) {
+                knownPostIds[allPosts[k].id] = true;
+              }
+            }
+            isFirstFetch = false;
+          } else {
+            var incomingPosts = [];
+            for (var m = 0; m < allPosts.length; m++) {
+              var pid = allPosts[m] ? allPosts[m].id : null;
+              if (pid && !knownPostIds[pid]) {
+                knownPostIds[pid] = true;
+                if (!myRecentPostIds[pid]) {
+                  incomingPosts.push(allPosts[m]);
+                }
+              }
+            }
+            if (incomingPosts.length > 0) {
+              notifyIncomingPosts(incomingPosts);
+            }
+          }
           if (currentFilterEpisode && currentFilterEpisode !== 'all') {
             var targetEp = parseInt(currentFilterEpisode, 10);
             allPosts = allPosts.filter(function (p) {
@@ -358,7 +638,12 @@
 
         if (result.ok && result.data.status === 'created') {
           if (result.data.post) {
-            saveLocalUserPost(result.data.post);
+            var createdPost = result.data.post;
+            if (createdPost.id) {
+              myRecentPostIds[createdPost.id] = Date.now();
+              knownPostIds[createdPost.id] = true;
+            }
+            saveLocalUserPost(createdPost);
           }
           contentTextarea.value = '';
           updateCharCounter();
@@ -517,6 +802,27 @@
       });
     });
 
+    // Inicializar estado y botones de notificación
+    notificationsEnabled = isNotificationsEnabled();
+    updateNotificationButtonsUI();
+
+    // Delegación de click para botones de notificación
+    document.addEventListener('click', function (e) {
+      var notifBtn = e.target.closest('.feed-notif-btn, #btn-feed-notifications, #btn-feed-notifications-header');
+      if (notifBtn) {
+        e.preventDefault();
+        toggleNotifications();
+      }
+    });
+
+    // Limpiar contador en título al enfocar la pestaña
+    window.addEventListener('focus', function () {
+      unreadCount = 0;
+      if (originalDocumentTitle) {
+        document.title = originalDocumentTitle;
+      }
+    });
+
     // Cargar posts iniciales
     fetchPosts(false);
 
@@ -536,7 +842,12 @@
   window.CyberiaClinicalFeed = {
     init: initFeed,
     fetchPosts: fetchPosts,
-    setEpisodeFilter: setEpisodeFilter
+    setEpisodeFilter: setEpisodeFilter,
+    toggleNotifications: toggleNotifications,
+    setNotificationsEnabled: setNotificationsEnabled,
+    isNotificationsEnabled: isNotificationsEnabled,
+    notifyIncomingPosts: notifyIncomingPosts,
+    playNotificationSound: playNotificationSound
   };
 
   if (document.readyState === 'loading') {

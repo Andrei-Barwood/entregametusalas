@@ -630,6 +630,46 @@ RSpec.describe 'CYBERIA-MED // SOC Console v19.96 — Complete Verification Suit
       expect(css).to include('feed-react-like')
       expect(css).to include('feed-react-dislike')
       expect(css).to include('nav-btn-feed')
+      expect(css).to include('feed-notif-btn')
+      expect(css).to include('notif-active')
+      expect(css).to include('feed-notification-toast-container')
+    end
+
+    it 'incluye botón interactivo para activar notificaciones de nuevos mensajes del feed en escritorio y móvil' do
+      # Comprobar en /muro
+      get '/muro'
+      expect(last_response.status).to eq(200)
+      muro_body = last_response.body.force_encoding('UTF-8')
+      expect(muro_body).to include('id="btn-feed-notifications"')
+      expect(muro_body).to include('feed-notif-btn')
+      expect(muro_body).to include('ACTIVAR NOTIFICACIONES')
+
+      # Comprobar en la consola principal /
+      get '/'
+      expect(last_response.status).to eq(200)
+      index_body = last_response.body.force_encoding('UTF-8')
+      expect(index_body).to include('id="btn-feed-notifications"')
+      expect(index_body).to include('feed-notif-btn')
+      expect(index_body).to include('ACTIVAR NOTIFICACIONES')
+
+      # Comprobar en /mobile
+      get '/mobile'
+      expect(last_response.status).to eq(200)
+      mobile_body = last_response.body.force_encoding('UTF-8')
+      expect(mobile_body).to include('feed-notif-btn')
+      expect(mobile_body).to include('btn-feed-notifications')
+      expect(mobile_body).to include('btn-feed-notifications-header')
+
+      # Comprobar lógica en el cliente JavaScript
+      get '/js/clinical_feed.js'
+      expect(last_response.status).to eq(200)
+      js_code = last_response.body.force_encoding('UTF-8')
+      expect(js_code).to include('toggleNotifications')
+      expect(js_code).to include('cyberia_feed_notifications_enabled')
+      expect(js_code).to include('notifyIncomingPosts')
+      expect(js_code).to include('playNotificationSound')
+      expect(js_code).to include('Notification.requestPermission')
+      expect(js_code).to include('feed-toast-card')
     end
   end
 
