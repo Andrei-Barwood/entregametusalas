@@ -1134,5 +1134,19 @@ RSpec.describe 'CYBERIA-MED // SOC Console v19.96 — Complete Verification Suit
       expect(last_response.status).to eq(200)
       expect(last_response.body.force_encoding('UTF-8')).to include('id="feed_security_token_hp"')
     end
+
+    it 'permite eliminar publicaciones y purgar spam específico mediante DELETE /api/feed/:id' do
+      post = WallPost.create(
+        author: 'Cadete_Para_Borrar',
+        content: 'Este mensaje debe poder ser eliminado'
+      )
+      expect(WallPost.find(post.id)).not_to be_nil
+
+      delete "/api/feed/#{post.id}"
+      expect(last_response.status).to eq(200)
+      data = JSON.parse(last_response.body)
+      expect(data['status']).to eq('ok')
+      expect(WallPost.find(post.id)).to be_nil
+    end
   end
 end

@@ -122,6 +122,22 @@ class ApplicationController < Sinatra::Base
         halt 500, json_response({ status: 'error', error: "Error al registrar reacción: #{e.message}" }, 500)
       end
     end
+
+    # Eliminar una publicación por ID
+    delete '/:id' do
+      post_id = params[:id]
+      deleted = WallPost.delete(post_id)
+      if deleted
+        json_response({
+          status: 'ok',
+          message: "Publicación '#{post_id}' eliminada con éxito",
+          storage_stats: WallPost.storage_stats
+        })
+      else
+        status 404
+        json_response({ status: 'not_found', error: "Publicación con ID '#{post_id}' no encontrada" }, 404)
+      end
+    end
   end
 
   # Proxy seguro para oEmbed de SoundCloud y reproductores externos

@@ -78,6 +78,61 @@ const SEED_FEED_POSTS = [
   }
 ];
 
+// ==============================================================================
+// AEGIS-9 SENTINEL // CLOUDFLARE WORKER ANTI-SPAM FILTER & BLACKLIST
+// ==============================================================================
+const SPAM_BLACKLIST_IOCS = [
+  'feedbackformeu',
+  '375259112693',
+  '+375259112693',
+  't.me/feedbackformeu',
+  'wa.me/375259112693'
+];
+
+const SPAM_PATTERNS = [
+  { id: 'BELARUS_BOTNET_CONTACT', regex: /(?:t\.me\/feedbackformeu|wa\.me\/375259112693|wa\.me\/375\d{8,9}|375259112693)/i, reason: 'Contacto de botnet de spam masivo (Bielorrusia / FeedbackFormEU)' },
+  { id: 'CONTACT_FORM_SPAM_PITCH', regex: /submitted\s+through\s+a\s+contact\s+form(?:\s+intended\s+for\s+messages)?/i, reason: 'Oferta comercial de inyección automatizada en formularios' },
+  { id: 'LAWFUL_BUSINESS_MESSAGES', regex: /send\s+business\s+messages\s+in\s+a\s+lawful\s+way/i, reason: 'Frase de bot de contacto masivo' },
+  { id: 'NO_PERSONAL_DATA_CLAIM', regex: /submitted\s+without\s+using\s+recipient\s+personal\s+data/i, reason: 'Patrón de spam que simula cumplimiento de privacidad' },
+  { id: 'SPAM_FILTER_BYPASS_PITCH', regex: /reduce\s+the\s+chance\s+of\s+spam\s+filtering/i, reason: 'Venta de servicio para evadir filtros de spam' },
+  { id: 'BULK_MESSAGES_PRICING', regex: /(?:cost\s+of\s+sending|sending)\s+(?:one|\d+)?\s*million\s+messages\s+is\s*\$?\d+/i, reason: 'Tarifario de spam masivo comercial (millones de mensajes)' },
+  { id: 'FREE_TRIAL_MESSAGES', regex: /free\s+trial\s+(?:is\s+available|includes)\s+up\s+to\s+\d+[\d,]*\s*messages/i, reason: 'Oferta de prueba de envío de mensajes masivos' },
+  { id: 'DUAL_CHANNEL_SOLICITATION', regex: /reach\s+us\s+on\s+(?:telegram|whatsapp)\s+or\s+(?:telegram|whatsapp)/i, reason: 'Captación de clientes vía Telegram / WhatsApp' },
+  { id: 'TELEGRAM_WHATSAPP_SPAM_LINKS', regex: /(?:telegram\s*[-:]\s*t\.me\/[a-z0-9_]+)[\s\S]{0,100}(?:whatsapp\s*[-:]\s*wa\.me\/\d+)/i, reason: 'Combinación cruzada de enlaces t.me y wa.me de spam comercial' },
+  { id: 'FORM_SUBMITTER_TOOLS', regex: /(?:xrumer|scrapebox|gsa\s+search\s+engine|contact\s+form\s+(?:submitter|blaster|spammer|marketing)|mass\s+form\s+submission)/i, reason: 'Herramientas de spam masivo a formularios' },
+  { id: 'BULK_MESSAGING_SERVICES', regex: /(?:send\s+bulk\s+messages|blast\s+your\s+message|bulk\s+whatsapp\s+marketing|bulk\s+telegram\s+messages)/i, reason: 'Venta de mensajería masiva no solicitada' },
+  { id: 'UNAUTHORIZED_COMMERCIAL_SCAM', regex: /(?:buy\s+cheap\s+viagra|cialis\s+without\s+prescription|online\s+casino\s+bonus|earn\s+\$\d+\s+daily\s+crypto)/i, reason: 'Publicidad engañosa o comercial no autorizada' }
+];
+
+function evaluateAntiSpam(content, author, honeypot) {
+  if (honeypot && honeypot.toString().trim().length > 0) {
+    return { isSpam: true, rule: 'AEGIS9_HONEYPOT_TRIGGERED', reason: 'Campo honeypot trampa completado por bot automatizado' };
+  }
+  const normAuthor = (author || '').toString().replace(/[\u200B-\u200D\uFEFF]/g, '').toLowerCase().replace(/\s+/g, ' ').trim();
+  if (normAuthor && /(?:https?:\/\/|t\.me\/|wa\.me\/|feedbackform|\.com|\.ru|\.eu)/i.test(normAuthor)) {
+    return { isSpam: true, rule: 'AEGIS9_AUTHOR_BLACKLIST', reason: 'Alias de autor con enlaces o identificador de botnet' };
+  }
+  const normContent = (content || '').toString().replace(/[\u200B-\u200D\uFEFF]/g, '').toLowerCase().replace(/\s+/g, ' ').replace(/\s*\.\s*/g, '.').trim();
+  for (const ioc of SPAM_BLACKLIST_IOCS) {
+    if (normContent.includes(ioc)) {
+      return { isSpam: true, rule: 'AEGIS9_IOC_BLACKLIST', reason: 'Contiene indicador de compromiso bloqueado: ' + ioc };
+    }
+  }
+  for (const p of SPAM_PATTERNS) {
+    if (p.regex.test(content) || p.regex.test(normContent)) {
+      return { isSpam: true, rule: p.id, reason: p.reason };
+    }
+  }
+  if (normContent.includes('t.me/') || normContent.includes('wa.me/') || normContent.includes('telegram') || normContent.includes('whatsapp')) {
+    const commercialTerms = ['million messages', 'free trial', 'cost of', 'dollar', '$59', '$', 'business messages', 'contact form'];
+    const matched = commercialTerms.filter(t => normContent.includes(t));
+    if (matched.length >= 2) {
+      return { isSpam: true, rule: 'AEGIS9_COMMERCIAL_MESSAGING_COMBO', reason: 'Combinación de mensajería externa con términos comerciales (' + matched.join(', ') + ')' };
+    }
+  }
+  return { isSpam: false };
+}
+
 let feedPosts = [...SEED_FEED_POSTS];
 const FEED_KV_KEY = 'clinical_wall_posts_v1';
 
@@ -86,7 +141,21 @@ async function loadFeedPosts(env) {
     try {
       const data = await env.FEED_KV.get(FEED_KV_KEY, { type: 'json' });
       if (Array.isArray(data) && data.length > 0) {
-        feedPosts = data;
+        // Purga determinista en tiempo real de cualquier post malicioso / spam residual en KV
+        const cleanPosts = data.filter(p => {
+          if (!p || !p.content) return false;
+          if (p.id === 'post_1793545827_98cdb250') return false;
+          const check = evaluateAntiSpam(p.content, p.author, null);
+          return !check.isSpam;
+        });
+
+        if (cleanPosts.length !== data.length) {
+          feedPosts = cleanPosts;
+          await env.FEED_KV.put(FEED_KV_KEY, JSON.stringify(cleanPosts));
+          console.log(`[AEGIS-9 SENTINEL] Purga completada en KV: ${data.length - cleanPosts.length} posts maliciosos eliminados permanentemente.`);
+        } else {
+          feedPosts = cleanPosts;
+        }
         return feedPosts;
       } else {
         // Inicializar KV con las semillas si está vacío
@@ -153,61 +222,6 @@ function calculateStorageStats() {
   };
 }
 
-// ==============================================================================
-// AEGIS-9 SENTINEL // CLOUDFLARE WORKER ANTI-SPAM FILTER & BLACKLIST
-// ==============================================================================
-const SPAM_BLACKLIST_IOCS = [
-  'feedbackformeu',
-  '375259112693',
-  '+375259112693',
-  't.me/feedbackformeu',
-  'wa.me/375259112693'
-];
-
-const SPAM_PATTERNS = [
-  { id: 'BELARUS_BOTNET_CONTACT', regex: /(?:t\.me\/feedbackformeu|wa\.me\/375259112693|wa\.me\/375\d{8,9}|375259112693)/i, reason: 'Contacto de botnet de spam masivo (Bielorrusia / FeedbackFormEU)' },
-  { id: 'CONTACT_FORM_SPAM_PITCH', regex: /submitted\s+through\s+a\s+contact\s+form(?:\s+intended\s+for\s+messages)?/i, reason: 'Oferta comercial de inyección automatizada en formularios' },
-  { id: 'LAWFUL_BUSINESS_MESSAGES', regex: /send\s+business\s+messages\s+in\s+a\s+lawful\s+way/i, reason: 'Frase de bot de contacto masivo' },
-  { id: 'NO_PERSONAL_DATA_CLAIM', regex: /submitted\s+without\s+using\s+recipient\s+personal\s+data/i, reason: 'Patrón de spam que simula cumplimiento de privacidad' },
-  { id: 'SPAM_FILTER_BYPASS_PITCH', regex: /reduce\s+the\s+chance\s+of\s+spam\s+filtering/i, reason: 'Venta de servicio para evadir filtros de spam' },
-  { id: 'BULK_MESSAGES_PRICING', regex: /(?:cost\s+of\s+sending|sending)\s+(?:one|\d+)?\s*million\s+messages\s+is\s*\$?\d+/i, reason: 'Tarifario de spam masivo comercial (millones de mensajes)' },
-  { id: 'FREE_TRIAL_MESSAGES', regex: /free\s+trial\s+(?:is\s+available|includes)\s+up\s+to\s+\d+[\d,]*\s*messages/i, reason: 'Oferta de prueba de envío de mensajes masivos' },
-  { id: 'DUAL_CHANNEL_SOLICITATION', regex: /reach\s+us\s+on\s+(?:telegram|whatsapp)\s+or\s+(?:telegram|whatsapp)/i, reason: 'Captación de clientes vía Telegram / WhatsApp' },
-  { id: 'TELEGRAM_WHATSAPP_SPAM_LINKS', regex: /(?:telegram\s*[-:]\s*t\.me\/[a-z0-9_]+)[\s\S]{0,100}(?:whatsapp\s*[-:]\s*wa\.me\/\d+)/i, reason: 'Combinación cruzada de enlaces t.me y wa.me de spam comercial' },
-  { id: 'FORM_SUBMITTER_TOOLS', regex: /(?:xrumer|scrapebox|gsa\s+search\s+engine|contact\s+form\s+(?:submitter|blaster|spammer|marketing)|mass\s+form\s+submission)/i, reason: 'Herramientas de spam masivo a formularios' },
-  { id: 'BULK_MESSAGING_SERVICES', regex: /(?:send\s+bulk\s+messages|blast\s+your\s+message|bulk\s+whatsapp\s+marketing|bulk\s+telegram\s+messages)/i, reason: 'Venta de mensajería masiva no solicitada' },
-  { id: 'UNAUTHORIZED_COMMERCIAL_SCAM', regex: /(?:buy\s+cheap\s+viagra|cialis\s+without\s+prescription|online\s+casino\s+bonus|earn\s+\$\d+\s+daily\s+crypto)/i, reason: 'Publicidad engañosa o comercial no autorizada' }
-];
-
-function evaluateAntiSpam(content, author, honeypot) {
-  if (honeypot && honeypot.toString().trim().length > 0) {
-    return { isSpam: true, rule: 'AEGIS9_HONEYPOT_TRIGGERED', reason: 'Campo honeypot trampa completado por bot automatizado' };
-  }
-  const normAuthor = (author || '').toString().replace(/[\u200B-\u200D\uFEFF]/g, '').toLowerCase().replace(/\s+/g, ' ').trim();
-  if (normAuthor && /(?:https?:\/\/|t\.me\/|wa\.me\/|feedbackform|\.com|\.ru|\.eu)/i.test(normAuthor)) {
-    return { isSpam: true, rule: 'AEGIS9_AUTHOR_BLACKLIST', reason: 'Alias de autor con enlaces o identificador de botnet' };
-  }
-  const normContent = (content || '').toString().replace(/[\u200B-\u200D\uFEFF]/g, '').toLowerCase().replace(/\s+/g, ' ').replace(/\s*\.\s*/g, '.').trim();
-  for (const ioc of SPAM_BLACKLIST_IOCS) {
-    if (normContent.includes(ioc)) {
-      return { isSpam: true, rule: 'AEGIS9_IOC_BLACKLIST', reason: 'Contiene indicador de compromiso bloqueado: ' + ioc };
-    }
-  }
-  for (const p of SPAM_PATTERNS) {
-    if (p.regex.test(content) || p.regex.test(normContent)) {
-      return { isSpam: true, rule: p.id, reason: p.reason };
-    }
-  }
-  if (normContent.includes('t.me/') || normContent.includes('wa.me/') || normContent.includes('telegram') || normContent.includes('whatsapp')) {
-    const commercialTerms = ['million messages', 'free trial', 'cost of', 'dollar', '$59', '$', 'business messages', 'contact form'];
-    const matched = commercialTerms.filter(t => normContent.includes(t));
-    if (matched.length >= 2) {
-      return { isSpam: true, rule: 'AEGIS9_COMMERCIAL_MESSAGING_COMBO', reason: 'Combinación de mensajería externa con términos comerciales (' + matched.join(', ') + ')' };
-    }
-  }
-  return { isSpam: false };
-}
-
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
@@ -240,7 +254,11 @@ export default {
 
       if (method === 'GET') {
         const epFilter = url.searchParams.get('episode_id');
-        let filtered = [...feedPosts];
+        let filtered = [...feedPosts].filter(p => {
+          if (!p || !p.content) return false;
+          if (p.id === 'post_1793545827_98cdb250') return false;
+          return !evaluateAntiSpam(p.content, p.author, null).isSpam;
+        });
         if (epFilter && epFilter !== 'all') {
           const targetEp = parseInt(epFilter, 10);
           filtered = filtered.filter(p => p.episode_id === targetEp);
@@ -321,6 +339,28 @@ export default {
         } catch (err) {
           return jsonResponse({ status: 'error', error: err.message }, 500);
         }
+      }
+    }
+
+    // -------------------------------------------------------------
+    // DELETE /api/feed/:id — Purga administrativa o eliminación de comentarios
+    // -------------------------------------------------------------
+    const deleteMatch = url.pathname.match(/^\/api\/feed\/([^\/]+)$/);
+    if (deleteMatch && (method === 'DELETE' || (method === 'POST' && (url.searchParams.get('_method') === 'DELETE' || url.searchParams.get('action') === 'delete')))) {
+      await loadFeedPosts(env);
+      const targetId = deleteMatch[1];
+      const initialCount = feedPosts.length;
+      feedPosts = feedPosts.filter(p => p.id !== targetId);
+      if (feedPosts.length !== initialCount) {
+        await saveFeedPosts(env, feedPosts);
+        return jsonResponse({
+          status: 'ok',
+          message: `Publicación '${targetId}' eliminada exitosamente del muro`,
+          total_posts: feedPosts.length,
+          storage_stats: calculateStorageStats()
+        });
+      } else {
+        return jsonResponse({ status: 'not_found', error: `Publicación con ID '${targetId}' no encontrada` }, 404);
       }
     }
 

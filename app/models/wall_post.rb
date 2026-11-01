@@ -215,6 +215,46 @@ class WallPost
       target_post
     end
 
+    def delete(id)
+      ensure_storage_ready!
+      target_id = id.to_s
+      deleted = false
+      retained_lines = []
+
+      File.open(file_path, File::RDWR | File::CREAT, 0o644) do |file|
+        file.flock(File::LOCK_EX)
+        file.rewind
+        lines = file.readlines
+
+        lines.each do |line|
+          stripped = line.strip
+          next if stripped.empty?
+
+          begin
+            data = JSON.parse(stripped)
+            if data['id'] == target_id
+              deleted = true
+            else
+              retained_lines << stripped
+            end
+          rescue JSON::ParserError
+            retained_lines << stripped
+          end
+        end
+
+        if deleted
+          file.rewind
+          file.truncate(0)
+          retained_lines.each { |l| file.puts(l) }
+          file.flush
+        end
+
+        file.flock(File::LOCK_UN)
+      end
+
+      deleted
+    end
+
     def storage_stats
       ensure_storage_ready!
       bytes = File.exist?(file_path) ? File.size(file_path) : 0
