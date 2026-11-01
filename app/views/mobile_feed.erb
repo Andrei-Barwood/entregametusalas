@@ -64,7 +64,18 @@
   <main class="mobile-feed-main">
     <!-- CAJA DE TEXTO MÓVIL (SOLO TIPIAR Y PUBLICAR EN EL FEED) -->
     <section class="mobile-compose-card" aria-label="Publicar comentario en el feed">
+      <% if @error %>
+        <div class="feed-alert-box" style="display: block; margin-bottom: 0.65rem; color: #FF4444; border: 1px solid #FF4444; padding: 0.5rem; font-size: 0.75rem; background: rgba(255, 68, 68, 0.1);">
+          <%= @error %>
+        </div>
+      <% end %>
       <form id="feed-post-form" action="/mobile" method="POST">
+        <!-- Trampa Honeypot Anti-Bot (invisible para humanos, trampa para bots de spam) -->
+        <div style="display:none !important; visibility:hidden !important; position:absolute; left:-9999px; width:0; height:0; overflow:hidden;" aria-hidden="true">
+          <label for="feed_security_token_hp">Verification token (leave blank)</label>
+          <input type="text" id="feed_security_token_hp" name="website_url_hp" tabindex="-1" autocomplete="off" value="">
+        </div>
+
         <div class="mobile-input-grid">
           <div>
             <label for="feed-author-input" class="feed-label" style="font-size: 0.62rem;">TU ALIAS / DISTINTIVO:</label>

@@ -153,6 +153,61 @@ function calculateStorageStats() {
   };
 }
 
+// ==============================================================================
+// AEGIS-9 SENTINEL // CLOUDFLARE WORKER ANTI-SPAM FILTER & BLACKLIST
+// ==============================================================================
+const SPAM_BLACKLIST_IOCS = [
+  'feedbackformeu',
+  '375259112693',
+  '+375259112693',
+  't.me/feedbackformeu',
+  'wa.me/375259112693'
+];
+
+const SPAM_PATTERNS = [
+  { id: 'BELARUS_BOTNET_CONTACT', regex: /(?:t\.me\/feedbackformeu|wa\.me\/375259112693|wa\.me\/375\d{8,9}|375259112693)/i, reason: 'Contacto de botnet de spam masivo (Bielorrusia / FeedbackFormEU)' },
+  { id: 'CONTACT_FORM_SPAM_PITCH', regex: /submitted\s+through\s+a\s+contact\s+form(?:\s+intended\s+for\s+messages)?/i, reason: 'Oferta comercial de inyección automatizada en formularios' },
+  { id: 'LAWFUL_BUSINESS_MESSAGES', regex: /send\s+business\s+messages\s+in\s+a\s+lawful\s+way/i, reason: 'Frase de bot de contacto masivo' },
+  { id: 'NO_PERSONAL_DATA_CLAIM', regex: /submitted\s+without\s+using\s+recipient\s+personal\s+data/i, reason: 'Patrón de spam que simula cumplimiento de privacidad' },
+  { id: 'SPAM_FILTER_BYPASS_PITCH', regex: /reduce\s+the\s+chance\s+of\s+spam\s+filtering/i, reason: 'Venta de servicio para evadir filtros de spam' },
+  { id: 'BULK_MESSAGES_PRICING', regex: /(?:cost\s+of\s+sending|sending)\s+(?:one|\d+)?\s*million\s+messages\s+is\s*\$?\d+/i, reason: 'Tarifario de spam masivo comercial (millones de mensajes)' },
+  { id: 'FREE_TRIAL_MESSAGES', regex: /free\s+trial\s+(?:is\s+available|includes)\s+up\s+to\s+\d+[\d,]*\s*messages/i, reason: 'Oferta de prueba de envío de mensajes masivos' },
+  { id: 'DUAL_CHANNEL_SOLICITATION', regex: /reach\s+us\s+on\s+(?:telegram|whatsapp)\s+or\s+(?:telegram|whatsapp)/i, reason: 'Captación de clientes vía Telegram / WhatsApp' },
+  { id: 'TELEGRAM_WHATSAPP_SPAM_LINKS', regex: /(?:telegram\s*[-:]\s*t\.me\/[a-z0-9_]+)[\s\S]{0,100}(?:whatsapp\s*[-:]\s*wa\.me\/\d+)/i, reason: 'Combinación cruzada de enlaces t.me y wa.me de spam comercial' },
+  { id: 'FORM_SUBMITTER_TOOLS', regex: /(?:xrumer|scrapebox|gsa\s+search\s+engine|contact\s+form\s+(?:submitter|blaster|spammer|marketing)|mass\s+form\s+submission)/i, reason: 'Herramientas de spam masivo a formularios' },
+  { id: 'BULK_MESSAGING_SERVICES', regex: /(?:send\s+bulk\s+messages|blast\s+your\s+message|bulk\s+whatsapp\s+marketing|bulk\s+telegram\s+messages)/i, reason: 'Venta de mensajería masiva no solicitada' },
+  { id: 'UNAUTHORIZED_COMMERCIAL_SCAM', regex: /(?:buy\s+cheap\s+viagra|cialis\s+without\s+prescription|online\s+casino\s+bonus|earn\s+\$\d+\s+daily\s+crypto)/i, reason: 'Publicidad engañosa o comercial no autorizada' }
+];
+
+function evaluateAntiSpam(content, author, honeypot) {
+  if (honeypot && honeypot.toString().trim().length > 0) {
+    return { isSpam: true, rule: 'AEGIS9_HONEYPOT_TRIGGERED', reason: 'Campo honeypot trampa completado por bot automatizado' };
+  }
+  const normAuthor = (author || '').toString().replace(/[\u200B-\u200D\uFEFF]/g, '').toLowerCase().replace(/\s+/g, ' ').trim();
+  if (normAuthor && /(?:https?:\/\/|t\.me\/|wa\.me\/|feedbackform|\.com|\.ru|\.eu)/i.test(normAuthor)) {
+    return { isSpam: true, rule: 'AEGIS9_AUTHOR_BLACKLIST', reason: 'Alias de autor con enlaces o identificador de botnet' };
+  }
+  const normContent = (content || '').toString().replace(/[\u200B-\u200D\uFEFF]/g, '').toLowerCase().replace(/\s+/g, ' ').replace(/\s*\.\s*/g, '.').trim();
+  for (const ioc of SPAM_BLACKLIST_IOCS) {
+    if (normContent.includes(ioc)) {
+      return { isSpam: true, rule: 'AEGIS9_IOC_BLACKLIST', reason: 'Contiene indicador de compromiso bloqueado: ' + ioc };
+    }
+  }
+  for (const p of SPAM_PATTERNS) {
+    if (p.regex.test(content) || p.regex.test(normContent)) {
+      return { isSpam: true, rule: p.id, reason: p.reason };
+    }
+  }
+  if (normContent.includes('t.me/') || normContent.includes('wa.me/') || normContent.includes('telegram') || normContent.includes('whatsapp')) {
+    const commercialTerms = ['million messages', 'free trial', 'cost of', 'dollar', '$59', '$', 'business messages', 'contact form'];
+    const matched = commercialTerms.filter(t => normContent.includes(t));
+    if (matched.length >= 2) {
+      return { isSpam: true, rule: 'AEGIS9_COMMERCIAL_MESSAGING_COMBO', reason: 'Combinación de mensajería externa con términos comerciales (' + matched.join(', ') + ')' };
+    }
+  }
+  return { isSpam: false };
+}
+
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
@@ -225,6 +280,19 @@ export default {
           }
 
           const author = (data.author || data.usuario || data.cadete || 'Cadete_NetAcad').toString().trim() || 'Cadete_NetAcad';
+          const honeypot = (data.website_url_hp || data.website || data.hp_email || '').toString().trim();
+
+          // Centinela Aegis-9 Edge: Inspección anti-spam y lista negra
+          const spamCheck = evaluateAntiSpam(rawContent, author, honeypot);
+          if (spamCheck.isSpam) {
+            return jsonResponse({
+              status: 'blocked',
+              error: `[AEGIS-9 SENTINEL] Comentario bloqueado por filtro anti-spam: ${spamCheck.reason}`,
+              rule: spamCheck.rule,
+              reason: spamCheck.reason
+            }, 403);
+          }
+
           const epId = data.episode_id ? parseInt(data.episode_id, 10) : null;
           const colors = ['#29C2DA', '#6CC929', '#A4FF8E', '#AEF504', '#E7F800', '#218595', '#409979'];
           const avatarColor = data.avatar_color || colors[Math.floor(Math.random() * colors.length)];

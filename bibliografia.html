@@ -4,6 +4,23 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CYBERIA-MED // SOC Console v19.96 — BLADES Neural &amp; IoMT Telemetry</title>
+
+  <!-- METADATOS OPEN GRAPH Y TWITTER (PREVISUALIZACIÓN EN WHATSAPP Y REDES SOCIALES) -->
+  <meta property="og:site_name" content="CYBERIA-MED // SOC Console v19.96">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://entregametusalas.uk/">
+  <meta property="og:title" content="CYBERIA-MED // SOC Console &amp; Muro Clínico Pod NetAcad">
+  <meta property="og:description" content="Instalación biotecnológica submarina Snocomm Lounge y consola de telemetría médica en tiempo real para 48 episodios clínicos y ciberseguridad hospitalaria.">
+  <meta property="og:image" content="https://entregametusalas.uk/img/underwater_lounge_habitat.jpg">
+  <meta property="og:image:secure_url" content="https://entregametusalas.uk/img/underwater_lounge_habitat.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1448">
+  <meta property="og:image:height" content="1086">
+  <meta property="og:image:alt" content="Cyberia Deep Habitat Lounge — Sala de Descanso y Meditación Submarina">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="CYBERIA-MED // SOC Console &amp; Muro Clínico Pod NetAcad">
+  <meta name="twitter:description" content="Instalación biotecnológica submarina Snocomm Lounge y consola de telemetría médica en tiempo real.">
+  <meta name="twitter:image" content="https://entregametusalas.uk/img/underwater_lounge_habitat.jpg">
   <link rel="stylesheet" href="/css/chrysalis_medsoc.css">
 </head>
 <body>
@@ -43,6 +60,9 @@
       <a href="/mobile" class="soc-btn nav-btn-mobile" style="border-color: var(--magic-ring); color: var(--magic-highlight);" title="Versión móvil optimizada exclusiva para el feed">
         [📱] MÓVIL
       </a>
+      <button type="button" id="btn-share-topbar-wa" class="soc-btn soc-btn-wa" title="Compartir consola y telemetría en WhatsApp">
+        <span class="share-wa-icon" aria-hidden="true">💬</span> COMPARTIR WA
+      </button>
     </nav>
   </header>
 
@@ -169,6 +189,9 @@
           <a href="#universal-48-methodology" class="soc-btn" style="font-size: 0.82rem; padding: 0.5rem 1rem; text-decoration: none;">
             🌐 PATRÓN UNIVERSAL EN LOS 48 NIVELES
           </a>
+          <button type="button" class="soc-btn soc-btn-wa btn-share-tutorial-wa" style="font-size: 0.82rem; padding: 0.5rem 1rem;" title="Compartir esta guía en WhatsApp">
+            <span class="share-wa-icon" aria-hidden="true">💬</span> COMPARTIR EN WHATSAPP
+          </button>
         </div>
       </section>
 
@@ -1678,6 +1701,70 @@ Nmap done: 1 IP address (1 host up) scanned in 0.42 seconds`);
   })();
 </script>
 
+
+  <!-- MODAL HUB PARA COMPARTIR EN WHATSAPP -->
+  <div id="cyberia-wa-modal" class="cyberia-modal-overlay" style="display: none;" aria-hidden="true" role="dialog" aria-label="Compartir en WhatsApp">
+    <div class="cyberia-modal-content">
+      <div class="cyberia-modal-header">
+        <div style="display: flex; align-items: center; gap: 0.5rem;">
+          <span style="font-size: 1.1rem;" aria-hidden="true">💬</span>
+          <strong style="color: #25D366; letter-spacing: 0.5px;">COMPARTIR EN WHATSAPP // CYBERIA HUB</strong>
+        </div>
+        <button type="button" class="cyberia-modal-close" aria-label="Cerrar ventana">&times;</button>
+      </div>
+      <div class="cyberia-modal-body">
+        <p style="font-size: 0.78rem; color: var(--hud-glass-outline); margin-top: 0; margin-bottom: 0.85rem;">
+          Selecciona la sección del Pod Clínico que deseas transmitir directamente a tus contactos o grupos de WhatsApp:
+        </p>
+        <div class="wa-share-grid">
+          <button type="button" class="wa-share-card-btn" data-share-target="console">
+            <div class="wa-share-card-icon">🌐</div>
+            <div class="wa-share-card-info">
+              <div class="wa-share-card-title">CONSOLA SOC PRINCIPAL</div>
+              <div class="wa-share-card-desc">Plataforma central interactiva y los 48 episodios clínicos</div>
+            </div>
+            <div class="wa-share-card-arrow">↗</div>
+          </button>
+
+          <button type="button" class="wa-share-card-btn" data-share-target="episode">
+            <div class="wa-share-card-icon">🎧</div>
+            <div class="wa-share-card-info">
+              <div class="wa-share-card-title">EPISODIO EN CURSO</div>
+              <div class="wa-share-card-desc">Telemetría, vulnerabilidad CVE y los 4 pilares del episodio activo</div>
+            </div>
+            <div class="wa-share-card-arrow">↗</div>
+          </button>
+
+          <button type="button" class="wa-share-card-btn" data-share-target="feed">
+            <div class="wa-share-card-icon">📡</div>
+            <div class="wa-share-card-info">
+              <div class="wa-share-card-title">MURO SOCIAL CLÍNICO</div>
+              <div class="wa-share-card-desc">Transmisión P2P en tiempo real de comentarios, hallazgos y debates</div>
+            </div>
+            <div class="wa-share-card-arrow">↗</div>
+          </button>
+
+          <button type="button" class="wa-share-card-btn" data-share-target="sentinel">
+            <div class="wa-share-card-icon">🛡️</div>
+            <div class="wa-share-card-info">
+              <div class="wa-share-card-title">SENTINEL AEGIS-9</div>
+              <div class="wa-share-card-desc">Misión táctica de mitigación, defensa hospitalaria y killchain</div>
+            </div>
+            <div class="wa-share-card-arrow">↗</div>
+          </button>
+
+          <button type="button" class="wa-share-card-btn" data-share-target="tutorial">
+            <div class="wa-share-card-icon">⚡</div>
+            <div class="wa-share-card-info">
+              <div class="wa-share-card-title">METODOLOGÍA 48 PASOS</div>
+              <div class="wa-share-card-desc">Guía clínica, seguridad de transformadores LIM y simuladores</div>
+            </div>
+            <div class="wa-share-card-arrow">↗</div>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <script src="/js/sentinel_tactical_game.js"></script>
   <script src="/js/cyberia_console.js"></script>

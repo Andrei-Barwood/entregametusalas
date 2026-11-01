@@ -2,6 +2,7 @@
 
 require_relative 'application_controller'
 require_relative '../models/wall_post'
+require_relative '../services/feed_anti_spam_sentinel'
 
 class ApplicationController < Sinatra::Base
   namespace '/api/feed' do
@@ -48,13 +49,17 @@ class ApplicationController < Sinatra::Base
                    payload['episodio'] || payload[:episodio]
 
       avatar_color = payload['avatar_color'] || payload[:avatar_color]
+      honeypot = payload['website_url_hp'] || payload[:website_url_hp] ||
+                 payload['website'] || payload[:website] ||
+                 payload['hp_email'] || payload[:hp_email]
 
       begin
         new_post = WallPost.create(
           author: author,
           content: content,
           episode_id: episode_id,
-          avatar_color: avatar_color
+          avatar_color: avatar_color,
+          website_url_hp: honeypot
         )
 
         status 201
@@ -64,6 +69,14 @@ class ApplicationController < Sinatra::Base
           post: new_post.to_h,
           storage_stats: WallPost.storage_stats
         }, 201)
+      rescue FeedAntiSpamSentinel::SpamDetectedError => e
+        status 403
+        json_response({
+          status: 'blocked',
+          error: e.message,
+          rule: e.rule,
+          reason: e.reason
+        }, 403)
       rescue ArgumentError => e
         status 422
         json_response({
@@ -153,9 +166,10 @@ class ApplicationController < Sinatra::Base
     author = payload['author'] || payload[:author] || 'Cadete_NetAcad'
     content = payload['content'] || payload[:content] || payload['comment'] || payload[:comment] || payload['comentario'] || payload[:comentario]
     episode_id = payload['episode_id'] || payload[:episode_id]
+    honeypot = payload['website_url_hp'] || payload[:website_url_hp] || payload['website'] || payload[:website]
 
     begin
-      WallPost.create(author: author, content: content, episode_id: episode_id)
+      WallPost.create(author: author, content: content, episode_id: episode_id, website_url_hp: honeypot)
       redirect '/muro'
     rescue ArgumentError => e
       @episodes = Episode.all
@@ -188,9 +202,10 @@ class ApplicationController < Sinatra::Base
     author = payload['author'] || payload[:author] || 'Cadete_NetAcad'
     content = payload['content'] || payload[:content] || payload['comment'] || payload[:comment] || payload['comentario'] || payload[:comentario]
     episode_id = payload['episode_id'] || payload[:episode_id]
+    honeypot = payload['website_url_hp'] || payload[:website_url_hp] || payload['website'] || payload[:website]
 
     begin
-      WallPost.create(author: author, content: content, episode_id: episode_id)
+      WallPost.create(author: author, content: content, episode_id: episode_id, website_url_hp: honeypot)
       redirect '/mobile'
     rescue ArgumentError => e
       @episodes = Episode.all

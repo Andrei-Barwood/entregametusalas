@@ -19,19 +19,8 @@
   <meta property="og:image:alt" content="Cyberia Deep Habitat Lounge — Sala de Descanso y Meditación Submarina">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="CYBERIA-MED // SOC Console &amp; Muro Clínico Pod NetAcad">
-  <meta name="twitter:description" content="Instalación biotecnológica submarina Snocomm Lounge y consola de telemetría médica en tiempo real para 48 episodios clínicos y ciberseguridad hospitalaria.">
+  <meta name="twitter:description" content="Instalación biotecnológica submarina Snocomm Lounge y consola de telemetría médica en tiempo real.">
   <meta name="twitter:image" content="https://entregametusalas.uk/img/underwater_lounge_habitat.jpg">
-  <script>
-    (function() {
-      try {
-        var isMob = (window.innerWidth <= 768 || /Mobile|Android|iPhone|iPad|iPod|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent));
-        var forceDesk = location.search.indexOf('desktop=1') !== -1 || document.cookie.indexOf('force_desktop=1') !== -1;
-        if (isMob && !forceDesk) {
-          location.replace('/mobile');
-        }
-      } catch (e) {}
-    })();
-  </script>
   <link rel="stylesheet" href="/css/chrysalis_medsoc.css">
 </head>
 <body>
@@ -144,7 +133,7 @@
 
   <!-- OVERLAY LANDING PAGE: GUÍA CLÍNICA Y TUTORIAL KALI LINUX (SOBREPUESTA CON TRANSPARENCIA SOBRE NEGRO) -->
   <!-- OVERLAY LANDING PAGE: GUÍA CLÍNICA Y TUTORIAL KALI LINUX (SOBREPUESTA CON TRANSPARENCIA SOBRE NEGRO) -->
-<div id="tutorial-overlay" class="tutorial-overlay-backdrop hidden" role="dialog" aria-modal="true" aria-label="Guía Clínica y Tutorial Kali Linux">
+<div id="tutorial-overlay" class="tutorial-overlay-backdrop " role="dialog" aria-modal="true" aria-label="Guía Clínica y Tutorial Kali Linux">
   <div class="tutorial-overlay-sheet">
     <!-- BARRA SUPERIOR DE CONTROL DEL OVERLAY -->
     <div class="tutorial-overlay-topbar">
@@ -200,6 +189,9 @@
           <a href="#universal-48-methodology" class="soc-btn" style="font-size: 0.82rem; padding: 0.5rem 1rem; text-decoration: none;">
             🌐 PATRÓN UNIVERSAL EN LOS 48 NIVELES
           </a>
+          <button type="button" class="soc-btn soc-btn-wa btn-share-tutorial-wa" style="font-size: 0.82rem; padding: 0.5rem 1rem;" title="Compartir esta guía en WhatsApp">
+            <span class="share-wa-icon" aria-hidden="true">💬</span> COMPARTIR EN WHATSAPP
+          </button>
         </div>
       </section>
 
@@ -733,15 +725,12 @@ Tipea 'pistas' para ver la información del Episodio 1 (InfusionPump-ICU-01)...
       alreadyDismissed = sessionStorage.getItem('cyberia_tutorial_dismissed') === 'true';
     } catch (e) {}
 
-    // Si es URL explícita de tutorial o es la primera visita del usuario en escritorio, mostrar
-    if (isExplicitTutorialUrl || (!alreadyDismissed && window.innerWidth > 768)) {
-      if (overlay) {
-        overlay.classList.remove('hidden');
-        document.body.style.overflow = 'hidden';
-      }
-    } else if (overlay) {
+    // Si ya fue cerrada y no se abrió explícitamente por URL de tutorial, ocultar de inmediato
+    if (overlay && alreadyDismissed && !isExplicitTutorialUrl) {
       overlay.classList.add('hidden');
       document.body.style.overflow = '';
+    } else if (overlay && !overlay.classList.contains('hidden')) {
+      document.body.style.overflow = 'hidden';
     }
 
     window.closeTutorialOverlay = function() {
@@ -2540,6 +2529,11 @@ Nmap done: 1 IP address (1 host up) scanned in 0.42 seconds`);
         <!-- COLUMNA IZQUIERDA: FORMULARIO DE COMPOSICIÓN (MÁXIMO 2000 CARACTERES) -->
         <div class="feed-compose-box">
           <form id="feed-post-form" action="/api/feed" method="POST">
+            <!-- Trampa Honeypot Anti-Bot (invisible para cadetes, trampa para botnets de spam) -->
+            <div style="display:none !important; visibility:hidden !important; position:absolute; left:-9999px; width:0; height:0; overflow:hidden;" aria-hidden="true">
+              <label for="feed_security_token_hp">Verification token (leave blank)</label>
+              <input type="text" id="feed_security_token_hp" name="website_url_hp" tabindex="-1" autocomplete="off" value="">
+            </div>
             <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.5rem;">
               <div style="flex: 1; min-width: 160px;">
                 <label for="feed-author-input" class="feed-label">TU ALIAS O CADETE ID:</label>
@@ -2921,6 +2915,7 @@ Nmap done: 1 IP address (1 host up) scanned in 0.42 seconds`);
   </section>
 </main>
 
+
   <!-- MODAL HUB PARA COMPARTIR EN WHATSAPP -->
   <div id="cyberia-wa-modal" class="cyberia-modal-overlay" style="display: none;" aria-hidden="true" role="dialog" aria-label="Compartir en WhatsApp">
     <div class="cyberia-modal-content">
@@ -2984,7 +2979,6 @@ Nmap done: 1 IP address (1 host up) scanned in 0.42 seconds`);
       </div>
     </div>
   </div>
-
 
   <script src="/js/sentinel_tactical_game.js"></script>
   <script src="/js/cyberia_console.js"></script>

@@ -969,4 +969,170 @@ RSpec.describe 'CYBERIA-MED // SOC Console v19.96 — Complete Verification Suit
       expect(mobile).to include('underwater_lounge_habitat.jpg')
     end
   end
+
+  describe '16. Aegis-9 Sentinel Feed Anti-Spam Shield & Blacklist' do
+    let(:malicious_comment) do
+      <<~SPAM
+        Good day! 
+
+        It is possible to send business messages in a lawful way. 
+
+        This message is submitted without using recipient personal data. It is submitted through a contact form intended for messages. This approach may reduce the chance of spam filtering. 
+
+        A free trial is available if you would like to try the service. 
+
+        The free trial includes up to 50,000 messages. 
+
+        The cost of sending one million messages is $59. 
+
+        If you would like more details, reach us on Telegram or WhatsApp. 
+
+        Telegram - t.me/FeedbackFormEU 
+
+        WhatsApp - wa.me/375259112693 
+
+        Have a wonderful day.
+      SPAM
+    end
+
+    before(:each) do
+      WallPost.reset_feed!
+    end
+
+    it 'detecta e identifica la fuente y bloquea el comentario exacto recibido por el usuario' do
+      inspection = FeedAntiSpamSentinel.inspect_text(malicious_comment)
+      expect(inspection[:is_spam]).to be true
+      expect(inspection[:rule]).to be_truthy
+      expect(['AEGIS9_IOC_BLACKLIST', 'BELARUS_BOTNET_CONTACT', 'CONTACT_FORM_SPAM_PITCH', 'LAWFUL_BUSINESS_MESSAGES']).to include(inspection[:rule])
+
+      expect {
+        WallPost.create(
+          author: 'SpamBot_Feedback',
+          content: malicious_comment
+        )
+      }.to raise_error(FeedAntiSpamSentinel::SpamDetectedError)
+    end
+
+    it 'bloquea todas las variantes y patrones similares de contact form spam y botnets de Bielorrusia' do
+      variations = [
+        'It is possible to send business messages in a lawful way. Contact our team.',
+        'This message is submitted without using recipient personal data through our service.',
+        'Our approach may reduce the chance of spam filtering for your campaigns.',
+        'The free trial includes up to 50,000 messages for testing.',
+        'The cost of sending one million messages is $59. Inquire now.',
+        'Reach us on Telegram or WhatsApp for bulk form submission.',
+        'Check our Telegram - t.me/FeedbackFormEU right now',
+        'Direct chat via WhatsApp - wa.me/375259112693 today',
+        'Automated xrumer bulk submitter tool contact form blaster',
+        'wa.me/375298889900 mass contact blast service'
+      ]
+
+      variations.each do |sample|
+        result = FeedAntiSpamSentinel.inspect_text(sample)
+        expect(result[:is_spam]).to be(true), "Esperado que '#{sample}' fuera detectado como spam pero no lo fue"
+      end
+    end
+
+    it 'bloquea intentos de evasión mediante mayúsculas, espacios alterados o trucos de puntuación' do
+      obfuscated = 'SEND BUSINESS MESSAGES IN A LAWFUL WAY via t . me / feedbackformeu or wa.me / 375259112693'
+      inspection = FeedAntiSpamSentinel.inspect_text(obfuscated)
+      expect(inspection[:is_spam]).to be true
+    end
+
+    it 'bloquea autores con nombres sospechosos de botnets o enlaces' do
+      inspection = FeedAntiSpamSentinel.inspect_text('Mensaje de prueba', author: 'http://spamsite.ru/bot')
+      expect(inspection[:is_spam]).to be true
+      expect(inspection[:rule]).to eq('AEGIS9_AUTHOR_BLACKLIST')
+    end
+
+    it 'atrapa y bloquea bots mediante la trampa honeypot invisible' do
+      inspection = FeedAntiSpamSentinel.inspect_text(
+        'Mensaje que parece normal',
+        author: 'Cadete_Inocente',
+        honeypot: 'http://automated-bot-payload.com'
+      )
+      expect(inspection[:is_spam]).to be true
+      expect(inspection[:rule]).to eq('AEGIS9_HONEYPOT_TRIGGERED')
+    end
+
+    it 'rechaza el comentario de spam en POST /api/feed con código HTTP 403 Forbidden' do
+      initial_count = WallPost.all.size
+
+      post '/api/feed', JSON.generate({
+        author: 'ContactBot',
+        content: malicious_comment
+      }), { 'CONTENT_TYPE' => 'application/json' }
+
+      expect(last_response.status).to eq(403)
+      data = JSON.parse(last_response.body)
+      expect(data['status']).to eq('blocked')
+      expect(data['error']).to include('AEGIS-9 SENTINEL')
+
+      # El post NUNCA se guardó en el feed
+      expect(WallPost.all.size).to eq(initial_count)
+    end
+
+    it 'rechaza envíos de spam en el formulario web POST /muro sin publicarlo' do
+      initial_count = WallPost.all.size
+
+      post '/muro', {
+        'author' => 'ContactBot',
+        'content' => malicious_comment
+      }
+
+      expect(last_response.status).to eq(200)
+      body = last_response.body.force_encoding('UTF-8')
+      expect(body).to include('AEGIS-9 SENTINEL')
+      expect(body).to include('Comentario bloqueado por filtro anti-spam')
+
+      expect(WallPost.all.size).to eq(initial_count)
+    end
+
+    it 'rechaza envíos de spam en el formulario móvil POST /mobile sin publicarlo' do
+      initial_count = WallPost.all.size
+
+      post '/mobile', {
+        'author' => 'ContactBot',
+        'content' => malicious_comment
+      }
+
+      expect(last_response.status).to eq(200)
+      body = last_response.body.force_encoding('UTF-8')
+      expect(body).to include('AEGIS-9 SENTINEL')
+      expect(body).to include('Comentario bloqueado por filtro anti-spam')
+
+      expect(WallPost.all.size).to eq(initial_count)
+    end
+
+    it 'permite y nunca bloquea publicaciones legítimas de cadetes y doctores' do
+      cadet_posts = [
+        '¡Atención equipo! En EP01 verifiquen la corriente de fuga con el monitor LIM antes de inocular.',
+        'Comando Kali: nmap --script ssl-enum-ciphers -p 8443 192.168.10.50 para auditar bombas Alaris.',
+        'Duda clínica: ¿cuál es el tiempo de conmutación en la fuente ininterrumpida de UCI grado 1?',
+        'Revisen los signos vitales en el panel de telemetría: SpO2 al 98% y ECG en ritmo sinusal.'
+      ]
+
+      cadet_posts.each do |content|
+        inspection = FeedAntiSpamSentinel.inspect_text(content, author: 'Cadete_NetAcad_UCI')
+        expect(inspection[:is_spam]).to be(false), "Falso positivo en: '#{content}'"
+
+        post = WallPost.create(
+          author: 'Cadete_NetAcad_UCI',
+          content: content
+        )
+        expect(post).to be_a(WallPost)
+        expect(post.content).to eq(content)
+      end
+    end
+
+    it 'incluye el campo honeypot oculto en las vistas del muro para trampar bots' do
+      get '/muro'
+      expect(last_response.status).to eq(200)
+      expect(last_response.body.force_encoding('UTF-8')).to include('id="feed_security_token_hp"')
+
+      get '/mobile'
+      expect(last_response.status).to eq(200)
+      expect(last_response.body.force_encoding('UTF-8')).to include('id="feed_security_token_hp"')
+    end
+  end
 end

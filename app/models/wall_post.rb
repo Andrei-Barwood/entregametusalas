@@ -3,6 +3,7 @@
 require 'json'
 require 'securerandom'
 require 'time'
+require_relative '../services/feed_anti_spam_sentinel'
 
 class WallPost
   DATA_FILE = File.expand_path('../../data/clinical_wall_feed.jsonl', __dir__)
@@ -136,7 +137,14 @@ class WallPost
         raise ArgumentError, "El comentario excede el límite máximo de #{MAX_CONTENT_LENGTH} caracteres (longitud: #{raw_content.length})"
       end
 
+      author = (attrs['author'] || attrs[:author] || 'Cadete_NetAcad').to_s.strip
+      honeypot = attrs['website_url_hp'] || attrs[:website_url_hp] || attrs['website'] || attrs[:website] || attrs['hp_email'] || attrs[:hp_email]
+
+      # Centinela Aegis-9: Verificación de lista negra y heurística anti-spam masivo
+      FeedAntiSpamSentinel.validate!(raw_content, author: author, honeypot: honeypot)
+
       post = WallPost.new(attrs)
+      post.author = author
       post.content = raw_content
 
       # Almacenamiento ultracompacto en formato JSONL append-only con bloqueo exclusivo

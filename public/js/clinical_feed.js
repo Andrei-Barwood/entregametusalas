@@ -1519,6 +1519,60 @@
       });
   }
 
+  // --- Centinela Aegis-9: Filtro Anti-Spam en el Cliente ---
+  var SPAM_CLIENT_IOCS = [
+    'feedbackformeu',
+    '375259112693',
+    '+375259112693',
+    't.me/feedbackformeu',
+    'wa.me/375259112693'
+  ];
+
+  var SPAM_CLIENT_PATTERNS = [
+    { id: 'BELARUS_BOTNET_CONTACT', regex: /(?:t\.me\/feedbackformeu|wa\.me\/375259112693|wa\.me\/375\d{8,9}|375259112693)/i, reason: 'Contacto de botnet de spam masivo (Bielorrusia / FeedbackFormEU)' },
+    { id: 'CONTACT_FORM_SPAM_PITCH', regex: /submitted\s+through\s+a\s+contact\s+form(?:\s+intended\s+for\s+messages)?/i, reason: 'Oferta comercial de inyección automatizada en formularios' },
+    { id: 'LAWFUL_BUSINESS_MESSAGES', regex: /send\s+business\s+messages\s+in\s+a\s+lawful\s+way/i, reason: 'Frase típica de bypass de bot de contacto' },
+    { id: 'NO_PERSONAL_DATA_CLAIM', regex: /submitted\s+without\s+using\s+recipient\s+personal\s+data/i, reason: 'Patrón de spam de evasión GDPR' },
+    { id: 'SPAM_FILTER_BYPASS_PITCH', regex: /reduce\s+the\s+chance\s+of\s+spam\s+filtering/i, reason: 'Venta de servicio para evadir filtros de spam' },
+    { id: 'BULK_MESSAGES_PRICING', regex: /(?:cost\s+of\s+sending|sending)\s+(?:one|\d+)?\s*million\s+messages\s+is\s*\$?\d+/i, reason: 'Tarifario de spam masivo comercial' },
+    { id: 'FREE_TRIAL_MESSAGES', regex: /free\s+trial\s+(?:is\s+available|includes)\s+up\s+to\s+\d+[\d,]*\s*messages/i, reason: 'Oferta de prueba de envío masivo' },
+    { id: 'DUAL_CHANNEL_SOLICITATION', regex: /reach\s+us\s+on\s+(?:telegram|whatsapp)\s+or\s+(?:telegram|whatsapp)/i, reason: 'Captación de clientes comercial vía Telegram / WhatsApp' },
+    { id: 'TELEGRAM_WHATSAPP_SPAM_LINKS', regex: /(?:telegram\s*[-:]\s*t\.me\/[a-z0-9_]+)[\s\S]{0,100}(?:whatsapp\s*[-:]\s*wa\.me\/\d+)/i, reason: 'Combinación cruzada de enlaces t.me y wa.me de spam' },
+    { id: 'FORM_SUBMITTER_TOOLS', regex: /(?:xrumer|scrapebox|gsa\s+search\s+engine|contact\s+form\s+(?:submitter|blaster|spammer|marketing)|mass\s+form\s+submission)/i, reason: 'Herramientas de spam masivo a formularios' },
+    { id: 'BULK_MESSAGING_SERVICES', regex: /(?:send\s+bulk\s+messages|blast\s+your\s+message|bulk\s+whatsapp\s+marketing|bulk\s+telegram\s+messages)/i, reason: 'Venta de mensajería masiva no solicitada' },
+    { id: 'UNAUTHORIZED_COMMERCIAL_SCAM', regex: /(?:buy\s+cheap\s+viagra|cialis\s+without\s+prescription|online\s+casino\s+bonus|earn\s+\$\d+\s+daily\s+crypto)/i, reason: 'Publicidad engañosa o comercial no autorizada' }
+  ];
+
+  function evaluateAntiSpamClient(content, author) {
+    var normAuthor = (author || '').replace(/[\u200B-\u200D\uFEFF]/g, '').toLowerCase().replace(/\s+/g, ' ').trim();
+    if (normAuthor && /(?:https?:\/\/|t\.me\/|wa\.me\/|feedbackform|\.com|\.ru|\.eu)/i.test(normAuthor)) {
+      return { isSpam: true, rule: 'AEGIS9_AUTHOR_BLACKLIST', reason: 'Alias de autor con enlaces o identificador de botnet' };
+    }
+    var normContent = (content || '').replace(/[\u200B-\u200D\uFEFF]/g, '').toLowerCase().replace(/\s+/g, ' ').replace(/\s*\.\s*/g, '.').trim();
+    for (var i = 0; i < SPAM_CLIENT_IOCS.length; i++) {
+      if (normContent.indexOf(SPAM_CLIENT_IOCS[i]) !== -1) {
+        return { isSpam: true, rule: 'AEGIS9_IOC_BLACKLIST', reason: 'Contiene indicador de compromiso bloqueado (' + SPAM_CLIENT_IOCS[i] + ')' };
+      }
+    }
+    for (var j = 0; j < SPAM_CLIENT_PATTERNS.length; j++) {
+      var p = SPAM_CLIENT_PATTERNS[j];
+      if (p.regex.test(content) || p.regex.test(normContent)) {
+        return { isSpam: true, rule: p.id, reason: p.reason };
+      }
+    }
+    if (normContent.indexOf('t.me/') !== -1 || normContent.indexOf('wa.me/') !== -1 || normContent.indexOf('telegram') !== -1 || normContent.indexOf('whatsapp') !== -1) {
+      var commercialTerms = ['million messages', 'free trial', 'cost of', 'dollar', '$59', '$', 'business messages', 'contact form'];
+      var matchedCount = 0;
+      for (var k = 0; k < commercialTerms.length; k++) {
+        if (normContent.indexOf(commercialTerms[k]) !== -1) matchedCount++;
+      }
+      if (matchedCount >= 2) {
+        return { isSpam: true, rule: 'AEGIS9_COMMERCIAL_MESSAGING_COMBO', reason: 'Combinación de mensajería externa con términos comerciales' };
+      }
+    }
+    return { isSpam: false };
+  }
+
   function submitNewPost() {
     if (isSubmitting) return;
 
@@ -1527,6 +1581,8 @@
     var epSelect = document.getElementById('feed-post-episode-select');
     var submitBtn = document.getElementById('btn-feed-submit');
     var alertBox = document.getElementById('feed-form-alert');
+    var honeypotInput = document.getElementById('feed_security_token_hp');
+    var honeypotValue = honeypotInput ? honeypotInput.value.trim() : '';
 
     if (!contentTextarea) return;
 
@@ -1551,6 +1607,29 @@
       return;
     }
 
+    // 1. Verificación Honeypot anti-bot
+    if (honeypotValue.length > 0) {
+      if (alertBox) {
+        alertBox.textContent = '⛔ [AEGIS-9 SENTINEL] Envío bloqueado: Bot automatizado detectado vía trampa honeypot.';
+        alertBox.style.color = '#FF3344';
+        alertBox.style.borderColor = '#FF3344';
+        alertBox.style.display = 'block';
+      }
+      return;
+    }
+
+    // 2. Pre-validación inmediata de spam y lista negra en el cliente
+    var spamVerdict = evaluateAntiSpamClient(content, author);
+    if (spamVerdict.isSpam) {
+      if (alertBox) {
+        alertBox.textContent = '⛔ [AEGIS-9 SENTINEL] Comentario bloqueado antes de publicar: ' + spamVerdict.reason + '. El feed se mantiene limpio.';
+        alertBox.style.color = '#FF3344';
+        alertBox.style.borderColor = '#FF3344';
+        alertBox.style.display = 'block';
+      }
+      return;
+    }
+
     if (alertBox) alertBox.style.display = 'none';
     isSubmitting = true;
     if (submitBtn) {
@@ -1568,7 +1647,8 @@
       body: JSON.stringify({
         author: author,
         content: content,
-        episode_id: epId === '' || epId === 'all' ? null : parseInt(epId, 10)
+        episode_id: epId === '' || epId === 'all' ? null : parseInt(epId, 10),
+        website_url_hp: honeypotValue
       })
     })
       .then(function (res) {

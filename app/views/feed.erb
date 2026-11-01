@@ -61,6 +61,12 @@
         </div>
       <% end %>
       <form id="feed-post-form" action="/muro" method="POST">
+        <!-- Trampa Honeypot Anti-Bot (invisible para humanos, activador de descarte inmediato para bots automatizados) -->
+        <div style="display:none !important; visibility:hidden !important; position:absolute; left:-9999px; width:0; height:0; overflow:hidden;" aria-hidden="true">
+          <label for="feed_security_token_hp">Verification token (leave blank)</label>
+          <input type="text" id="feed_security_token_hp" name="website_url_hp" tabindex="-1" autocomplete="off" value="">
+        </div>
+
         <div class="feed-compose-meta-row">
           <div style="flex: 1; min-width: 220px;">
             <label for="feed-author-input" class="feed-label">

@@ -8,18 +8,18 @@
   <!-- METADATOS OPEN GRAPH Y TWITTER (PREVISUALIZACIÓN EN WHATSAPP Y REDES SOCIALES) -->
   <meta property="og:site_name" content="CYBERIA-MED // SOC Console v19.96">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://entregametusalas.uk/muro">
-  <meta property="og:title" content="MURO SOCIAL CLÍNICO // Cyberia Pod NetAcad">
-  <meta property="og:description" content="Feed en tiempo real P2P de telemetría médica, ciberseguridad hospitalaria y hábitats submarinos de Cyberia.">
+  <meta property="og:url" content="https://entregametusalas.uk/">
+  <meta property="og:title" content="CYBERIA-MED // SOC Console &amp; Muro Clínico Pod NetAcad">
+  <meta property="og:description" content="Instalación biotecnológica submarina Snocomm Lounge y consola de telemetría médica en tiempo real para 48 episodios clínicos y ciberseguridad hospitalaria.">
   <meta property="og:image" content="https://entregametusalas.uk/img/underwater_lounge_habitat.jpg">
   <meta property="og:image:secure_url" content="https://entregametusalas.uk/img/underwater_lounge_habitat.jpg">
   <meta property="og:image:type" content="image/jpeg">
   <meta property="og:image:width" content="1448">
   <meta property="og:image:height" content="1086">
-  <meta property="og:image:alt" content="Cyberia Deep Habitat Lounge — Sala de Descanso Submarina">
+  <meta property="og:image:alt" content="Cyberia Deep Habitat Lounge — Sala de Descanso y Meditación Submarina">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="MURO SOCIAL CLÍNICO // Cyberia Pod NetAcad">
-  <meta name="twitter:description" content="Feed en tiempo real P2P de telemetría médica, ciberseguridad hospitalaria y hábitats submarinos de Cyberia.">
+  <meta name="twitter:title" content="CYBERIA-MED // SOC Console &amp; Muro Clínico Pod NetAcad">
+  <meta name="twitter:description" content="Instalación biotecnológica submarina Snocomm Lounge y consola de telemetría médica en tiempo real.">
   <meta name="twitter:image" content="https://entregametusalas.uk/img/underwater_lounge_habitat.jpg">
   <link rel="stylesheet" href="/css/chrysalis_medsoc.css">
 </head>
@@ -60,7 +60,7 @@
       <a href="/mobile" class="soc-btn nav-btn-mobile" style="border-color: var(--magic-ring); color: var(--magic-highlight);" title="Versión móvil optimizada exclusiva para el feed">
         [📱] MÓVIL
       </a>
-      <button type="button" class="soc-btn soc-btn-wa btn-share-feed-wa" title="Compartir muro en WhatsApp">
+      <button type="button" id="btn-share-topbar-wa" class="soc-btn soc-btn-wa" title="Compartir consola y telemetría en WhatsApp">
         <span class="share-wa-icon" aria-hidden="true">💬</span> COMPARTIR WA
       </button>
     </nav>
@@ -189,6 +189,9 @@
           <a href="#universal-48-methodology" class="soc-btn" style="font-size: 0.82rem; padding: 0.5rem 1rem; text-decoration: none;">
             🌐 PATRÓN UNIVERSAL EN LOS 48 NIVELES
           </a>
+          <button type="button" class="soc-btn soc-btn-wa btn-share-tutorial-wa" style="font-size: 0.82rem; padding: 0.5rem 1rem;" title="Compartir esta guía en WhatsApp">
+            <span class="share-wa-icon" aria-hidden="true">💬</span> COMPARTIR EN WHATSAPP
+          </button>
         </div>
       </section>
 
@@ -971,7 +974,7 @@ Nmap done: 1 IP address (1 host up) scanned in 0.42 seconds`);
           DOCUMENTO COMPACTO (.JSONL)
         </div>
         <div id="feed-storage-stats-badge" style="font-size: 0.7rem; color: var(--bauble-cyan-bright);">
-          2.19 KB / 3,000 KB (JSONL • 5 posts)
+          2.75 KB / 3,000 KB (JSONL • 6 posts)
         </div>
         <div style="font-size: 0.62rem; color: #888888; margin-top: 0.2rem;">
           <code style="color: var(--magic-ring);">data/clinical_wall_feed.jsonl</code> • Autonomía: ~5 años sin base de datos pesada
@@ -994,6 +997,12 @@ Nmap done: 1 IP address (1 host up) scanned in 0.42 seconds`);
     <div class="soc-panel-body" style="padding: 1rem;">
       
       <form id="feed-post-form" action="/muro" method="POST">
+        <!-- Trampa Honeypot Anti-Bot (invisible para humanos, activador de descarte inmediato para bots automatizados) -->
+        <div style="display:none !important; visibility:hidden !important; position:absolute; left:-9999px; width:0; height:0; overflow:hidden;" aria-hidden="true">
+          <label for="feed_security_token_hp">Verification token (leave blank)</label>
+          <input type="text" id="feed_security_token_hp" name="website_url_hp" tabindex="-1" autocomplete="off" value="">
+        </div>
+
         <div class="feed-compose-meta-row">
           <div style="flex: 1; min-width: 220px;">
             <label for="feed-author-input" class="feed-label">
@@ -1233,8 +1242,8 @@ Nmap done: 1 IP address (1 host up) scanned in 0.42 seconds`);
 
         <div class="feed-compose-footer">
           <div class="feed-compose-presets">
-            <span style="font-size: 0.65rem; color: var(--hud-glass-outline); margin-right: 0.2rem;">ESTILOS:</span>
-            <button type="button" class="feed-preset-btn" data-preset="lounge" title="Adjuntar vista previa de Hábitat Lounge">🛋️ Lounge</button>
+            <span style="font-size: 0.65rem; color: var(--hud-glass-outline); margin-right: 0.2rem;">ESTILOS RÁPIDOS:</span>
+            <button type="button" class="feed-preset-btn" data-preset="lounge" title="Adjuntar vista previa de Hábitat Lounge">🛋️ Hábitat Lounge</button>
             <button type="button" class="feed-preset-btn" data-preset="snocomm" title="Adjuntar vista previa de Snocomm Building">🏢 Snocomm</button>
           </div>
           <div id="feed-char-counter" class="feed-char-counter">
@@ -1473,7 +1482,7 @@ Nmap done: 1 IP address (1 host up) scanned in 0.42 seconds`);
 
     <div style="font-size: 0.72rem; color: var(--hud-glass-outline); display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
       <span id="feed-active-count-badge" class="hud-tag" style="color: var(--magic-pulse-core);">
-        5 MENSAJES
+        6 MENSAJES
       </span>
       <button type="button" id="btn-feed-notifications" class="soc-btn feed-notif-btn" title="Activar notificaciones de nuevos mensajes" aria-label="Activar notificaciones del feed">
         <span class="feed-notif-bell">🔔</span>
@@ -1486,11 +1495,291 @@ Nmap done: 1 IP address (1 host up) scanned in 0.42 seconds`);
   <!-- FLUJO DINÁMICO DE PUBLICACIONES (STREAM) -->
   <section class="feed-stream-section" aria-label="Comentarios en tiempo real">
     <div id="feed-stream-container" class="feed-stream-list">
-      <!-- Renderizado dinámico vía JavaScript y auto-polling cada 5 segundos -->
+      
+        <article class="feed-post-card" data-post-id="post_seed_ep12_01" data-episode-id="12">
+          <div class="feed-post-avatar" style="background-color: #E7F800;">
+            B
+          </div>
+          <div class="feed-post-main">
+            <div class="feed-post-header">
+              <span class="feed-post-author">BioIngeniero_DevlinHunter</span>
+              <span class="feed-post-pill feed-post-ep-pill">
+                EP12
+              </span>
+              <time class="feed-post-time" datetime="2026-11-01T22:24:37Z">hace poco</time>
+            </div>
+            <div class="feed-post-body">
+              <div class="feed-post-text">Al finalizar el Acto I en EP12 (STEAL PLANE), la firma criptográfica con `openssl dgst -sha256` garantiza la integridad del firmware antes de despegar. Recuerden: en ciberseguridad médica un parche mal formado puede costar vidas reales.</div>
+            </div>
+            <div class="feed-post-actions" aria-label="Reacciones al comentario">
+              <button type="button" class="feed-react-btn feed-react-like" data-post-id="post_seed_ep12_01" data-reaction="like" title="Pulgar arriba (Me gusta)">
+                <span class="react-emoji" aria-hidden="true">👍</span>
+                <span class="react-count" id="react-like-post_seed_ep12_01">31</span>
+              </button>
+              <button type="button" class="feed-react-btn feed-react-dislike" data-post-id="post_seed_ep12_01" data-reaction="dislike" title="Pulgar abajo (No me gusta)">
+                <span class="react-emoji" aria-hidden="true">👎</span>
+                <span class="react-count" id="react-dislike-post_seed_ep12_01">0</span>
+              </button>
+              <button type="button" class="feed-react-btn feed-react-love" data-post-id="post_seed_ep12_01" data-reaction="love" title="Amor Clínico (Corazón con lazo)">
+                <span class="react-emoji" aria-hidden="true">💝</span>
+                <span class="react-count" id="react-love-post_seed_ep12_01">42</span>
+              </button>
+              <button type="button" class="feed-share-wa-btn" data-post-id="post_seed_ep12_01" title="Compartir este comentario en WhatsApp" aria-label="Compartir en WhatsApp">
+                <span class="share-wa-icon" aria-hidden="true">💬</span>
+                <span class="share-wa-label">WhatsApp</span>
+              </button>
+            </div>
+          </div>
+        </article>
+      
+        <article class="feed-post-card" data-post-id="post_seed_ep04_01" data-episode-id="4">
+          <div class="feed-post-avatar" style="background-color: #A4FF8E;">
+            I
+          </div>
+          <div class="feed-post-main">
+            <div class="feed-post-header">
+              <span class="feed-post-author">Interno_Trauma_Zak</span>
+              <span class="feed-post-pill feed-post-ep-pill">
+                EP04
+              </span>
+              <time class="feed-post-time" datetime="2026-11-01T21:54:37Z">hace poco</time>
+            </div>
+            <div class="feed-post-body">
+              <div class="feed-post-text">En EP04 (SKEET SHOOT) el ataque DoS UDP flood a los ventiladores mecánicos simula el protocolo IEEE 11073. Con iptables limitamos el rate a 25 paquetes/seg y los signos vitales del paciente se estabilizaron inmediatamente. ¡La consola táctica de Kali ayuda muchísimo a memorizar los comandos antes del examen!</div>
+            </div>
+            <div class="feed-post-actions" aria-label="Reacciones al comentario">
+              <button type="button" class="feed-react-btn feed-react-like" data-post-id="post_seed_ep04_01" data-reaction="like" title="Pulgar arriba (Me gusta)">
+                <span class="react-emoji" aria-hidden="true">👍</span>
+                <span class="react-count" id="react-like-post_seed_ep04_01">15</span>
+              </button>
+              <button type="button" class="feed-react-btn feed-react-dislike" data-post-id="post_seed_ep04_01" data-reaction="dislike" title="Pulgar abajo (No me gusta)">
+                <span class="react-emoji" aria-hidden="true">👎</span>
+                <span class="react-count" id="react-dislike-post_seed_ep04_01">0</span>
+              </button>
+              <button type="button" class="feed-react-btn feed-react-love" data-post-id="post_seed_ep04_01" data-reaction="love" title="Amor Clínico (Corazón con lazo)">
+                <span class="react-emoji" aria-hidden="true">💝</span>
+                <span class="react-count" id="react-love-post_seed_ep04_01">19</span>
+              </button>
+              <button type="button" class="feed-share-wa-btn" data-post-id="post_seed_ep04_01" title="Compartir este comentario en WhatsApp" aria-label="Compartir en WhatsApp">
+                <span class="share-wa-icon" aria-hidden="true">💬</span>
+                <span class="share-wa-label">WhatsApp</span>
+              </button>
+            </div>
+          </div>
+        </article>
+      
+        <article class="feed-post-card" data-post-id="post_seed_ep01_02" data-episode-id="1">
+          <div class="feed-post-avatar" style="background-color: #6CC929;">
+            D
+          </div>
+          <div class="feed-post-main">
+            <div class="feed-post-header">
+              <span class="feed-post-author">Dra_BioCyber_96</span>
+              <span class="feed-post-pill feed-post-ep-pill">
+                EP01
+              </span>
+              <time class="feed-post-time" datetime="2026-11-01T21:24:37Z">hace poco</time>
+            </div>
+            <div class="feed-post-body">
+              <div class="feed-post-text">Excelente punto @Cadete_NetAcad_UCI. De acuerdo a la norma IEC 60601-1-1 y NFPA 99 capítulo 6, la resistencia de tierra equipotencial del quirófano debe ser < 0.1 Ω. Si el atacante intenta una inyección de memoria en las bombas Alaris, el script bash que armamos con nmap y openssl s_client aísla el bus sin reiniciar la infusión continua de noradrenalina.</div>
+            </div>
+            <div class="feed-post-actions" aria-label="Reacciones al comentario">
+              <button type="button" class="feed-react-btn feed-react-like" data-post-id="post_seed_ep01_02" data-reaction="like" title="Pulgar arriba (Me gusta)">
+                <span class="react-emoji" aria-hidden="true">👍</span>
+                <span class="react-count" id="react-like-post_seed_ep01_02">27</span>
+              </button>
+              <button type="button" class="feed-react-btn feed-react-dislike" data-post-id="post_seed_ep01_02" data-reaction="dislike" title="Pulgar abajo (No me gusta)">
+                <span class="react-emoji" aria-hidden="true">👎</span>
+                <span class="react-count" id="react-dislike-post_seed_ep01_02">1</span>
+              </button>
+              <button type="button" class="feed-react-btn feed-react-love" data-post-id="post_seed_ep01_02" data-reaction="love" title="Amor Clínico (Corazón con lazo)">
+                <span class="react-emoji" aria-hidden="true">💝</span>
+                <span class="react-count" id="react-love-post_seed_ep01_02">35</span>
+              </button>
+              <button type="button" class="feed-share-wa-btn" data-post-id="post_seed_ep01_02" title="Compartir este comentario en WhatsApp" aria-label="Compartir en WhatsApp">
+                <span class="share-wa-icon" aria-hidden="true">💬</span>
+                <span class="share-wa-label">WhatsApp</span>
+              </button>
+            </div>
+          </div>
+        </article>
+      
+        <article class="feed-post-card" data-post-id="post_seed_ep01_01" data-episode-id="1">
+          <div class="feed-post-avatar" style="background-color: #29C2DA;">
+            C
+          </div>
+          <div class="feed-post-main">
+            <div class="feed-post-header">
+              <span class="feed-post-author">Cadete_NetAcad_UCI</span>
+              <span class="feed-post-pill feed-post-ep-pill">
+                EP01
+              </span>
+              <time class="feed-post-time" datetime="2026-11-01T20:54:37Z">hace poco</time>
+            </div>
+            <div class="feed-post-body">
+              <div class="feed-post-text">¡Compañeros de NetAcad! Ojo en el EP01 con el comando `nmap --script ssl-enum-ciphers -p 8443 192.168.10.50`. Si el sistema IT del quirófano tiene corrientes de fuga superiores a 10 µA, el monitor de aislamiento de línea (LIM) disparará la alarma acústica antes de que el parche TLS 1.3 conmute. Siempre verifiquen el transformador de aislamiento antes de inocular firmware.</div>
+            </div>
+            <div class="feed-post-actions" aria-label="Reacciones al comentario">
+              <button type="button" class="feed-react-btn feed-react-like" data-post-id="post_seed_ep01_01" data-reaction="like" title="Pulgar arriba (Me gusta)">
+                <span class="react-emoji" aria-hidden="true">👍</span>
+                <span class="react-count" id="react-like-post_seed_ep01_01">18</span>
+              </button>
+              <button type="button" class="feed-react-btn feed-react-dislike" data-post-id="post_seed_ep01_01" data-reaction="dislike" title="Pulgar abajo (No me gusta)">
+                <span class="react-emoji" aria-hidden="true">👎</span>
+                <span class="react-count" id="react-dislike-post_seed_ep01_01">0</span>
+              </button>
+              <button type="button" class="feed-react-btn feed-react-love" data-post-id="post_seed_ep01_01" data-reaction="love" title="Amor Clínico (Corazón con lazo)">
+                <span class="react-emoji" aria-hidden="true">💝</span>
+                <span class="react-count" id="react-love-post_seed_ep01_01">24</span>
+              </button>
+              <button type="button" class="feed-share-wa-btn" data-post-id="post_seed_ep01_01" title="Compartir este comentario en WhatsApp" aria-label="Compartir en WhatsApp">
+                <span class="share-wa-icon" aria-hidden="true">💬</span>
+                <span class="share-wa-label">WhatsApp</span>
+              </button>
+            </div>
+          </div>
+        </article>
+      
+        <article class="feed-post-card" data-post-id="post_seed_snocomm_01" data-episode-id="4">
+          <div class="feed-post-avatar" style="background-color: #6CC929;">
+            I
+          </div>
+          <div class="feed-post-main">
+            <div class="feed-post-header">
+              <span class="feed-post-author">Ing_BioSistemas</span>
+              <span class="feed-post-pill feed-post-ep-pill">
+                EP04
+              </span>
+              <time class="feed-post-time" datetime="2026-11-01T22:34:37Z">hace poco</time>
+            </div>
+            <div class="feed-post-body">
+              <div class="feed-post-text">Señalética activa en el corredor de tránsito: proceed to lounge relaxation sector (#snocomm). Consulten el blueprint holográfico 3D de la instalación principal antes de entrar al sector de relajación.</div>
+            </div>
+            <div class="feed-post-actions" aria-label="Reacciones al comentario">
+              <button type="button" class="feed-react-btn feed-react-like" data-post-id="post_seed_snocomm_01" data-reaction="like" title="Pulgar arriba (Me gusta)">
+                <span class="react-emoji" aria-hidden="true">👍</span>
+                <span class="react-count" id="react-like-post_seed_snocomm_01">34</span>
+              </button>
+              <button type="button" class="feed-react-btn feed-react-dislike" data-post-id="post_seed_snocomm_01" data-reaction="dislike" title="Pulgar abajo (No me gusta)">
+                <span class="react-emoji" aria-hidden="true">👎</span>
+                <span class="react-count" id="react-dislike-post_seed_snocomm_01">0</span>
+              </button>
+              <button type="button" class="feed-react-btn feed-react-love" data-post-id="post_seed_snocomm_01" data-reaction="love" title="Amor Clínico (Corazón con lazo)">
+                <span class="react-emoji" aria-hidden="true">💝</span>
+                <span class="react-count" id="react-love-post_seed_snocomm_01">41</span>
+              </button>
+              <button type="button" class="feed-share-wa-btn" data-post-id="post_seed_snocomm_01" title="Compartir este comentario en WhatsApp" aria-label="Compartir en WhatsApp">
+                <span class="share-wa-icon" aria-hidden="true">💬</span>
+                <span class="share-wa-label">WhatsApp</span>
+              </button>
+            </div>
+          </div>
+        </article>
+      
+        <article class="feed-post-card" data-post-id="post_seed_lounge_01" data-episode-id="1">
+          <div class="feed-post-avatar" style="background-color: #29C2DA;">
+            C
+          </div>
+          <div class="feed-post-main">
+            <div class="feed-post-header">
+              <span class="feed-post-author">Comandante_BLADES</span>
+              <span class="feed-post-pill feed-post-ep-pill">
+                EP01
+              </span>
+              <time class="feed-post-time" datetime="2026-11-01T22:39:37Z">hace poco</time>
+            </div>
+            <div class="feed-post-body">
+              <div class="feed-post-text">¡Atención cadetes de NetAcad! Se ha habilitado el acceso al Hábitat Submarino Lounge (#lounge). Cuentan con soporte vital autónomo a 420m de profundidad para descompresión sensorial tras auditorías de telemetría médica.</div>
+            </div>
+            <div class="feed-post-actions" aria-label="Reacciones al comentario">
+              <button type="button" class="feed-react-btn feed-react-like" data-post-id="post_seed_lounge_01" data-reaction="like" title="Pulgar arriba (Me gusta)">
+                <span class="react-emoji" aria-hidden="true">👍</span>
+                <span class="react-count" id="react-like-post_seed_lounge_01">48</span>
+              </button>
+              <button type="button" class="feed-react-btn feed-react-dislike" data-post-id="post_seed_lounge_01" data-reaction="dislike" title="Pulgar abajo (No me gusta)">
+                <span class="react-emoji" aria-hidden="true">👎</span>
+                <span class="react-count" id="react-dislike-post_seed_lounge_01">0</span>
+              </button>
+              <button type="button" class="feed-react-btn feed-react-love" data-post-id="post_seed_lounge_01" data-reaction="love" title="Amor Clínico (Corazón con lazo)">
+                <span class="react-emoji" aria-hidden="true">💝</span>
+                <span class="react-count" id="react-love-post_seed_lounge_01">64</span>
+              </button>
+              <button type="button" class="feed-share-wa-btn" data-post-id="post_seed_lounge_01" title="Compartir este comentario en WhatsApp" aria-label="Compartir en WhatsApp">
+                <span class="share-wa-icon" aria-hidden="true">💬</span>
+                <span class="share-wa-label">WhatsApp</span>
+              </button>
+            </div>
+          </div>
+        </article>
+      
     </div>
   </section>
 </main>
 
+
+  <!-- MODAL HUB PARA COMPARTIR EN WHATSAPP -->
+  <div id="cyberia-wa-modal" class="cyberia-modal-overlay" style="display: none;" aria-hidden="true" role="dialog" aria-label="Compartir en WhatsApp">
+    <div class="cyberia-modal-content">
+      <div class="cyberia-modal-header">
+        <div style="display: flex; align-items: center; gap: 0.5rem;">
+          <span style="font-size: 1.1rem;" aria-hidden="true">💬</span>
+          <strong style="color: #25D366; letter-spacing: 0.5px;">COMPARTIR EN WHATSAPP // CYBERIA HUB</strong>
+        </div>
+        <button type="button" class="cyberia-modal-close" aria-label="Cerrar ventana">&times;</button>
+      </div>
+      <div class="cyberia-modal-body">
+        <p style="font-size: 0.78rem; color: var(--hud-glass-outline); margin-top: 0; margin-bottom: 0.85rem;">
+          Selecciona la sección del Pod Clínico que deseas transmitir directamente a tus contactos o grupos de WhatsApp:
+        </p>
+        <div class="wa-share-grid">
+          <button type="button" class="wa-share-card-btn" data-share-target="console">
+            <div class="wa-share-card-icon">🌐</div>
+            <div class="wa-share-card-info">
+              <div class="wa-share-card-title">CONSOLA SOC PRINCIPAL</div>
+              <div class="wa-share-card-desc">Plataforma central interactiva y los 48 episodios clínicos</div>
+            </div>
+            <div class="wa-share-card-arrow">↗</div>
+          </button>
+
+          <button type="button" class="wa-share-card-btn" data-share-target="episode">
+            <div class="wa-share-card-icon">🎧</div>
+            <div class="wa-share-card-info">
+              <div class="wa-share-card-title">EPISODIO EN CURSO</div>
+              <div class="wa-share-card-desc">Telemetría, vulnerabilidad CVE y los 4 pilares del episodio activo</div>
+            </div>
+            <div class="wa-share-card-arrow">↗</div>
+          </button>
+
+          <button type="button" class="wa-share-card-btn" data-share-target="feed">
+            <div class="wa-share-card-icon">📡</div>
+            <div class="wa-share-card-info">
+              <div class="wa-share-card-title">MURO SOCIAL CLÍNICO</div>
+              <div class="wa-share-card-desc">Transmisión P2P en tiempo real de comentarios, hallazgos y debates</div>
+            </div>
+            <div class="wa-share-card-arrow">↗</div>
+          </button>
+
+          <button type="button" class="wa-share-card-btn" data-share-target="sentinel">
+            <div class="wa-share-card-icon">🛡️</div>
+            <div class="wa-share-card-info">
+              <div class="wa-share-card-title">SENTINEL AEGIS-9</div>
+              <div class="wa-share-card-desc">Misión táctica de mitigación, defensa hospitalaria y killchain</div>
+            </div>
+            <div class="wa-share-card-arrow">↗</div>
+          </button>
+
+          <button type="button" class="wa-share-card-btn" data-share-target="tutorial">
+            <div class="wa-share-card-icon">⚡</div>
+            <div class="wa-share-card-info">
+              <div class="wa-share-card-title">METODOLOGÍA 48 PASOS</div>
+              <div class="wa-share-card-desc">Guía clínica, seguridad de transformadores LIM y simuladores</div>
+            </div>
+            <div class="wa-share-card-arrow">↗</div>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <script src="/js/sentinel_tactical_game.js"></script>
   <script src="/js/cyberia_console.js"></script>

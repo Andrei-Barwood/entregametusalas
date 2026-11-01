@@ -701,6 +701,11 @@
         <!-- COLUMNA IZQUIERDA: FORMULARIO DE COMPOSICIÓN (MÁXIMO 2000 CARACTERES) -->
         <div class="feed-compose-box">
           <form id="feed-post-form" action="/api/feed" method="POST">
+            <!-- Trampa Honeypot Anti-Bot (invisible para cadetes, trampa para botnets de spam) -->
+            <div style="display:none !important; visibility:hidden !important; position:absolute; left:-9999px; width:0; height:0; overflow:hidden;" aria-hidden="true">
+              <label for="feed_security_token_hp">Verification token (leave blank)</label>
+              <input type="text" id="feed_security_token_hp" name="website_url_hp" tabindex="-1" autocomplete="off" value="">
+            </div>
             <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.5rem;">
               <div style="flex: 1; min-width: 160px;">
                 <label for="feed-author-input" class="feed-label">TU ALIAS O CADETE ID:</label>
