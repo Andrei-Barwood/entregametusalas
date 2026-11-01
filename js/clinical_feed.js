@@ -1125,10 +1125,10 @@
   // --- Utilidades de Compartición en WhatsApp ---
 
   function getShareBaseUrl() {
-    if (typeof window === 'undefined') return 'https://entregametusalas.pages.dev';
+    if (typeof window === 'undefined') return 'https://entregametusalas.uk';
     var host = window.location.hostname;
     if (host === 'localhost' || host === '127.0.0.1' || host === '0.0.0.0') {
-      return 'https://entregametusalas.pages.dev';
+      return 'https://entregametusalas.uk';
     }
     return window.location.origin;
   }
@@ -1160,7 +1160,7 @@
     var epLabel = epPill ? epPill.textContent.trim() : '';
 
     var baseUrl = getShareBaseUrl();
-    var postUrl = baseUrl + '/muro#post-' + postId;
+    var postUrl = baseUrl + '/muro?ref=wa#post-' + postId;
 
     var lines = [
       '💬 *Comentario de ' + author + ' en el Pod Clínico Cyberia*' + (epLabel ? ' [' + epLabel + ']' : '') + ':',
@@ -1191,7 +1191,7 @@
       'Canal de telemetría P2P en tiempo real (sin login). Comparte análisis de vulnerabilidades, comandos Kali Linux y depuración táctica.',
       '',
       '💬 *Súmate a la transmisión en vivo:*',
-      baseUrl + '/muro'
+      baseUrl + '/muro?ref=wa'
     ];
     openWhatsAppShare(lines.join('\n'));
   }

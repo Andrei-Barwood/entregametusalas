@@ -401,10 +401,10 @@ function setText(id, val) {
 
 /* 7. Compartir Secciones Clave en WhatsApp */
 function getConsoleShareBaseUrl() {
-  if (typeof window === 'undefined') return 'https://entregametusalas.pages.dev';
+  if (typeof window === 'undefined') return 'https://entregametusalas.uk';
   const host = window.location.hostname;
   if (host === 'localhost' || host === '127.0.0.1' || host === '0.0.0.0') {
-    return 'https://entregametusalas.pages.dev';
+    return 'https://entregametusalas.uk';
   }
   return window.location.origin;
 }
@@ -447,7 +447,7 @@ function shareSectionToWhatsApp(sectionKey, extraData) {
         '⚠️ *Vulnerabilidad:* ' + epCve + ' (CVSS ' + epCvss + ')',
         '',
         '📡 *Analiza la telemetría y los 4 pilares en vivo:*',
-        baseUrl + '/?episode=' + epId + '#episode-viewer'
+        baseUrl + '/?episode=' + epId + '&ref=wa#episode-viewer'
       ];
       break;
 
@@ -459,7 +459,7 @@ function shareSectionToWhatsApp(sectionKey, extraData) {
         'Canal de telemetría P2P en tiempo real (sin login). Comparte parches, telemetría y hallazgos con cadetes de medicina y ciberseguridad.',
         '',
         '💬 *Súmate a la transmisión en vivo:*',
-        baseUrl + '/muro'
+        baseUrl + '/muro?ref=wa'
       ];
       break;
 
@@ -470,7 +470,7 @@ function shareSectionToWhatsApp(sectionKey, extraData) {
         '¡Acepta el desafío táctico de defensa de redes clínicas hospitalarias y neutraliza la killchain en el sandbox interactivo!',
         '',
         '⚡ *Juega y desafía el sistema aquí:*',
-        baseUrl + '/#aegis9-sentinel-panel'
+        baseUrl + '/?ref=wa#aegis9-sentinel-panel'
       ];
       break;
 
