@@ -7,6 +7,18 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <title>CYBERIA-MED // MURO SOCIAL MÓVIL (NETACAD POD)</title>
+
+  <!-- METADATOS OPEN GRAPH Y TWITTER (PREVISUALIZACIÓN EN WHATSAPP Y REDES SOCIALES) -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="CYBERIA-MED // Muro Móvil Pod NetAcad">
+  <meta property="og:description" content="Feed móvil P2P de telemetría médica en vivo y hábitat de descanso submarino.">
+  <meta property="og:image" content="https://entregametusalas.pages.dev/img/underwater_lounge_habitat.jpg">
+  <meta property="og:image:secure_url" content="https://entregametusalas.pages.dev/img/underwater_lounge_habitat.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1440">
+  <meta property="og:image:height" content="1080">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://entregametusalas.pages.dev/img/underwater_lounge_habitat.jpg">
   <link rel="stylesheet" href="/css/chrysalis_medsoc.css">
 </head>
 <body class="mobile-body">
@@ -28,6 +40,9 @@
         </span>
         <button type="button" id="btn-feed-notifications-header" class="soc-btn feed-notif-btn" style="padding: 0.2rem 0.45rem; font-size: 0.75rem;" title="Activar notificaciones de nuevos mensajes" aria-label="Activar notificaciones del feed">
           <span class="feed-notif-bell">🔔</span>
+        </button>
+        <button type="button" id="btn-mobile-share-wa" class="soc-btn soc-btn-wa btn-share-feed-wa" style="padding: 0.2rem 0.45rem; font-size: 0.75rem;" title="Compartir muro en WhatsApp" aria-label="Compartir muro en WhatsApp">
+          <span class="share-wa-icon" aria-hidden="true">💬</span>
         </button>
         <button type="button" id="btn-mobile-refresh" class="soc-btn" style="padding: 0.2rem 0.45rem; font-size: 0.75rem;" title="Refrescar feed">
           ↻
@@ -278,8 +293,13 @@
         </div>
 
         <div id="feed-form-alert" class="feed-alert-box" style="display: none;"></div>
+        <div id="feed-live-preview-box" class="feed-live-preview-box" style="display: none;"></div>
 
         <div class="mobile-compose-footer">
+          <div class="feed-compose-presets" style="margin-bottom: 0.35rem;">
+            <button type="button" class="feed-preset-btn" data-preset="lounge" title="Adjuntar vista previa de Hábitat Lounge">🛋️ Lounge</button>
+            <button type="button" class="feed-preset-btn" data-preset="snocomm" title="Adjuntar vista previa de Snocomm Building">🏢 Snocomm</button>
+          </div>
           <div id="feed-char-counter" class="feed-char-counter" style="font-size: 0.68rem;">
             0 / 2000 caracteres
           </div>

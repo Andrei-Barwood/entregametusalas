@@ -851,4 +851,122 @@ RSpec.describe 'CYBERIA-MED // SOC Console v19.96 — Complete Verification Suit
       end
     end
   end
+
+  describe '12. Compartir Secciones Clave y Comentarios en WhatsApp (Cyberia WhatsApp Hub)' do
+    it 'incluye botones y estilos CSS de WhatsApp para secciones y comentarios' do
+      get '/css/chrysalis_medsoc.css'
+      expect(last_response.status).to eq(200)
+      css = last_response.body
+      expect(css).to include('soc-btn-wa')
+      expect(css).to include('feed-share-wa-btn')
+      expect(css).to include('feed-post-highlight-pulse')
+      expect(css).to include('cyberia-modal-overlay')
+      expect(css).to include('wa-share-grid')
+    end
+
+    it 'incluye botones de compartir en WhatsApp en la consola principal, visor de episodios y muro' do
+      get '/'
+      expect(last_response.status).to eq(200)
+      body = last_response.body.force_encoding('UTF-8')
+      expect(body).to include('btn-share-topbar-wa')
+      expect(body).to include('btn-share-episode-wa')
+      expect(body).to include('btn-share-sentinel-wa')
+      expect(body).to include('btn-share-feed-wa')
+      expect(body).to include('cyberia-wa-modal')
+      expect(body).to include('COMPARTIR EN WHATSAPP')
+    end
+
+    it 'incluye funciones de compartir comentarios y muro en clinical_feed.js' do
+      get '/js/clinical_feed.js'
+      expect(last_response.status).to eq(200)
+      js = last_response.body.force_encoding('UTF-8')
+      expect(js).to include('feed-share-wa-btn')
+      expect(js).to include('handleSharePostToWhatsApp')
+      expect(js).to include('handleShareMuroToWhatsApp')
+      expect(js).to include('openWhatsAppShare')
+      expect(js).to include('api.whatsapp.com/send?text=')
+      expect(js).to include('checkUrlHashForPostHighlight')
+    end
+
+    it 'incluye funciones de compartir secciones en cyberia_console.js' do
+      get '/js/cyberia_console.js'
+      expect(last_response.status).to eq(200)
+      js = last_response.body.force_encoding('UTF-8')
+      expect(js).to include('shareSectionToWhatsApp')
+      expect(js).to include('initWhatsAppSharing')
+      expect(js).to include('api.whatsapp.com/send?text=')
+      expect(js).to include('cyberia-wa-modal')
+    end
+
+    it 'incluye botón de compartir en WhatsApp en la vista móvil y en la vista muro' do
+      get '/mobile'
+      expect(last_response.status).to eq(200)
+      mobile_body = last_response.body.force_encoding('UTF-8')
+      expect(mobile_body).to include('btn-mobile-share-wa')
+
+      get '/muro'
+      expect(last_response.status).to eq(200)
+      muro_body = last_response.body.force_encoding('UTF-8')
+      expect(muro_body).to include('btn-share-feed-wa')
+    end
+  end
+
+  describe '13. Estilos de Vista Previa Ambiental (Habitat Lounge & Snocomm) y Metadatos Open Graph' do
+    it 'incluye los estilos CSS de las tarjetas de vista previa marina y snocomm' do
+      get '/css/chrysalis_medsoc.css'
+      expect(last_response.status).to eq(200)
+      css = last_response.body
+      expect(css).to include('.feed-habitat-lounge-preview')
+      expect(css).to include('.feed-snocomm-preview')
+      expect(css).to include('.feed-habitat-card-link')
+      expect(css).to include('.feed-snocomm-card-link')
+      expect(css).to include('.feed-habitat-hud-overlay')
+      expect(css).to include('.feed-snocomm-hud-overlay')
+    end
+
+    it 'incluye builders y reconocimiento de hashtags/URLs de ambientación en clinical_feed.js' do
+      get '/js/clinical_feed.js'
+      expect(last_response.status).to eq(200)
+      js = last_response.body.force_encoding('UTF-8')
+      expect(js).to include('underwater_lounge_habitat.jpg')
+      expect(js).to include('snocomm_lounge_preview.jpg')
+      expect(js).to include('isHabitatLoungeUrl')
+      expect(js).to include('isSnocommUrl')
+      expect(js).to include('buildHabitatLoungeCard')
+      expect(js).to include('buildSnocommCard')
+      expect(js).to include('feed-habitat-lounge-preview')
+      expect(js).to include('feed-snocomm-preview')
+    end
+
+    it 'sirve las imágenes de alta resolución de previsualización estática' do
+      get '/img/underwater_lounge_habitat.jpg'
+      expect(last_response.status).to eq(200)
+      expect(last_response.headers['Content-Type']).to include('image/jpeg')
+
+      get '/img/snocomm_lounge_preview.jpg'
+      expect(last_response.status).to eq(200)
+      expect(last_response.headers['Content-Type']).to include('image/jpeg')
+    end
+
+    it 'incluye etiquetas Open Graph y Twitter Cards con la vista previa del Lounge en las páginas clave' do
+      get '/'
+      expect(last_response.status).to eq(200)
+      body = last_response.body.force_encoding('UTF-8')
+      expect(body).to include('property="og:image"')
+      expect(body).to include('underwater_lounge_habitat.jpg')
+      expect(body).to include('name="twitter:card"')
+
+      get '/muro'
+      expect(last_response.status).to eq(200)
+      muro = last_response.body.force_encoding('UTF-8')
+      expect(muro).to include('property="og:image"')
+      expect(muro).to include('underwater_lounge_habitat.jpg')
+
+      get '/mobile'
+      expect(last_response.status).to eq(200)
+      mobile = last_response.body.force_encoding('UTF-8')
+      expect(mobile).to include('property="og:image"')
+      expect(mobile).to include('underwater_lounge_habitat.jpg')
+    end
+  end
 end

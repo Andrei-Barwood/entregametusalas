@@ -18,7 +18,7 @@ class ApplicationController < Sinatra::Base
     set :root, File.expand_path('../..', __dir__)
     set :views, File.expand_path('../views', __dir__)
     set :public_folder, File.expand_path('../../public', __dir__)
-    set :protection, except: [:frame_options]
+    set :protection, except: [:frame_options, :host_authorization]
   end
 
   before do
@@ -31,6 +31,7 @@ class ApplicationController < Sinatra::Base
        !request.path_info.start_with?('/api') &&
        !request.path_info.start_with?('/css') &&
        !request.path_info.start_with?('/js') &&
+       !request.path_info.start_with?('/img') &&
        !request.path_info.start_with?('/reports')
       if params[:desktop] == '1'
         response.set_cookie('force_desktop', value: '1', path: '/', max_age: '86400')

@@ -388,10 +388,12 @@
       if (submitBtn) submitBtn.disabled = len === 0;
     }
 
-    // Indicador dinámico en la caja de redacción cuando se detectan enlaces
+    // Indicador dinámico en la caja de redacción cuando se detectan enlaces o hashtags temáticos
     var linkHint = document.getElementById('feed-link-detected-hint');
     var detectedUrls = extractUrls(textarea.value);
-    if (detectedUrls.length > 0) {
+    var hasHabitatTag = /#(?:habitat|lounge|descanso|reposo|snocomm|relaxation)\b/i.test(textarea.value) ||
+      /\b(?:habitat\s*lounge|sala\s*de\s*descanso|sector\s*descanso|sector\s*de\s*descanso|lounge|snocomm|submarino)\b/i.test(textarea.value);
+    if (detectedUrls.length > 0 || hasHabitatTag) {
       if (!linkHint) {
         linkHint = document.createElement('div');
         linkHint.id = 'feed-link-detected-hint';
@@ -400,19 +402,56 @@
           textarea.parentNode.appendChild(linkHint);
         }
       }
-      var count = detectedUrls.length;
-      linkHint.innerHTML = '🔗 <strong>' + count + ' enlace' + (count > 1 ? 's' : '') + ' detectado' + (count > 1 ? 's' : '') + ':</strong> Previsualización multimedia activa (YouTube, SoundCloud, Spotify, Imágenes o Web).';
+      if (hasHabitatTag && detectedUrls.length === 0) {
+        linkHint.innerHTML = '🛋️ <strong>Vista previa ambiental activa:</strong> Sector Lounge / Habitat Submarino de Cyberia.';
+      } else {
+        var count = detectedUrls.length;
+        linkHint.innerHTML = '🔗 <strong>' + count + ' enlace' + (count > 1 ? 's' : '') + ' detectado' + (count > 1 ? 's' : '') + ':</strong> Previsualización multimedia activa (YouTube, SoundCloud, Spotify, Habitat Lounge, Imágenes o Web).';
+      }
       linkHint.style.display = 'flex';
     } else if (linkHint) {
       linkHint.style.display = 'none';
     }
+
+    // Actualizar vista previa en vivo en tiempo real mientras el usuario escribe
+    updateLivePreview(textarea.value);
+  }
+
+  function updateLivePreview(content) {
+    var previewBox = document.getElementById('feed-live-preview-box');
+    if (!previewBox) return;
+
+    if (!content || content.trim().length === 0) {
+      previewBox.style.display = 'none';
+      previewBox.innerHTML = '';
+      return;
+    }
+
+    var parsed = formatContentWithPreviews(content);
+    if (!parsed.previewsHtml) {
+      previewBox.style.display = 'none';
+      previewBox.innerHTML = '';
+      return;
+    }
+
+    previewBox.style.display = 'block';
+    previewBox.innerHTML = [
+      '<div class="feed-live-preview-header">',
+      '  <span class="live-preview-icon">👁️</span> TELEMETRÍA VISUAL // VISTA PREVIA EN VIVO DE TU PUBLICACIÓN',
+      '</div>',
+      '<div class="feed-live-preview-content">',
+      '  <div class="feed-live-preview-text">' + parsed.textHtml + '</div>',
+      '  <div class="feed-post-previews-container">' + parsed.previewsHtml + '</div>',
+      '</div>'
+    ].join('\n');
+    enhanceSoundCloudCards();
   }
 
   // --- Detección y Previsualización de Enlaces Multimedia ---
 
   function extractUrls(text) {
     if (!text) return [];
-    var urlRegex = /(https?:\/\/[^\s<>"'`]+|(?:^|[\s])(?:www\.|soundcloud\.com\/|on\.soundcloud\.com\/|youtube\.com\/|youtu\.be\/)[^\s<>"'`]+)/gi;
+    var urlRegex = /(https?:\/\/[^\s<>"'`]+|(?:^|[\s])(?:www\.|soundcloud\.com\/|on\.soundcloud\.com\/|youtube\.com\/|youtu\.be\/|\/?img\/[a-zA-Z0-9_\-\.]+)[^\s<>"'`]*)/gi;
     var matches = text.match(urlRegex) || [];
     var cleaned = [];
     var seen = {};
@@ -421,7 +460,9 @@
       var raw = matches[i].trim();
       // Remover puntuación residual al final de la URL
       var u = raw.replace(/[.,)\]?!;:]+$/, '');
-      if (!/^https?:\/\//i.test(u)) {
+      if (u.indexOf('/img/') === 0 || u.indexOf('img/') === 0) {
+        if (u.charAt(0) !== '/') u = '/' + u;
+      } else if (!/^https?:\/\//i.test(u)) {
         u = 'https://' + u;
       }
       if (u && !seen[u]) {
@@ -517,8 +558,118 @@
     return false;
   }
 
+  function isHabitatLoungeUrl(url) {
+    if (!url) return false;
+    try {
+      var u = new URL(url);
+      var text = (u.hostname + u.pathname + u.search + u.hash).toLowerCase();
+      return text.indexOf('underwater_lounge') >= 0 ||
+             text.indexOf('habitat') >= 0 ||
+             text.indexOf('lounge') >= 0 ||
+             text.indexOf('descanso') >= 0 ||
+             text.indexOf('reposo') >= 0 ||
+             text.indexOf('sanctuary') >= 0;
+    } catch (_) {
+      var s = String(url).toLowerCase();
+      return s.indexOf('habitat') >= 0 || s.indexOf('lounge') >= 0 || s.indexOf('descanso') >= 0;
+    }
+  }
+
+  function isSnocommUrl(url) {
+    if (!url) return false;
+    try {
+      var u = new URL(url);
+      var text = (u.hostname + u.pathname + u.search + u.hash).toLowerCase();
+      return text.indexOf('snocomm') >= 0 ||
+             text.indexOf('relaxation_sector') >= 0 ||
+             text.indexOf('relaxation-sector') >= 0;
+    } catch (_) {
+      var s = String(url).toLowerCase();
+      return s.indexOf('snocomm') >= 0;
+    }
+  }
+
+  function buildHabitatLoungeCard(url) {
+    var safeUrl = escapeHtml(url || '/img/underwater_lounge_habitat.jpg');
+    return [
+      '<div class="feed-media-preview feed-habitat-lounge-preview">',
+      '  <div class="feed-media-badge">',
+      '    <span class="feed-media-badge-left">🛋️ HABITAT CLÍNICO // SECTOR DE DESCANSO &amp; SINCRONIZACIÓN</span>',
+      '    <span class="feed-media-badge-tag">VISTA EN PROFUNDIDAD • 4.2 ATM</span>',
+      '  </div>',
+      '  <a href="' + safeUrl + '" target="_blank" rel="noopener noreferrer" class="feed-habitat-card-link" title="Click para ver habitat submarino en alta resolución">',
+      '    <div class="feed-habitat-img-wrapper">',
+      '      <img src="/img/underwater_lounge_habitat.jpg" alt="Cyberia Deep Habitat Lounge — Sala de Descanso y Meditación Submarina" class="feed-habitat-thumb" loading="lazy" onerror="if(!this.dataset.tried){this.dataset.tried=\'1\';this.src=\'./img/underwater_lounge_habitat.jpg\';}">',
+      '      <div class="feed-habitat-hud-overlay">',
+      '        <div class="feed-habitat-top-tags">',
+      '          <span class="feed-habitat-sign-tag">🟢 HABITAT SUBMARINO // NIVEL -420M</span>',
+      '          <span class="feed-habitat-status-tag"><span class="habitat-pulse-dot"></span> REPOSO NEURAL ACTIVO</span>',
+      '        </div>',
+      '        <div class="feed-habitat-bottom-vitals">',
+      '          <span>🌡️ 21.4°C</span> • <span>💧 4.2 ATM</span> • <span>🫁 O₂ 98.6%</span> • <span>🔕 AMORTIGUACIÓN ACÚSTICA</span>',
+      '        </div>',
+      '      </div>',
+      '    </div>',
+      '    <div class="feed-habitat-info-box">',
+      '      <div class="feed-habitat-title">CYBERIA DEEP HABITAT // SALA DE DESCANSO &amp; SINCRONIZACIÓN NEURAL</div>',
+      '      <div class="feed-habitat-desc">Espacio de contención sensorial y reposo para cadetes e ingenieros clínicos. Vistas panorámicas al lecho marino con soporte vital autónomo y protección contra interferencias EMI.</div>',
+      '    </div>',
+      '  </a>',
+      '  <div class="feed-preview-footer">',
+      '    <a href="' + safeUrl + '" target="_blank" rel="noopener noreferrer" class="feed-preview-source-link">',
+      '      <span>↗ Acceder al sector de reposo</span>',
+      '      <span class="feed-preview-url-domain">cyberia.habitat/relaxation-suite</span>',
+      '    </a>',
+      '  </div>',
+      '</div>'
+    ].join('\n');
+  }
+
+  function buildSnocommCard(url) {
+    var safeUrl = escapeHtml(url || '/img/snocomm_lounge_preview.jpg');
+    return [
+      '<div class="feed-media-preview feed-snocomm-preview">',
+      '  <div class="feed-media-badge">',
+      '    <span class="feed-media-badge-left">🏢 SNOCOMM MAIN BUILDING // SECTOR DE RELAJACIÓN</span>',
+      '    <span class="feed-media-badge-tag">VISTA PREVIA HD</span>',
+      '  </div>',
+      '  <a href="' + safeUrl + '" target="_blank" rel="noopener noreferrer" class="feed-snocomm-card-link" title="Click para abrir sector Snocomm Lounge">',
+      '    <div class="feed-snocomm-img-wrapper">',
+      '      <img src="/img/snocomm_lounge_preview.jpg" alt="Snocomm Main Building — Proceed to Lounge Relaxation Sector" class="feed-snocomm-thumb" loading="lazy" onerror="if(!this.dataset.tried){this.dataset.tried=\'1\';this.src=\'./img/snocomm_lounge_preview.jpg\';}">',
+      '      <div class="feed-snocomm-hud-overlay">',
+      '        <div class="feed-snocomm-sign-tag">',
+      '          <span class="snocomm-arrow">↓</span> PROCEED TO LOUNGE // RELAXATION SECTOR',
+      '        </div>',
+      '        <div class="feed-snocomm-blueprint-tag">',
+      '          <span class="snocomm-pulse-dot"></span> SNOCOMM MAIN BUILDING // 3D BLUEPRINT',
+      '        </div>',
+      '      </div>',
+      '    </div>',
+      '    <div class="feed-snocomm-info-box">',
+      '      <div class="feed-snocomm-title">SNOCOMM MAIN BUILDING // RELAXATION SECTOR &amp; UNDERWATER LOUNGE</div>',
+      '      <div class="feed-snocomm-desc">Instalación bio-cibernética submarina de Cyberia. Mirador oceánico con amortiguación neuroquímica, telemetría de signos vitales y sector de descanso para cadetes.</div>',
+      '    </div>',
+      '  </a>',
+      '  <div class="feed-preview-footer">',
+      '    <a href="' + safeUrl + '" target="_blank" rel="noopener noreferrer" class="feed-preview-source-link">',
+      '      <span>↗ Explorar sector en alta resolución</span>',
+      '      <span class="feed-preview-url-domain">snocomm.facility/lounge</span>',
+      '    </a>',
+      '  </div>',
+      '</div>'
+    ].join('\n');
+  }
+
   function buildPreviewCard(url) {
     var safeUrl = escapeHtml(url);
+
+    // 0. Sector Habitat Lounge & Snocomm Facility
+    if (isHabitatLoungeUrl(url)) {
+      return buildHabitatLoungeCard(url);
+    }
+    if (isSnocommUrl(url)) {
+      return buildSnocommCard(url);
+    }
 
     // 1. YouTube
     var ytId = parseYouTubeId(url);
@@ -675,6 +826,27 @@
       var card = buildPreviewCard(urls[i]);
       if (card) {
         previews.push(card);
+      }
+    }
+
+    // 2.b Si no hay previsualizaciones activas pero el mensaje invoca palabras clave o hashtags temáticos
+    if (previews.length < 2) {
+      var mentionsHabitat = /#(?:habitat|lounge|descanso|reposo|sanctuary|habitad|relax|submarino|underwater)\b/i.test(textWithoutCode) ||
+        /\b(?:habitat\s*lounge|sala\s*de\s*descanso|sector\s*descanso|sector\s*de\s*descanso|sector\s*lounge|habitat\s*submarino|vista\s*submarina|lounge|descanso|reposo|habitad|relax|submarino)\b/i.test(textWithoutCode) ||
+        textWithoutCode.indexOf('underwater_lounge') >= 0;
+
+      var mentionsSnocomm = /#(?:snocomm|relaxation|facility|blueprint|corredor)\b/i.test(textWithoutCode) ||
+        /\b(?:snocomm\s*main\s*building|relaxation\s*sector|edificio\s*principal|sector\s*relajacion|snocomm|corredor|blueprint)\b/i.test(textWithoutCode) ||
+        textWithoutCode.indexOf('snocomm_lounge') >= 0;
+
+      var alreadyHasHabitat = previews.some(function (p) { return p.indexOf('feed-habitat-lounge-preview') >= 0; });
+      var alreadyHasSnocomm = previews.some(function (p) { return p.indexOf('feed-snocomm-preview') >= 0; });
+
+      if (mentionsHabitat && !alreadyHasHabitat) {
+        previews.push(buildHabitatLoungeCard('/img/underwater_lounge_habitat.jpg'));
+      }
+      if (mentionsSnocomm && !alreadyHasSnocomm && previews.length < 2) {
+        previews.push(buildSnocommCard('/img/snocomm_lounge_preview.jpg'));
       }
     }
 
@@ -950,6 +1122,108 @@
     });
   }
 
+  // --- Utilidades de Compartición en WhatsApp ---
+
+  function getShareBaseUrl() {
+    if (typeof window === 'undefined') return 'https://entregametusalas.pages.dev';
+    var host = window.location.hostname;
+    if (host === 'localhost' || host === '127.0.0.1' || host === '0.0.0.0') {
+      return 'https://entregametusalas.pages.dev';
+    }
+    return window.location.origin;
+  }
+
+  function openWhatsAppShare(text) {
+    if (typeof window === 'undefined') return;
+    var waUrl = 'https://api.whatsapp.com/send?text=' + encodeURIComponent(text);
+    window.open(waUrl, '_blank', 'noopener,noreferrer');
+  }
+
+  function handleSharePostToWhatsApp(btn) {
+    if (!btn) return;
+    var postId = btn.getAttribute('data-post-id');
+    if (!postId) return;
+    var card = btn.closest('.feed-post-card');
+    if (!card) return;
+
+    var authorEl = card.querySelector('.feed-post-author');
+    var author = authorEl ? authorEl.textContent.trim() : 'Cadete NetAcad';
+
+    var textEl = card.querySelector('.feed-post-text');
+    var rawText = textEl ? (textEl.innerText || textEl.textContent || '') : '';
+    var snippet = rawText.trim();
+    if (snippet.length > 280) {
+      snippet = snippet.substring(0, 277) + '...';
+    }
+
+    var epPill = card.querySelector('.feed-post-pill');
+    var epLabel = epPill ? epPill.textContent.trim() : '';
+
+    var baseUrl = getShareBaseUrl();
+    var postUrl = baseUrl + '/muro#post-' + postId;
+
+    var lines = [
+      '💬 *Comentario de ' + author + ' en el Pod Clínico Cyberia*' + (epLabel ? ' [' + epLabel + ']' : '') + ':',
+      '',
+      '«' + snippet + '»',
+      '',
+      '📡 *Ver transmisión en vivo en el Muro:*',
+      postUrl
+    ];
+
+    openWhatsAppShare(lines.join('\n'));
+
+    var labelEl = btn.querySelector('.share-wa-label');
+    if (labelEl) {
+      var prev = labelEl.textContent;
+      labelEl.textContent = '✓ Abriendo';
+      setTimeout(function () {
+        labelEl.textContent = prev;
+      }, 2000);
+    }
+  }
+
+  function handleShareMuroToWhatsApp() {
+    var baseUrl = getShareBaseUrl();
+    var lines = [
+      '📡 *MURO SOCIAL CLÍNICO // CYBERIA POD NETACAD*',
+      '',
+      'Canal de telemetría P2P en tiempo real (sin login). Comparte análisis de vulnerabilidades, comandos Kali Linux y depuración táctica.',
+      '',
+      '💬 *Súmate a la transmisión en vivo:*',
+      baseUrl + '/muro'
+    ];
+    openWhatsAppShare(lines.join('\n'));
+  }
+
+  function checkUrlHashForPostHighlight() {
+    if (typeof window === 'undefined') return;
+    var hash = window.location.hash || '';
+    var targetId = null;
+    var m = hash.match(/#post-([a-zA-Z0-9_-]+)/);
+    if (m && m[1]) {
+      targetId = m[1];
+    } else {
+      try {
+        var params = new URLSearchParams(window.location.search);
+        var p = params.get('post');
+        if (p) targetId = p;
+      } catch (_) {}
+    }
+    if (targetId) {
+      var card = document.querySelector('[data-post-id="' + targetId + '"]');
+      if (card) {
+        setTimeout(function () {
+          card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          card.classList.add('feed-post-highlight-pulse');
+          setTimeout(function () {
+            card.classList.remove('feed-post-highlight-pulse');
+          }, 3500);
+        }, 350);
+      }
+    }
+  }
+
   function renderPostCard(post) {
     var isMobile = document.body && document.body.classList.contains('mobile-body');
     var epLabel = 'GENERAL';
@@ -968,7 +1242,7 @@
     var actionsClasses = 'feed-post-actions' + (isMobile ? ' mobile-post-actions' : '');
 
     return [
-      '<article class="' + cardClasses + '" data-post-id="' + escapeHtml(post.id) + '" data-episode-id="' + (post.episode_id || '') + '">',
+      '<article class="' + cardClasses + '" id="post-' + escapeHtml(post.id) + '" data-post-id="' + escapeHtml(post.id) + '" data-episode-id="' + (post.episode_id || '') + '">',
       '  <div class="' + avatarClasses + '" style="background-color: ' + escapeHtml(avatarBg) + ';">' + avatarInitial + '</div>',
       '  <div class="feed-post-main">',
       '    <div class="feed-post-header">',
@@ -982,7 +1256,7 @@
       '      <div class="feed-post-text">' + parsed.textHtml + '</div>',
       parsed.previewsHtml ? '      <div class="feed-post-previews-container">' + parsed.previewsHtml + '</div>' : '',
       '    </div>',
-      '    <div class="' + actionsClasses + '" aria-label="Reacciones al comentario">',
+      '    <div class="' + actionsClasses + '" aria-label="Reacciones y acciones del comentario">',
       '      <button type="button" class="feed-react-btn feed-react-like" data-post-id="' + escapeHtml(post.id) + '" data-reaction="like" title="Pulgar arriba (Me gusta)">',
       '        <span class="react-emoji" aria-hidden="true">👍</span>',
       '        <span class="react-count" id="react-like-' + escapeHtml(post.id) + '">' + (post.likes || 0) + '</span>',
@@ -994,6 +1268,10 @@
       '      <button type="button" class="feed-react-btn feed-react-love" data-post-id="' + escapeHtml(post.id) + '" data-reaction="love" title="Amor Clínico (Corazón con lazo)">',
       '        <span class="react-emoji" aria-hidden="true">💝</span>',
       '        <span class="react-count" id="react-love-' + escapeHtml(post.id) + '">' + (post.loves || 0) + '</span>',
+      '      </button>',
+      '      <button type="button" class="feed-share-wa-btn" data-post-id="' + escapeHtml(post.id) + '" title="Compartir este comentario en WhatsApp" aria-label="Compartir en WhatsApp">',
+      '        <span class="share-wa-icon" aria-hidden="true">💬</span>',
+      '        <span class="share-wa-label">WhatsApp</span>',
       '      </button>',
       '    </div>',
       '  </div>',
@@ -1085,6 +1363,32 @@
           }
         }
 
+        // Si la tarjeta en el DOM proviene de ERB o no tiene formateo de previews, enriquecerla
+        var bodyEl = existingCard.querySelector('.feed-post-body');
+        var parsed = formatContentWithPreviews(post.content);
+        var hasTextDiv = existingCard.querySelector('.feed-post-text');
+        var hasPreviewsDiv = existingCard.querySelector('.feed-post-previews-container');
+
+        if (bodyEl && (!hasTextDiv || (!hasPreviewsDiv && parsed.previewsHtml))) {
+          bodyEl.innerHTML = '<div class="feed-post-text">' + parsed.textHtml + '</div>' +
+            (parsed.previewsHtml ? '<div class="feed-post-previews-container">' + parsed.previewsHtml + '</div>' : '');
+        }
+
+        // Si falta el botón de compartir en WhatsApp, agregarlo a las acciones
+        if (!existingCard.querySelector('.feed-share-wa-btn')) {
+          var actions = existingCard.querySelector('.feed-post-actions');
+          if (actions) {
+            var waBtn = document.createElement('button');
+            waBtn.type = 'button';
+            waBtn.className = 'feed-share-wa-btn';
+            waBtn.setAttribute('data-post-id', post.id);
+            waBtn.title = 'Compartir este comentario en WhatsApp';
+            waBtn.setAttribute('aria-label', 'Compartir en WhatsApp');
+            waBtn.innerHTML = '<span class="share-wa-icon" aria-hidden="true">💬</span> <span class="share-wa-label">WhatsApp</span>';
+            actions.appendChild(waBtn);
+          }
+        }
+
         // Si ya está en la posición exacta, NO moverlo en el DOM (preserva iframes y reproducción de audio/video)
         if (currentChild !== existingCard) {
           container.insertBefore(existingCard, currentChild || null);
@@ -1102,6 +1406,7 @@
     }
 
     enhanceSoundCloudCards();
+    checkUrlHashForPostHighlight();
 
     if (preserveScroll) {
       container.scrollTop = scrollPos;
@@ -1366,8 +1671,38 @@
     var contentTextarea = document.getElementById('feed-post-content');
     if (contentTextarea) {
       contentTextarea.addEventListener('input', updateCharCounter);
+      contentTextarea.addEventListener('keyup', updateCharCounter);
+      contentTextarea.addEventListener('change', updateCharCounter);
       updateCharCounter();
     }
+
+    // Botones de presets rápidos (Lounge, Snocomm, Audio)
+    document.addEventListener('click', function (e) {
+      var presetBtn = e.target.closest('.feed-preset-btn');
+      if (presetBtn) {
+        e.preventDefault();
+        var preset = presetBtn.getAttribute('data-preset');
+        var textarea = document.getElementById('feed-post-content');
+        if (!textarea) return;
+
+        var snippet = '';
+        if (preset === 'lounge') {
+          snippet = ' #lounge';
+        } else if (preset === 'snocomm') {
+          snippet = ' #snocomm';
+        } else if (preset === 'soundcloud') {
+          snippet = ' https://soundcloud.com/weird-bananas/thats-not-my-house';
+        } else if (preset === 'youtube') {
+          snippet = ' https://youtu.be/dQw4w9WgXcQ';
+        }
+
+        if (snippet && textarea.value.indexOf(snippet.trim()) === -1) {
+          textarea.value = (textarea.value.trim() + snippet).trim();
+          updateCharCounter();
+          textarea.focus();
+        }
+      }
+    });
 
     var submitBtn = document.getElementById('btn-feed-submit');
     if (submitBtn) {
@@ -1490,9 +1825,28 @@
       }
     });
 
+    // Delegación de click para botón de compartir comentario individual en WhatsApp
+    document.addEventListener('click', function (e) {
+      var waBtn = e.target.closest('.feed-share-wa-btn');
+      if (waBtn) {
+        e.preventDefault();
+        handleSharePostToWhatsApp(waBtn);
+      }
+    });
+
+    // Delegación de click para botón de compartir el Muro en WhatsApp
+    document.addEventListener('click', function (e) {
+      var muroWaBtn = e.target.closest('.btn-share-feed-wa, #btn-share-feed-wa, #btn-mobile-share-wa');
+      if (muroWaBtn) {
+        e.preventDefault();
+        handleShareMuroToWhatsApp();
+      }
+    });
+
     // Cargar posts iniciales y mejorar tarjetas
     fetchPosts(false);
     enhanceSoundCloudCards();
+    setTimeout(checkUrlHashForPostHighlight, 500);
 
     // Auto-polling en tiempo real cada 5 segundos
     if (pollInterval) clearInterval(pollInterval);
@@ -1525,12 +1879,27 @@
     parseSpotifyEmbed: parseSpotifyEmbed,
     isImageUrl: isImageUrl,
     buildPreviewCard: buildPreviewCard,
+    buildHabitatLoungeCard: buildHabitatLoungeCard,
+    buildSnocommCard: buildSnocommCard,
+    isHabitatLoungeUrl: isHabitatLoungeUrl,
+    isSnocommUrl: isSnocommUrl,
     formatContentWithPreviews: formatContentWithPreviews,
     playYouTubeFacade: playYouTubeFacade,
     updateFeedDOM: updateFeedDOM,
     ensureSoundCloudApi: ensureSoundCloudApi,
-    attachSoundCloudInfiniteLoop: attachSoundCloudInfiniteLoop
+    attachSoundCloudInfiniteLoop: attachSoundCloudInfiniteLoop,
+    getShareBaseUrl: getShareBaseUrl,
+    openWhatsAppShare: openWhatsAppShare,
+    handleSharePostToWhatsApp: handleSharePostToWhatsApp,
+    handleShareMuroToWhatsApp: handleShareMuroToWhatsApp,
+    checkUrlHashForPostHighlight: checkUrlHashForPostHighlight
   };
+
+  window.CyberiaShare = window.CyberiaShare || {};
+  window.CyberiaShare.getBaseUrl = getShareBaseUrl;
+  window.CyberiaShare.openWhatsApp = openWhatsAppShare;
+  window.CyberiaShare.sharePost = handleSharePostToWhatsApp;
+  window.CyberiaShare.shareMuro = handleShareMuroToWhatsApp;
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initFeed);

@@ -11,6 +11,28 @@
 // Semillas iniciales del Muro Social Clínico (NetAcad Pod)
 const SEED_FEED_POSTS = [
   {
+    id: 'post_seed_habitat_01',
+    episode_id: 1,
+    author: 'Comandante_BLADES',
+    avatar_color: '#29C2DA',
+    content: '¡Atención cadetes de NetAcad! Se ha habilitado el acceso al Hábitat Submarino Lounge (#lounge). Cuentan con soporte vital autónomo a 420m de profundidad para descompresión sensorial tras auditorías de telemetría médica.',
+    likes: 48,
+    dislikes: 0,
+    loves: 64,
+    created_at: new Date(Date.now() - 900000).toISOString()
+  },
+  {
+    id: 'post_seed_snocomm_01',
+    episode_id: 4,
+    author: 'Ing_BioSistemas',
+    avatar_color: '#6CC929',
+    content: 'Señalética activa en el corredor de tránsito: proceed to lounge relaxation sector (#snocomm). Consulten el blueprint holográfico 3D de la instalación principal antes de entrar al sector de relajación.',
+    likes: 34,
+    dislikes: 0,
+    loves: 41,
+    created_at: new Date(Date.now() - 1200000).toISOString()
+  },
+  {
     id: 'post_seed_ep12_01',
     episode_id: 12,
     author: 'BioIngeniero_DevlinHunter',

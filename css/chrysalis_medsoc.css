@@ -3072,6 +3072,71 @@ html, body {
   animation: fadeInHint 0.2s ease;
 }
 
+/* Presets de composición rápida (Lounge, Snocomm, Audio) */
+.feed-compose-presets {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.feed-preset-btn {
+  background: rgba(14, 24, 30, 0.8);
+  border: 1px solid rgba(41, 194, 218, 0.35);
+  color: var(--bauble-cyan-bright, #29C2DA);
+  font-family: var(--font-hud, monospace);
+  font-size: 0.68rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.feed-preset-btn:hover {
+  background: rgba(41, 194, 218, 0.2);
+  border-color: var(--bauble-cyan-bright, #29C2DA);
+  color: #FFFFFF;
+  box-shadow: 0 0 8px rgba(41, 194, 218, 0.3);
+}
+
+/* Caja de previsualización en vivo en el componedor */
+.feed-live-preview-box {
+  margin-top: 0.75rem;
+  padding: 0.65rem;
+  background: rgba(14, 17, 17, 0.95);
+  border: 1px dashed rgba(41, 194, 218, 0.5);
+  border-radius: 4px;
+  animation: fadeInHint 0.25s ease;
+}
+
+.feed-live-preview-header {
+  font-family: var(--font-hud, monospace);
+  font-size: 0.66rem;
+  font-weight: 700;
+  color: var(--bauble-cyan-bright, #29C2DA);
+  letter-spacing: 0.08em;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.feed-live-preview-content {
+  background: rgba(0, 0, 0, 0.25);
+  padding: 0.5rem;
+  border-radius: 3px;
+}
+
+.feed-live-preview-text {
+  font-size: 0.78rem;
+  color: var(--magic-main, #83FF65);
+  margin-bottom: 0.5rem;
+  line-height: 1.4;
+}
+
 @keyframes fadeInHint {
   from { opacity: 0; transform: translateY(-4px); }
   to { opacity: 1; transform: translateY(0); }
@@ -3092,5 +3157,531 @@ html, body {
     min-height: 140px;
   }
 }
+
+/* ==========================================================================
+   INTEGRACIÓN CYBERIA // COMPARTIR EN WHATSAPP (SECCIONES Y COMENTARIOS)
+   ========================================================================== */
+
+.soc-btn-wa {
+  background-color: rgba(37, 211, 102, 0.12);
+  border: 1px solid #25D366;
+  color: #25D366;
+  text-shadow: 0 0 6px rgba(37, 211, 102, 0.4);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.soc-btn-wa:hover,
+.soc-btn-wa:focus-visible {
+  background: linear-gradient(90deg, #128C7E, #25D366);
+  color: #0E1111;
+  border-color: #25D366;
+  box-shadow: 0 0 12px rgba(37, 211, 102, 0.6);
+}
+
+/* Botón de compartir en WhatsApp dentro de cada tarjeta de comentario */
+.feed-share-wa-btn {
+  background: rgba(37, 211, 102, 0.1);
+  border: 1px solid rgba(37, 211, 102, 0.4);
+  border-radius: 14px;
+  padding: 0.22rem 0.65rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  cursor: pointer;
+  color: #25D366;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  transition: all 0.18s ease;
+  user-select: none;
+  margin-left: auto;
+}
+
+.feed-share-wa-btn:hover {
+  transform: scale(1.05);
+  background: rgba(37, 211, 102, 0.22);
+  border-color: #25D366;
+  color: #FFFFFF;
+  box-shadow: 0 0 10px rgba(37, 211, 102, 0.5);
+}
+
+.feed-share-wa-btn:active {
+  transform: scale(0.96);
+}
+
+.feed-share-wa-btn .share-wa-icon {
+  font-size: 0.82rem;
+}
+
+.mobile-post-actions .feed-share-wa-btn {
+  padding: 0.3rem 0.65rem;
+  font-size: 0.78rem;
+  min-height: 34px;
+}
+
+/* Animación de pulso cuando se accede a un comentario vía deep-link (#post-ID) */
+@keyframes cyberiaPulseHighlight {
+  0% {
+    box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.8);
+    border-color: #25D366;
+  }
+  30% {
+    box-shadow: 0 0 25px 6px rgba(37, 211, 102, 0.7);
+    border-color: #25D366;
+  }
+  70% {
+    box-shadow: 0 0 15px 3px rgba(37, 211, 102, 0.4);
+    border-color: #25D366;
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
+  }
+}
+
+.feed-post-highlight-pulse {
+  animation: cyberiaPulseHighlight 2.5s ease-out;
+  border-color: #25D366 !important;
+}
+
+/* Modal Selector de Secciones para Compartir en WhatsApp */
+.cyberia-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(5, 12, 16, 0.85);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999;
+  padding: 1rem;
+  animation: modalFadeIn 0.22s ease-out;
+}
+
+@keyframes modalFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.cyberia-modal-content {
+  background: #0D161B;
+  border: 1px solid #25D366;
+  border-radius: 6px;
+  box-shadow: 0 0 35px rgba(37, 211, 102, 0.35), inset 0 0 15px rgba(37, 211, 102, 0.08);
+  max-width: 520px;
+  width: 100%;
+  overflow: hidden;
+}
+
+.cyberia-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(90deg, #102A24 0%, #174235 100%);
+  border-bottom: 1px solid rgba(37, 211, 102, 0.4);
+  padding: 0.85rem 1.1rem;
+}
+
+.cyberia-modal-close {
+  background: transparent;
+  border: none;
+  color: var(--hud-glass-outline);
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0 0.3rem;
+  transition: color 0.18s ease;
+}
+
+.cyberia-modal-close:hover {
+  color: #FF4444;
+}
+
+.cyberia-modal-body {
+  padding: 1.1rem;
+}
+
+.wa-share-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.wa-share-card-btn {
+  background: rgba(14, 25, 30, 0.85);
+  border: 1px solid var(--border-structural);
+  border-radius: 4px;
+  padding: 0.75rem 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  width: 100%;
+}
+
+.wa-share-card-btn:hover {
+  background: rgba(37, 211, 102, 0.12);
+  border-color: #25D366;
+  transform: translateX(4px);
+  box-shadow: 0 0 12px rgba(37, 211, 102, 0.25);
+}
+
+.wa-share-card-icon {
+  font-size: 1.4rem;
+  min-width: 32px;
+  text-align: center;
+}
+
+.wa-share-card-info {
+  flex: 1;
+}
+
+.wa-share-card-title {
+  color: #FFFFFF;
+  font-weight: 700;
+  font-size: 0.82rem;
+  letter-spacing: 0.5px;
+  margin-bottom: 0.2rem;
+}
+
+.wa-share-card-btn:hover .wa-share-card-title {
+  color: #25D366;
+}
+
+.wa-share-card-desc {
+  color: var(--hud-glass-outline);
+  font-size: 0.7rem;
+  line-height: 1.35;
+}
+
+.wa-share-card-arrow {
+  color: #25D366;
+  font-weight: 800;
+  font-size: 1.1rem;
+  transition: transform 0.18s ease;
+}
+
+.wa-share-card-btn:hover .wa-share-card-arrow {
+  transform: translate(2px, -2px);
+}
+
+/* ==========================================================================
+   ESTILOS DE VISTA PREVIA AMBIENTAL Y HABITAT // CYBERIA & SNOCOMM LOUNGE
+   ========================================================================== */
+
+/* 1. Habitat Lounge Interior (Vista Panorámica Submarina, Sofá y Vela) */
+.feed-habitat-lounge-preview {
+  background: #061015;
+  border: 1px solid rgba(41, 194, 218, 0.45);
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 4px 25px rgba(0, 0, 0, 0.75), inset 0 0 18px rgba(41, 194, 218, 0.08);
+  transition: all 0.25s ease;
+  margin-top: 0.5rem;
+}
+
+.feed-habitat-lounge-preview:hover {
+  border-color: var(--bauble-cyan-bright, #29C2DA);
+  box-shadow: 0 6px 30px rgba(41, 194, 218, 0.35);
+}
+
+.feed-habitat-card-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+.feed-habitat-img-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  max-height: 380px;
+  overflow: hidden;
+  background: #020608;
+}
+
+.feed-habitat-thumb {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.45s ease, filter 0.45s ease;
+  filter: brightness(0.96) contrast(1.04);
+}
+
+.feed-habitat-card-link:hover .feed-habitat-thumb {
+  transform: scale(1.025);
+  filter: brightness(1.04) contrast(1.08);
+}
+
+.feed-habitat-hud-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 0.75rem;
+  background: linear-gradient(180deg, rgba(6, 16, 21, 0.4) 0%, rgba(6, 16, 21, 0) 45%, rgba(6, 16, 21, 0.88) 100%);
+}
+
+.feed-habitat-top-tags {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.feed-habitat-sign-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: rgba(6, 16, 21, 0.88);
+  border: 1px solid rgba(41, 194, 218, 0.7);
+  color: #29C2DA;
+  font-family: var(--font-hud, monospace);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 0.22rem 0.55rem;
+  border-radius: 3px;
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  box-shadow: 0 0 12px rgba(41, 194, 218, 0.3);
+  text-shadow: 0 0 8px rgba(41, 194, 218, 0.7);
+}
+
+.feed-habitat-status-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: rgba(16, 32, 22, 0.88);
+  border: 1px solid rgba(48, 255, 0, 0.55);
+  color: var(--magic-highlight, #A4FF8E);
+  font-family: var(--font-hud, monospace);
+  font-size: 0.64rem;
+  letter-spacing: 0.05em;
+  padding: 0.2rem 0.5rem;
+  border-radius: 3px;
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  text-shadow: 0 0 6px rgba(48, 255, 0, 0.5);
+}
+
+.feed-habitat-status-tag .habitat-pulse-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--magic-ring, #30FF00);
+  box-shadow: 0 0 6px var(--magic-ring, #30FF00);
+  animation: habitatPulse 1.8s infinite;
+}
+
+@keyframes habitatPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.35; transform: scale(0.85); }
+}
+
+.feed-habitat-bottom-vitals {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  background: rgba(5, 12, 16, 0.85);
+  border: 1px solid rgba(41, 194, 218, 0.35);
+  border-radius: 3px;
+  padding: 0.25rem 0.65rem;
+  color: #79B8C3;
+  font-family: var(--font-hud, monospace);
+  font-size: 0.66rem;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  align-self: flex-start;
+}
+
+.feed-habitat-info-box {
+  padding: 0.85rem 1rem;
+  background: #09171E;
+  border-top: 1px solid rgba(41, 194, 218, 0.2);
+}
+
+.feed-habitat-title {
+  color: #FFFFFF;
+  font-family: var(--font-hud, monospace);
+  font-size: 0.84rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  margin-bottom: 0.35rem;
+  line-height: 1.35;
+  transition: color 0.18s ease;
+}
+
+.feed-habitat-card-link:hover .feed-habitat-title {
+  color: var(--bauble-cyan-bright, #29C2DA);
+  text-shadow: 0 0 8px rgba(41, 194, 218, 0.5);
+}
+
+.feed-habitat-desc {
+  color: #9AB2B7;
+  font-size: 0.74rem;
+  line-height: 1.45;
+}
+
+/* 2. Snocomm Access Corridor (Corredor y Plano Holográfico 3D) */
+.feed-snocomm-preview {
+  background: #071217;
+  border: 1px solid rgba(41, 194, 218, 0.45);
+  border-radius: 4px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6), inset 0 0 15px rgba(41, 194, 218, 0.05);
+  transition: all 0.25s ease;
+  margin-top: 0.5rem;
+}
+
+.feed-snocomm-preview:hover {
+  border-color: var(--bauble-cyan-bright, #29C2DA);
+  box-shadow: 0 6px 24px rgba(41, 194, 218, 0.35);
+}
+
+.feed-snocomm-card-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+
+.feed-snocomm-img-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 7;
+  max-height: 280px;
+  overflow: hidden;
+  background: #020608;
+}
+
+.feed-snocomm-thumb {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease, filter 0.4s ease;
+  filter: brightness(0.95) contrast(1.05);
+}
+
+.feed-snocomm-card-link:hover .feed-snocomm-thumb {
+  transform: scale(1.025);
+  filter: brightness(1.05) contrast(1.1);
+}
+
+.feed-snocomm-hud-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 0.75rem;
+  background: linear-gradient(180deg, rgba(7, 18, 23, 0.3) 0%, rgba(7, 18, 23, 0) 40%, rgba(7, 18, 23, 0.85) 100%);
+}
+
+.feed-snocomm-sign-tag {
+  align-self: flex-start;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: rgba(5, 15, 20, 0.85);
+  border: 1px solid rgba(41, 194, 218, 0.6);
+  color: #29C2DA;
+  font-family: var(--font-hud, monospace);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  padding: 0.25rem 0.6rem;
+  border-radius: 3px;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  box-shadow: 0 0 12px rgba(41, 194, 218, 0.3);
+  text-shadow: 0 0 8px rgba(41, 194, 218, 0.7);
+}
+
+.feed-snocomm-sign-tag .snocomm-arrow {
+  color: #29C2DA;
+  font-weight: 900;
+  font-size: 0.8rem;
+}
+
+.feed-snocomm-blueprint-tag {
+  align-self: flex-end;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: rgba(14, 24, 30, 0.85);
+  border: 1px solid rgba(48, 255, 0, 0.5);
+  color: var(--magic-highlight, #A4FF8E);
+  font-family: var(--font-hud, monospace);
+  font-size: 0.65rem;
+  letter-spacing: 0.05em;
+  padding: 0.2rem 0.55rem;
+  border-radius: 3px;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  text-shadow: 0 0 6px rgba(48, 255, 0, 0.5);
+}
+
+.feed-snocomm-blueprint-tag .snocomm-pulse-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--magic-ring, #30FF00);
+  box-shadow: 0 0 6px var(--magic-ring, #30FF00);
+  animation: snocommPulseDot 1.5s infinite;
+}
+
+@keyframes snocommPulseDot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(0.8); }
+}
+
+.feed-snocomm-info-box {
+  padding: 0.85rem 1rem;
+  background: #09171E;
+  border-top: 1px solid rgba(41, 194, 218, 0.2);
+}
+
+.feed-snocomm-title {
+  color: #FFFFFF;
+  font-family: var(--font-hud, monospace);
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  margin-bottom: 0.35rem;
+  line-height: 1.35;
+  transition: color 0.18s ease;
+}
+
+.feed-snocomm-card-link:hover .feed-snocomm-title {
+  color: var(--bauble-cyan-bright, #29C2DA);
+  text-shadow: 0 0 8px rgba(41, 194, 218, 0.5);
+}
+
+.feed-snocomm-desc {
+  color: #A0B4B9;
+  font-size: 0.74rem;
+  line-height: 1.45;
+}
+
+
 
 

@@ -4,6 +4,21 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CYBERIA-MED // SOC Console v19.96 — BLADES Neural &amp; IoMT Telemetry</title>
+
+  <!-- METADATOS OPEN GRAPH Y TWITTER (PREVISUALIZACIÓN EN WHATSAPP Y REDES SOCIALES) -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="MURO SOCIAL CLÍNICO // Cyberia Pod NetAcad">
+  <meta property="og:description" content="Feed en tiempo real P2P de telemetría médica, ciberseguridad hospitalaria y hábitats submarinos de Cyberia.">
+  <meta property="og:image" content="https://entregametusalas.pages.dev/img/underwater_lounge_habitat.jpg">
+  <meta property="og:image:secure_url" content="https://entregametusalas.pages.dev/img/underwater_lounge_habitat.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1440">
+  <meta property="og:image:height" content="1080">
+  <meta property="og:image:alt" content="Cyberia Deep Habitat Lounge — Sala de Descanso Submarina">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="MURO SOCIAL CLÍNICO // Cyberia Pod NetAcad">
+  <meta name="twitter:description" content="Feed en tiempo real P2P de telemetría médica, ciberseguridad hospitalaria y hábitats submarinos de Cyberia.">
+  <meta name="twitter:image" content="https://entregametusalas.pages.dev/img/underwater_lounge_habitat.jpg">
   <link rel="stylesheet" href="/css/chrysalis_medsoc.css">
 </head>
 <body>
@@ -43,6 +58,9 @@
       <a href="/mobile" class="soc-btn nav-btn-mobile" style="border-color: var(--magic-ring); color: var(--magic-highlight);" title="Versión móvil optimizada exclusiva para el feed">
         [📱] MÓVIL
       </a>
+      <button type="button" class="soc-btn soc-btn-wa btn-share-feed-wa" title="Compartir muro en WhatsApp">
+        <span class="share-wa-icon" aria-hidden="true">💬</span> COMPARTIR WA
+      </button>
     </nav>
   </header>
 
@@ -935,6 +953,11 @@ Nmap done: 1 IP address (1 host up) scanned in 0.42 seconds`);
         <p style="font-size: 0.8rem; color: var(--hud-glass-outline); margin: 0; line-height: 1.4;">
           Feed en tiempo real para estudiantes de medicina e ingeniería de ciberseguridad. Comparte análisis de vulnerabilidades, comandos Kali Linux, configuraciones de transformadores de aislamiento (LIM) y depuración táctica de los 48 episodios.
         </p>
+        <div style="margin-top: 0.65rem; display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+          <button type="button" class="soc-btn soc-btn-wa btn-share-feed-wa" style="font-size: 0.74rem; padding: 0.25rem 0.65rem;" title="Compartir este muro en WhatsApp">
+            <span class="share-wa-icon" aria-hidden="true">💬</span> COMPARTIR MURO EN WHATSAPP
+          </button>
+        </div>
       </div>
 
       <!-- BADGE DE ALMACENAMIENTO ULTRACOMPACTO JSONL -->
@@ -1204,8 +1227,14 @@ Nmap done: 1 IP address (1 host up) scanned in 0.42 seconds`);
         </div>
 
         <div id="feed-form-alert" class="feed-alert-box" style="display: none;"></div>
+        <div id="feed-live-preview-box" class="feed-live-preview-box" style="display: none;"></div>
 
         <div class="feed-compose-footer">
+          <div class="feed-compose-presets">
+            <span style="font-size: 0.65rem; color: var(--hud-glass-outline); margin-right: 0.2rem;">ESTILOS:</span>
+            <button type="button" class="feed-preset-btn" data-preset="lounge" title="Adjuntar vista previa de Hábitat Lounge">🛋️ Lounge</button>
+            <button type="button" class="feed-preset-btn" data-preset="snocomm" title="Adjuntar vista previa de Snocomm Building">🏢 Snocomm</button>
+          </div>
           <div id="feed-char-counter" class="feed-char-counter">
             0 / 2000 caracteres
           </div>

@@ -18,6 +18,11 @@
         <p style="font-size: 0.8rem; color: var(--hud-glass-outline); margin: 0; line-height: 1.4;">
           Feed en tiempo real para estudiantes de medicina e ingeniería de ciberseguridad. Comparte análisis de vulnerabilidades, comandos Kali Linux, configuraciones de transformadores de aislamiento (LIM) y depuración táctica de los 48 episodios.
         </p>
+        <div style="margin-top: 0.65rem; display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap;">
+          <button type="button" class="soc-btn soc-btn-wa btn-share-feed-wa" style="font-size: 0.74rem; padding: 0.25rem 0.65rem;" title="Compartir este muro en WhatsApp">
+            <span class="share-wa-icon" aria-hidden="true">💬</span> COMPARTIR MURO EN WHATSAPP
+          </button>
+        </div>
       </div>
 
       <!-- BADGE DE ALMACENAMIENTO ULTRACOMPACTO JSONL -->
@@ -103,8 +108,14 @@
         </div>
 
         <div id="feed-form-alert" class="feed-alert-box" style="display: none;"></div>
+        <div id="feed-live-preview-box" class="feed-live-preview-box" style="display: none;"></div>
 
         <div class="feed-compose-footer">
+          <div class="feed-compose-presets">
+            <span style="font-size: 0.65rem; color: var(--hud-glass-outline); margin-right: 0.2rem;">ESTILOS RÁPIDOS:</span>
+            <button type="button" class="feed-preset-btn" data-preset="lounge" title="Adjuntar vista previa de Hábitat Lounge">🛋️ Hábitat Lounge</button>
+            <button type="button" class="feed-preset-btn" data-preset="snocomm" title="Adjuntar vista previa de Snocomm Building">🏢 Snocomm</button>
+          </div>
           <div id="feed-char-counter" class="feed-char-counter">
             0 / 2000 caracteres
           </div>
@@ -180,7 +191,7 @@
               <time class="feed-post-time" datetime="<%= p.created_at %>">hace poco</time>
             </div>
             <div class="feed-post-body">
-              <%= p.content.gsub("\n", "<br>") %>
+              <div class="feed-post-text"><%= p.content.gsub("\n", "<br>") %></div>
             </div>
             <div class="feed-post-actions" aria-label="Reacciones al comentario">
               <button type="button" class="feed-react-btn feed-react-like" data-post-id="<%= p.id %>" data-reaction="like" title="Pulgar arriba (Me gusta)">
@@ -194,6 +205,10 @@
               <button type="button" class="feed-react-btn feed-react-love" data-post-id="<%= p.id %>" data-reaction="love" title="Amor Clínico (Corazón con lazo)">
                 <span class="react-emoji" aria-hidden="true">💝</span>
                 <span class="react-count" id="react-love-<%= p.id %>"><%= p.loves %></span>
+              </button>
+              <button type="button" class="feed-share-wa-btn" data-post-id="<%= p.id %>" title="Compartir este comentario en WhatsApp" aria-label="Compartir en WhatsApp">
+                <span class="share-wa-icon" aria-hidden="true">💬</span>
+                <span class="share-wa-label">WhatsApp</span>
               </button>
             </div>
           </div>

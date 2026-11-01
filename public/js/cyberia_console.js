@@ -38,6 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initPlaybookExecutor();
   initTopologyMap();
   initAegis9SentinelControls();
+  initWhatsAppSharing();
   triggerSentinelDebug(1);
 });
 
@@ -136,6 +137,19 @@ function initEpisodeNavigator() {
       loadEpisodeIntoHud(epId);
     });
   });
+
+  // Soporte de enlace profundo por URL (?episode=X o #episode-X)
+  try {
+    const urlParams = new URLSearchParams(window.location.search);
+    const hashMatch = window.location.hash.match(/#episode-?(\d+)/i);
+    const epParam = urlParams.get('episode') || (hashMatch ? hashMatch[1] : null);
+    if (epParam) {
+      const targetCard = cards.find(c => c.getAttribute('data-ep-id') === String(epParam));
+      if (targetCard) {
+        setTimeout(() => targetCard.click(), 120);
+      }
+    }
+  } catch (_) {}
 }
 
 /* 3. Carga Dinámica de Episodio en el Visor Central BLADES + Reacción del Sentinela Aegis-9 */
@@ -384,3 +398,192 @@ function setText(id, val) {
   const el = document.getElementById(id);
   if (el) el.textContent = val || '';
 }
+
+/* 7. Compartir Secciones Clave en WhatsApp */
+function getConsoleShareBaseUrl() {
+  if (typeof window === 'undefined') return 'https://entregametusalas.pages.dev';
+  const host = window.location.hostname;
+  if (host === 'localhost' || host === '127.0.0.1' || host === '0.0.0.0') {
+    return 'https://entregametusalas.pages.dev';
+  }
+  return window.location.origin;
+}
+
+function shareSectionToWhatsApp(sectionKey, extraData) {
+  const baseUrl = getConsoleShareBaseUrl();
+  let lines = [];
+
+  switch (sectionKey) {
+    case 'console':
+      lines = [
+        '🧬 *CYBERIA // SOC CONSOLE v19.96 (POD NETACAD)*',
+        '',
+        'Entorno interactivo de telemetría médica, ciberseguridad hospitalaria y los 48 episodios tácticos contra amenazas IoMT.',
+        '',
+        '🌐 *Conéctate a la consola en vivo:*',
+        baseUrl + '/'
+      ];
+      break;
+
+    case 'episode':
+      const ep = extraData || window.currentLoadedEpisode || {
+        id: 1,
+        code: 'EP01',
+        title: 'FWA Quarantine Dock',
+        iomt_asset: 'Bomba de Infusión Alaris Medley 8100',
+        pillars: { vulnerability: { cve: 'CVE-2027-0101', cvss: '9.8' } }
+      };
+      const epCode = ep.code || ('EP' + (ep.id < 10 ? '0' + ep.id : ep.id));
+      const epTitle = ep.title || 'Análisis Clínico';
+      const epAsset = ep.iomt_asset || 'Infraestructura Médica';
+      const epCve = (ep.pillars && ep.pillars.vulnerability && ep.pillars.vulnerability.cve) || 'CVE Clínico';
+      const epCvss = (ep.pillars && ep.pillars.vulnerability && ep.pillars.vulnerability.cvss) || '9.8';
+      const epId = ep.id || 1;
+
+      lines = [
+        '🎧 *Cyberia // ' + epCode + ' — ' + epTitle + '*',
+        '',
+        '🩺 *Activo IoMT:* ' + epAsset,
+        '⚠️ *Vulnerabilidad:* ' + epCve + ' (CVSS ' + epCvss + ')',
+        '',
+        '📡 *Analiza la telemetría y los 4 pilares en vivo:*',
+        baseUrl + '/?episode=' + epId + '#episode-viewer'
+      ];
+      break;
+
+    case 'feed':
+    case 'muro':
+      lines = [
+        '📡 *MURO SOCIAL CLÍNICO // CYBERIA POD NETACAD*',
+        '',
+        'Canal de telemetría P2P en tiempo real (sin login). Comparte parches, telemetría y hallazgos con cadetes de medicina y ciberseguridad.',
+        '',
+        '💬 *Súmate a la transmisión en vivo:*',
+        baseUrl + '/muro'
+      ];
+      break;
+
+    case 'sentinel':
+      lines = [
+        '🛡️ *SENTINEL TÁCTICO // Aegis9CyberbrainEDR*',
+        '',
+        '¡Acepta el desafío táctico de defensa de redes clínicas hospitalarias y neutraliza la killchain en el sandbox interactivo!',
+        '',
+        '⚡ *Juega y desafía el sistema aquí:*',
+        baseUrl + '/#aegis9-sentinel-panel'
+      ];
+      break;
+
+    case 'tutorial':
+      lines = [
+        '⚡ *METODOLOGÍA UNIVERSAL DE CIBERSEGURIDAD MÉDICA*',
+        '',
+        'Guía clínica interactiva sobre transformadores de aislamiento (LIM), seguridad eléctrica en quirófanos y hacking ético en hospitales.',
+        '',
+        '📘 *Accede a la guía y simuladores:*',
+        baseUrl + '/tutorial'
+      ];
+      break;
+
+    default:
+      lines = [
+        '🧬 *CYBERIA // SOC CONSOLE v19.96*',
+        baseUrl + '/'
+      ];
+  }
+
+  const message = lines.join('\n');
+  const waUrl = 'https://api.whatsapp.com/send?text=' + encodeURIComponent(message);
+  window.open(waUrl, '_blank', 'noopener,noreferrer');
+}
+
+function initWhatsAppSharing() {
+  const modal = document.getElementById('cyberia-wa-modal');
+
+  function openModal() {
+    if (modal) {
+      modal.style.display = 'flex';
+      modal.setAttribute('aria-hidden', 'false');
+    }
+  }
+
+  function closeModal() {
+    if (modal) {
+      modal.style.display = 'none';
+      modal.setAttribute('aria-hidden', 'true');
+    }
+  }
+
+  // Botón topbar para abrir selector general
+  document.querySelectorAll('#btn-share-topbar-wa, #btn-global-share-wa').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      openModal();
+    });
+  });
+
+  // Botón de cerrar modal
+  if (modal) {
+    const closeBtn = modal.querySelector('.cyberia-modal-close');
+    if (closeBtn) {
+      closeBtn.addEventListener('click', closeModal);
+    }
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        closeModal();
+      }
+    });
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modal.style.display !== 'none') {
+        closeModal();
+      }
+    });
+  }
+
+  // Botones de opciones dentro del modal
+  document.querySelectorAll('.wa-share-card-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      const target = btn.getAttribute('data-share-target');
+      shareSectionToWhatsApp(target);
+      closeModal();
+    });
+  });
+
+  // Botón directo para compartir el episodio activo
+  document.querySelectorAll('#btn-share-episode-wa, .btn-share-episode-wa').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      shareSectionToWhatsApp('episode');
+    });
+  });
+
+  // Botón directo para compartir el Sentinel Aegis-9
+  document.querySelectorAll('#btn-share-sentinel-wa, .btn-share-sentinel-wa').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      shareSectionToWhatsApp('sentinel');
+    });
+  });
+
+  // Botón directo para compartir el Muro Social
+  document.querySelectorAll('#btn-share-feed-wa, .btn-share-feed-wa').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      shareSectionToWhatsApp('feed');
+    });
+  });
+
+  // Botón directo para compartir el Tutorial / Metodología
+  document.querySelectorAll('#btn-share-tutorial-wa, .btn-share-tutorial-wa').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      shareSectionToWhatsApp('tutorial');
+    });
+  });
+}
+
+window.CyberiaShare = window.CyberiaShare || {};
+window.CyberiaShare.shareSection = shareSectionToWhatsApp;
+window.CyberiaShare.initWhatsApp = initWhatsAppSharing;
+window.CyberiaShare.getConsoleBaseUrl = getConsoleShareBaseUrl;

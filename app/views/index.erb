@@ -98,6 +98,9 @@
         <a id="btn-export-json" href="/reports/episode/<%= ep0['id'] %>.json" class="soc-btn" style="padding: 0.2rem 0.55rem; font-size: 0.72rem;">
           STIX .JSON
         </a>
+        <button type="button" id="btn-share-episode-wa" class="soc-btn soc-btn-wa" style="padding: 0.2rem 0.55rem; font-size: 0.72rem;" title="Compartir este episodio en WhatsApp">
+          <span class="share-wa-icon" aria-hidden="true">💬</span> WHATSAPP
+        </button>
       </div>
     </div>
 
@@ -353,6 +356,9 @@
       <div style="display: flex; gap: 0.4rem; flex-wrap: wrap;">
         <button type="button" id="btn-sentinel-verify-bin" class="soc-btn soc-btn-warning" style="padding: 0.2rem 0.55rem; font-size: 0.7rem;">
           EJECUTAR BINARIO (--verify-killchain)
+        </button>
+        <button type="button" id="btn-share-sentinel-wa" class="soc-btn soc-btn-wa" style="padding: 0.2rem 0.55rem; font-size: 0.7rem;" title="Compartir desafío Aegis9 Sentinel en WhatsApp">
+          <span class="share-wa-icon" aria-hidden="true">💬</span> COMPARTIR MISIÓN
         </button>
       </div>
     </div>
@@ -684,6 +690,9 @@
         <a href="/muro" class="soc-btn" style="font-size: 0.68rem; padding: 0.2rem 0.55rem; text-decoration: none; border-color: var(--bauble-cyan-bright); color: var(--bauble-cyan-bright);">
           ↗ PANTALLA COMPLETA
         </a>
+        <button type="button" id="btn-share-feed-wa" class="soc-btn soc-btn-wa" style="font-size: 0.68rem; padding: 0.2rem 0.55rem;" title="Compartir Muro Social en WhatsApp">
+          <span class="share-wa-icon" aria-hidden="true">💬</span> COMPARTIR
+        </button>
       </div>
     </div>
 
@@ -734,8 +743,14 @@
             </div>
 
             <div id="feed-form-alert" class="feed-alert-box" style="display: none;"></div>
+            <div id="feed-live-preview-box" class="feed-live-preview-box" style="display: none;"></div>
 
             <div class="feed-compose-footer">
+              <div class="feed-compose-presets">
+                <span style="font-size: 0.65rem; color: var(--hud-glass-outline); margin-right: 0.2rem;">ESTILOS:</span>
+                <button type="button" class="feed-preset-btn" data-preset="lounge" title="Adjuntar vista previa de Hábitat Lounge">🛋️ Lounge</button>
+                <button type="button" class="feed-preset-btn" data-preset="snocomm" title="Adjuntar vista previa de Snocomm Building">🏢 Snocomm</button>
+              </div>
               <div id="feed-char-counter" class="feed-char-counter">
                 0 / 2000 caracteres
               </div>
