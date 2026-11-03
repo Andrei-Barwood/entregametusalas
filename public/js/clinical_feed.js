@@ -452,9 +452,11 @@
     // Indicador dinámico en la caja de redacción cuando se detectan enlaces o hashtags temáticos
     var linkHint = document.getElementById('feed-link-detected-hint');
     var detectedUrls = extractUrls(textarea.value);
+    var hasIframe = /<iframe|&lt;iframe/i.test(textarea.value);
+    var hasBandcamp = /bandcamp\.com/i.test(textarea.value);
     var hasHabitatTag = /#(?:habitat|lounge|descanso|reposo|snocomm|relaxation)\b/i.test(textarea.value) ||
       /\b(?:habitat\s*lounge|sala\s*de\s*descanso|sector\s*descanso|sector\s*de\s*descanso|lounge|snocomm|submarino)\b/i.test(textarea.value);
-    if (detectedUrls.length > 0 || hasHabitatTag) {
+    if (detectedUrls.length > 0 || hasHabitatTag || hasIframe || hasBandcamp) {
       if (!linkHint) {
         linkHint = document.createElement('div');
         linkHint.id = 'feed-link-detected-hint';
@@ -463,11 +465,13 @@
           textarea.parentNode.appendChild(linkHint);
         }
       }
-      if (hasHabitatTag && detectedUrls.length === 0) {
+      if (hasBandcamp && hasIframe) {
+        linkHint.innerHTML = '💽 <strong>Reproductor Bandcamp detectado:</strong> Previsualización en vivo e incrustación activa del reproductor en el muro.';
+      } else if (hasHabitatTag && detectedUrls.length === 0 && !hasIframe) {
         linkHint.innerHTML = '🛋️ <strong>Vista previa ambiental activa:</strong> Sector Lounge / Habitat Submarino de Cyberia.';
       } else {
-        var count = detectedUrls.length;
-        linkHint.innerHTML = '🔗 <strong>' + count + ' enlace' + (count > 1 ? 's' : '') + ' detectado' + (count > 1 ? 's' : '') + ':</strong> Previsualización multimedia activa (YouTube, SoundCloud, Spotify, Habitat Lounge, Imágenes o Web).';
+        var count = detectedUrls.length + (hasIframe ? 1 : 0);
+        linkHint.innerHTML = '🔗 <strong>' + count + ' elemento' + (count > 1 ? 's' : '') + ' multimedia detectado' + (count > 1 ? 's' : '') + ':</strong> Previsualización multimedia activa (Bandcamp, YouTube, SoundCloud, Spotify, Habitat Lounge, Imágenes o Web).';
       }
       linkHint.style.display = 'flex';
     } else if (linkHint) {
@@ -512,7 +516,7 @@
 
   function extractUrls(text) {
     if (!text) return [];
-    var urlRegex = /(https?:\/\/[^\s<>"'`]+|(?:^|[\s])(?:www\.|soundcloud\.com\/|on\.soundcloud\.com\/|youtube\.com\/|youtu\.be\/|\/?img\/[a-zA-Z0-9_\-\.]+)[^\s<>"'`]*)/gi;
+    var urlRegex = /(https?:\/\/[^\s<>"'`]+|(?:^|[\s])(?:www\.|bandcamp\.com\/|soundcloud\.com\/|on\.soundcloud\.com\/|youtube\.com\/|youtu\.be\/|\/?img\/[a-zA-Z0-9_\-\.]+)[^\s<>"'`]*)/gi;
     var matches = text.match(urlRegex) || [];
     var cleaned = [];
     var seen = {};
@@ -602,6 +606,151 @@
       }
     } catch (e) {}
     return null;
+  }
+
+  // --- Funcionalidad de Reproductor Bandcamp e Inserción de Iframes ---
+
+  function isBandcampUrl(url) {
+    if (!url) return false;
+    try {
+      var u = new URL(url);
+      var host = u.hostname.toLowerCase().replace(/^www\./, '');
+      return host === 'bandcamp.com' || host.endsWith('.bandcamp.com');
+    } catch (e) {
+      return /https?:\/\/(?:[a-zA-Z0-9_-]+\.)?bandcamp\.com\/.+/i.test(url);
+    }
+  }
+
+  function parseBandcampIframeSnippet(iframeHtml) {
+    if (!iframeHtml) return null;
+
+    var decoded = iframeHtml
+      .replace(/&quot;/g, '"')
+      .replace(/&#34;/g, '"')
+      .replace(/&#39;/g, "'")
+      .replace(/&lt;/g, '<')
+      .replace(/&gt;/g, '>');
+
+    var srcMatch = decoded.match(/\bsrc\s*=\s*["']([^"']+)["']/i);
+    if (!srcMatch) return null;
+    var embedUrl = srcMatch[1].trim().replace(/^http:\/\//i, 'https://');
+
+    if (!isBandcampUrl(embedUrl)) {
+      return null;
+    }
+
+    var height = 120;
+    var styleHeightMatch = decoded.match(/height\s*:\s*(\d+)px/i);
+    var attrHeightMatch = decoded.match(/\bheight\s*=\s*["']?(\d+)/i);
+    if (styleHeightMatch) {
+      height = parseInt(styleHeightMatch[1], 10);
+    } else if (attrHeightMatch) {
+      height = parseInt(attrHeightMatch[1], 10);
+    } else if (embedUrl.indexOf('size=small') !== -1) {
+      height = 42;
+    } else if (embedUrl.indexOf('artwork=big') !== -1 || (embedUrl.indexOf('size=large') !== -1 && embedUrl.indexOf('artwork=small') === -1 && embedUrl.indexOf('artwork=none') === -1)) {
+      if (decoded.indexOf('470') !== -1 || decoded.indexOf('472') !== -1) {
+        height = 472;
+      }
+    }
+    if (height < 40 || height > 600) height = 120;
+
+    var itemUrl = embedUrl;
+    var title = 'Reproductor Bandcamp';
+    var anchorMatch = decoded.match(/<a\b[^>]*href=["']([^"']+)["'][^>]*>([\s\S]*?)<\/a>/i);
+    if (anchorMatch) {
+      itemUrl = anchorMatch[1].trim().replace(/^http:\/\//i, 'https://');
+      var rawTitle = anchorMatch[2].replace(/<[^>]+>/g, '').trim();
+      if (rawTitle) title = rawTitle;
+    } else {
+      var idMatch = embedUrl.match(/(album|track)=(\d+)/i);
+      if (idMatch) {
+        title = (idMatch[1].toUpperCase() === 'ALBUM' ? 'Álbum' : 'Pista') + ' #' + idMatch[2];
+      }
+    }
+
+    return {
+      embedUrl: embedUrl,
+      itemUrl: itemUrl,
+      title: title,
+      height: height
+    };
+  }
+
+  function buildBandcampCard(data) {
+    var safeEmbedUrl = escapeHtml(data.embedUrl);
+    var safeItemUrl = escapeHtml(data.itemUrl || data.embedUrl);
+    var safeTitle = escapeHtml(data.title || 'Reproductor Bandcamp // Audio Stream');
+    var height = parseInt(data.height, 10) || 120;
+
+    return [
+      '<div class="feed-media-preview feed-bandcamp-preview" data-bandcamp-embed="' + safeEmbedUrl + '">',
+      '  <div class="feed-media-badge">',
+      '    <span class="feed-media-badge-left">💽 BANDCAMP AUDIO STREAM // REPRODUCTOR INSERTADO</span>',
+      '    <span class="feed-media-badge-tag">EMBED POD • ' + height + 'PX</span>',
+      '  </div>',
+      '  <div class="feed-bandcamp-frame-wrapper">',
+      '    <iframe style="border: 0; width: 100%; height: ' + height + 'px;" src="' + safeEmbedUrl + '" seamless loading="lazy" allow="autoplay; encrypted-media" title="' + safeTitle + '"></iframe>',
+      '  </div>',
+      '  <div class="feed-preview-footer">',
+      '    <a href="' + safeItemUrl + '" target="_blank" rel="noopener noreferrer" class="feed-preview-source-link">',
+      '      <span>↗ Escuchar en Bandcamp (' + safeTitle + ')</span>',
+      '      <span class="feed-preview-url-domain">bandcamp.com</span>',
+      '    </a>',
+      '  </div>',
+      '</div>'
+    ].join('\n');
+  }
+
+  function buildBandcampCardFromUrl(url) {
+    if (!isBandcampUrl(url)) return '';
+    var safeUrl = escapeHtml(url);
+
+    // Si es un EmbeddedPlayer directo
+    if (url.indexOf('/EmbeddedPlayer/') !== -1) {
+      var height = url.indexOf('size=small') !== -1 ? 42 : 120;
+      var title = 'Reproductor Bandcamp';
+      var idMatch = url.match(/(album|track)=(\d+)/i);
+      if (idMatch) {
+        title = (idMatch[1].toUpperCase() === 'ALBUM' ? 'Álbum' : 'Pista') + ' #' + idMatch[2];
+      }
+      return buildBandcampCard({
+        embedUrl: url,
+        itemUrl: url,
+        title: title,
+        height: height
+      });
+    }
+
+    // Si es una URL estándar de álbum o pista en Bandcamp
+    try {
+      var u = new URL(url);
+      var domain = u.hostname.replace(/^www\./, '');
+      var pathParts = u.pathname.split('/').filter(function (p) { return p.length > 0; });
+      var titleText = 'Audio en Bandcamp';
+      if (pathParts.length >= 2) {
+        var kind = pathParts[0] === 'track' ? 'Pista' : (pathParts[0] === 'album' ? 'Álbum' : 'Lanzamiento');
+        var slug = decodeURIComponent(pathParts[1]).replace(/[-_]/g, ' ').replace(/\b\w/g, function (l) { return l.toUpperCase(); });
+        titleText = kind + ': ' + slug;
+      }
+
+      return [
+        '<div class="feed-media-preview feed-bandcamp-preview">',
+        '  <div class="feed-media-badge">',
+        '    <span class="feed-media-badge-left">💽 BANDCAMP AUDIO // DISCOGRAFÍA CLÍNICA</span>',
+        '    <span class="feed-media-badge-tag">AUDIO EXTERNO</span>',
+        '  </div>',
+        '  <div class="feed-preview-footer">',
+        '    <a href="' + safeUrl + '" target="_blank" rel="noopener noreferrer" class="feed-preview-source-link">',
+        '      <span>↗ Abrir ' + escapeHtml(titleText) + ' en Bandcamp</span>',
+        '      <span class="feed-preview-url-domain">' + escapeHtml(domain) + '</span>',
+        '    </a>',
+        '  </div>',
+        '</div>'
+      ].join('\n');
+    } catch (e) {
+      return '';
+    }
   }
 
   function isImageUrl(url) {
@@ -823,6 +972,12 @@
       ].join('\n');
     }
 
+    // 3.b Bandcamp
+    if (isBandcampUrl(url)) {
+      var bcCard = buildBandcampCardFromUrl(url);
+      if (bcCard) return bcCard;
+    }
+
     // 4. Direct Images
     if (isImageUrl(url)) {
       return [
@@ -880,25 +1035,62 @@
       return '___FEED_CODE_BLOCK_' + (codeBlocks.length - 1) + '___';
     });
 
-    // 2. Extraer URLs del texto
-    var urls = extractUrls(textWithoutCode);
     var previews = [];
+    var iframePlaceholders = [];
+
+    // 2. Extraer y procesar iframes insertados (Bandcamp u otros reproductores multimedia)
+    var iframeRegex = /<iframe\b[^>]*>[\s\S]*?<\/iframe>|<iframe\b[^>]*\/?>|&lt;iframe\b[\s\S]*?&lt;\/iframe&gt;|&lt;iframe\b[\s\S]*?\/?&gt;/gi;
+    var textWithoutIframes = textWithoutCode.replace(iframeRegex, function (match) {
+      var bcData = parseBandcampIframeSnippet(match);
+      if (bcData) {
+        if (previews.length < 2) {
+          previews.push(buildBandcampCard(bcData));
+        }
+        var placeholder = '___FEED_IFRAME_REPL_' + iframePlaceholders.length + '___';
+        var linkTag = '<a href="' + escapeHtml(bcData.itemUrl) + '" target="_blank" rel="noopener noreferrer" class="feed-content-link">💽 ' + escapeHtml(bcData.title) + ' (Bandcamp)</a>';
+        iframePlaceholders.push(linkTag);
+        return ' ' + placeholder + ' ';
+      }
+
+      // Si es otro iframe con URL reconocible (YouTube, Spotify, SoundCloud, etc.)
+      var decoded = match
+        .replace(/&quot;/g, '"')
+        .replace(/&#34;/g, '"')
+        .replace(/&#39;/g, "'")
+        .replace(/&lt;/g, '<')
+        .replace(/&gt;/g, '>');
+      var srcMatch = decoded.match(/\bsrc\s*=\s*["']([^"']+)["']/i);
+      if (srcMatch) {
+        var embedSrc = srcMatch[1].trim();
+        return ' ' + embedSrc + ' ';
+      }
+      return match;
+    });
+
+    // 3. Extraer URLs del texto resultante
+    var urls = extractUrls(textWithoutIframes);
     for (var i = 0; i < urls.length && previews.length < 2; i++) {
       var card = buildPreviewCard(urls[i]);
       if (card) {
-        previews.push(card);
+        // Evitar duplicar tarjeta si ya fue generada por el iframe
+        var isDuplicate = previews.some(function (p) {
+          return p.indexOf(urls[i]) !== -1;
+        });
+        if (!isDuplicate) {
+          previews.push(card);
+        }
       }
     }
 
-    // 2.b Si no hay previsualizaciones activas pero el mensaje invoca palabras clave o hashtags temáticos
+    // 3.b Si no hay previsualizaciones activas pero el mensaje invoca palabras clave o hashtags temáticos
     if (previews.length < 2) {
-      var mentionsHabitat = /#(?:habitat|lounge|descanso|reposo|sanctuary|habitad|relax|submarino|underwater)\b/i.test(textWithoutCode) ||
-        /\b(?:habitat\s*lounge|sala\s*de\s*descanso|sector\s*descanso|sector\s*de\s*descanso|sector\s*lounge|habitat\s*submarino|vista\s*submarina|lounge|descanso|reposo|habitad|relax|submarino)\b/i.test(textWithoutCode) ||
-        textWithoutCode.indexOf('underwater_lounge') >= 0;
+      var mentionsHabitat = /#(?:habitat|lounge|descanso|reposo|sanctuary|habitad|relax|submarino|underwater)\b/i.test(textWithoutIframes) ||
+        /\b(?:habitat\s*lounge|sala\s*de\s*descanso|sector\s*descanso|sector\s*de\s*descanso|sector\s*lounge|habitat\s*submarino|vista\s*submarina|lounge|descanso|reposo|habitad|relax|submarino)\b/i.test(textWithoutIframes) ||
+        textWithoutIframes.indexOf('underwater_lounge') >= 0;
 
-      var mentionsSnocomm = /#(?:snocomm|relaxation|facility|blueprint|corredor)\b/i.test(textWithoutCode) ||
-        /\b(?:snocomm\s*main\s*building|relaxation\s*sector|edificio\s*principal|sector\s*relajacion|snocomm|corredor|blueprint)\b/i.test(textWithoutCode) ||
-        textWithoutCode.indexOf('snocomm_lounge') >= 0;
+      var mentionsSnocomm = /#(?:snocomm|relaxation|facility|blueprint|corredor)\b/i.test(textWithoutIframes) ||
+        /\b(?:snocomm\s*main\s*building|relaxation\s*sector|edificio\s*principal|sector\s*relajacion|snocomm|corredor|blueprint)\b/i.test(textWithoutIframes) ||
+        textWithoutIframes.indexOf('snocomm_lounge') >= 0;
 
       var alreadyHasHabitat = previews.some(function (p) { return p.indexOf('feed-habitat-lounge-preview') >= 0; });
       var alreadyHasSnocomm = previews.some(function (p) { return p.indexOf('feed-snocomm-preview') >= 0; });
@@ -911,10 +1103,10 @@
       }
     }
 
-    // 3. Escapar HTML del texto
-    var safeText = escapeHtml(textWithoutCode);
+    // 4. Escapar HTML del texto
+    var safeText = escapeHtml(textWithoutIframes);
 
-    // 4. Reemplazar URLs en el texto con enlaces clicables bonitos
+    // 5. Reemplazar URLs en el texto con enlaces clicables bonitos
     for (var j = 0; j < urls.length; j++) {
       var fullUrl = urls[j];
       var safeFullUrl = escapeHtml(fullUrl);
@@ -934,17 +1126,22 @@
       }
     }
 
-    // 5. Restaurar bloques de código inline
+    // 6. Restaurar enlaces de iframes procesados
+    for (var k = 0; k < iframePlaceholders.length; k++) {
+      safeText = safeText.split('___FEED_IFRAME_REPL_' + k + '___').join(iframePlaceholders[k]);
+    }
+
+    // 7. Restaurar bloques de código inline
     safeText = safeText.replace(/___FEED_CODE_BLOCK_(\d+)___/g, function (match, idx) {
       var code = codeBlocks[parseInt(idx, 10)] || '';
       return '<code class="feed-inline-code">' + escapeHtml(code) + '</code>';
     });
 
-    // 6. Convertir saltos de línea a <br>
+    // 8. Convertir saltos de línea a <br>
     safeText = safeText.replace(/\n/g, '<br>');
 
     return {
-      textHtml: safeText,
+      textHtml: safeText.trim(),
       previewsHtml: previews.join('\n')
     };
   }
@@ -1781,6 +1978,8 @@
           snippet = ' https://soundcloud.com/weird-bananas/thats-not-my-house';
         } else if (preset === 'youtube') {
           snippet = ' https://youtu.be/dQw4w9WgXcQ';
+        } else if (preset === 'bandcamp') {
+          snippet = ' <iframe style="border: 0; width: 100%; height: 120px;" src="https://bandcamp.com/EmbeddedPlayer/album=2722165038/size=large/bgcol=333333/linkcol=0f91ff/tracklist=false/artwork=small/transparent=true/" seamless><a href="https://vendredisurmer.bandcamp.com/album/premiere-ep">Première - EP by Vendredi sur Mer</a></iframe>';
         }
 
         if (snippet && textarea.value.indexOf(snippet.trim()) === -1) {

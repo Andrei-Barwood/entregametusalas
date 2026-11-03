@@ -156,3 +156,26 @@ flowchart TD
 ## 6. CONCLUSIÓN
 
 El repositorio ha evolucionado desde una plantilla editorial estática a una aplicación interactiva con soporte multiplataforma y edge-computing. Las pifias de asincronía, parpadeo de interfaces y desincronización entre dispositivos han quedado resueltas y documentadas en el historial de Git, dejando el proyecto en un estado productivo, estable y verificado.
+
+---
+
+## 7. REGISTRO DE IMPLEMENTACIÓN: VISTA PREVIA E INCRUSTACIÓN DE REPRODUCTOR BANDCAMP (IFRAME)
+
+* **Fecha de Implementación:** 2026-11-02
+* **Objetivo:** Permitir a los usuarios y cadetes insertar códigos iframe de Bandcamp en los comentarios del muro social clínico (`/muro`, `/mobile`, `/`), visualizando una previsualización en vivo mientras redactan (`#feed-live-preview-box`) y publicando el reproductor embebido interactivo en la tarjeta del post.
+* **Componentes Modificados:**
+  1. `public/js/clinical_feed.js` y `js/clinical_feed.js`:
+     - Función `parseBandcampIframeSnippet`: extrae de manera segura el `src` (restringido a dominios `bandcamp.com`), altura (`height`), enlace original y título del álbum/pista. Soporta formatos estándar (120px), slim (42px) y arte grande (472px), tanto en HTML sin procesar como en entidades escapadas (`&lt;iframe...&gt;`).
+     - Función `buildBandcampCard`: genera la tarjeta visual `.feed-bandcamp-preview` con el iframe responsivo dentro de `.feed-bandcamp-frame-wrapper`.
+     - Integración en `formatContentWithPreviews`: extrae y reemplaza los códigos iframes por enlaces formateados en el cuerpo textual, inyectando las tarjetas de reproductor en `previewsHtml`.
+     - Integración reactiva en `updateLivePreview` y `updateComposerCounters` para telemetría visual inmediata.
+     - Botón de estilo rápido / preset `data-preset="bandcamp"`.
+  2. `css/chrysalis_medsoc.css` y `public/css/chrysalis_medsoc.css`:
+     - Definición de `.feed-bandcamp-preview` (borde distintivo cian/teal `#1DA0C3`) y `.feed-bandcamp-frame-wrapper`.
+  3. `app/views/feed.erb`, `app/views/mobile_feed.erb`, `app/views/index.erb`:
+     - Inclusión del botón interactivo de preset `💽 Bandcamp`.
+  4. `app/controllers/feed_controller.rb` y `worker.js`:
+     - Soporte para oEmbed de `bandcamp.com` en el endpoint `/api/oembed`.
+  5. `spec/cyberia_medsoc_spec.rb`:
+     - Caso de prueba automatizado completo que valida CSS, vistas, parser en JS y publicación vía POST `/api/feed`.
+

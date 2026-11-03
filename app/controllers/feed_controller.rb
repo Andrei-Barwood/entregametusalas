@@ -160,6 +160,17 @@ class ApplicationController < Sinatra::Base
           status 200
           return res.body
         end
+      elsif host.include?('bandcamp.com')
+        require 'cgi'
+        require 'net/http'
+        oembed_url = "https://bandcamp.com/oembed?format=json&url=#{CGI.escape(target_url)}"
+        res = Net::HTTP.get_response(URI(oembed_url))
+        if res.is_a?(Net::HTTPSuccess)
+          content_type :json
+          headers 'Access-Control-Allow-Origin' => '*'
+          status 200
+          return res.body
+        end
       end
 
       json_response({ status: 'fallback', url: target_url })

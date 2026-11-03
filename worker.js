@@ -425,6 +425,12 @@ export default {
             const data = await scRes.json();
             return jsonResponse(data, 200);
           }
+        } else if (u.hostname.includes('bandcamp.com')) {
+          const bcRes = await fetch(`https://bandcamp.com/oembed?format=json&url=${encodeURIComponent(targetUrl)}`);
+          if (bcRes.ok) {
+            const data = await bcRes.json();
+            return jsonResponse(data, 200);
+          }
         }
       } catch (e) {}
       return jsonResponse({ status: 'fallback', url: targetUrl }, 200);

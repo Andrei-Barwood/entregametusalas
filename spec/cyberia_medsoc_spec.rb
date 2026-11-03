@@ -721,6 +721,82 @@ RSpec.describe 'CYBERIA-MED // SOC Console v19.96 — Complete Verification Suit
       expect(oembed_json['title']).to include('Flickermood')
       expect(oembed_json['thumbnail_url']).to include('sndcdn.com')
     end
+
+    it 'permite insertar códigos iframe de Bandcamp en los comentarios, ofrece vista previa y publica el reproductor incrustado' do
+      # 1. Comprobar que los estilos CSS soportan las tarjetas y wrappers de Bandcamp
+      get '/css/chrysalis_medsoc.css'
+      expect(last_response.status).to eq(200)
+      css = last_response.body
+      expect(css).to include('.feed-bandcamp-preview')
+      expect(css).to include('.feed-bandcamp-frame-wrapper')
+
+      # 2. Comprobar que las vistas de muro y móvil tienen el preset para insertar Bandcamp
+      get '/muro'
+      expect(last_response.status).to eq(200)
+      muro_html = last_response.body.force_encoding('UTF-8')
+      expect(muro_html).to include('data-preset="bandcamp"')
+
+      get '/mobile'
+      expect(last_response.status).to eq(200)
+      mobile_html = last_response.body.force_encoding('UTF-8')
+      expect(mobile_html).to include('data-preset="bandcamp"')
+
+      # 3. Comprobar que clinical_feed.js contiene el parser, generador de tarjetas y soporte de previsualización
+      get '/js/clinical_feed.js'
+      expect(last_response.status).to eq(200)
+      js_code = last_response.body.force_encoding('UTF-8')
+      expect(js_code).to include('parseBandcampIframeSnippet')
+      expect(js_code).to include('buildBandcampCard')
+      expect(js_code).to include('isBandcampUrl')
+      expect(js_code).to include('feed-bandcamp-preview')
+      expect(js_code).to include('feed-bandcamp-frame-wrapper')
+      expect(js_code).to include('data-preset')
+
+      # 4. Publicar un comentario con código iframe de Bandcamp vía POST /api/feed
+      iframe_snippet = '<iframe style="border: 0; width: 100%; height: 120px;" src="https://bandcamp.com/EmbeddedPlayer/album=2722165038/size=large/bgcol=333333/linkcol=0f91ff/tracklist=false/artwork=small/transparent=true/" seamless><a href="https://vendredisurmer.bandcamp.com/album/premiere-ep">Première - EP by Vendredi sur Mer</a></iframe>'
+      comment_payload = {
+        author: 'Dra_Sintetizador',
+        content: "Banda sonora médica para el turno nocturno: #{iframe_snippet} Excelente ambientación.",
+        episode_id: 1
+      }
+      post '/api/feed', JSON.generate(comment_payload), { 'CONTENT_TYPE' => 'application/json' }
+      expect(last_response.status).to eq(201)
+      created_post = JSON.parse(last_response.body)['post']
+      expect(created_post['author']).to eq('Dra_Sintetizador')
+      expect(created_post['content']).to include('bandcamp.com/EmbeddedPlayer')
+
+      # 5. Verificar que el comentario publicado está almacenado en WallPost y se puede consultar
+      get '/api/feed'
+      expect(last_response.status).to eq(200)
+      feed_body = JSON.parse(last_response.body)
+      matching_post = feed_body['posts'].find { |p| p['id'] == created_post['id'] }
+      expect(matching_post).not_to be_nil
+      expect(matching_post['content']).to include(iframe_snippet)
+
+      # 6. Validar mediante Node.js que el motor en cliente se ejecuta limpiamente y sin errores de sintaxis
+      node_test = <<~NODE
+        const fs = require('fs');
+        const code = fs.readFileSync('public/js/clinical_feed.js', 'utf8');
+        const runCode = new Function('window', 'document', 'localStorage', 'setInterval', code);
+        const mockWindow = {
+          AudioContext: null,
+          addEventListener: () => {},
+          removeEventListener: () => {},
+          location: { search: '' }
+        };
+        const mockDoc = {
+          title: '',
+          getElementById: () => null,
+          querySelectorAll: () => [],
+          addEventListener: () => {}
+        };
+        const mockStorage = { getItem: () => null, setItem: () => {} };
+        runCode(mockWindow, mockDoc, mockStorage, () => {});
+        process.exit(0);
+      NODE
+      system_res = system('node', '-e', node_test)
+      expect(system_res).to be(true)
+    end
   end
 
   describe '11. Versión Móvil Exclusiva (Feed Móvil Ligero, Restricción de Consola de Escritorio y Sincronización P2P)' do
